@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=19;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;document.open();document.write(h);document.close()}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=33;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Min IPTV</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -149,6 +149,9 @@ video{width:100%;height:100%;background:#000}
 /* overlay player */
 #ov{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column}
 #ov.on{display:flex}
+#dtr{aspect-ratio:16/9;width:100%;margin-bottom:12px;border-radius:12px;overflow:hidden;background:#000}#dtr[hidden]{display:none}#dtr iframe{width:100%;height:100%;border:0}
+#ov.pfs .ovbar{display:none}#ov.pfs.bar .ovbar{display:flex;position:absolute;top:0;left:0;right:0;z-index:5}
+#vwrap.pfs{position:fixed;inset:0;z-index:90;aspect-ratio:auto;width:100vw;height:100vh}
 .ovbar{display:flex;gap:8px;align-items:center;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.2))}
 .ovbar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 #ovw{position:relative;flex:1;min-height:0}
@@ -454,7 +457,8 @@ html.tvm header{flex-wrap:wrap;padding-left:28px;padding-right:28px}html.tvm mai
 #tvSearch{display:none}html.tvm #tvSearch{display:inline-block}
 #tvsD input{width:100%;font-size:22px;padding:14px}
 html.tvm *{animation:none!important;transition:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;scroll-behavior:auto!important}
-html.tvm body{font-size:118%}html.tvm #embers,html.tvm canvas#fx{display:none!important}
+html.tvm body{font-size:118%}html.tvm .pc,html.tvm .ch,html.tvm .cc,html.tvm .app{content-visibility:auto;contain-intrinsic-size:auto 240px}html.tvm .vbar,html.tvm #tabs,html.tvm #chips,html.tvm #provs,html.tvm #q,html.tvm #grp{display:none!important}#tvFilt{display:none}#vside{display:none}.vlay{display:block}.vmain{min-width:0}#tvMenu{display:none}html.tvm #tvMenu{display:flex;flex-direction:column;gap:4px;width:200px;flex:none;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px}html.tvm #v-live #side{max-width:340px}html.tvm .vlay,.vwide{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start}html.tvm #vside,.vwide #vside{display:flex;flex-direction:column;gap:4px;position:sticky;top:0;max-height:calc(100vh - 110px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px}html.tvm #vchips,html.tvm #vsort,html.tvm #vcat{display:none!important}
+@media(min-width:900px){.vlay{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start}#vside{display:flex;flex-direction:column;gap:4px;position:sticky;top:0;max-height:calc(100vh - 110px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px}#vchips,#vsort,#vcat{display:none!important}#tvMenu{display:flex;flex-direction:column;gap:4px;width:200px;flex:none;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px}#tabs,#chips,#provs{display:none!important}#v-live #side{max-width:340px}}.tmh{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 6px 2px}.tmi{flex:none;text-align:left;padding:9px 12px;border-radius:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}.tmi small{opacity:.6;margin-left:6px}.tmi.on{background:var(--accent);color:#fff;border-color:var(--accent)}#tvfB h3{margin:12px 0 6px;font-size:15px;color:var(--muted)}.tvfc{display:flex;flex-wrap:wrap;gap:8px}html.tvm .bbv{display:none!important}html.tvm .bb{min-height:0}html.tvm #embers,html.tvm canvas#fx{display:none!important}
 html.tvm .bb .bbv{display:none!important}
 html.tvm :focus{outline:4px solid #fff!important;outline-offset:2px;background-color:rgba(228,0,43,.35)}
 html.tvm .poster:focus,html.tvm .pc:focus,html.tvm .cc:focus,html.tvm .ch:focus,html.tvm .app:focus{outline:5px solid #fff!important;transform:none!important}
@@ -471,6 +475,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
     <button data-v="series"><i>🎬</i>Serier</button>
     <button data-v="fotball"><i>⚽</i>Fotball</button>
     <button data-v="live"><i>📡</i>Direkte TV</button>
+    <button data-v="apps"><i>📲</i>Apper</button>
     <button data-v="cams"><i>📹</i>IP-kamera</button>
     <button data-v="fav"><i>★</i>Favoritter</button>
     <button data-v="settings"><i>⚙️</i>Innstillinger</button>
@@ -489,8 +494,9 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
   <section class="view" id="v-tv"></section>
   <section class="view" id="v-fotball"></section>
   <section class="view" id="v-live">
+    <div id="tvMenu"></div>
     <div id="side">
-      <div id="sidetop"><button id="liveBack" class="ghost" data-back>← Tilbake</button><div id="findBar"></div></div>
+      <div id="sidetop"><button id="liveBack" class="ghost" data-back>← Tilbake</button><div id="findBar"></div><button id="tvFilt" class="bpill"></button></div>
       <div id="tabs"></div>
       <div id="chips"></div>
       <div id="provs"></div>
@@ -524,6 +530,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
   <section class="view" id="v-fav"></section>
   <section class="view" id="v-search"></section>
   <section class="view" id="v-matches"></section>
+  <section class="view" id="v-apps"></section>
   <section class="view" id="v-cams"></section>
   <section class="view" id="v-settings"></section>
 </div>
@@ -532,7 +539,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
   <div class="ovbar">
     <button id="ovClose">✕ Lukk</button><b id="ovTitle"></b>
     <button id="ovNext" style="display:none">Neste ▶</button>
-    <button id="ovCC">💬 Tekst</button><button id="ovCopy">Kopier lenke</button>
+    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovCopy">Kopier lenke</button>
     <button id="ovFs">⛶</button>
   </div>
   
@@ -543,6 +550,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
 <dialog id="dlgItem"></dialog>
 
 <dialog id="tvsD"><h2>🔍 Søk</h2><input id="tvsQ" type="search" placeholder="Skriv og trykk OK" autocomplete="off"><div class="actions"><button id="tvsX">Avbryt</button><button id="tvsGo" class="primary">Søk</button></div></dialog>
+<dialog id="tvfD" class="tvpick"><h2>🎚 Velg kanaler</h2><div id="tvfB"></div><div class="actions"><button id="tvfX" class="primary">Ferdig</button></div></dialog>
 <dialog id="dlgSrc">
   <h2>Kilder</h2>
   <div id="srcList"></div>
@@ -597,6 +605,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js"></script>
 <script>
+if(window.__RP)throw new Error("replacing");
 (()=>{
 const $=id=>document.getElementById(id);
 const LSget=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
@@ -639,7 +648,7 @@ const TVM=(()=>{try{const m=localStorage.getItem('tvmode');if(m==='1')return tru
 if(TVM){document.documentElement.classList.add('tvm');
   try{for(const sh of document.styleSheets)for(const r of sh.cssRules)if(r.type===4&&/max-width|hover:\s*none/.test(r.media.mediaText))r.media.mediaText='not all'}catch(e){}
   const fit=()=>{document.documentElement.style.zoom=String(Math.max(.5,innerWidth/1280))};fit();addEventListener('resize',fit)}
-const PAGE=TVM?60:300, GPAGE=TVM?24:72;
+const PAGE=TVM?36:300, GPAGE=TVM?18:72;
 /* ---- språk/land ---- */
 const LMAP={sv:'se',swe:'se',da:'dk',dnk:'dk',dan:'dk',nor:'no',nb:'no',nob:'no',usa:'us',gb:'uk',gbr:'uk',en:'uk',eng:'uk'};
 const CC_OTHER=new Set('de fr it es pt nl be pl tr ar al ro ru ua gr cz sk hu bg rs hr ba si mk in pk af ir iq sa ae eg ma dz tn br mx ca au nz jp kr cn th vn il fi is ee lv lt ch at ie cy mt me xk ge am az by kz uz ph id my sg hk tw lb sy jo ly sd so ng za ke gh sn ci cm et pe cl co ve ec uy py bo cu do pr ex yu'.split(' '));
@@ -869,6 +878,11 @@ function buildItems0(s){
 }
 
 /* ===================== Kilder ===================== */
+async function seedCheck(){
+  try{if(localStorage.getItem('seeded')||(await dbAll()).length)return;
+    const r=await fetch('seed.json',{cache:'no-store'});if(!r.ok)return;const t=await r.text();const j=JSON.parse(t);if(!j||j.app!=='min-iptv')return;
+    localStorage.setItem('seeded','1');await restoreData(t)}catch(e){}
+}
 async function loadSources(){
   const all=await dbAll();
   sources=all.filter(s=>s.profile===pid||s.profile==='*');
@@ -1043,7 +1057,12 @@ function makePlayer(video,msgEl){
     }
     const pr=video.play();if(pr&&pr.catch)pr.catch(()=>{});
   }
-  return {play,stop,video,get cur(){return cur}};
+  const aud=()=>{if(hls&&hls.audioTracks&&hls.audioTracks.length>1)return{src:'hls',list:hls.audioTracks.map((t,i)=>({i,n:t.name||t.lang||'Spor '+(i+1),on:hls.audioTrack===i}))};
+    const at=video.audioTracks;if(at&&at.length>1)return{src:'el',list:[...at].map((t,i)=>({i,n:t.label||t.language||'Spor '+(i+1),on:t.enabled}))};return null};
+  const setAud=i=>{if(hls&&hls.audioTracks&&hls.audioTracks.length>1)hls.audioTrack=i;else if(video.audioTracks)[...video.audioTracks].forEach((t,k)=>t.enabled=k===i)};
+  const lev=()=>hls&&hls.levels&&hls.levels.length>1?{cur:hls.currentLevel,auto:hls.autoLevelEnabled,list:hls.levels.map((l,i)=>({i,n:(l.height?l.height+'p':Math.round(l.bitrate/1000)+' kbit')+(l.bitrate?' · '+(l.bitrate/1e6).toFixed(1)+' Mbit':'')}))}:null;
+  const setLev=i=>{if(hls)hls.currentLevel=i};
+  return {play,stop,video,aud,setAud,lev,setLev,get cur(){return cur}};
 }
 const livePlayer=makePlayer($('v'),$('msg'));
 const vodPlayer=makePlayer($('ovv'),$('ovmsg'));
@@ -1112,11 +1131,28 @@ function ccMenu(){
    <button data-t="close">Lukk</button>`;
   m.className='on';
 }
+function avMenu(){
+  const m=$('ccMenu'),A=vodPlayer.aud(),L=vodPlayer.lev(),v=$('ovv');
+  m.innerHTML=`<b>Lydspor</b>
+   ${A?A.list.map(t=>`<button data-av="a${t.i}" class="${t.on?'on':''}">${esc(t.n)}</button>`).join(''):'<small>Filen har bare ett lydspor (eller spilleren kan ikke bytte).</small>'}
+   <b>Bildekvalitet</b>
+   ${L?`<button data-av="l-1" class="${L.auto?'on':''}">Automatisk</button>`+L.list.slice().reverse().map(t=>`<button data-av="l${t.i}" class="${!L.auto&&L.cur===t.i?'on':''}">${esc(t.n)}</button>`).join(''):'<small>Strømmen tilbyr bare én kvalitet.</small>'}
+   <b>Lyd</b>
+   <div class="ccoff">Volum <button data-av="v-0.1">−</button><button data-av="v0.1">+</button><small>${Math.round(v.volume*100)}%</small></div>
+   <button data-av="mute" class="${v.muted?'on':''}">${v.muted?'Lyden er av – slå på':'Slå av lyden'}</button>
+   <button data-t="close">Lukk</button>`;
+  m.className='on';
+}
+$('ovAV').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else avMenu()};
 $('ovCC').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else ccMenu()};
 $('ccMenu').onclick=e=>{
   const b=e.target.closest('button'),v=$('ovv');
   if(e.target.id==='ccAuto'){localStorage.setItem('nosub',e.target.checked?'1':'0');return}
   if(!b)return;
+  if(b.dataset.av!==undefined){const a=b.dataset.av;
+    if(a[0]==='a')vodPlayer.setAud(+a.slice(1));else if(a[0]==='l')vodPlayer.setLev(+a.slice(1));
+    else if(a[0]==='v')v.volume=Math.max(0,Math.min(1,v.volume+ +a.slice(1)));else if(a==='mute')v.muted=!v.muted;
+    setTimeout(avMenu,150);return}
   if(b.dataset.o){subOff+=+b.dataset.o;if(extSub&&!extSub.vtt)applyExtSub();ccMenu();return}
   const t=b.dataset.t;
   if(t==='close'){$('ccMenu').className='';return}
@@ -1133,14 +1169,24 @@ $('ccFile').onchange=async e=>{
 function closePlayer(){
   const v=$('ovv');
   if(ovCtx&&v.currentTime>5)pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
-  ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on');startEmbers();
+  ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on','pfs','bar');startEmbers();
   if(document.fullscreenElement)document.exitFullscreen();
   if(curView==='home')renderHome();
 }
 $('ovClose').onclick=closePlayer;
 $('ovNext').onclick=()=>{if(ovCtx&&ovCtx.next)ovCtx.next()};
 $('ovCopy').onclick=async()=>{if(!ovCtx)return;try{await navigator.clipboard.writeText(ovCtx.url);toast('Lenke kopiert – lim den inn i VLC (Medier → Åpne nettverksstrøm)',4000)}catch(e){prompt('Kopier lenken:',ovCtx.url)}};
-$('ovFs').onclick=()=>{const el=$('ov');if(document.fullscreenElement)document.exitFullscreen();else if(el.requestFullscreen)el.requestFullscreen()};
+function fsToggle(el){
+  if(document.fullscreenElement){document.exitFullscreen().catch(()=>{});return}
+  if(el.classList.contains('pfs')){el.classList.remove('pfs','bar');return}
+  if(!(NATIVE&&!DESKTOP)&&el.requestFullscreen){el.requestFullscreen().catch(()=>el.classList.add('pfs'))}else el.classList.add('pfs');
+}
+$('ovFs').onclick=()=>fsToggle($('ov'));
+let pfsT;document.addEventListener('keydown',e=>{const pf=document.querySelector('.pfs');if(!pf)return;
+  if(e.key==='Escape'||e.key==='Backspace'){pf.classList.remove('pfs','bar');e.preventDefault();e.stopImmediatePropagation();return}
+  if(!pf.classList.contains('bar')&&/^Arrow|Enter/.test(e.key)&&pf.id==='ov'){pf.classList.add('bar');e.preventDefault();e.stopImmediatePropagation();clearTimeout(pfsT);pfsT=setTimeout(()=>pf.classList.remove('bar'),5000)}
+},true);
+document.addEventListener('click',e=>{const pf=document.querySelector('.pfs');if(pf&&pf.id==='ov'&&!e.target.closest('.ovbar')){pf.classList.add('bar');clearTimeout(pfsT);pfsT=setTimeout(()=>pf.classList.remove('bar'),5000)}});
 
 /* ===================== Kort og hjelpefunksjoner ===================== */
 const pcard=c=>`<div class="pc" data-k="${c.key}" tabindex="0"><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div>${c.logo?`<img loading="lazy" src="${esc(c.logo)}" alt="">`:''}${c.rt?`<span class="rt">★ ${c.rt.toFixed(1)}</span>`:''}${isFav(c)?'<span class="fv">★</span>':''}</div><div class="pt">${esc(c.nm||c.name)}</div></div>`;
@@ -1155,7 +1201,7 @@ const byNew=(a,b)=>(b.ad||0)-(a.ad||0);
 
 /* ===================== Visninger ===================== */
 let curView='home';
-const VIEWS=['home','tv','fotball','live','movies','series','fav','search','matches','cams','settings'];
+const VIEWS=['home','tv','fotball','live','movies','series','fav','search','matches','apps','cams','settings'];
 let navStack=[];
 function showView(v,force,np){
   if(!force&&v===curView&&$('v-'+v).classList.contains('on'))return;
@@ -1177,6 +1223,7 @@ function showView(v,force,np){
   if(v==='series')renderVodShell('ser');
   if(v==='fav')renderFav();
   if(v==='matches')renderMatches();
+  if(v==='apps')$('v-apps').innerHTML='<h2>📲 Apper</h2>'+appsHtml();
   if(v==='cams')renderCams();
   if(v==='settings')renderSettings();
   $('v-'+v).scrollTop=0;
@@ -1234,7 +1281,6 @@ function renderHome(){
       <div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div>
       <div class="hbtn"><button class="primary" data-go="live:chip=brann">▶ Se Brann live</button><button class="ghost" data-go="matches:">Kamper og tabell</button></div></div>
     <div class="hside"><h3>🔴 Direkte og neste kamper</h3><div id="hsideList"><small>Henter kamper …</small></div></div></section>
-  ${appsHtml()}
   <h3 class="sech">Velg din verden</h3>
   <div class="posters">
     ${P('pp-film','film','Kino','Filmer','Nye, populære og norske','movies:',nfmt(nV))}
@@ -1341,6 +1387,7 @@ function go(sp){
   showView(v,true);
 }
 function appBack(){
+  const pf=document.querySelector('.pfs');if(pf){pf.classList.remove('pfs','bar');return true}
   const cm=$('ccMenu');if(cm&&cm.className==='on'){cm.className='';return true}
   if($('ov').classList.contains('on')){closePlayer();return true}
   const d=document.querySelector('dialog[open]');if(d){d.close();return true}
@@ -1463,6 +1510,7 @@ function zap(d){
 }
 if('mediaSession'in navigator){try{navigator.mediaSession.setActionHandler('previoustrack',()=>zap(-1));navigator.mediaSession.setActionHandler('nexttrack',()=>zap(1))}catch(e){}}
 function toggleFs(){
+  if(NATIVE&&!DESKTOP){fsToggle($('vwrap'));return}
   const el=$('vwrap');
   if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);
   else if(el.requestFullscreen)el.requestFullscreen();
@@ -1473,14 +1521,28 @@ $('btnFs').onclick=toggleFs;$('v').addEventListener('dblclick',toggleFs);
 
 /* ---------- Filmer / Serier ---------- */
 let vf={svc:'',cat:'',q:'',no:false,kids:false,sort:'new'},vpage=0,vkind='vod',vlist=[];
+let catOpen=false;
+function vsideBuild(cats){
+  const m=$('vside');if(!m)return;const fa=document.activeElement,key=m.contains(fa)?fa.dataset.k:'';
+  const chips=[...document.querySelectorAll('#vchips .chip')].map((c,i)=>`<button class="tmi ${c.classList.contains('on')?'on':''}" data-k="c${i}">${c.innerHTML}</button>`).join('');
+  const sorts=[['new','Nylig lagt til'],['az','A–Å'],['rt','Høyest rating']].map(([v,l])=>`<button class="tmi ${vf.sort===v?'on':''}" data-k="s${v}">${l}</button>`).join('');
+  const cl=catOpen?cats.map((c,i)=>`<button class="tmi ${vf.cat===c?'on':''}" data-k="k${i}">${esc(c)}</button>`).join(''):'';
+  m.innerHTML=`<div class="tmh">Visning</div>${chips}<div class="tmh">Sortering</div>${sorts}<div class="tmh">Kategori</div><button class="tmi ${!vf.cat?'on':''}" data-k="k-">${vf.cat?'Alle kategorier':'Alle kategorier'}</button><button class="tmi" data-k="ko">${catOpen?'▾ Skjul liste':'▸ Vis '+cats.length+' kategorier'}</button>${cl}`;
+  m.onclick=e=>{const b=e.target.closest('.tmi');if(!b)return;const k=b.dataset.k;
+    if(k[0]==='c'){document.querySelectorAll('#vchips .chip')[+k.slice(1)].click();return}
+    if(k[0]==='s'){vf.sort=k.slice(1);const sel=$('vsort');if(sel)sel.value=vf.sort;updateGrid();vsideBuild(cats);return}
+    if(k==='ko'){catOpen=!catOpen;vsideBuild(cats);return}
+    if(k[0]==='k'){vf.cat=k==='k-'?'':cats[+k.slice(1)];const sel=$('vcat');if(sel)sel.value=vf.cat;updateGrid();vsideBuild(cats)}};
+  if(key){const e=m.querySelector(`[data-k="${key}"]`);if(e)e.focus({preventScroll:true})}
+}
 function renderVodShell(kind){
   vkind=kind;const el=$(kind==='vod'?'v-movies':'v-series');
   const arr=DB[kind];
   if(!arr.length){el.innerHTML=`<h1>${kind==='vod'?'Filmer':'Serier'}</h1><div class="empty">${S?'Ingen '+(kind==='vod'?'filmer':'serier')+' i denne kilden. Prøv Innstillinger → Kilder → Oppdater.':'Legg til en kilde først.'}</div>`;return}
   const cnt={};for(const c of arr){if(c.sv&&visible(c))cnt[c.sv]=(cnt[c.sv]||0)+1}
   const cats=[...new Set(arr.filter(c=>(!vf.svc||c.sv===vf.svc)).map(c=>c.cat))].sort((a,b)=>a.localeCompare(b,'no'));
-  el.innerHTML=`<div id="vbb"></div><h1>${kind==='vod'?'🍿 <em>Filmer</em>':'🎬 <em>Serier</em>'}</h1>
-  <div class="bar"><input type="search" id="vq" placeholder="Søk …" value="${esc(vf.q)}">
+  el.innerHTML=`<div class="vlay"><aside id="vside"></aside><div class="vmain"><div id="vbb"></div><h1>${kind==='vod'?'🍿 <em>Filmer</em>':'🎬 <em>Serier</em>'}</h1>
+  <div class="bar vbar"><input type="search" id="vq" placeholder="Søk …" value="${esc(vf.q)}">
     <select id="vcat"><option value="">Alle kategorier (${cats.length})</option>${cats.map(c=>`<option ${vf.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
     <select id="vsort"><option value="new" ${vf.sort==='new'?'selected':''}>Nylig lagt til</option><option value="az" ${vf.sort==='az'?'selected':''}>A–Å</option><option value="rt" ${vf.sort==='rt'?'selected':''}>Høyest rating</option></select></div>
   <div class="bar" id="vchips">
@@ -1490,10 +1552,11 @@ function renderVodShell(kind){
     <button class="chip ${vf.kids?'on':''}" data-f="kids">🧸 Barn</button>
     ${SERV.filter(s=>cnt[s.id]).map(s=>`<button class="chip ${vf.svc===s.id?'on':''}" data-f="svc:${s.id}"><span style="color:${s.c}">●</span> ${s.name}<small>${cnt[s.id]}</small></button>`).join('')}
   </div>
-  <div id="vrails"></div><div class="grid" id="vgrid"></div><div id="vmore"></div>`;
+  <div id="vrails"></div><div class="grid" id="vgrid"></div><div id="vmore"></div></div></div>`;
+  vsideBuild(cats);
   $('vq').oninput=()=>{clearTimeout(qt);qt=setTimeout(()=>{vf.q=$('vq').value;updateGrid()},180)};
-  $('vcat').onchange=e=>{vf.cat=e.target.value;updateGrid()};
-  $('vsort').onchange=e=>{vf.sort=e.target.value;updateGrid()};
+  $('vcat').onchange=e=>{vf.cat=e.target.value;updateGrid();vsideBuild(cats)};
+  $('vsort').onchange=e=>{vf.sort=e.target.value;updateGrid();vsideBuild(cats)};
   $('vchips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const f=b.dataset.f;
     if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.all=false;vf.q='';vf.cat=''}
     else if(f==='grid'){vf.all=!vf.all}
@@ -1512,7 +1575,7 @@ function sliderHtml(items,kind){
 function startSlider(){
   stopSlider();const root=document.getElementById('bbx');if(!root)return;
   const slides=[...root.querySelectorAll('.bbs')],dots=[...root.querySelectorAll('.bbd i')];
-  const tick=()=>{clearInterval(bbTimer);bbTimer=setInterval(()=>show(bbIdx+1),8000)};
+  const tick=()=>{clearInterval(bbTimer);if(!TVM)bbTimer=setInterval(()=>show(bbIdx+1),8000)};
   const playTr=(sl,id,mute)=>{
     clearInterval(bbTimer);clearTimeout(bbTr);
     const v=sl.querySelector('.bbv');
@@ -1630,13 +1693,18 @@ const dlg=$('dlgItem');
 function openItem(c){
   if(c.t==='live'){current=c;showView('live',true);selectLive(c,true);const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===c.key);if(row)row.scrollIntoView({block:'center'});return}
   const fav=isFav(c);
-  dlg.innerHTML=`<div class="det"><div class="pimg"><div class="pfb">${esc(c.name)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
+  dlg.innerHTML=`<div id="dtr" hidden></div><div class="det"><div class="pimg"><div class="pfb">${esc(c.name)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
    <div><h2>${esc(c.name)}</h2><div class="meta" id="dmeta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}<span>${esc(c.cat)}</span>${c.sv?`<span>${esc(SERV.find(s=>s.id===c.sv).name)}</span>`:''}</div>
    <div class="plot" id="dplot">${esc(c.pl||'')}</div>
-   <div class="actions" style="justify-content:flex-start">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dFav">${fav?'★ Fjern favoritt':'☆ Favoritt'}</button><button id="dHide" class="danger">🚫 Skjul</button><button id="dClose">Lukk</button></div></div></div>
+   <div class="actions" style="justify-content:flex-start">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dTr">🎞 Trailer</button><button id="dFav">${fav?'★ Fjern favoritt':'☆ Favoritt'}</button><button id="dHide" class="danger">🚫 Skjul</button><button id="dClose">Lukk</button></div></div></div>
    ${c.t==='ser'?`<div id="dser"><div class="muted" style="margin-top:12px">Henter episoder …</div></div>`:''}`;
   dlg.showModal();
   $('dClose').onclick=()=>dlg.close();
+  let trId=ytId(c.tr||'');dlg._setTr=id=>{if(id&&!trId)trId=id};
+  $('dTr').onclick=()=>{const b=$('dtr');
+    if(!b.hidden){b.hidden=true;b.innerHTML='';$('dTr').textContent='🎞 Trailer';return}
+    if(trId){b.innerHTML=`<iframe src="https://www.youtube.com/embed/${trId}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;b.hidden=false;$('dTr').textContent='⏹ Skjul trailer';b.scrollIntoView({block:'nearest'})}
+    else{const q=encodeURIComponent(String(c.name).replace(/^[A-Z]{2}\s*[-|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').trim()+' trailer');openApp('youtube','https://www.youtube.com/results?search_query='+q,'YouTube')}};
   $('dFav').onclick=()=>{toggleFav(c);$('dFav').textContent=isFav(c)?'★ Fjern favoritt':'☆ Favoritt';if(curView==='home')renderHome()};
   $('dHide').onclick=()=>{toggleHide(c);dlg.close();showView(curView,true)};
   if(c.t==='vod'){
@@ -1647,6 +1715,7 @@ function openItem(c){
       if(!dlg.open)return;const i=j&&j.info;if(!i)return;
       const m=[];if(i.releasedate||i.releaseDate)m.push(String(i.releasedate||i.releaseDate).slice(0,4));if(i.duration)m.push(i.duration);if(i.genre)m.push(cl(i.genre));
       if(m.length)$('dmeta').insertAdjacentHTML('beforeend',m.map(x=>`<span>${esc(x)}</span>`).join(''));
+      dlg._setTr&&dlg._setTr(ytId(i.youtube_trailer||i.trailer||''));
       if(i.plot||i.description)$('dplot').textContent=cl(i.plot||i.description);
       if(i.movie_image&&!c.logo){const im=dlg.querySelector('.pimg');im.insertAdjacentHTML('beforeend',`<img src="${esc(i.movie_image)}" alt="">`)}
     }).catch(()=>{});
@@ -1657,6 +1726,7 @@ async function loadSeries(c){
   try{
     const j=await xapi(c.xt,'get_series_info','&series_id='+c.id);
     const info=j.info||{};
+    dlg._setTr&&dlg._setTr(ytId(info.youtube_trailer||info.trailer||''));
     if(info.plot)$('dplot').textContent=cl(info.plot);
     const m=[];if(info.releaseDate||info.releasedate)m.push(String(info.releaseDate||info.releasedate).slice(0,4));if(info.genre)m.push(cl(info.genre));
     if(m.length)$('dmeta').insertAdjacentHTML('beforeend',m.map(x=>`<span>${esc(x)}</span>`).join(''));
@@ -1918,14 +1988,33 @@ function tvSearchGo(){
 $('tvSearch').onclick=()=>{$('tvsQ').value='';$('tvsD').showModal();$('tvsQ').focus()};
 $('tvsGo').onclick=tvSearchGo;$('tvsX').onclick=()=>$('tvsD').close();
 $('tvsQ').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tvSearchGo()}});
+const tvfSum=()=>{const g=id=>{const e=$(id).querySelector('.chip.on');return e?e.childNodes[0].textContent.trim():''};$('tvFilt').textContent='🎚 '+[g('tabs'),g('chips'),g('provs')].filter(Boolean).join(' · ')+'  ▾'};
+function tvmBuild(){const m=$('tvMenu');const sec=[['Land / liste','tabs'],['Kategori','chips'],['Leverandør','provs']];
+  const has=m.contains(document.activeElement)&&document.activeElement.dataset.s?document.activeElement.dataset.s+'|'+document.activeElement.dataset.i:'';
+  m.innerHTML=sec.map(([t,id])=>{const cs=[...$(id).querySelectorAll('.chip')];return cs.length?`<div class="tmh">${t}</div>`+cs.map((c,i)=>`<button class="tmi ${c.classList.contains('on')?'on':''}" data-s="${id}" data-i="${i}">${c.innerHTML}</button>`).join(''):''}).join('');
+  if(has){const [a,b]=has.split('|');const e=m.querySelector(`[data-s="${a}"][data-i="${b}"]`);if(e)e.focus({preventScroll:true})}}
+$('tvMenu').onclick=e=>{const b=e.target.closest('.tmi');if(!b)return;$(b.dataset.s).querySelectorAll('.chip')[+b.dataset.i].click()};
+{const mo=new MutationObserver(()=>{tvfSum();tvmBuild()});['tabs','chips','provs'].forEach(i=>mo.observe($(i),{childList:true}))}
+function tvfOpen(){
+  const sec=[['Land / liste','tabs'],['Kategori','chips'],['Leverandør','provs']];
+  $('tvfB').innerHTML=sec.map(([t,id])=>{const cs=[...$(id).querySelectorAll('.chip')];return cs.length?`<h3>${t}</h3><div class="tvfc">${cs.map((c,i)=>`<button class="chip ${c.classList.contains('on')?'on':''}" data-s="${id}" data-i="${i}">${c.innerHTML}</button>`).join('')}</div>`:''}).join('');
+  if(!$('tvfD').open)$('tvfD').showModal();const f=$('tvfB').querySelector('.chip.on')||$('tvfB').querySelector('.chip');if(f)f.focus();
+}
+$('tvFilt').onclick=tvfOpen;$('tvfX').onclick=()=>$('tvfD').close();
+$('tvfB').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;$(b.dataset.s).querySelectorAll('.chip')[+b.dataset.i].click();tvfOpen();$('tvfB').querySelector('.chip.on')&&0};
 function tvMove(dir){
   const root=tvRoot(),cur=document.activeElement&&root.contains(document.activeElement)&&document.activeElement!==document.body?document.activeElement:null;
-  const vis=[...root.querySelectorAll(TVSEL)].filter(el=>{if(el.disabled||el.hidden||el.closest('[hidden]'))return false;if(TVM&&root===document.body&&(el.tagName==='SELECT'||(el.tagName==='INPUT'&&!/checkbox|file|button|radio/.test(el.type))))return false;const r=el.getBoundingClientRect();if(r.width<8||r.height<8)return false;const cs=getComputedStyle(el);return cs.visibility!=='hidden'&&cs.display!=='none'});
+  const vis=[...root.querySelectorAll(TVSEL)].filter(el=>{if(el.disabled||el.hidden||el.closest('[hidden]'))return false;if(TVM&&root===document.body&&(el.tagName==='SELECT'||(el.tagName==='INPUT'&&!/checkbox|file|button|radio/.test(el.type))))return false;if(TVM&&(dir==='ArrowUp'||dir==='ArrowDown')&&el.classList.contains('chip')&&el!==cur){const pr=el.parentElement,st=pr&&(pr.querySelector('.chip.on')||pr.querySelector('.chip'));if(el!==st)return false}const r=el.getBoundingClientRect();if(r.width<8||r.height<8)return false;const cs=getComputedStyle(el);return cs.visibility!=='hidden'&&cs.display!=='none'});
   if(!cur){const f=vis.find(el=>el.getBoundingClientRect().top>=0)||vis[0];if(f){if(!f.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(f.tagName))f.tabIndex=0;f.focus();}return}
+  if(root.tagName==='DIALOG'&&!root.classList.contains('tvpick')&&(dir==='ArrowDown'||dir==='ArrowUp')){const i=vis.indexOf(cur),n=vis[i<0?0:Math.max(0,Math.min(vis.length-1,i+(dir==='ArrowDown'?1:-1)))];if(n){n.focus({preventScroll:true});n.scrollIntoView({block:'center',behavior:'auto'})}return}
   const a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;let best=null,bs=1e9;
   for(const el of vis){if(el===cur||cur.contains(el)||el.contains(cur))continue;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,dx=x-ax,dy=y-ay;
     let pr,or;if(dir==='ArrowRight'){if(dx<=4)continue;pr=dx;or=Math.abs(dy)}else if(dir==='ArrowLeft'){if(dx>=-4)continue;pr=-dx;or=Math.abs(dy)}else if(dir==='ArrowDown'){if(dy<=4)continue;pr=dy;or=Math.abs(dx)}else{if(dy>=-4)continue;pr=-dy;or=Math.abs(dx)}
     const sc=pr+or*2.5;if(sc<bs){bs=sc;best=el}}
+  if(TVM&&(dir==='ArrowDown'||dir==='ArrowUp')){const sc=(cur&&cur.closest('#list,.eps,#vside,.view'))||document.querySelector('.view.on')||document.documentElement,H=sc.clientHeight||innerHeight;
+    const off=best&&(()=>{const r=best.getBoundingClientRect();return dir==='ArrowDown'?r.top>innerHeight*0.92:r.bottom<innerHeight*0.08})();
+    const canS=dir==='ArrowDown'?sc.scrollTop+H<sc.scrollHeight-4:sc.scrollTop>4;
+    if((!best||off)&&canS){sc.scrollBy({top:(dir==='ArrowDown'?1:-1)*Math.round(H*0.28),behavior:'auto'});return}}
   if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:'center',behavior:TVM?'auto':'smooth'})}
 }
 document.addEventListener('keydown',e=>{
@@ -1936,7 +2025,7 @@ document.addEventListener('keydown',e=>{
     if(!TVM&&typing&&/Left|Right/.test(k))return;
     if(!TVM&&t&&t.tagName==='SELECT')return;
     if(t&&t.tagName==='VIDEO'&&/Left|Right/.test(k))return;
-    document.body.classList.add('tv');e.preventDefault();if(TVM&&t&&/INPUT|SELECT|TEXTAREA/.test(t.tagName))t.blur();tvMove(k);
+    document.body.classList.add('tv');e.preventDefault();tvMove(k);
   }else if(k==='Enter'&&document.body.classList.contains('tv')&&t&&!/BUTTON|A|INPUT|SELECT|TEXTAREA|VIDEO/.test(t.tagName)){e.preventDefault();t.click()}
 });
 if(/Android.*(TV|AFT|BRAVIA|Chromecast|SHIELD)/i.test(navigator.userAgent))document.body.classList.add('tv');
@@ -2017,7 +2106,7 @@ async function checkAppUpdate(){
   }catch(e){}
 }
 setTimeout(checkAppUpdate,4000);
-detectProxy().then(loadSources).then(()=>{setTimeout(()=>autoUpdate(false),1500);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
+detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpdate(false),1500);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
 })();
 </script>
 
