@@ -2,18 +2,19 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=38;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=62;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
+window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Min IPTV</title>
+<title>Eskedals Univers</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5.0.8/400.css">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#07080d">
+<meta name="theme-color" content="#090a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Min IPTV">
+<meta name="apple-mobile-web-app-title" content="Eskedals Univers">
 <style>
 :root{--bg:#07080d;--panel:rgba(12,14,22,.84);--panel2:rgba(28,32,48,.92);--line:rgba(255,255,255,.10);--text:#f5f2ec;--muted:#a29e94;--accent:#e4002b;--accent2:#ff5468;--glow:rgba(228,0,43,.55);--onacc:#fff;--ok:#3ecf8e;--r:16px}
 html[data-theme=kino]{--accent:#d9b45b;--accent2:#f3dc9a;--glow:rgba(217,180,91,.45);--onacc:#1a1405}
@@ -37,7 +38,7 @@ header{position:relative;display:flex;gap:12px;align-items:center;padding:10px 1
 header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:repeating-linear-gradient(90deg,var(--accent) 0 22px,#fff 22px 44px);opacity:.9}
 header::after{background:var(--accent)!important;opacity:1!important}
 html[data-theme=kino] header::after{background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-.brand{display:flex;align-items:center;gap:8px;white-space:nowrap;cursor:pointer}
+.brand{display:flex;align-items:center;gap:11px;white-space:nowrap;cursor:pointer}
 .brand .fl{font-size:22px;animation:none}
 .brand b{font:800 19px Georgia,"Times New Roman",serif;letter-spacing:.26em;color:#fff;text-shadow:0 0 16px var(--glow)}
 @keyframes flick{0%,100%{transform:scale(1)}50%{transform:scale(1.12) rotate(-3deg)}}
@@ -308,7 +309,7 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 }
 
 /* ===== v6: stadion + kino ===== */
-h1,.pagetitle{font-family:"Bebas Neue",Bahnschrift,Impact,"Arial Narrow",sans-serif;font-weight:400;letter-spacing:.05em}
+h1,.pagetitle{font-family:var(--ff);font-weight:400;letter-spacing:.05em}
 h1{font-size:clamp(30px,4vw,46px)}
 .hero{position:relative;margin:-18px -22px 26px;padding:70px 34px 34px;min-height:480px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(290px,1fr);gap:30px;align-items:end;border-bottom:1px solid rgba(217,180,91,.45);background:radial-gradient(ellipse 80% 55% at 50% 125%,#115a34 0,transparent 70%),radial-gradient(ellipse 55% 70% at 100% -10%,rgba(228,0,43,.5),transparent 70%),radial-gradient(ellipse 45% 60% at 0 -10%,rgba(120,150,255,.22),transparent 70%),linear-gradient(180deg,#04060d,#070a10 62%,#06150d)}
 .hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:conic-gradient(from 195deg at 12% -8%,transparent 0 6%,rgba(255,244,214,.18) 8%,transparent 12%,rgba(255,244,214,.10) 15%,transparent 20%),conic-gradient(from 160deg at 88% -8%,transparent 0 6%,rgba(255,244,214,.16) 8%,transparent 12%,rgba(255,244,214,.09) 15%,transparent 20%);animation:sway 10s ease-in-out infinite alternate}
@@ -319,22 +320,22 @@ h1{font-size:clamp(30px,4vw,46px)}
 .stad .pitch{position:absolute;left:-30%;right:-30%;bottom:-4%;height:70%;transform:perspective(560px) rotateX(66deg);transform-origin:50% 100%;background:repeating-linear-gradient(90deg,#23a35e 0 120px,#1a8c4e 120px 240px);opacity:.9;-webkit-mask-image:linear-gradient(0deg,#000 8%,transparent 92%);mask-image:linear-gradient(0deg,#000 8%,transparent 92%);border-top:4px solid rgba(255,255,255,.55)}
 .stad .pitch::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:rgba(255,255,255,.55)}
 .stad .pitch::after{content:"";position:absolute;left:50%;top:6%;width:300px;height:300px;margin-left:-150px;border:4px solid rgba(255,255,255,.55);border-radius:50%}
-.stad .wm{position:absolute;right:2%;top:2%;font:400 clamp(130px,23vw,360px)/.9 "Bebas Neue",Impact,sans-serif;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.07);letter-spacing:.05em;user-select:none}
+.stad .wm{position:absolute;right:2%;top:2%;font:700 clamp(130px,23vw,360px)/.9 var(--ff);color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.07);letter-spacing:.05em;user-select:none}
 .eyebrow{display:flex;gap:10px;align-items:center;font-weight:700;letter-spacing:.38em;font-size:12px;color:var(--accent2);text-transform:uppercase}
 .eyebrow::before{content:"";width:34px;height:2px;background:var(--accent2)}
 .hello{margin-top:14px;color:#d8d3c4;font-size:17px;letter-spacing:.04em}
-.hero h1{text-transform:uppercase;font:400 clamp(54px,8.4vw,120px)/.92 "Bebas Neue",Bahnschrift,Impact,"Arial Narrow",sans-serif;letter-spacing:.015em;margin:2px 0 8px;text-shadow:0 6px 40px rgba(0,0,0,.8)}
+.hero h1{text-transform:uppercase;font:700 clamp(54px,8.4vw,120px)/.92 var(--ff);letter-spacing:.015em;margin:2px 0 8px;text-shadow:0 6px 40px rgba(0,0,0,.8)}
 .hero h1 em{display:inline;font-style:normal;color:transparent;-webkit-text-stroke:2px var(--accent2);text-shadow:0 0 40px var(--glow)}
 .hsub{color:#e6e1d4;max-width:540px;margin:0 0 18px;font-size:16px}
 .ticket{--cut:68%;display:flex;max-width:660px;margin-bottom:18px;color:#fff;background:linear-gradient(100deg,rgba(130,0,25,.9),rgba(20,3,8,.92) 70%);border:1px solid rgba(217,180,91,.65);border-radius:14px;-webkit-mask:radial-gradient(circle 11px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 11px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;mask:radial-gradient(circle 11px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 11px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;box-shadow:0 20px 50px -20px #000}
 .ticket .tl{flex:0 0 68%;padding:14px 18px;min-width:0}
 .ticket .tr{flex:1;padding:14px 16px;border-left:2px dashed rgba(217,180,91,.7);display:flex;flex-direction:column;justify-content:center;gap:4px}
 .ticket small{display:block;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#e9d9a8}
-.ticket .tt{display:flex;align-items:center;gap:10px;margin:6px 0 4px;font:400 28px/1.05 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.04em;flex-wrap:wrap}
+.ticket .tt{display:flex;align-items:center;gap:10px;margin:6px 0 4px;font:700 28px/1.05 var(--ff);letter-spacing:.04em;flex-wrap:wrap}
 .ticket .tt img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 3px 6px #000)}
 .ticket .tt i{font-style:normal;color:var(--accent2);font-size:20px}
 .ticket .td{color:#f0e8d0;font-size:14px}
-.ticket .tr b{font:400 30px/1 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.ticket .tr b{font:700 30px/1 var(--ff);letter-spacing:.04em;font-variant-numeric:tabular-nums}
 .hbtn{display:flex;gap:10px;flex-wrap:wrap}
 .hbtn button{padding:12px 24px;border-radius:999px;font-weight:800;font-size:15px}
 .hbtn .ghost{background:rgba(255,255,255,.1);backdrop-filter:blur(6px);border-color:rgba(255,255,255,.28)}
@@ -351,7 +352,7 @@ h1{font-size:clamp(30px,4vw,46px)}
 .apphint{font-size:12px;opacity:.65;margin:-4px 0 10px}
 .poster .pi{position:absolute;top:8%;left:0;right:0;text-align:center;font-size:clamp(54px,6.4vw,92px);filter:drop-shadow(0 12px 22px rgba(0,0,0,.75))}
 .poster .kick{font-size:10.5px;letter-spacing:.3em;color:var(--accent2);text-transform:uppercase;margin-bottom:2px}
-.poster b{text-transform:uppercase;font:400 clamp(26px,2.5vw,38px)/1 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.05em}
+.poster b{text-transform:uppercase;font:700 clamp(26px,2.5vw,38px)/1 var(--ff);letter-spacing:.05em}
 .poster .ps{color:#d0d3e4;font-size:13px;margin-top:4px}
 .poster .cnt{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
 .poster .cnt.live{background:#e4002b;border-color:#e4002b;animation:pulse 1.6s infinite}
@@ -370,7 +371,7 @@ h1{font-size:clamp(30px,4vw,46px)}
 .bb::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,5,10,.9),transparent 70%),linear-gradient(0deg,var(--bg) 2%,transparent 40%);z-index:1}
 .bb>*{position:relative;z-index:2}
 .bb .bbin{flex:1;min-width:0;max-width:640px}
-.bb h2{font:400 clamp(38px,5.4vw,74px)/.98 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.03em;margin:6px 0 8px;text-shadow:0 4px 30px #000}
+.bb h2{font:700 clamp(38px,5.4vw,74px)/.98 var(--ff);letter-spacing:.03em;margin:6px 0 8px;text-shadow:0 4px 30px #000}
 .bb .bbtn{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .bb .bbtn button{padding:11px 22px;border-radius:999px;font-weight:800}
 .bb .bbp{width:200px;aspect-ratio:2/3;object-fit:cover;border-radius:14px;box-shadow:0 24px 50px -10px #000,0 0 0 1px rgba(255,255,255,.2);flex:0 0 auto;margin-left:auto}
@@ -382,12 +383,12 @@ h1{font-size:clamp(30px,4vw,46px)}
 .fhero .ticket{margin:0 0 14px}
 /* Topp 10 rettet */
 .t10{flex:0 0 300px;width:300px;position:relative;padding-left:140px}
-.t10 .num{position:absolute;left:0;bottom:22px;font:400 190px/.8 "Bebas Neue",Impact,sans-serif;color:#080a12;-webkit-text-stroke:3px #7c829c;letter-spacing:-.02em;z-index:0}
+.t10 .num{position:absolute;left:0;bottom:22px;font:700 190px/.8 var(--ff);color:#080a12;-webkit-text-stroke:3px #7c829c;letter-spacing:-.02em;z-index:0}
 .t10 .pimg{width:158px;position:relative;z-index:1}
 .t10.w2{flex-basis:360px;width:360px;padding-left:200px}
 .t10.w2 .num{letter-spacing:-.1em}
-.sech{text-transform:uppercase;font:400 26px/1 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.06em}
-.rh h3{text-transform:uppercase;font:400 24px/1 "Bebas Neue",Bahnschrift,Impact,sans-serif;letter-spacing:.06em}
+.sech{text-transform:uppercase;font:700 26px/1 var(--ff);letter-spacing:.06em}
+.rh h3{text-transform:uppercase;font:700 24px/1 var(--ff);letter-spacing:.06em}
 @media (max-width:980px){.posters{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:860px){
   .hero{margin:-12px -12px 20px;padding:50px 16px 20px;min-height:0;grid-template-columns:1fr}
@@ -463,23 +464,342 @@ html.tvm .bb .bbv{display:none!important}
 html.tvm :focus{outline:4px solid #fff!important;outline-offset:2px;background-color:rgba(228,0,43,.35)}
 html.tvm .poster:focus,html.tvm .pc:focus,html.tvm .cc:focus,html.tvm .ch:focus,html.tvm .app:focus{outline:5px solid #fff!important;transform:none!important}
 html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html.tvm #prof,html.tvm .brand b{display:none!important}html.tvm #nav button{white-space:nowrap;padding:8px 12px}
+/* ================= v39 – nytt design ================= */
+:root,html[data-theme=kino]{--bg:#090a0f;--panel:rgba(20,22,31,.94);--panel2:#1a1d29;--line:rgba(255,255,255,.08);--text:#f3f5fa;--muted:#8d95a9;--accent:#7c5cff;--accent2:#a99bff;--glow:rgba(124,92,255,.38);--onacc:#fff;--ff:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;--live:#ff4d5e;--sport:#19c37d;--r:10px}
+html,body{background:var(--bg);font-family:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body::before,body::after,#embers{display:none!important}
+h1,h2,h3,.sech,.pagetitle,.bb h2,.ticket .tt,.ticket .tr b,.poster b,.t10 .num{font-family:var(--ff)}
+h1{font-weight:800;letter-spacing:-.025em;font-size:clamp(28px,3.4vw,42px)}
+h1 em{color:var(--text);text-shadow:none}
+button{border-radius:8px;background:rgba(255,255,255,.07);border:1px solid transparent}
+button:hover{background:rgba(255,255,255,.13);border-color:transparent}
+button.primary{background:#fff;color:#0b0c12;border:0;box-shadow:none;font-weight:700}
+button.primary:hover{background:#e3e5ee}
+input,select{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px}
+/* topp */
+header{height:68px;padding:0 4vw;gap:30px;background:linear-gradient(180deg,rgba(9,10,15,.98),rgba(9,10,15,.86));border-bottom:1px solid var(--line);backdrop-filter:blur(16px);z-index:30}
+header::after{display:none!important}
+.brand .fl{display:none}
+.brand b{font:900 19px/1 var(--ff);letter-spacing:.09em;text-shadow:none;color:#fff}
+.brand b span{background:linear-gradient(90deg,var(--accent2),#4fd0ff);-webkit-background-clip:text;background-clip:text;color:transparent}.brand .logo{width:36px;height:36px;flex:none;filter:drop-shadow(0 4px 14px rgba(124,92,255,.5))}
+#nav{gap:2px}
+#nav button{background:none;border:0;border-radius:8px;padding:10px 14px;font-weight:600;font-size:15px;color:#aab1c3;position:relative;white-space:nowrap}
+#nav button i{display:none}
+#nav button:hover{color:#fff;background:rgba(255,255,255,.05)}
+#nav button.on{color:#fff;background:none;box-shadow:none}
+#nav button.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:3px;border-radius:3px;background:var(--accent)}
+#nav button.sec{display:none}
+#moreWrap{position:relative}
+#moreBtn{background:none;border:0;color:#aab1c3;font-weight:600;font-size:15px;padding:10px 14px;position:relative}
+#moreBtn.on{color:#fff}
+#moreBtn.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:3px;border-radius:3px;background:var(--accent)}
+#moreMenu{display:none;position:absolute;top:100%;right:0;margin-top:8px;min-width:200px;padding:8px;background:#141620;border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px -10px #000;z-index:60}
+#moreWrap.open #moreMenu{display:block}
+#moreMenu button{display:block;width:100%;text-align:left;background:none;padding:11px 14px;font-weight:600;color:#d6dae6}
+#moreMenu button:hover{background:rgba(255,255,255,.08)}
+#gq{width:220px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid transparent;padding:9px 14px}
+#gq:focus{background:rgba(255,255,255,.12);border-color:var(--accent)}
+#bBrann{display:none}
+.bpill{animation:none;background:rgba(255,255,255,.08);border:0;color:#fff;border-radius:8px}
+#prof{border-radius:8px;background:rgba(255,255,255,.07);border:0;max-width:120px}
+#clock{display:none}
+@media(min-width:1500px){#clock{display:inline}}
+/* sider */
+.view{padding:0 4vw 70px}
+#v-live.on{padding:14px 2vw}
+.view>h1:first-child,.view>.pagehead:first-child{margin-top:26px}
+/* rader */
+.rail{margin:0 0 6px;position:relative}
+.rh{margin:0 0 2px;align-items:baseline}
+.rh h3,.sech{font:700 20px/1.2 var(--ff);letter-spacing:-.01em;text-transform:none;margin:0}
+.rh .lk{background:none;border:0;color:var(--accent2);font-size:13px;font-weight:600;opacity:0;transition:.2s;padding:4px 8px}
+.rail:hover .rh .lk,.rh .lk:focus-visible{opacity:1}
+.rs{gap:10px;padding:14px 0 30px;scrollbar-width:none;scroll-snap-type:none}
+.rs::-webkit-scrollbar{display:none}
+.pc{flex:0 0 clamp(140px,12.5vw,200px);width:clamp(140px,12.5vw,200px);transition:transform .22s cubic-bezier(.2,.7,.3,1)}
+.pc:hover,.pc:focus-visible{transform:scale(1.08);z-index:5;position:relative}
+.pimg{border-radius:8px;border:0;background:linear-gradient(160deg,#242842,#12141f);box-shadow:0 6px 18px -8px #000}
+.pc:hover .pimg{box-shadow:0 20px 40px -10px #000,0 0 0 2px rgba(255,255,255,.9)}
+.pt{color:#c3c8d6;font-size:12.5px;margin-top:8px}
+.rt{background:rgba(0,0,0,.72);color:#ffd36b;border-radius:6px}
+.cc{flex:0 0 clamp(150px,13vw,200px);width:clamp(150px,13vw,200px);transition:transform .22s}
+.cc:hover,.cc:focus-visible{transform:scale(1.06);z-index:5;position:relative}
+.cimg{height:96px;border-radius:8px;background:linear-gradient(160deg,#1c2030,#10121b);border:0;box-shadow:0 6px 18px -8px #000}
+.cc:hover .cimg{box-shadow:0 0 0 2px #fff}
+.rnv{position:absolute;top:44px;bottom:30px;width:52px;border:0;border-radius:0;background:linear-gradient(90deg,rgba(9,10,15,.92),transparent);color:#fff;font-size:34px;opacity:0;transition:.2s;z-index:8;padding:0;cursor:pointer}
+.rnv.l{left:-4vw;width:4vw;min-width:34px}
+.rnv.r{right:-4vw;width:4vw;min-width:34px;background:linear-gradient(270deg,rgba(9,10,15,.92),transparent)}
+.rail:hover .rnv{opacity:1}
+@media(hover:none){.rnv{display:none}}
+html.tvm .rnv{display:none}
+.pc.t10{flex:0 0 300px;width:300px}.pc.t10.w2{flex-basis:360px;width:360px}.t10 .num{color:#090a0f;-webkit-text-stroke:3px #5b6178;font-weight:900}
+.chip{border-radius:999px;background:rgba(255,255,255,.07);border:1px solid transparent;padding:7px 15px;font-weight:600;color:#c3c8d6}
+.chip:hover{background:rgba(255,255,255,.14)}
+.chip.on{background:#fff;color:#0b0c12;border-color:#fff;box-shadow:none}
+/* billboard */
+.bb{margin:0 -4vw 0;--bbh:clamp(480px,72vh,720px);height:var(--bbh);min-height:0;padding:0;border:0}
+.bb .bbs{padding:0 4vw 130px;gap:40px}
+.bbd{left:4vw;right:auto;bottom:100px}
+.bb .bbimg{inset:-40px;filter:blur(38px) brightness(.5) saturate(1.3);background-position:center 25%}
+.bb::after{background:linear-gradient(90deg,rgba(9,10,15,.92) 0%,rgba(9,10,15,.35) 55%,transparent),linear-gradient(0deg,var(--bg) 0,transparent 38%)}
+.bb h2{font-weight:900;font-size:clamp(34px,4.8vw,66px);line-height:1.02;letter-spacing:-.035em;margin:10px 0 12px;text-shadow:0 6px 40px rgba(0,0,0,.7)}
+.bb .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:var(--accent2)}
+.bb .bbtn button{border-radius:8px;padding:12px 26px;font-size:16px}
+.bb .bbtn .ghost{background:rgba(109,118,140,.55);color:#fff}
+.bb .bbtn .ghost:hover{background:rgba(109,118,140,.8)}
+.bb .bbp{width:230px;border-radius:10px;box-shadow:0 30px 70px -10px #000}
+.hrails{margin-top:-70px;position:relative;z-index:5}.hrails.nobb{margin-top:26px}
+/* hjem – kveldens kamper */
+.mc{flex:0 0 280px;width:280px;cursor:pointer;border-radius:12px;padding:14px 16px;background:linear-gradient(160deg,#1a1d2b,#12141e);border:1px solid var(--line);transition:transform .22s;display:flex;flex-direction:column;gap:10px}
+.mc:hover,.mc:focus-visible{transform:scale(1.04);border-color:rgba(255,255,255,.6);z-index:5;position:relative}
+.mc.brann{border-color:rgba(255,77,94,.5);background:linear-gradient(160deg,#2a1520,#14111a)}
+.mc .mlg>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mc .mlg{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.mc .mt{display:flex;flex-direction:column;gap:7px}
+.mc .mtm{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.mc .mtm img{width:26px;height:26px;object-fit:contain}
+.mc .mtm b{margin-left:auto;font-variant-numeric:tabular-nums}
+.mc .mft{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#c9cedc}
+.mc .mft .go{color:var(--accent2);font-weight:700}
+.liveb{background:var(--live);color:#fff;border-radius:5px;padding:1px 7px;font-size:11px;font-weight:800;letter-spacing:.06em}
+/* ticket (neste Brann-kamp) */
+.ticket{background:linear-gradient(100deg,rgba(25,195,125,.2),rgba(18,20,30,.96) 72%);border:1px solid rgba(25,195,125,.4);border-radius:14px}
+.ticket small{color:#7fe3b8}
+.ticket .tt{font-weight:800;font-size:26px;letter-spacing:-.02em}
+.ticket .tt i{color:var(--sport)}
+.ticket .tr{border-left:2px dashed rgba(255,255,255,.16)}
+.ticket .tr b{font-weight:800}
+/* sport */
+.shero{position:relative;overflow:hidden;margin:0 -4vw 26px;padding:54px 4vw 34px;background:radial-gradient(ellipse 60% 120% at 85% 0%,rgba(25,195,125,.32),transparent 65%),linear-gradient(180deg,#0b1f19,var(--bg))}
+.shero .stad{position:absolute;inset:0;opacity:.25;overflow:hidden}
+.shero>*{position:relative;z-index:2}
+.shero h1{font-size:clamp(40px,6vw,84px);font-weight:900;letter-spacing:-.04em;margin:0 0 6px;line-height:1}
+.shero .sub{color:#b4c9c0;margin:0 0 20px;font-size:17px}
+.shero .ticket{max-width:680px;margin-bottom:18px}
+.shero .hbtn{display:flex;gap:10px;flex-wrap:wrap}
+.shero .hbtn .ghost{background:rgba(255,255,255,.1)}
+.spills{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+/* filmer/serier */
+@media(min-width:900px){.vlay{display:block}#vside{display:none!important}}
+@media(min-width:900px){html:not(.tvm) #vchips{display:flex!important;flex-wrap:wrap;gap:8px;margin:4px 0 14px}html:not(.tvm) #vsort,html:not(.tvm) #vcat{display:block!important}html:not(.tvm) .vbar{display:flex;gap:10px;margin:14px 0 10px}html:not(.tvm) .vbar input{max-width:320px}html:not(.tvm) .vbar select{width:auto;min-width:190px}}
+html.tvm .vlay{display:grid}
+.vmain>h1{display:none}
+.vbar{margin:8px 0 6px}
+#vchips{margin:0 0 6px}
+.vmain .bb{margin-top:0}
+/* direkte TV – landing */
+.ctiles{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:14px 0 34px}
+.ctile{border-radius:12px;min-height:130px;padding:16px 18px;background:linear-gradient(160deg,#1b1e2d,#11131c)!important;border:1px solid var(--line)}
+.ctile:hover,.ctile:focus-visible{transform:scale(1.04);border-color:rgba(255,255,255,.6);box-shadow:0 20px 40px -14px #000}
+.ctile .flag{font-size:34px;top:14px;left:18px}
+.ctile .mos{grid-template-columns:repeat(2,34px);gap:5px;right:14px;top:14px}.ctile .mos span{width:34px;height:34px;border-radius:8px}
+.ctile b{font-size:18px;font-weight:700}
+.ctile.c-brann{border-color:rgba(255,77,94,.55);background:linear-gradient(160deg,#2c1620,#14111a)!important}
+.ctile.c-sp{background:linear-gradient(160deg,#102a21,#0e1417)!important}
+.fx{border-radius:12px;background:var(--panel)}.fx.brann{background:linear-gradient(90deg,rgba(255,77,94,.16),var(--panel))!important;border-color:rgba(255,77,94,.5);box-shadow:none}
+/* ===== Direkte TV 2.0 ===== */
+.tvh{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:26px 0 6px}
+.tvh h1{margin:0}
+#tvq{max-width:360px;margin-left:auto}
+.lc{flex:0 0 clamp(210px,17vw,280px);width:clamp(210px,17vw,280px);cursor:pointer;transition:transform .22s cubic-bezier(.2,.7,.3,1);border-radius:10px;background:linear-gradient(160deg,#1a1d2b,#11131c);box-shadow:0 6px 18px -8px #000;overflow:hidden;display:flex;flex-direction:column}
+.lc:hover,.lc:focus-visible{transform:scale(1.06);z-index:5;position:relative;box-shadow:0 20px 40px -10px #000,0 0 0 2px #fff}
+.lci{position:relative;height:104px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 30%,#262b42,#12141f 75%)}
+.lci img{position:relative;max-width:62%;max-height:68%;object-fit:contain;z-index:1}
+.lci .cph{position:absolute;color:#5b6178;font-weight:800;font-size:26px}
+.lci .qb{position:absolute;right:8px;bottom:8px;background:rgba(124,92,255,.9);color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;z-index:2}
+.lci .fv{position:absolute;left:8px;top:6px;color:#ffc84a;z-index:2;font-size:13px}
+.lcb{padding:10px 12px 12px;min-height:76px}
+.lcn{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcp{margin-top:5px}
+.lpn{font-size:12.5px;color:#dfe3ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lpb{height:3px;background:rgba(255,255,255,.14);border-radius:3px;margin:6px 0 5px;overflow:hidden}
+.lpb i{display:block;height:100%;background:var(--accent2)}
+.lpx{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding:6px 0 30px}
+.lgrid .lc{width:auto}
+/* TV-guide */
+.gscroll{overflow:auto;max-height:calc(100vh - 230px);border:1px solid var(--line);border-radius:12px;background:#0d0f16}
+.gin{position:relative}
+.ghead,.grow{display:flex;border-bottom:1px solid var(--line)}
+.ghead{position:sticky;top:0;z-index:4;background:#12141e}
+.gch{flex:0 0 190px;width:190px;display:flex;align-items:center;gap:10px;padding:8px 12px;position:sticky;left:0;z-index:3;background:#12141e;cursor:pointer;border-right:1px solid var(--line)}
+.gch img{width:34px;height:26px;object-fit:contain}
+.gch span{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gtl{position:relative;flex:1;height:56px}
+.ghead .gtl{height:34px}
+.ghead .gtl span{position:absolute;top:8px;font-size:12px;color:var(--muted);padding-left:6px;border-left:1px solid var(--line)}
+.gp{position:absolute;top:5px;height:46px;border-radius:7px;background:#1d2132;border:0;padding:5px 8px;text-align:left;overflow:hidden;white-space:nowrap}
+.gp b{display:block;font-size:12.5px;overflow:hidden;text-overflow:ellipsis}
+.gp small{color:var(--muted);font-size:11px}
+.gp:hover,.gp:focus-visible{background:#2b3050;outline:none;box-shadow:0 0 0 2px #fff}
+.gp.now{background:linear-gradient(160deg,#41359a,#2b2470)}
+.gnow{position:absolute;top:0;bottom:0;width:2px;background:var(--live);z-index:5;pointer-events:none}
+/* spiller: kanalinfo, nummer, liste */
+#zapI{position:absolute;left:3%;right:3%;bottom:8%;display:none;align-items:center;gap:16px;padding:14px 18px;border-radius:14px;background:rgba(10,11,16,.86);backdrop-filter:blur(8px);z-index:7;pointer-events:none}
+#zapI.on{display:flex}
+#zapI .zil{width:64px;height:48px;display:grid;place-items:center}#zapI img{max-width:100%;max-height:100%;object-fit:contain}
+#zapI .zib{flex:1;min-width:0}#zapI .zib b{font-size:20px}
+#zapN{position:absolute;top:6%;right:5%;font:800 56px/1 var(--ff);color:#fff;text-shadow:0 4px 20px #000;display:none;z-index:8}
+#zapN.on{display:block}
+#zapL{position:absolute;left:0;top:0;bottom:0;width:min(380px,80%);display:none;flex-direction:column;background:linear-gradient(90deg,rgba(9,10,15,.95),rgba(9,10,15,.8));z-index:9;padding:14px 10px;overflow:hidden}
+#vwrap.zl #zapL{display:flex}
+#vwrap.zl #zapI{display:none!important}
+#zapL .zh{font-weight:800;font-size:16px;padding:4px 10px 10px}#zapL .zh small{color:var(--muted);font-weight:500;margin-left:6px}
+.zr{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:10px;cursor:pointer;margin-bottom:4px}
+.zr.on{background:rgba(124,92,255,.38);box-shadow:0 0 0 2px #fff inset}
+.zr.cur .zrb b::after{content:" ●";color:var(--live);font-size:11px}
+.zr img,.zr .zph{width:48px;height:36px;object-fit:contain;flex:none}
+.zrb{min-width:0;flex:1}.zrb b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nowAlt{white-space:nowrap}
+html.tvm .lc{content-visibility:auto;contain-intrinsic-size:auto 190px}
+html.tvm #tvq{display:none}
+html.tvm .lc:focus{background:linear-gradient(160deg,#41359a,#2b2470)}
+.qstat{position:absolute;top:12px;right:12px;z-index:12;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);padding:10px 14px;border-radius:10px;font:12.5px/1.6 var(--ff);white-space:pre;pointer-events:none;display:none;max-width:90%}
+#ovw{position:relative}
+/* tv-modus */
+html.tvm :focus{outline:4px solid #fff!important;background-color:rgba(124,92,255,.35)}
+html.tvm #nav button.sec{display:inline-block}
+html.tvm #moreWrap{display:none}
+html.tvm .bb .bbp{display:none}
+html.tvm .rh .lk{opacity:1}
+html.tvm header{height:auto;padding-top:8px;padding-bottom:8px;gap:12px}
+html.tvm .brand b{display:inline!important}
+/* mobil */
+@media(max-width:860px){
+  header{height:auto;flex-wrap:wrap;gap:6px 10px;padding:8px 14px}
+  #nav{order:5;width:100%;overflow-x:auto;scrollbar-width:none}
+  #nav button{padding:8px 10px;font-size:14px}
+  #gq{width:130px}
+  .bb{--bbh:440px}.bb .bbs{padding:0 14px 90px}.bbd{left:14px;bottom:96px}.hrails{margin-top:-30px}
+  .view{padding:0 14px 60px}
+  .bb,.shero{margin-left:-14px;margin-right:-14px}
+  .rnv{display:none}
+}
+
+.lci img{position:absolute;left:19%;top:14%;width:62%;height:72%;max-width:none;max-height:none;object-fit:contain}.lci img~.cph{display:none}
+#list .ch .cl{overflow:hidden}#list .ch .cl img{position:absolute;left:14%;top:16%}#v-live.playing #list .ch .cl img{left:11%;top:11%}
+.hlive .pfb{display:none}
+.hlive{background:radial-gradient(circle at 50% 22%,#414a6e,#161a2b 74%)!important}.hlive img{object-fit:contain!important;width:100%!important;height:100%!important;padding:14% 20%;box-sizing:border-box}
+
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;padding:4px 0 30px}
+.stile{position:relative;overflow:hidden;border-radius:16px;min-height:140px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;cursor:pointer;box-shadow:0 10px 28px -14px #000;border:1px solid rgba(255,255,255,.1);transition:transform .2s,box-shadow .2s}
+.stile:hover,.stile:focus-visible{transform:translateY(-4px) scale(1.02);box-shadow:0 18px 40px -12px #000,0 0 0 2px #fff;outline:0}
+.stile .sti{position:absolute;right:14px;top:8px;font-size:58px;opacity:.9;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.stile b{font-size:21px;font-weight:800;letter-spacing:-.01em;position:relative}
+.stile small{color:rgba(255,255,255,.75);font-size:13px;position:relative}
+.sdh{display:flex;align-items:center;gap:16px;margin:6px 0 18px;flex-wrap:wrap}
+.sdh h1{font-size:clamp(28px,4vw,44px);font-weight:900;margin:0;letter-spacing:-.02em}
+.sback{padding:9px 16px}
+#v-fotball .ticket{max-width:680px;margin-bottom:18px}
+html.tvm .stile:focus{outline:5px solid #fff;transform:none}
+
+.sgrid.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.sgrid.big .stile{min-height:210px;padding:24px}
+.sgrid.big .stile b{font-size:30px}
+.sgrid.big .stile .sti{width:112px;height:112px;right:20px;top:18px;opacity:.9}
+.stile .sti{display:grid;place-items:center;width:64px;height:64px;right:14px;top:12px;font-size:0;color:rgba(255,255,255,.92)}
+.stile .sti svg{width:100%;height:100%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.stile::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07)}
+.lbadge{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;font:900 15px/1 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.02em;color:#fff;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.35),var(--c) 60%);box-shadow:0 0 0 3px rgba(255,255,255,.22),0 8px 18px -6px #000}
+.lbadge.sm{width:44px;height:44px;font-size:12px}
+.sdi{display:inline-grid;place-items:center;width:46px;height:46px;color:var(--accent2)}.sdi svg{width:100%;height:100%}
+.shero2{padding:44px 4vw 26px;margin-bottom:22px}
+
+/* v53: resultater + knapper */
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);margin-bottom:12px}
+.seg button{border-radius:999px;padding:7px 16px;background:transparent;border:0;color:#b9bfd0;font-weight:700;font-size:14px}
+.seg button.on{background:#fff;color:#0b0c12;box-shadow:0 4px 16px -4px rgba(150,130,255,.7)}
+.fx.res .tm{font-size:12px;font-weight:800;letter-spacing:.06em;color:#8d94ab}
+.fx.res .tn b{font-size:16px}
+button{transition:transform .2s cubic-bezier(.2,.8,.3,1),box-shadow .25s,background .25s,color .2s,border-color .25s}
+button:not(:disabled):hover{transform:translateY(-2px)}
+button:not(:disabled):active{transform:translateY(0) scale(.95);transition-duration:.07s}
+button.primary{position:relative;overflow:hidden;border-radius:999px;padding:10px 24px;background:linear-gradient(135deg,#ffffff,#d9defc);color:#0b0c12;box-shadow:0 8px 24px -8px rgba(140,120,255,.75),inset 0 -2px 0 rgba(0,0,0,.08)}
+button.primary:hover{background:linear-gradient(135deg,#ffffff,#c9d0ff);box-shadow:0 12px 32px -8px rgba(140,120,255,.95)}
+button.primary::after{content:"";position:absolute;top:-10%;left:-70%;width:38%;height:120%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.95),transparent);transform:skewX(-20deg);animation:sheen 4.2s ease-in-out infinite;pointer-events:none}
+@keyframes sheen{0%,62%{left:-70%}100%{left:140%}}
+button.ghost,.hbtn .ghost,.bbtn .ghost{border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.24);padding:10px 20px;font-weight:600}
+button.ghost:hover{background:rgba(255,255,255,.2);border-color:var(--accent2);box-shadow:0 0 0 1px var(--accent2),0 10px 26px -10px var(--glow)}
+.chip{position:relative;overflow:hidden;transition:transform .2s cubic-bezier(.2,.8,.3,1),background .25s,color .2s,box-shadow .25s}
+.chip:hover{background:rgba(255,255,255,.18);box-shadow:0 8px 20px -10px var(--glow)}
+.chip.on{background:linear-gradient(120deg,#fff,#cdd3ff,#fff);background-size:220% 100%;animation:chipflow 5s linear infinite;color:#0b0c12;box-shadow:0 6px 20px -6px rgba(150,130,255,.8)}
+@keyframes chipflow{0%{background-position:0 0}100%{background-position:220% 0}}
+#nav button{transition:color .2s,transform .2s}
+#nav button::after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.3,1)}
+#nav button:hover::after,#nav button.on::after{transform:scaleX(1)}
+.stile::before{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-20deg);transition:left .6s ease;pointer-events:none}
+.stile:hover::before{left:130%}
+.stile .sti{transition:transform .35s cubic-bezier(.2,.8,.3,1)}.stile:hover .sti{transform:scale(1.12) rotate(-6deg)}
+.lk{transition:transform .2s,color .2s,letter-spacing .2s}.lk:hover{transform:translateX(3px)}
+html.tvm button:hover,html.tvm button:active{transform:none}
+@media (prefers-reduced-motion:reduce){button.primary::after,.chip.on{animation:none}}
+#spRes{max-width:760px;margin-bottom:22px}
+
+.fx[data-find],.ticket.go,.mc{cursor:pointer}
+.fx[data-find]{transition:transform .18s,box-shadow .2s,background .2s}
+.fx[data-find]:hover,.fx[data-find]:focus-visible{transform:translateX(4px);background:rgba(255,255,255,.07);box-shadow:0 0 0 1px var(--accent2);outline:0}
+.fx .lk{font-weight:700;color:#b9a8ff;white-space:nowrap}
+.ticket.go{transition:transform .2s,box-shadow .25s}.ticket.go:hover,.ticket.go:focus-visible{transform:translateY(-3px);box-shadow:0 14px 34px -12px rgba(25,195,125,.6);outline:0}
+.ticket .go{color:#7dffc0;font-weight:700}
+#fhTab tr[data-team]{cursor:pointer;transition:background .15s}#fhTab tr[data-team]:hover{background:rgba(255,255,255,.09)}
+.tchip{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:8px 12px;border-radius:12px;background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.5)}
+.tchip button{margin-left:auto;padding:4px 12px;font-size:13px}
+.fxmore{display:block;margin:14px auto}
+.tbl .nx{display:none}#fhTab .tbl .nx{display:table-cell;text-align:left;white-space:nowrap;font-size:12px;color:#b6bdd0;padding-left:12px}
+#fhTab .tbl .nxd{color:#fff;font-weight:600;margin-right:4px}
+#fhBody .mcols{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+@media (max-width:980px){#fhBody .mcols{grid-template-columns:1fr}}
+
+.sgrid.big{grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:22px}
+.sgrid.big .stile.xl{min-height:300px;padding:0;border-radius:22px;justify-content:flex-end;border:1px solid rgba(255,255,255,.14)}
+.sgrid.big .stile.xl .sbg{position:absolute;inset:0;overflow:hidden}
+.sgrid.big .stile.xl .scn{position:absolute;inset:0;width:100%;height:100%;transition:transform .8s cubic-bezier(.2,.7,.3,1)}
+.sgrid.big .stile.xl:hover .scn{transform:scale(1.08)}
+.sgrid.big .stile.xl::after{inset:0;width:auto;height:auto;right:auto;top:auto;border-radius:0;background:linear-gradient(180deg,rgba(0,0,0,0) 22%,rgba(0,0,0,.82) 100%)}
+.sgrid.big .stile.xl .sti{z-index:2;width:56px;height:56px;right:18px;top:18px;padding:12px;border-radius:50%;background:rgba(10,12,20,.45);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25)}
+.sgrid.big .stile.xl .stx{position:relative;z-index:2;padding:22px 24px;display:flex;flex-direction:column;gap:4px}
+.sgrid.big .stile.xl b{font-size:34px;font-weight:900;letter-spacing:-.02em;text-shadow:0 3px 14px rgba(0,0,0,.6)}
+.sgrid.big .stile.xl small{font-size:14px;color:rgba(255,255,255,.88);text-shadow:0 2px 8px rgba(0,0,0,.7)}
+.sgrid.big .stile.xl::before{z-index:3}
+/* v45: kompakt kanalliste mens du ser på + riktig logoformat */
+.cl img[style],.lci img[style],.cimg img[style]{transform-origin:center}
+#v-live.playing #list{grid-template-columns:1fr;gap:6px;padding:8px}
+#v-live.playing #list .ch{display:flex;align-items:center;gap:12px;padding:6px 10px 6px 6px;border-radius:12px}
+#v-live.playing #list .ch:hover{transform:none;background:rgba(255,255,255,.06)}
+#v-live.playing #list .ch .cl{flex:0 0 84px;width:84px;aspect-ratio:auto;height:46px;border-radius:9px;overflow:hidden}
+#v-live.playing #list .ch .cl img{width:78%;height:78%}#v-live.playing #list .ch .cl img[style]{width:40%;left:30%}
+#v-live.playing #list .ch .cl .qb{display:none}
+#v-live.playing #list .ch .cb{flex:1;min-width:0;padding:0}
+#v-live.playing #list .ch .cb .n{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#v-live.playing #list .ch .cb .g{display:none}
+#v-live.playing #list .ch .ic{position:static;opacity:.0;flex:none}
+#v-live.playing #list .ch:hover .ic,#v-live.playing #list .ch .star.on{opacity:1}
+#v-live.playing #list .ch .lcp{margin-top:2px}
+#v-live.playing #list .ch .lcp .lpn{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#v-live.playing #list .ch .lcp .lpb{height:2px;margin-top:4px}
+#v-live.playing #list .ch .lcp .lpx{display:none}
+#list .ch .lcp .lpn{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+#list .ch .lcp .lpb{height:2px;margin-top:5px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+#list .ch .lcp .lpb i{display:block;height:100%;background:var(--accent2)}
+#list .ch .lcp .lpx{display:none}
+#v-live.playing #list .ch.active{box-shadow:0 0 0 2px var(--accent)}
 </style>
 </head>
 <body>
 <canvas id="embers"></canvas>
 <header>
-  <div class="brand" id="brand"><span class="fl"><img class="skb" onerror="this.replaceWith(document.createTextNode('🔥'))" src="https://a.espncdn.com/i/teamlogos/soccer/500/620.png" alt="SK Brann"></span><b>MIN IPTV</b></div>
+  <div class="brand" id="brand"><svg class="logo" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lgb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1f6e"/><stop offset="1" stop-color="#0a0b18"/></linearGradient><linearGradient id="lga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b3a6ff"/><stop offset="1" stop-color="#4fd0ff"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#lgb)"/><g transform="rotate(-24 256 262)"><ellipse cx="256" cy="262" rx="200" ry="64" fill="none" stroke="url(#lga)" stroke-width="12" opacity=".55"/></g><g fill="#fff"><rect x="150" y="132" width="62" height="248" rx="18"/><rect x="150" y="132" width="212" height="56" rx="18"/><rect x="150" y="224" width="170" height="56" rx="18"/><rect x="150" y="324" width="212" height="56" rx="18"/></g><g transform="rotate(-24 256 262)"><path d="M56 262A200 64 0 0 0 456 262" fill="none" stroke="url(#lga)" stroke-width="15" stroke-linecap="round"/></g><circle cx="439" cy="181" r="26" fill="#bdeeff"/></svg><b>ESKEDALS <span>UNIVERS</span></b></div>
   <nav id="nav">
-    <button data-v="home"><i>🏠</i>Hjem</button>
-    <button data-v="movies"><i>🍿</i>Filmer</button>
-    <button data-v="series"><i>🎬</i>Serier</button>
-    <button data-v="fotball"><i>⚽</i>Fotball</button>
-    <button data-v="live"><i>📡</i>Direkte TV</button>
-    <button data-v="apps"><i>📲</i>Apper</button>
-    <button data-v="cams"><i>📹</i>IP-kamera</button>
-    <button data-v="fav"><i>★</i>Favoritter</button>
-    <button data-v="settings"><i>⚙️</i>Innstillinger</button>
+    <button data-v="home">Hjem</button>
+    <button data-v="movies">Filmer</button>
+    <button data-v="series">Serier</button>
+    <button data-v="live">Direkte TV</button>
+    <button data-v="fotball">Sport</button>
+    <button data-v="apps" class="sec">Apper</button>
+    <button data-v="cams" class="sec">IP-kamera</button>
+    <button data-v="fav" class="sec">Favoritter</button>
+    <button data-v="settings" class="sec">Innstillinger</button>
   </nav>
+  <span id="moreWrap"><button id="moreBtn">Mer ▾</button><div id="moreMenu"></div></span>
   <span class="sp"></span>
   <button id="tvSearch" class="bpill">🔍 Søk</button>
   <input id="gq" type="search" placeholder="Søk …  ( / )" autocomplete="off">
@@ -492,6 +812,7 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
   <section class="view" id="v-home"></section>
 
   <section class="view" id="v-tv"></section>
+  <section class="view" id="v-guide"></section>
   <section class="view" id="v-fotball"></section>
   <section class="view" id="v-live">
     <div id="tvMenu"></div>
@@ -515,11 +836,14 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
         <video id="v" controls playsinline autoplay></video>
         <div id="idle"><div><h2>KVELDENS KAMP</h2><p>Velg en kanal for å starte</p></div></div>
         <div class="msg" id="msg"></div>
+        <div id="zapI"></div><div id="zapN"></div><div id="zapL"></div><div class="qstat" id="qsL"></div>
       </div>
       <div id="now">
         <b id="nowName">Ingen kanal valgt</b>
         <button class="ic" id="nowFav" title="Favoritt">★</button>
         <button class="ic" id="nowHide" title="Skjul kanal">🚫</button>
+        <button id="nowQs" title="Vis strømmestatistikk (tast I)">📊 Info</button>
+        <button id="nowAlt" hidden title="Prøv en annen kilde for denne kanalen">🔁 Annen kilde</button>
         <button id="btnFs">Fullskjerm</button>
         <button id="btnBack">☰ Kanalliste</button>
       </div>
@@ -540,12 +864,12 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
   <div class="ovbar">
     <button id="ovClose">✕ Lukk</button><b id="ovTitle"></b>
     <button id="ovNext" style="display:none">Neste ▶</button>
-    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovCopy">Kopier lenke</button>
+    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovQs">📊 Info</button><button id="ovCopy">Kopier lenke</button>
     <button id="ovFs">⛶</button>
   </div>
   
   <div id="ccMenu"></div><input id="ccFile" type="file" accept=".srt,.vtt" hidden>
-  <div id="ovw"><video id="ovv" controls autoplay playsinline></video><div class="msg" id="ovmsg"></div></div>
+  <div id="ovw"><video id="ovv" controls autoplay playsinline></video><div class="msg" id="ovmsg"></div><div class="qstat" id="qsO"></div></div>
 </div>
 
 <dialog id="dlgItem"></dialog>
@@ -604,8 +928,6 @@ html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html
 
 <div id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js"></script>
 <script>
 if(window.__RP)throw new Error("replacing");
 (()=>{
@@ -715,8 +1037,17 @@ function dedupe(){
     for(const c of DB[k]){c.dup=0;if(!dedupeOn||!langOk(c))continue;const n=normTitle(c.nm||c.name);if(!n)continue;const g=groups.get(n);if(g)g.push(c);else groups.set(n,[c])}
     for(const g of groups.values()){if(g.length<2)continue;g.sort((a,b)=>((LRANK[a.lg]??5)-(LRANK[b.lg]??5))||(b.rt-a.rt)||((b.ad||0)-(a.ad||0)));for(let i=1;i<g.length;i++)g[i].dup=1}
   }
+  dedupeLive();
 }
-const noRank=c=>/\bnrk\b/i.test(c.name)?0:/tv ?2/i.test(c.name)?1:/tv ?norge|tvnorge/i.test(c.name)?2:/viaplay|v ?sport/i.test(c.name)?3:4;
+const normLive=c=>String(c.nm||c.name).toLowerCase().replace(/[^a-z0-9æøåäöü]+/g,'');
+function dedupeLive(){
+  const groups=new Map();
+  for(const c of DB.live){c.dup=0;c.alts=null;if(!dedupeOn)continue;const b=normLive(c);if(b.length<2)continue;const k=b+'|'+(c.lg||'');const g=groups.get(k);if(g)g.push(c);else groups.set(k,[c])}
+  const QR={HD:0,FHD:0,'4K':1,UHD:1,SD:2,VIP:2,RAW:3};
+  const qr=c=>QR[(c.q&&c.q[0])||'']??1;
+  for(const g of groups.values()){if(g.length<2)continue;g.sort((a,b)=>qr(a)-qr(b));g[0].alts=g.slice(1);for(let i=1;i<g.length;i++)g[i].dup=1}
+}
+const noRank=c=>/\bnrk/i.test(c.name)?0:/tv ?2/i.test(c.name)?1:/tv ?norge|tvnorge/i.test(c.name)?2:/viaplay|v ?sport/i.test(c.name)?3:4;
 
 /* ===================== Brukere ===================== */
 let profiles=LSget('profiles',null);
@@ -809,6 +1140,8 @@ function cleanName(c){
   if(c.t==='live'){
     n=n.replace(/^\W*[A-Za-z]{2,3}\s*[|:\]\)\-–]\s*/,'');
     n=n.replace(/\b(8K|4K|UHD|FHD|HD|SD|RAW|VIP|HEVC|50FPS|60FPS|1080P|720P|3840P)\b/gi,m=>{const u=m.toUpperCase();if(!q.includes(u))q.push(u);return ' '});
+    n=n.replace(/(?:\s+v)?\s+IP\b/gi,' ').replace(/\s+v\s*$/i,'').replace(/\(\s*(backup|bkp|alt)\s*\)/gi,' ');
+    if(n.length>3&&!/[a-zæøå]/.test(n))n=n.replace(/[A-ZÆØÅ]{4,}/g,w=>/^(ESPN|DAZN|VGTV|CNBC|HBOM|SVT\d?|TNT|MTV|NRK|CNN|BBC)$/.test(w)?w:w[0]+w.slice(1).toLowerCase());
   }else{
     n=n.replace(/^\s*(?:[A-Z0-9+]{2,6}(?:-[A-Z0-9+]{1,6})*)\s+-\s+/,'');
   }
@@ -835,7 +1168,10 @@ function fin(c){
   c.no=(RX_NO_TOKEN.test(hay)||RX_NO_WORD.test(hay))?1:0;
   c.fb=c.t==='live'&&RX_FOOTBALL.test(hay)?1:0;
   c.kid=c.t!=='live'&&RX_KIDS.test(hay)?1:0;
+  if(c.t==='live'&&c.logo)c.logo=String(c.logo).replace(/(\/stalker_portal\/misc\/logos\/)\d+\//,'$1original/');
+  if(c.t!=='live'&&c.logo)c.logo=String(c.logo).replace(/(image\.tmdb\.org\/t\/p\/)(?:original|w\d{3,4})\//,'$1w342/');
   c.lg=langOf(c);c.dup=0;c.nm=cleanName(c);
+  if(c.t==='live'){const mr=/^nrk ?1\s+(?!hd\b|ip\b)(\S.*)$/i.exec(c.nm);c.reg=mr?mr[1]:''}
   if(c.t==='live'){
     c.junk=RX_JUNK_CH.test(hay)?1:0;
     const hay2=hay.replace(/\bno (events?|stream(ing)?|games?|matches?)\b/gi,' ');
@@ -954,10 +1290,11 @@ async function fetchAll(x,onP){
       return list.map(s=>map(s,cm[s.category_id]||'Andre'));
     }catch(e){warn.push(label+': '+e.message);return null}
   };
-  const live=await part('kanaler','get_live_categories','get_live_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c]);
+  const [live,vod,ser]=await Promise.all([
+    part('kanaler','get_live_categories','get_live_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c]),
+    part('filmer','get_vod_categories','get_vod_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c,s.container_extension||'mp4',s.rating||s.rating_5based||0,s.added||0]),
+    part('serier','get_series_categories','get_series',(s,c)=>[s.series_id,cl(s.name),cl(s.cover),c,s.rating||s.rating_5based||0,s.last_modified||0,cl(s.plot).slice(0,300)])]);
   if(!live)throw new Error('Live-TV: '+warn.join('; ')+' (sjekk brukernavn/passord)');
-  const vod=await part('filmer','get_vod_categories','get_vod_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c,s.container_extension||'mp4',s.rating||s.rating_5based||0,s.added||0]);
-  const ser=await part('serier','get_series_categories','get_series',(s,c)=>[s.series_id,cl(s.name),cl(s.cover),c,s.rating||s.rating_5based||0,s.last_modified||0,cl(s.plot).slice(0,300)]);
   return {data:{live,vod:vod||[],ser:ser||[]},warn};
 }
 async function refreshSource(s,quiet){
@@ -1026,7 +1363,8 @@ async function autoUpdate(force){
   if(autoBusy||(!force&&!autoOn()))return;autoBusy=true;
   try{for(const s of sources.slice()){
     if(!(s.url||s.xt))continue;
-    if(!force&&s.updated&&Date.now()-s.updated<(startupDone?24:1)*3600e3)continue;
+    if(!force&&s.updated&&Date.now()-s.updated<(startupDone?24:12)*3600e3)continue;
+    if(!force&&(!$('v').paused||!$('ovv').paused))continue;
     await refreshSource(s,true);
   }}finally{autoBusy=false;startupDone=true}
 }
@@ -1036,13 +1374,15 @@ $('srcClose').onclick=()=>$('dlgSrc').close();
 
 /* ===================== Spillere ===================== */
 function makePlayer(video,msgEl){
-  let hls=null,mts=null,retries=0,cur=null,alive=0;
+  let hls=null,mts=null,retries=0,cur=null,alive=0,stalls=0,t0=0;
+  video.addEventListener('waiting',()=>{if(cur)stalls++});
   const show=t=>{msgEl.textContent=t;msgEl.style.display=t?'block':'none'};
   function stop(){alive++;if(hls){hls.destroy();hls=null}if(mts){try{mts.destroy()}catch(e){}mts=null}video.removeAttribute('src');video.load();show('')}
   const xt=u=>u.match(/^(https?:\/\/[^\/]+)\/live\/([^\/]+)\/([^\/]+)\/(\d+)(?:\.(ts|m3u8))?(\?.*)?$/i);
   function play(url,live,forceHls){
+    if(!window.__libsDone){stop();const m0=alive;show('Laster …');window.__libs.then(()=>{if(m0===alive)play(url,live,forceHls)});return}
     stop();const me=alive;cur={url,live};
-    show('Laster …');video.onplaying=()=>{show('');retries=0};
+    stalls=0;t0=Date.now();show('Laster …');if(live)epgHold=Date.now()+10000;clearInterval(video._lt);video._lt=setInterval(()=>{if(me!==alive||!video.paused&&video.readyState>2){clearInterval(video._lt);return}const sec=Math.round((Date.now()-t0)/1000);if(live&&sec>=1)show('Laster … '+sec+' s');if(live&&sec>=(kind==='ts'?7:12)&&!video._t1){clearInterval(video._lt);video.onerror&&video.onerror()}},1000);video.onplaying=()=>{clearInterval(video._lt);show('');retries=0;epgHold=0;if(!video._t1)video._t1=Date.now()-t0};video._t1=0;
     let src=url,kind='file';
     if(live){
       kind='ts';const m=xt(url);const canTs=window.mpegts&&mpegts.isSupported();
@@ -1052,16 +1392,19 @@ function makePlayer(video,msgEl){
         if(me!==alive)return;
         if(kind==='ts'&&m&&!forceHls)return play(url,true,true);
         if(retries++<3){show('Mistet forbindelsen – prøver igjen …');setTimeout(()=>{if(me===alive)play(url,true,forceHls)},2500);return}
-        show('Kunne ikke spille av kanalen. '+(why||'')+(proxyOn?'':' (Hvis strømmen er http, start server.js.)'));
+        show('Kunne ikke spille av kanalen. '+(why||'')+(proxyOn?'':' (Hvis strømmen er http, start server.js.)')+' Sjekker årsak …');
+        const ac=new AbortController(),tt=setTimeout(()=>ac.abort(),6000);const t1=Date.now();
+        fetch(px(m?src.replace(/\.m3u8$/,'.ts'):url),{signal:ac.signal}).then(async r=>{clearTimeout(tt);let tx='';if(!r.ok)try{tx=(await r.text()).slice(0,160)}catch(e){}ac.abort();
+          if(me===alive)show('Kunne ikke spille av kanalen. Leverandøren svarte '+r.status+' etter '+(Date.now()-t1)+' ms'+(tx?': '+tx.replace(/(username|password)=[^&\s]+/g,'$1=…'):(r.ok?' (strømmen starter, men spilleren klarer ikke å vise den – prøv «Annen kilde»)':'')))}).catch(e=>{clearTimeout(tt);if(me===alive)show('Kunne ikke spille av kanalen. Leverandøren svarte ikke innen 6 sekunder ('+(e.name==='AbortError'?'tidsavbrudd':e.message)+'). Kanalen er trolig nede eller tilkoblingene dine er brukt opp.')});
       };
       video.onerror=()=>fail('');
       const p=px(src);
       if(kind==='hls'&&window.Hls&&Hls.isSupported()){
-        hls=new Hls({maxBufferLength:30});hls.loadSource(p);hls.attachMedia(video);
+        hls=new Hls({maxBufferLength:30,maxMaxBufferLength:60,backBufferLength:20,abrEwmaDefaultEstimate:6e6,startFragPrefetch:true,manifestLoadingMaxRetry:3,levelLoadingMaxRetry:4,fragLoadingMaxRetry:5,liveSyncDurationCount:3,liveMaxLatencyDurationCount:10});hls.loadSource(p);hls.attachMedia(video);
         hls.on(Hls.Events.ERROR,(_,d)=>{if(!d.fatal)return;if(d.type===Hls.ErrorTypes.MEDIA_ERROR)hls.recoverMediaError();else fail('('+d.details+')')});
       }else if(kind==='hls')video.src=p;
       else if(canTs){
-        mts=mpegts.createPlayer({type:'mpegts',isLive:true,url:p},{liveBufferLatencyChasing:true});
+        mts=mpegts.createPlayer({type:'mpegts',isLive:true,url:p},{liveBufferLatencyChasing:true,liveBufferLatencyMaxLatency:10,liveBufferLatencyMinRemainDuration:3,autoCleanupSourceBuffer:true,autoCleanupMaxBackwardDuration:30,autoCleanupMinBackwardDuration:15});
         mts.attachMediaElement(video);mts.load();mts.on(mpegts.Events.ERROR,(t,d)=>fail('('+d+')'));
       }else video.src=p;
     }else{
@@ -1075,7 +1418,15 @@ function makePlayer(video,msgEl){
   const setAud=i=>{if(hls&&hls.audioTracks&&hls.audioTracks.length>1)hls.audioTrack=i;else if(video.audioTracks)[...video.audioTracks].forEach((t,k)=>t.enabled=k===i)};
   const lev=()=>hls&&hls.levels&&hls.levels.length>1?{cur:hls.currentLevel,auto:hls.autoLevelEnabled,list:hls.levels.map((l,i)=>({i,n:(l.height?l.height+'p':Math.round(l.bitrate/1000)+' kbit')+(l.bitrate?' · '+(l.bitrate/1e6).toFixed(1)+' Mbit':'')}))}:null;
   const setLev=i=>{if(hls)hls.currentLevel=i};
-  return {play,stop,video,aud,setAud,lev,setLev,get cur(){return cur}};
+  const stats=()=>{
+    const q=video.getVideoPlaybackQuality?video.getVideoPlaybackQuality():null;
+    let buf=0;try{const b=video.buffered;for(let i=0;i<b.length;i++)if(b.start(i)<=video.currentTime+.5&&b.end(i)>=video.currentTime)buf=b.end(i)-video.currentTime}catch(e){}
+    const o={kind:hls?'HLS':mts?'MPEG-TS':(cur&&!cur.live?'Fil':'Direkte'),w:video.videoWidth,h:video.videoHeight,drop:q?q.droppedVideoFrames:0,total:q?q.totalVideoFrames:0,buf,stalls,start:video._t1||0,mbit:0,codec:'',fps:0};
+    if(hls){o.mbit=(hls.bandwidthEstimate||0)/1e6;const l=hls.levels&&hls.levels[hls.currentLevel];if(l){o.codec=[l.videoCodec,l.audioCodec].filter(Boolean).join(' / ').replace(/\.[\w.]+/g,'');if(l.bitrate)o.lvl=(l.bitrate/1e6).toFixed(1)+' Mbit'}}
+    if(mts){const si=mts.statisticsInfo||{},mi=mts.mediaInfo||{};o.mbit=(si.speed||0)*8/1000;o.codec=[mi.videoCodec,mi.audioCodec].filter(Boolean).join(' / ');o.fps=mi.fps||0;if(si.droppedFrames!=null&&!o.total){o.drop=si.droppedFrames;o.total=si.decodedFrames||0}}
+    return o;
+  };
+  return {play,stop,video,aud,setAud,lev,setLev,stats,get cur(){return cur}};
 }
 const livePlayer=makePlayer($('v'),$('msg'));
 const vodPlayer=makePlayer($('ovv'),$('ovmsg'));
@@ -1207,20 +1558,63 @@ document.addEventListener('keydown',e=>{const pf=document.querySelector('.pfs');
 },true);
 document.addEventListener('click',e=>{const pf=document.querySelector('.pfs');if(pf&&pf.id==='ov'&&!e.target.closest('.ovbar'))pfsBar(pf)});
 
+/* ===================== Programguide (EPG) ===================== */
+const EPG=new Map(),EPGP=new Map(),epgQ=[];let epgBusy=0,epgOk=0,epgFail=0;
+const b64d=t=>{try{return decodeURIComponent(escape(atob(t)))}catch(e){try{return atob(t)}catch(_){return String(t||'')}}};
+const epgOff=()=>epgFail>=10&&epgOk===0;
+function epgGet(c){
+  if(!c||!c.xt||epgOff())return Promise.resolve([]);
+  const h=EPG.get(c.key);if(h&&Date.now()-h.t<180000)return Promise.resolve(h.list);
+  if(EPGP.has(c.key))return EPGP.get(c.key);
+  const p=new Promise(res=>{epgQ.push({c,res})});EPGP.set(c.key,p);epgPump();return p;
+}
+let epgHold=0;
+function epgPump(){
+  if(Date.now()<epgHold){if(epgQ.length)setTimeout(epgPump,Math.max(300,epgHold-Date.now()+50));return}
+  while(epgBusy<2&&epgQ.length){
+    const {c,res}=epgQ.shift();epgBusy++;
+    xapi(c.xt,'get_short_epg','&stream_id='+c.id+'&limit=14').then(j=>{
+      const ts=(x,k)=>{const v=+x[k+'_timestamp'];if(v)return v*1000;const d=Date.parse(String(x[k]||'').replace(' ','T'));return isNaN(d)?0:d};
+      return ((j&&j.epg_listings)||[]).map(x=>({t:b64d(x.title||''),d:b64d(x.description||''),s:ts(x,'start'),e:ts(x,'end')||ts(x,'stop')})).filter(x=>x.t&&x.e>x.s).sort((a,b)=>a.s-b.s);
+    }).catch(()=>null).then(l=>{
+      if(l&&l.length)epgOk++;else epgFail++;
+      l=l||[];EPG.set(c.key,{t:Date.now(),list:l});EPGP.delete(c.key);epgBusy--;res(l);epgPump();
+    });
+  }
+}
+const epgNow=(list,t)=>{t=t||Date.now();const i=list.findIndex(x=>x.s<=t&&x.e>t);return i<0?null:{now:list[i],next:list[i+1]||null,pct:Math.max(0,Math.min(100,Math.round((t-list[i].s)/(list[i].e-list[i].s)*100)))}};
+function epgFill(el,l){
+  const n=epgNow(l);
+  if(!n){el.innerHTML='';return}
+  el.innerHTML=`<div class="lpn">${esc(n.now.t)}</div><div class="lpb"><i style="width:${n.pct}%"></i></div>${n.next?`<div class="lpx">${fmtTime(n.next.s)} · ${esc(n.next.t)}</div>`:''}`;
+}
+const epgIO=typeof IntersectionObserver!=='undefined'?new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){epgIO.unobserve(e.target);const c=byKey.get(e.target.dataset.epg);if(c)epgGet(c).then(l=>{if(e.target.isConnected)epgFill(e.target,l)})}},{rootMargin:'250px'}):null;
+function epgHydrate(root){
+  if(epgOff())return;
+  root.querySelectorAll('.lcp[data-epg]').forEach(el=>{const h=EPG.get(el.dataset.epg);if(h&&h.list.length)epgFill(el,h.list);if(epgIO)epgIO.observe(el);else{const c=byKey.get(el.dataset.epg);if(c)epgGet(c).then(l=>epgFill(el,l))}});
+}
+setInterval(()=>{document.querySelectorAll('.lcp[data-epg]').forEach(el=>{const h=EPG.get(el.dataset.epg);if(h&&h.list.length)epgFill(el,h.list)})},60000);
+const lfix=c=>'';
+const lcard=c=>`<div class="lc" data-k="${c.key}" tabindex="0"><div class="lci">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""${lfix(c)}>`:''}<span class="cph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</span>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}${isFav(c)?'<span class="fv">★</span>':''}</div><div class="lcb"><div class="lcn">${esc(c.nm||c.name)}</div><div class="lcp" data-epg="${c.key}"></div></div></div>`;
+
 /* ===================== Kort og hjelpefunksjoner ===================== */
-const pcard=c=>`<div class="pc" data-k="${c.key}" tabindex="0"><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div>${c.logo?`<img loading="lazy" src="${esc(c.logo)}" alt="">`:''}${c.rt?`<span class="rt">★ ${c.rt.toFixed(1)}</span>`:''}${isFav(c)?'<span class="fv">★</span>':''}</div><div class="pt">${esc(c.nm||c.name)}</div></div>`;
-const ccard=c=>`<div class="cc" data-k="${c.key}" tabindex="0"><div class="cimg">${c.logo?`<img loading="lazy" src="${esc(c.logo)}" alt="">`:''}<span class="cph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</span>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}</div><div class="ct">${esc(c.nm||c.name)}</div></div>`;
+const pcard=c=>`<div class="pc" data-k="${c.key}" tabindex="0"><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div>${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt="">`:''}${c.rt?`<span class="rt">★ ${c.rt.toFixed(1)}</span>`:''}${isFav(c)?'<span class="fv">★</span>':''}</div><div class="pt">${esc(c.nm||c.name)}</div></div>`;
+const ccard=c=>`<div class="cc" data-k="${c.key}" tabindex="0"><div class="cimg">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""${lfix(c)}>`:''}<span class="cph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</span>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}</div><div class="ct">${esc(c.nm||c.name)}</div></div>`;
+const lgFix=u=>String(u||'').replace(/(\/stalker_portal\/misc\/logos\/)\d+\//,'$1original/');
 const hcard=h=>{const pct=h.dur?Math.min(100,Math.round(h.pos/h.dur*100)):0;
-  return `<div class="pc" data-h="${esc(h.k)}" tabindex="0" style="flex-basis:210px;width:210px"><div class="pimg" style="aspect-ratio:16/9"><div class="pfb">${esc(h.name)}</div>${h.logo?`<img loading="lazy" src="${esc(h.logo)}" alt="">`:''}${pct?`<div style="position:absolute;left:0;bottom:0;height:5px;width:${pct}%;background:var(--accent)"></div>`:''}</div><div class="pt">${esc(h.name)}${h.dur?` <small>· ${Math.max(1,Math.round((h.dur-h.pos)/60))} min igjen</small>`:''}</div></div>`};
-document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'){if(t.classList.contains('skb')){t.replaceWith(document.createTextNode('🔥'));return}t.remove()}},true);
+  return `<div class="pc" data-h="${esc(h.k)}" tabindex="0" style="flex-basis:210px;width:210px"><div class="pimg${h.type==='live'?' hlive':''}" style="aspect-ratio:16/9"><div class="pfb">${esc(h.name)}</div>${h.logo?`<img loading="lazy" decoding="async" src="${esc(h.type==='live'?lgFix(h.logo):h.logo)}" alt="">`:''}${pct?`<div style="position:absolute;left:0;bottom:0;height:5px;width:${pct}%;background:var(--accent)"></div>`:''}</div><div class="pt">${esc(h.name)}${h.dur?` <small>· ${Math.max(1,Math.round((h.dur-h.pos)/60))} min igjen</small>`:''}</div></div>`};
+document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'){if(/\/logos\/original\//.test(t.src)&&!t._lf){t._lf=1;t.src=t.src.replace('/logos/original/','/logos/320/');return}if(t.classList.contains('skb')){t.replaceWith(document.createTextNode('🔥'));return}t.remove()}},true);
 const visible=c=>!hidden.has(c.key)&&!c.dup&&langOk(c)&&(showAdult||!c.adult)&&!isPast(c)&&!c.junk;
 const fvis=c=>visible(c)&&!c.adult;
-const rail=(title,items,fn,go)=>items.length?`<section class="rail"><div class="rh"><h3>${title}</h3>${go?`<button class="lk" data-go="${go}">Se alle ›</button>`:''}</div><div class="rs">${items.map(fn).join('')}</div></section>`:'';
+const rtl=t=>/^</.test(t)?t:String(t).replace(/^[\p{Extended_Pictographic}\p{Regional_Indicator}★▶\uFE0F\u200d\s]+/u,'');
+const NAVB='<button class="rnv l" data-rs="-1" tabindex="-1" aria-hidden="true">‹</button><button class="rnv r" data-rs="1" tabindex="-1" aria-hidden="true">›</button>';
+const rail=(title,items,fn,go)=>items.length?`<section class="rail"><div class="rh"><h3>${rtl(title)}</h3>${go?`<button class="lk" data-go="${go}">Se alle ›</button>`:''}</div><div class="rs">${items.map(fn).join('')}</div>${NAVB}</section>`:'';
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rs]');if(!b)return;e.stopPropagation();const r=b.closest('.rail').querySelector('.rs');r.scrollBy({left:(+b.dataset.rs)*r.clientWidth*.85,behavior:'smooth'})},true);
 const byNew=(a,b)=>(b.ad||0)-(a.ad||0);
 
 /* ===================== Visninger ===================== */
 let curView='home';
-const VIEWS=['home','tv','fotball','live','movies','series','fav','search','matches','apps','cams','settings'];
+const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings'];
 let navStack=[];
 function showView(v,force,np){
   if(!force&&v===curView&&$('v-'+v).classList.contains('on'))return;
@@ -1229,13 +1623,16 @@ function showView(v,force,np){
   clearInterval(hTimer);stopSlider();
   if(curView==='cams'&&v!=='cams')stopCams();
   if(curView==='matches'&&v!=='matches'){clearInterval(mTimer);mTimer=0}
+  if(v==='fotball'&&curView!=='fotball')spOpen=null;
   curView=v;
   if(v!=='movies')$('v-movies').innerHTML='';
   if(v!=='series')$('v-series').innerHTML='';
   for(const x of VIEWS)$('v-'+x).classList.toggle('on',x===v);
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='tv'&&b.dataset.v==='live')||(v==='matches'&&b.dataset.v==='fotball')));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='tv'&&b.dataset.v==='live')||(v==='guide'&&b.dataset.v==='live')||(v==='matches'&&b.dataset.v==='fotball')));
+  {const mb=$('moreBtn');if(mb)mb.classList.toggle('on',['apps','cams','fav','settings'].includes(v))}
   if(v==='home')renderHome();
   if(v==='tv')renderTV();
+  if(v==='guide')renderGuide();
   if(v==='fotball')renderFotball();
   if(v==='live'){applyFilter();if(current&&!force)selectLive(current,true)}
   if(v==='movies')renderVodShell('vod');
@@ -1249,6 +1646,11 @@ function showView(v,force,np){
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
 $('brand').onclick=()=>showView('home');
+(function(){const w=$('moreWrap'),m=$('moreMenu');
+m.innerHTML=[['apps','Apper'],['cams','IP-kamera'],['fav','Favoritter'],['settings','Innstillinger']].map(([v,t])=>`<button data-mv="${v}">${t}</button>`).join('');
+$('moreBtn').onclick=e=>{e.stopPropagation();w.classList.toggle('open')};
+m.onclick=e=>{const b=e.target.closest('button');if(b){w.classList.remove('open');showView(b.dataset.mv)}};
+document.addEventListener('click',()=>w.classList.remove('open'));})();
 $('bBrann').onclick=()=>goLive({tab:'all',chip:'brann'});
 
 /* ---------- Hjem ---------- */
@@ -1269,11 +1671,11 @@ function ticketHtml(n){
   if(!n)return '<div class="ticket"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Ingen kamp funnet</div><div class="td">Prøv igjen senere.'+(window.__fxErr||window.__fxDiag?' <small>('+esc(window.__fxErr||window.__fxDiag)+')</small>':'')+'</div></div><div class="tr"></div></div>';
   const live=n.state==='in';
   const cr=t=>`${t.logo?`<img src="${esc(t.logo)}" alt="">`:''}<span>${esc(t.shortDisplayName||t.displayName)}</span>`;
-  return `<div class="ticket"><div class="tl"><small>${live?'<span class="liveb">LIVE</span> ':''}${esc(n.lg)} · neste Brann-kamp</small><div class="tt">${cr(n.h)}<i>${live?esc(n.hs)+' – '+esc(n.as):'mot'}</i>${cr(n.a)}</div><div class="td">${live?esc(n.clock):fmtDay(n.t)+' · kl. '+fmtTime(n.t)}</div></div><div class="tr"><small>${live?'Pågår nå':'Avspark om'}</small><b ${live?'':`data-cd="${n.t}"`}>${live?'LIVE':cd(n.t)}</b></div></div>`;
+  return `<div class="ticket go" tabindex="0" data-find="${esc((n.h.shortDisplayName||n.h.displayName)+'|'+(n.a.shortDisplayName||n.a.displayName))}"><div class="tl"><small>${live?'<span class="liveb">LIVE</span> ':''}${esc(n.lg)} · neste Brann-kamp</small><div class="tt">${cr(n.h)}<i>${live?esc(n.hs)+' – '+esc(n.as):'mot'}</i>${cr(n.a)}</div><div class="td">${live?esc(n.clock):fmtDay(n.t)+' · kl. '+fmtTime(n.t)}</div></div><div class="tr"><small>${live?'Pågår nå':'Avspark om'}</small><b ${live?'':`data-cd="${n.t}"`}>${live?'LIVE':cd(n.t)}</b></div></div>`;
 }
 function heroFill(root){
   loadFixtures().then(f=>{
-    const el=root.querySelector('#heroNext');if(el)el.outerHTML=ticketHtml(f.brann[0]).replace('<div class="ticket"','<div class="ticket" id="heroNext"');
+    const el=root.querySelector('#heroNext');if(el)el.outerHTML=ticketHtml(f.brann[0]).replace('<div class="ticket go"','<div class="ticket go" id="heroNext"');
     const hs=root.querySelector('#hsideList');
     if(hs){
       const l=f.list.filter(e=>e.state==='in').concat(f.list.filter(e=>e.state!=='in')).slice(0,5);
@@ -1285,40 +1687,75 @@ function heroFill(root){
 const nfmt=n=>n.toLocaleString('nb-NO');
 const SKB='https://a.espncdn.com/i/teamlogos/soccer/500/620.png';
 const ART={"film": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><linearGradient id=\"gf1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#3a0d10\"/><stop offset=\"1\" stop-color=\"#0a0405\"/></linearGradient><radialGradient id=\"gf2\" cx=\".5\" cy=\".3\" r=\".55\"><stop offset=\"0\" stop-color=\"#ffe7a8\" stop-opacity=\".9\"/><stop offset=\"1\" stop-color=\"#ff9d2e\" stop-opacity=\"0\"/></radialGradient><linearGradient id=\"gf3\" x1=\"0\" y1=\"1\" x2=\"0\" y2=\"0\"><stop offset=\"0\" stop-color=\"#fff2cc\" stop-opacity=\"0\"/><stop offset=\"1\" stop-color=\"#fff2cc\" stop-opacity=\".5\"/></linearGradient><linearGradient id=\"gf4\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#4d070d\"/><stop offset=\".5\" stop-color=\"#b3202c\"/><stop offset=\"1\" stop-color=\"#4d070d\"/></linearGradient><pattern id=\"gf5\" width=\"22\" height=\"20\" patternUnits=\"userSpaceOnUse\"><rect x=\"6\" y=\"6\" width=\"10\" height=\"8\" rx=\"2\" fill=\"#d9b45b\" opacity=\".7\"/></pattern></defs><rect width=\"400\" height=\"440\" fill=\"url(#gf1)\"/><ellipse cx=\"200\" cy=\"130\" rx=\"190\" ry=\"120\" fill=\"url(#gf2)\"/><rect x=\"100\" y=\"60\" width=\"200\" height=\"116\" rx=\"6\" fill=\"#fff3d0\" opacity=\".92\"/><polygon points=\"190,440 210,440 300,178 100,178\" fill=\"url(#gf3)\"/><path d=\"M0 0H105C80 110 118 250 70 440H0Z\" fill=\"url(#gf4)\"/><path d=\"M400 0H295C320 110 282 250 330 440H400Z\" fill=\"url(#gf4)\"/><g stroke=\"#2a0407\" stroke-opacity=\".5\" stroke-width=\"3\" fill=\"none\"><path d=\"M30 0C20 150 40 300 20 440\"/><path d=\"M62 0C48 150 70 300 44 440\"/><path d=\"M370 0C380 150 360 300 380 440\"/><path d=\"M338 0C352 150 330 300 356 440\"/></g><rect width=\"400\" height=\"20\" fill=\"#0a0a0f\"/><rect width=\"400\" height=\"20\" fill=\"url(#gf5)\"/><path d=\"M0 440V398Q30 384 60 398T120 398T180 398T240 398T300 398T360 398T400 398V440Z\" fill=\"#060304\"/><g fill=\"#0b0506\"><circle cx=\"92\" cy=\"374\" r=\"16\"/><circle cx=\"160\" cy=\"382\" r=\"15\"/><circle cx=\"262\" cy=\"376\" r=\"16\"/><circle cx=\"322\" cy=\"384\" r=\"15\"/></g><g fill=\"#ffe7a8\"><circle cx=\"70\" cy=\"90\" r=\"2\"/><circle cx=\"330\" cy=\"70\" r=\"2.4\"/><circle cx=\"350\" cy=\"130\" r=\"1.6\"/><circle cx=\"52\" cy=\"140\" r=\"1.8\"/></g></svg>", "ser": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><linearGradient id=\"gs1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#34206d\"/><stop offset=\"1\" stop-color=\"#090514\"/></linearGradient><radialGradient id=\"gs0\" cx=\".5\" cy=\".38\" r=\".5\"><stop offset=\"0\" stop-color=\"#c58bff\" stop-opacity=\".75\"/><stop offset=\"1\" stop-color=\"#c58bff\" stop-opacity=\"0\"/></radialGradient><linearGradient id=\"gs2\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ff6fb1\"/><stop offset=\"1\" stop-color=\"#6a1b8c\"/></linearGradient><linearGradient id=\"gs3\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#58c8ff\"/><stop offset=\"1\" stop-color=\"#1b2f9a\"/></linearGradient><linearGradient id=\"gs4\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ffd36e\"/><stop offset=\"1\" stop-color=\"#b8431a\"/></linearGradient><pattern id=\"gs5\" width=\"6\" height=\"6\" patternUnits=\"userSpaceOnUse\"><rect width=\"6\" height=\"2\" fill=\"#000\" opacity=\".12\"/></pattern></defs><rect width=\"400\" height=\"440\" fill=\"url(#gs1)\"/><circle cx=\"200\" cy=\"170\" r=\"190\" fill=\"url(#gs0)\"/><g transform=\"translate(200 175)\"><g transform=\"rotate(-20) translate(-190 -90)\"><rect width=\"112\" height=\"168\" rx=\"12\" fill=\"url(#gs2)\"/><rect width=\"112\" height=\"168\" rx=\"12\" fill=\"url(#gs5)\"/></g><g transform=\"rotate(20) translate(78 -90)\"><rect width=\"112\" height=\"168\" rx=\"12\" fill=\"url(#gs3)\"/><rect width=\"112\" height=\"168\" rx=\"12\" fill=\"url(#gs5)\"/></g><g transform=\"translate(-68 -112)\"><rect width=\"136\" height=\"204\" rx=\"14\" fill=\"url(#gs4)\" stroke=\"#fff\" stroke-opacity=\".5\" stroke-width=\"2\"/><circle cx=\"68\" cy=\"102\" r=\"34\" fill=\"#000\" opacity=\".4\"/><polygon points=\"56,82 56,122 90,102\" fill=\"#fff\"/></g></g><g fill=\"#fff\"><circle cx=\"46\" cy=\"70\" r=\"2\"/><circle cx=\"350\" cy=\"96\" r=\"2.4\"/><circle cx=\"64\" cy=\"250\" r=\"1.6\"/><circle cx=\"340\" cy=\"270\" r=\"1.8\"/></g></svg>", "fb": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><linearGradient id=\"gb1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#040a12\"/><stop offset=\"1\" stop-color=\"#06150d\"/></linearGradient><linearGradient id=\"gb2\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#fff6d8\" stop-opacity=\".6\"/><stop offset=\"1\" stop-color=\"#fff6d8\" stop-opacity=\"0\"/></linearGradient><pattern id=\"gb3\" width=\"14\" height=\"12\" patternUnits=\"userSpaceOnUse\"><circle cx=\"4\" cy=\"4\" r=\"2\" fill=\"#e4002b\" opacity=\".85\"/><circle cx=\"11\" cy=\"9\" r=\"2\" fill=\"#fff\" opacity=\".6\"/></pattern><linearGradient id=\"gb4\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#26a862\"/><stop offset=\"1\" stop-color=\"#0e5a35\"/></linearGradient></defs><rect width=\"400\" height=\"440\" fill=\"url(#gb1)\"/><rect y=\"70\" width=\"400\" height=\"120\" fill=\"url(#gb3)\" opacity=\".5\"/><polygon points=\"36,36 -60,330 190,330\" fill=\"url(#gb2)\" opacity=\".7\"/><polygon points=\"364,36 460,330 210,330\" fill=\"url(#gb2)\" opacity=\".7\"/><g stroke=\"#cfd6e6\" stroke-width=\"3\"><line x1=\"36\" y1=\"36\" x2=\"36\" y2=\"200\"/><line x1=\"364\" y1=\"36\" x2=\"364\" y2=\"200\"/></g><g fill=\"#fff6d8\"><rect x=\"22\" y=\"24\" width=\"28\" height=\"14\" rx=\"3\"/><rect x=\"350\" y=\"24\" width=\"28\" height=\"14\" rx=\"3\"/></g><polygon points=\"-120,440 520,440 350,236 50,236\" fill=\"url(#gb4)\"/><g fill=\"#fff\" opacity=\".1\"><polygon points=\"-20,440 80,440 130,236 100,236\"/><polygon points=\"180,440 280,440 250,236 210,236\"/></g><g fill=\"none\" stroke=\"#fff\" stroke-opacity=\".8\" stroke-width=\"3\"><polygon points=\"-120,440 520,440 350,236 50,236\"/><line x1=\"40\" y1=\"338\" x2=\"360\" y2=\"338\"/><ellipse cx=\"200\" cy=\"338\" rx=\"84\" ry=\"26\"/></g><circle cx=\"200\" cy=\"338\" r=\"4\" fill=\"#fff\"/><g><circle cx=\"300\" cy=\"382\" r=\"16\" fill=\"#fff\"/><polygon points=\"300,372 309,378 306,389 294,389 291,378\" fill=\"#222\"/></g></svg>", "tv": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><linearGradient id=\"gt1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#0a2e52\"/><stop offset=\"1\" stop-color=\"#030811\"/></linearGradient><radialGradient id=\"gt2\" cx=\".5\" cy=\".3\" r=\".5\"><stop offset=\"0\" stop-color=\"#5fd0ff\" stop-opacity=\".55\"/><stop offset=\"1\" stop-color=\"#5fd0ff\" stop-opacity=\"0\"/></radialGradient></defs><rect width=\"400\" height=\"440\" fill=\"url(#gt1)\"/><circle cx=\"200\" cy=\"150\" r=\"210\" fill=\"url(#gt2)\"/><g fill=\"none\" stroke=\"#6fc3ff\" stroke-opacity=\".28\" stroke-width=\"2\"><circle cx=\"200\" cy=\"260\" r=\"150\"/><ellipse cx=\"200\" cy=\"260\" rx=\"60\" ry=\"150\"/><ellipse cx=\"200\" cy=\"260\" rx=\"110\" ry=\"150\"/><ellipse cx=\"200\" cy=\"260\" rx=\"150\" ry=\"50\"/><ellipse cx=\"200\" cy=\"260\" rx=\"150\" ry=\"100\"/></g><g fill=\"none\" stroke=\"#d6f0ff\" stroke-width=\"4\" stroke-linecap=\"round\"><path d=\"M200 82L146 400M200 82L254 400M170 268H230M178 220H222M186 170H214M156 330H244\"/></g><circle cx=\"200\" cy=\"80\" r=\"9\" fill=\"#ff3b30\"/><circle cx=\"200\" cy=\"80\" r=\"20\" fill=\"#ff3b30\" opacity=\".3\"/><g fill=\"none\" stroke=\"#5fd0ff\" stroke-width=\"5\" stroke-linecap=\"round\"><path d=\"M168 56A40 40 0 0 0 168 104\"/><path d=\"M232 56A40 40 0 0 1 232 104\"/><path d=\"M144 38A72 72 0 0 0 144 122\" opacity=\".75\"/><path d=\"M256 38A72 72 0 0 1 256 122\" opacity=\".75\"/><path d=\"M120 20A104 104 0 0 0 120 140\" opacity=\".5\"/><path d=\"M280 20A104 104 0 0 1 280 140\" opacity=\".5\"/></g></svg>", "cam": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><linearGradient id=\"gc1\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#06302f\"/><stop offset=\"1\" stop-color=\"#030a0a\"/></linearGradient><linearGradient id=\"gc2\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#2fe0c8\" stop-opacity=\".55\"/><stop offset=\"1\" stop-color=\"#2fe0c8\" stop-opacity=\"0\"/></linearGradient></defs><rect width=\"400\" height=\"440\" fill=\"url(#gc1)\"/><g stroke=\"#2fd3c0\" stroke-opacity=\".2\" stroke-width=\"2\"><line x1=\"0\" y1=\"260\" x2=\"400\" y2=\"260\"/><line x1=\"0\" y1=\"330\" x2=\"400\" y2=\"330\"/><line x1=\"0\" y1=\"440\" x2=\"400\" y2=\"440\"/><line x1=\"200\" y1=\"190\" x2=\"-60\" y2=\"440\"/><line x1=\"200\" y1=\"190\" x2=\"460\" y2=\"440\"/><line x1=\"200\" y1=\"190\" x2=\"120\" y2=\"440\"/><line x1=\"200\" y1=\"190\" x2=\"280\" y2=\"440\"/><rect x=\"110\" y=\"130\" width=\"180\" height=\"130\"/></g><polygon points=\"130,96 430,230 340,440 120,190\" fill=\"url(#gc2)\"/><g transform=\"rotate(24 150 100)\"><rect x=\"40\" y=\"70\" width=\"130\" height=\"62\" rx=\"18\" fill=\"#0e1c1c\" stroke=\"#2fd3c0\" stroke-width=\"3\"/><circle cx=\"150\" cy=\"101\" r=\"26\" fill=\"#051010\" stroke=\"#7ff0e0\" stroke-width=\"3\"/><circle cx=\"150\" cy=\"101\" r=\"13\" fill=\"#1fa896\"/><circle cx=\"144\" cy=\"95\" r=\"4\" fill=\"#fff\"/><rect x=\"48\" y=\"82\" width=\"46\" height=\"8\" rx=\"4\" fill=\"#2fd3c0\" opacity=\".5\"/></g><path d=\"M64 60L20 20\" stroke=\"#2fd3c0\" stroke-width=\"8\" stroke-linecap=\"round\"/><circle cx=\"352\" cy=\"38\" r=\"7\" fill=\"#ff3b30\"/><text x=\"326\" y=\"44\" fill=\"#ffb4ae\" font-family=\"Arial,sans-serif\" font-size=\"13\" font-weight=\"700\" text-anchor=\"end\">REC</text></svg>"};
+const matchCard=e=>{const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a),nm=t=>t.shortDisplayName||t.displayName||t.name||'';
+  const tm=(t,sc)=>`<div class="mtm">${t.logo?`<img src="${esc(t.logo)}" alt="">`:''}<span>${esc(nm(t))}</span>${live?`<b>${esc(sc)}</b>`:''}</div>`;
+  const today=new Date(e.t).toDateString()===new Date().toDateString();
+  return `<div class="mc ${b?'brann':''}" tabindex="0" data-find="${esc(nm(e.h)+'|'+nm(e.a))}"><div class="mlg"><span>${esc(e.lg)}</span><span>${live?'<span class="liveb">LIVE</span> '+esc(e.clock):esc(today?'I dag':fmtDay(e.t))}</span></div><div class="mt">${tm(e.h,e.hs)}${tm(e.a,e.as)}</div><div class="mft"><span>${live?'Pågår nå':'kl. '+fmtTime(e.t)}</span><span class="go">▶ Se kampen</span></div></div>`};
+function tonightList(f){
+  const d0=new Date().toDateString();
+  const t=f.list.filter(e=>e.state==='in'||new Date(e.t).toDateString()===d0).sort((a,b)=>(b.state==='in')-(a.state==='in')||a.t-b.t);
+  return t.length?{title:'Kveldens kamper',list:t.slice(0,16)}:{title:'Neste kamper',list:f.list.slice(0,14)};
+}
 function renderHome(){
-  const nm=profiles.find(p=>p.id===pid).name;
   const el=$('v-home');
-  if(!S){el.innerHTML=`<h1>Velkommen til <em>Min IPTV</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button>`;return}
-  const cont=hist.slice(0,14);
-  const nV=DB.vod.filter(fvis).length,nS=DB.ser.filter(fvis).length,nL=DB.live.filter(fvis).length,nF=DB.live.filter(c=>fvis(c)&&c.fb).length;
-  const P=(cls,ic,kick,t,sub,go,cnt)=>`<div class="poster ${cls}" data-go="${go}" tabindex="0">${ART[ic]}${ic==='fb'?`<img class="skbart skb" onerror="this.remove()" src="${SKB}" alt="SK Brann">`:''}${cnt?`<span class="cnt ${/LIVE/.test(cnt)?'live':''}">${cnt}</span>`:''}<span class="kick">${kick}</span><b>${t}</b><span class="ps">${sub}</span></div>`;
-  el.innerHTML=`<section class="hero">${STAD}
-    <div><span class="eyebrow"><img class="skb" onerror="this.replaceWith(document.createTextNode('🔥'))" src="https://a.espncdn.com/i/teamlogos/soccer/500/620.png" alt=""> Forza Brann · Kino</span>
-      <div class="hello">Hei ${esc(nm)}</div>
-      <h1>Kveldens <em>kamp</em></h1>
-      <p class="hsub">Eliteserien, Europa og alle kanalene dine – i kinoformat.</p>
-      <div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div>
-      <div class="hbtn"><button class="primary" data-go="live:chip=brann">▶ Se Brann live</button><button class="ghost" data-go="matches:">Kamper og tabell</button></div></div>
-    <div class="hside"><h3>🔴 Direkte og neste kamper</h3><div id="hsideList"><small>Henter kamper …</small></div></div></section>
-  <h3 class="sech">Velg din verden</h3>
-  <div class="posters">
-    ${P('pp-film','film','Kino','Filmer','Nye, populære og norske','movies:',nfmt(nV))}
-    ${P('pp-ser','ser','Strøm','Serier','Maraton og nyheter','series:',nfmt(nS))}
-    ${P('pp-fb','fb','Forza Brann','Fotball','Kamper, tabell og kanaler','fotball:',nfmt(nF)+' kanaler')}
-    ${P('pp-tv','tv','Alle land','Direkte TV','Norge, Sverige, Danmark m.fl.','tv:','🔴 LIVE')}
-    ${P('pp-cam','cam','Hjemme og borte','IP-kamera','Reolink – se hjemme','cams:',cams.length?cams.length+' kamera':'')}
-  </div>
-  ${cont.length?`<section class="rail"><div class="rh"><h3>▶ Fortsett å se</h3></div><div class="rs">${cont.map(hcard).join('')}</div></section>`:''}`;
-  heroFill($('v-home'));
+  if(!S){el.innerHTML=`<h1>Velkommen til <em>Eskedals Univers</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button>`;return}
+  const vod=DB.vod.filter(fvis),ser=DB.ser.filter(fvis),cont=hist.slice(0,14);
+  const pick=a=>a.filter(c=>c.logo&&c.rt>=6.5).sort(byNew).slice(0,3);
+  let feat=pick(vod).concat(pick(ser));
+  if(!feat.length)feat=vod.concat(ser).filter(c=>c.logo).sort(byNew).slice(0,4);
+  const top=a=>a.filter(c=>c.logo&&c.rt>0).sort(byNew).slice(0,220).sort((x,y)=>y.rt-x.rt).slice(0,10);
+  const nw=a=>a.slice().sort(byNew);
+  const no=DB.live.filter(c=>c.no&&fvis(c)).sort((a,b)=>noRank(a)-noRank(b)).slice(0,30);
+  const favs=DB.live.filter(c=>isFav(c)&&fvis(c)).concat(DB.vod.filter(c=>isFav(c)&&fvis(c)),DB.ser.filter(c=>isFav(c)&&fvis(c)));
+  el.innerHTML=sliderHtml(feat,'vod')+`<div class="hrails ${feat.length?'':'nobb'}">`+
+    (cont.length?`<section class="rail"><div class="rh"><h3>Fortsett å se</h3></div><div class="rs">${cont.map(hcard).join('')}</div>${NAVB}</section>`:'')+
+    `<div id="hSport"></div>`+
+    rail('Direkte TV',no,lcard,'tv:')+
+    top10Rail(top(vod),'Topp 10 filmer')+
+    rail('Nye filmer',nw(vod).slice(0,24),pcard,'movies:all=1')+
+    top10Rail(top(ser),'Topp 10 serier')+
+    rail('Nye serier',nw(ser).slice(0,24),pcard,'series:all=1')+
+    rail('Norsk',nw(vod.concat(ser)).filter(c=>c.no).slice(0,24),pcard,'movies:no=1')+
+    rail('Min liste',favs.slice(0,30),c=>c.t==='live'?ccard(c):pcard(c),'fav:')+`</div>`;
+  startSlider();epgHydrate(el);
+  loadFixtures().then(f=>{const h=$('hSport');if(!h||curView!=='home')return;const t=tonightList(f);h.innerHTML=rail(t.title,t.list,matchCard,'fotball:')}).catch(()=>{});
 }
 let fbLg=LSget('fbLg','nor.1');
+const lgTeams={};
+async function leagueTeamIds(slug){
+  if(lgTeams[slug]&&lgTeams[slug].length)return lgTeams[slug];
+  try{const j=await jget(ESPNS+slug+'/standings');const g=(j.children&&j.children.length?j.children:[j])[0];const ids=((g.standings&&g.standings.entries)||[]).map(e=>e.team.id);lgTeams[slug]=ids;return ids}catch(e){return []}
+}
+async function leagueSchedules(L,fixture){
+  const ids=await leagueTeamIds(L.slug),out=[];
+  const r=await Promise.all(ids.map(id=>jget(ESPN+L.slug+'/teams/'+id+'/schedule'+(fixture?'?fixture=true':'')).catch(()=>null)));
+  for(const j of r)if(j)out.push(...parseEvents(j,L.name));
+  return out;
+}
 const LRX={'nor.1':/eliteserien|toppserien|norsk fotball/i,'nor.2':/obos|1\. ?divisjon/i,'uefa.champions':/champions|\bucl\b/i,'uefa.europa':/europa league|\buel\b/i,'uefa.europa.conf':/conference|\buecl\b/i,'eng.1':/premier league|\bepl\b/i,'esp.1':/la ?liga|laliga/i,'ger.1':/bundesliga/i,'ita.1':/serie ?a\b/i};
+const NIFS_ID={'nor.2':6};
+const nifsC={};
+async function nifsData(slug){
+  const c=nifsC[slug];if(c&&Date.now()-c.t<300000)return c;
+  const tid=NIFS_ID[slug],base='https://api.nifs.no/';
+  const sts=await jget(base+'tournaments/'+tid+'/stages/');
+  const yr=new Date().getFullYear();
+  const s=sts.find(x=>x.yearStart===yr&&x.yearEnd===yr)||sts.sort((a,b)=>b.yearStart-a.yearStart)[0];
+  const [ms,tb]=await Promise.all([jget(base+'stages/'+s.id+'/matches/'),jget(base+'stages/'+s.id+'/table/').catch(()=>null)]);
+  const tm=t=>({id:t.id,displayName:t.name,shortDisplayName:t.shortName||t.name,name:t.name,logo:t.logo&&t.logo.url||''});
+  const L='OBOS-ligaen',evs=ms.map(m=>{const r=m.result||{},done=r.homeScore90!=null&&r.awayScore90!=null&&new Date(m.timestamp).getTime()<Date.now()-90*60000;
+    const live=!done&&r.homeScore90!=null&&new Date(m.timestamp).getTime()<=Date.now();
+    return {id:'n'+m.id,t:new Date(m.timestamp).getTime(),state:done?'post':(live?'in':'pre'),clock:'',h:tm(m.homeTeam),a:tm(m.awayTeam),hs:r.homeScore90!=null?String(r.homeScore90):'',as:r.awayScore90!=null?String(r.awayScore90):'',lg:L}});
+  const o={t:Date.now(),fx:evs.filter(e=>e.state!=='post').sort((a,b)=>a.t-b.t),res:evs.filter(e=>e.state==='post').sort((a,b)=>b.t-a.t),table:tb&&tb.teams||[]};
+  nifsC[slug]=o;return o;
+}
 const lgCache={};
 async function loadLeagueFx(L,force){
   const c=lgCache[L.slug];if(!force&&c&&Date.now()-c.t<600000)return c.list;
+  if(NIFS_ID[L.slug]){try{const d=await nifsData(L.slug);lgCache[L.slug]={t:Date.now(),list:d.fx};return d.fx}catch(e){}}
   const get=u=>jget(u).catch(()=>null);const y=new Date().getFullYear();let evs=[];
-  if(L.year){const r=await Promise.all([get(ESPN+L.slug+'/scoreboard?dates='+y),get(ESPN+L.slug+'/scoreboard?dates='+(y+1))]);for(const j of r)if(j)evs.push(...parseEvents(j,L.name))}
-  else{
+  evs.push(...await leagueSchedules(L,true));
+  if(!evs.length){
     const j0=await get(ESPN+L.slug+'/scoreboard');
     if(j0)evs.push(...parseEvents(j0,L.name));
     const cal=((j0&&j0.leagues&&j0.leagues[0]&&j0.leagues[0].calendar)||[]).map(x=>typeof x==='string'?x:(x&&x.startDate)||'').filter(x=>/^\d{4}-\d\d-\d\d/.test(x));
@@ -1332,58 +1769,366 @@ async function loadLeagueFx(L,force){
   const list=evs.filter(e=>{const k=e.id||(e.h.id+'-'+e.a.id+e.t);if(seen.has(k))return false;seen.add(k);return e.state==='in'||(e.state!=='post'&&e.t>=now)}).sort((a,b)=>a.t-b.t);
   lgCache[L.slug]={t:Date.now(),list};return list;
 }
+const lgRes={};
+async function loadLeagueResults(L){
+  const c=lgRes[L.slug];if(c&&Date.now()-c.t<600000)return c.list;
+  if(NIFS_ID[L.slug]){try{const d=await nifsData(L.slug);lgRes[L.slug]={t:Date.now(),list:d.res};return d.res}catch(e){}}
+  const get=u=>jget(u).catch(()=>null);const y=new Date().getFullYear();let evs=[];
+  evs.push(...await leagueSchedules(L,false));
+  if(!evs.length){
+    const j0=await get(ESPN+L.slug+'/scoreboard');if(j0)evs.push(...parseEvents(j0,L.name));
+    const cal=((j0&&j0.leagues&&j0.leagues[0]&&j0.leagues[0].calendar)||[]).map(x=>typeof x==='string'?x:(x&&x.startDate)||'').filter(x=>/^\d{4}-\d\d-\d\d/.test(x));
+    const today=new Date().toISOString().slice(0,10);
+    const days=[...new Set(cal.map(x=>x.slice(0,10)))].filter(d=>d<today).sort().reverse().slice(0,7);
+    const js=await Promise.all(days.map(d=>get(ESPN+L.slug+'/scoreboard?dates='+d.replace(/-/g,''))));
+    for(const j of js)if(j)evs.push(...parseEvents(j,L.name));
+  }
+  const seen=new Set();
+  const list=evs.filter(e=>{const k=e.id||(e.h.id+'-'+e.a.id+e.t);if(seen.has(k))return false;seen.add(k);return e.state==='post'}).sort((a,b)=>b.t-a.t);
+  lgRes[L.slug]={t:Date.now(),list};return list;
+}
+const resHtml=list=>{let day='',h='';for(const x of list){const d=fmtDay(x.t);if(d!==day){day=d;h+=`<div class="mday">${esc(d)}</div>`}h+=fxRow(x,true)}return h||'<p class="muted">Ingen resultater funnet ennå.</p>'};
+let fxList=[],fxTeam='',fxN=20;
+function fillNext(){
+  const rows=document.querySelectorAll('#fhTab tr[data-team]');if(!rows.length||!fxList.length)return;
+  const now=Date.now()-2*3600e3;
+  rows.forEach(tr=>{const n=tr.dataset.team,td=tr.querySelector('.nx');if(!td)return;
+    const x=fxList.find(e=>e.t>=now&&(teamIs(e.h,n)||teamIs(e.a,n)));
+    if(!x){td.textContent='–';return}
+    const home=teamIs(x.h,n),o=home?x.a:x.h;
+    td.innerHTML=`<span class="nxd">${esc(new Date(x.t).toLocaleDateString('no',{weekday:'short',day:'numeric',month:'numeric'}))} ${fmtTime(x.t)}</span> <span class="nxo">${home?'':'@ '}${esc(o.shortDisplayName||o.displayName)}</span>`});
+}
+const teamIs=(t,n)=>{n=String(n).toLowerCase();return [t.displayName,t.shortDisplayName,t.name].some(x=>x&&String(x).toLowerCase()===n)};
+function renderFx(){
+  const e=$('fhFx');if(!e)return;
+  const l=fxTeam?fxList.filter(x=>teamIs(x.h,fxTeam)||teamIs(x.a,fxTeam)):fxList;
+  let day='',h=fxTeam?`<div class="tchip">Lag: <b>${esc(fxTeam)}</b><button data-fxclear="1">✕ Vis alle</button></div>`:'';
+  for(const x of l.slice(0,fxN)){const d=fmtDay(x.t);if(d!==day){day=d;h+=`<div class="mday">${esc(d)}</div>`}h+=fxRow(x)}
+  if(l.length>fxN)h+=`<button class="ghost fxmore" data-fxmore="1">Vis flere (${l.length-fxN})</button>`;
+  e.innerHTML=h||'<p class="muted">Ingen kamper funnet for denne turneringen akkurat nå'+'. Bruk kanalene under for å se kamper direkte.</p>';
+  fillNext();
+}
 function drawLeague(){
   const body=$('fhBody');if(!body)return;
   const L=LEAGUES.find(l=>l.slug===fbLg)||LEAGUES[0];
   const rx=LRX[L.slug];
   const chs=DB.live.filter(c=>fvis(c)&&rx.test(c.lc)).slice(0,40);
-  body.innerHTML=`<div class="mcols"><div><h3 class="sech" style="margin-bottom:8px">${esc(L.name)} – kommende kamper</h3><div id="fhFx"><p class="muted">Henter kamper …</p></div></div>
+  body.innerHTML=`<div class="mcols"><div><div class="seg" id="fhSeg"><button class="on" data-seg="fx">Kommende kamper</button><button data-seg="res">Resultater</button></div><div id="fhFx"><p class="muted">Henter kamper …</p></div></div>
   <div><h3 class="sech" style="margin-bottom:8px">${esc(L.name)} – tabell</h3><div id="fhTab"><p class="muted">Henter tabell …</p></div></div></div>
   <div style="height:22px"></div>${rail('📺 Kanaler for '+esc(L.name),chs,ccard,'live:tab=fb')}`;
-  loadLeagueFx(L).then(list=>{if(fbLg!==L.slug)return;const e=$('fhFx');if(!e)return;const l=list.slice(0,14);let day='',h='';for(const x of l){const d=fmtDay(x.t);if(d!==day){day=d;h+=`<div class="mday">${esc(d)}</div>`}h+=fxRow(x)}e.innerHTML=h||'<p class="muted">Ingen kommende kamper funnet.</p>'}).catch(()=>{const e=$('fhFx');if(e)e.innerHTML='<p class="muted">Kunne ikke hente kamper.</p>'});
-  tableInto($('fhTab'),L.slug,L.slug.startsWith('uefa')?36:20);
+  fxTeam='';fxN=20;fxList=[];
+  loadLeagueFx(L).then(list=>{if(fbLg!==L.slug)return;fxList=list;renderFx()}).catch(()=>{const e=$('fhFx');if(e)e.innerHTML='<p class="muted">Kunne ikke hente kamper.</p>'});
+  tableInto($('fhTab'),L.slug,L.slug.startsWith('uefa')?36:20).then(fillNext);
 }
+let spOpen=null;
+const IC={
+ fotball:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="32" r="26"/><path d="M32 20l10 7-4 12H26l-4-12z"/><path d="M32 20V6M42 27l14-5M38 39l8 11M26 39l-8 11M22 27L8 22"/></svg>',
+ hockey:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l22 40c1.5 3 5 4.5 9 4.5h9"/><path d="M24 6l14 26"/><ellipse cx="22" cy="56" rx="10" ry="4"/><path d="M12 56v-4M32 56v-4"/></svg>',
+ ski:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l40-14M10 58l44-16"/><circle cx="36" cy="12" r="5"/><path d="M34 19l-6 14 10 6-4 8M34 19l12 10M24 24l-8 12M50 8L38 52"/></svg>',
+ motor:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 8v50"/><path d="M10 10h40v26H10"/><path d="M10 10h10v9H10zM30 10h10v9H30zM20 19h10v9H20zM40 19h10v9H40zM10 28h10v8H10zM30 28h10v8H30z" fill="currentColor" opacity=".55"/></svg>',
+ tennis:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><circle cx="30" cy="28" r="20"/><path d="M14 14c8 8 8 24 0 32M46 14c-8 8-8 24 0 32"/><path d="M42 44l16 16"/></svg>',
+ ball:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><circle cx="32" cy="32" r="26"/><path d="M6 32h52M32 6v52M13 13c10 10 28 10 38 0M13 51c10-10 28-10 38 0"/></svg>',
+ golf:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M26 6v46"/><path d="M26 6l22 9-22 9"/><ellipse cx="26" cy="54" rx="20" ry="5"/><circle cx="46" cy="46" r="3.5" fill="currentColor"/></svg>',
+ tv:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="52" height="34" rx="5"/><path d="M22 56h20M26 6l6 8 6-8"/></svg>',
+ fire:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M32 6c2 10 14 16 14 32a14 14 0 0 1-28 0c0-8 5-12 8-18 3 5 4 7 6 8 2-6 0-14 0-22z"/></svg>'};
+
+const SC=(id,body)=>`<svg class="scn" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${body.replace(/id="#ID/g,'id="'+id).replace(/#ID/g,'#'+id)}</svg>`;
+const SCENE={
+fotball:SC('f',`<defs><linearGradient id="#IDs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050c1c"/><stop offset="1" stop-color="#0d3a30"/></linearGradient><radialGradient id="#IDl"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".25" stop-color="#cfe8ff" stop-opacity=".45"/><stop offset="1" stop-color="#9cc8ff" stop-opacity="0"/></radialGradient><linearGradient id="#IDp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f8a4a"/><stop offset="1" stop-color="#0e5a2c"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#IDs)"/><circle cx="40" cy="30" r="90" fill="url(#IDl)"/><circle cx="360" cy="30" r="90" fill="url(#IDl)"/>
+<path d="M0 118 L400 118 L400 132 L0 132Z" fill="#0a1626"/><g fill="#27405f" opacity=".7">${Array.from({length:70},(_,i)=>`<rect x="${i*6}" y="${120+(i*7)%9}" width="3" height="4"/>`).join('')}</g>
+<path d="M-60 260 L110 132 L290 132 L460 260Z" fill="url(#IDp)"/>
+<g opacity=".16" fill="#fff"><path d="M110 132 L150 132 L90 260 L-10 260Z"/><path d="M190 132 L230 132 L240 260 L130 260Z"/><path d="M270 132 L290 132 L460 260 L350 260Z" opacity=".0"/><path d="M250 132 L290 132 L410 260 L300 260Z" opacity=".5"/></g>
+<g fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.6"><path d="M110 132 L290 132 L460 260 L-60 260Z"/><path d="M45 196 L355 196"/><ellipse cx="200" cy="196" rx="52" ry="14"/><path d="M155 132 L140 160 L260 160 L245 132"/></g><circle cx="200" cy="196" r="2.4" fill="#fff"/>`),
+hockey:SC('h',`<defs><linearGradient id="#IDi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8f6ff"/><stop offset="1" stop-color="#8cc0e0"/></linearGradient><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050d1a"/><stop offset="1" stop-color="#143a5c"/></linearGradient><radialGradient id="#IDg"><stop offset="0" stop-color="#bfe6ff" stop-opacity=".8"/><stop offset="1" stop-color="#bfe6ff" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><circle cx="90" cy="40" r="80" fill="url(#IDg)"/><circle cx="310" cy="40" r="80" fill="url(#IDg)"/><g fill="#2a5075" opacity=".8">${Array.from({length:66},(_,i)=>`<rect x="${i*6.2}" y="${92+(i*5)%10}" width="3" height="5"/>`).join('')}</g>
+<rect x="0" y="104" width="400" height="18" fill="#f2f8ff"/><rect x="0" y="118" width="400" height="5" fill="#2a74c0"/>
+<path d="M0 123 H400 V260 H0Z" fill="url(#IDi)"/><g fill="none" stroke-width="2.2"><path d="M200 123 V260" stroke="#d6212f"/><path d="M110 123 L60 260M290 123 L340 260" stroke="#2a63c8"/><ellipse cx="200" cy="205" rx="64" ry="20" stroke="#d6212f"/></g><circle cx="200" cy="205" r="5" fill="#2a63c8"/>
+<g opacity=".35" fill="#fff"><path d="M20 150 L120 140 L100 146Z"/><path d="M250 232 L390 214 L370 226Z"/><path d="M130 180 L230 170 L210 176Z"/></g><ellipse cx="262" cy="232" rx="11" ry="4" fill="#0b0e14"/><ellipse cx="262" cy="229.5" rx="11" ry="4" fill="#20242e"/>`),
+ski:SC('s',`<defs><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5568d6"/><stop offset=".6" stop-color="#c9a8d8"/><stop offset="1" stop-color="#f6cdb9"/></linearGradient><linearGradient id="#IDm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9fb4e6"/></linearGradient><linearGradient id="#IDs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9efff"/><stop offset="1" stop-color="#a8b8e8"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><circle cx="305" cy="62" r="22" fill="#fff6e6" opacity=".9"/>
+<path d="M-10 160 L70 70 L120 125 L180 50 L250 140 L310 85 L410 170 V260 H-10Z" fill="url(#IDm)"/><path d="M180 50 L205 82 L190 78 L180 96 L170 78 L158 84Z" fill="#fff" opacity=".7"/>
+<path d="M0 175 Q120 150 230 180 T400 170 V260 H0Z" fill="#c1cdf0"/><g fill="#14284a">${[20,45,70,330,355,380,95,305].map((x,i)=>`<path d="M${x} ${170+(i%3)*8} l-9 26 h18z M${x} ${158+(i%3)*8} l-7 22 h14z"/>`).join('')}</g>
+<path d="M0 200 Q150 190 260 215 T400 232 V260 H0Z" fill="url(#IDs)"/><g fill="none" stroke="#8a9ad0" stroke-width="2.4" stroke-linecap="round" opacity=".85"><path d="M-10 250 Q140 215 250 214 T410 222"/><path d="M-10 258 Q140 226 252 222 T410 232"/></g>`),
+motor:SC('m',`<defs><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14070c"/><stop offset=".55" stop-color="#8a1c1c"/><stop offset="1" stop-color="#ff8a3a"/></linearGradient><radialGradient id="#IDb"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><g>${[[40,100,22],[90,96,14],[150,102,18],[260,98,16],[320,104,26],[370,94,14]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#IDb)" opacity=".55"/>`).join('')}</g>
+<path d="M0 126 H400 V136 H0Z" fill="#190b10"/><g fill="#3a1b22" opacity=".9">${Array.from({length:66},(_,i)=>`<rect x="${i*6.2}" y="${128+(i*3)%6}" width="3" height="6"/>`).join('')}</g>
+<path d="M-80 260 L170 136 L230 136 L480 260Z" fill="#23232c"/>
+<path d="M-80 260 L170 136 L176 136 L-50 260Z" fill="#e11d2b"/><path d="M-50 260 L176 136 L182 136 L-20 260Z" fill="#fff"/><path d="M480 260 L230 136 L224 136 L450 260Z" fill="#e11d2b"/><path d="M450 260 L224 136 L218 136 L420 260Z" fill="#fff"/>
+<g fill="#fff" opacity=".85"><path d="M198 140 h4 l1 10 h-6z"/><path d="M196 160 h8 l2 18 h-12z"/><path d="M193 192 h14 l3 30 h-20z"/></g>
+<g opacity=".5" stroke="#ffd9a8" stroke-width="2" stroke-linecap="round"><path d="M20 200 L120 214"/><path d="M380 196 L290 214"/><path d="M60 230 L130 240"/></g>`),
+tennis:SC('t',`<defs><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07101e"/><stop offset="1" stop-color="#1a3a5e"/></linearGradient><linearGradient id="#IDc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f78bd"/><stop offset="1" stop-color="#1a4f8c"/></linearGradient><radialGradient id="#IDg"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><circle cx="60" cy="30" r="90" fill="url(#IDg)" opacity=".55"/><circle cx="340" cy="30" r="90" fill="url(#IDg)" opacity=".55"/>
+<path d="M0 100 H400 V130 H0Z" fill="#0c1b30"/><g fill="#2c4a73" opacity=".8">${Array.from({length:66},(_,i)=>`<rect x="${i*6.2}" y="${104+(i*7)%14}" width="3" height="5"/>`).join('')}</g>
+<path d="M0 130 H400 V260 H0Z" fill="#2a8c5a" opacity=".0"/><path d="M-40 260 L100 132 L300 132 L440 260Z" fill="url(#IDc)"/>
+<g fill="none" stroke="#fff" stroke-width="2" stroke-opacity=".9"><path d="M100 132 L300 132 L440 260 L-40 260Z"/><path d="M146 132 L98 260M254 132 L302 260"/><path d="M122 168 H278M200 168 V260" opacity=".8"/></g>
+<path d="M92 128 H308" stroke="#e8edf5" stroke-width="3"/><path d="M96 132 H304" stroke="#0a0f18" stroke-width="2" stroke-dasharray="2 2" opacity=".5"/><circle cx="240" cy="205" r="9" fill="#d8f03a"/><path d="M233 202 q7 4 14 0M233 209 q7 -4 14 0" stroke="#fff" stroke-width="1.2" fill="none" opacity=".8"/>`),
+handball:SC('b',`<defs><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f1c"/><stop offset="1" stop-color="#27354f"/></linearGradient><linearGradient id="#IDf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9964e"/><stop offset="1" stop-color="#a5622a"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><g fill="#3b5078" opacity=".7">${Array.from({length:66},(_,i)=>`<rect x="${i*6.2}" y="${96+(i*5)%16}" width="3" height="5"/>`).join('')}</g>
+<path d="M-40 260 L90 124 L310 124 L440 260Z" fill="url(#IDf)"/><g opacity=".2" stroke="#6b3a14" stroke-width="1">${Array.from({length:10},(_,i)=>`<path d="M${90+i*22} 124 L${-40+i*48} 260"/>`).join('')}</g>
+<g fill="none" stroke="#fff" stroke-width="2.2"><path d="M90 124 H310 L440 260 H-40Z"/><path d="M200 124 V260"/><path d="M130 124 Q200 210 270 124" stroke="#2a63c8" stroke-width="3"/></g><rect x="170" y="112" width="60" height="14" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="262" cy="214" r="10" fill="#f2c94c"/>`),
+golf:SC('g',`<defs><linearGradient id="#IDa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a8be0"/><stop offset="1" stop-color="#cfe9f7"/></linearGradient><linearGradient id="#IDg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#58b868"/><stop offset="1" stop-color="#1f7a3c"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#IDa)"/><g fill="#fff" opacity=".85"><ellipse cx="80" cy="50" rx="46" ry="12"/><ellipse cx="110" cy="42" rx="30" ry="10"/><ellipse cx="300" cy="70" rx="52" ry="12"/></g>
+<path d="M0 150 Q100 110 200 140 T400 130 V260 H0Z" fill="#2e8f4a"/><g fill="#14522a">${[30,56,330,360,300].map((x,i)=>`<circle cx="${x}" cy="${128+(i%2)*6}" r="${10+(i%3)*3}"/>`).join('')}</g>
+<path d="M0 190 Q140 160 260 190 T400 180 V260 H0Z" fill="url(#IDg)"/><ellipse cx="205" cy="222" rx="70" ry="16" fill="#7fd48a"/><ellipse cx="205" cy="222" rx="8" ry="3" fill="#0e3b1d"/><path d="M205 222 V150" stroke="#fff" stroke-width="2.4"/><path d="M205 150 L240 160 L205 170Z" fill="#e11d2b"/><ellipse cx="120" cy="206" rx="34" ry="9" fill="#e8d4a0"/><circle cx="268" cy="226" r="4" fill="#fff"/>`)
+};
+const SPORTS=[
+ {id:'fotball',n:'Fotball',bg:'linear-gradient(135deg,#0d7a45,#052a19)',ic:'fotball',rx:/football|fotball|soccer|eliteserien|premier league|champions|europa league|la ?liga|bundesliga|serie ?a|brann|obos/i,sub:'Eliteserien, Champions League og mer'},
+ {id:'hockey',n:'Ishockey',bg:'linear-gradient(135deg,#1f86b5,#06202c)',ic:'hockey',rx:CHIPS[5].rx,sub:'NHL, VM og ligaer'},
+ {id:'ski',n:'Langrenn og ski',bg:'linear-gradient(135deg,#6272e0,#0f1438)',ic:'ski',rx:CHIPS[6].rx,sub:'Langrenn, alpint og hopp'},
+ {id:'motor',n:'Motorsport',bg:'linear-gradient(135deg,#c4232c,#2b0509)',ic:'motor',rx:/formula ?1|\bf1\b|motorsport|moto ?gp|nascar|rally|indycar|\bwrc\b|\bdtm\b/i,sub:'Formel 1, MotoGP og rally'},
+ {id:'tennis',n:'Tennis',bg:'linear-gradient(135deg,#7aa31a,#1c2a05)',ic:'tennis',rx:/tennis|\batp\b|\bwta\b|wimbledon|roland garros|us open|australian open/i,sub:'Grand Slam og touren'},
+ {id:'handball',n:'Håndball',bg:'linear-gradient(135deg,#e0832a,#3a1c05)',ic:'ball',rx:/h[åa]ndball|handball/i,sub:'Herrer og damer'},
+ {id:'golf',n:'Golf',bg:'linear-gradient(135deg,#2c9e6a,#07281a)',ic:'golf',rx:/\bgolf\b|pga|dp world|ryder/i,sub:'PGA og DP World Tour'}
+];
+const LGB={'nor.1':['ELI','#0d7a45'],'nor.2':['OBOS','#a3202f'],'uefa.champions':['UCL','#1a43b8'],'uefa.europa':['UEL','#d9691a'],'uefa.europa.conf':['UECL','#19a35c'],'eng.1':['PL','#6a22c4'],'esp.1':['LL','#c43520'],'ger.1':['BL','#c88a14'],'ita.1':['SA','#1f86c4']};
+const SPTILE=(id,ic,bg,name,sub,badge)=>`<div class="stile" tabindex="0" data-fl="${id}" style="background:${bg}"><span class="sti">${badge||IC[ic]||''}</span><b>${esc(name)}</b><small>${esc(sub)}</small></div>`;
+function spHub(){
+  const L=DB.live.filter(fvis);
+  return `<div class="sgrid big">${SPORTS.map(x=>{const n=L.filter(c=>x.rx.test(c.lc)).length;if(x.id!=='fotball'&&!n)return '';return `<div class="stile xl" tabindex="0" data-fl="${x.id}" style="background:${x.bg}"><div class="sbg">${SCENE[x.id]||''}</div><span class="sti">${IC[x.ic]}</span><div class="stx"><b>${x.n}</b><small>${x.sub}${n?' · '+n+' kanaler':''}</small></div></div>`}).join('')}</div>`;
+}
+function fotballTiles(){
+  const L=DB.live.filter(fvis);const cnt=rx=>L.filter(c=>rx.test(c.lc)).length;
+  const lg=LEAGUES.map(l=>{const b=LGB[l.slug]||['⚽','#444'];const n=cnt(LRX[l.slug]);return SPTILE(l.slug,'',`linear-gradient(135deg,${b[1]},#0b0d16 120%)`,l.name,(l.slug==='nor.1'?'Inkl. Brann · ':'')+(n?n+' kanaler':'Kamper og tabell'),`<i class="lbadge" style="--c:${b[1]}">${b[0]}</i>`)}).join('');
+  const br=SPTILE('brann','fire','linear-gradient(135deg,#c0112e,#2a050c)','Brann','Kamper og kanaler');
+  return `<div class="sgrid">${br}${lg}${SPTILE('tvfb','tv','linear-gradient(135deg,#444a66,#14161f)','Alle fotballkanaler','Åpne kanallisten')}</div>`;
+}
+const spParent=id=>(LEAGUES.some(l=>l.slug===id)||id==='brann')?'fotball':null;
+const spName=id=>{const x=SPORTS.find(z=>z.id===id);if(x)return x.n;if(id==='brann')return 'Brann';const l=LEAGUES.find(z=>z.slug===id);return l?l.name:'Sport'};
 function renderFotball(){
   const el=$('v-fotball');
-  if(!S){el.innerHTML='<h1>⚽ Fotball</h1><div class="empty">Legg til en kilde først.</div>';return}
-  const L=DB.live.filter(fvis);
-  const by=rx=>L.filter(c=>rx.test(c.lc)).slice(0,30);
-  const brannCh=by(/brann/i),hockey=by(CHIPS[5].rx),ski=by(CHIPS[6].rx);
-  const fav=L.filter(c=>isFav(c)&&c.fb).slice(0,30);
-  el.innerHTML=`<div class="pagehead"><h1>⚽ Fotball</h1></div>
-  <section class="fhero">${STAD}<div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div>
-    <div class="hbtn"><button class="primary" data-go="live:chip=brann">▶ Se Brann live</button><button class="ghost" data-go="matches:">Alle kamper og tabeller</button><button class="ghost" data-go="live:tab=fb">Alle fotballkanaler</button></div></section>
-  <div class="pills" id="fhLg">${LEAGUES.map(l=>`<button class="chip ${l.slug===fbLg?'on':''}" data-fl="${l.slug}">${esc(l.name)}</button>`).join('')}</div>
-  <div id="fhBody"></div>
-  ${rail('★ Dine fotballkanaler',fav,ccard,'live:tab=fb')}
-  <section class="brann"><h3>🔥 BRANN</h3><p>${brannCh.length?'Kanaler som viser Brann':'Ingen kanaler med «Brann» i navnet nå'}</p><div class="rs">${brannCh.map(ccard).join('')}</div></section>
-  ${rail('🏒 Ishockey',hockey,ccard,'live:chip=hockey')}
-  ${rail('⛷️ Ski',ski,ccard,'live:chip=ski')}`;
-  heroFill($('v-fotball'));
+  if(!S){el.innerHTML='<h1>Sport</h1><div class="empty">Legg til en kilde først.</div>';return}
+  if(spOpen)return renderSportDetail(el);
+  el.innerHTML=`<section class="shero shero2">${STAD}<h1>Sport</h1><p class="sub">Velg sport.</p></section>${spHub()}`;
+}
+const SPSTAND={hockey:'hockey/nhl',motor:'racing/f1'};
+const SPFEED={hockey:[['NHL','hockey/nhl']],motor:[['Formel 1','racing/f1']],tennis:[['ATP','tennis/atp'],['WTA','tennis/wta']],golf:[['PGA Tour','golf/pga']]};
+async function spStandFill(id){
+  const j=await jget('https://site.api.espn.com/apis/v2/sports/'+SPSTAND[id]+'/standings').catch(()=>null);
+  const el=$('spStand');if(!el||spOpen!==id)return;
+  const ch=(j&&j.children)||[];if(!ch.length){el.innerHTML='';return}
+  const st=(e,n)=>{const x=(e.stats||[]).find(y=>y.name===n);return x?(x.displayValue!=null?x.displayValue:x.value):''};
+  const nm=e=>(e.team&&(e.team.displayName||e.team.name))||(e.athlete&&e.athlete.displayName)||'';
+  const lg=e=>{const l=e.team&&(e.team.logos&&e.team.logos[0]&&e.team.logos[0].href||e.team.logo);return l?`<img src="${esc(l)}" alt="">`:''};
+  let h='';
+  for(const c of ch){
+    const ents=(c.standings&&c.standings.entries)||[];if(!ents.length)continue;
+    const rows=ents.map(e=>({e,p:+st(e,'points')||+st(e,'championshipPts')||0,r:+st(e,'rank')||0})).sort((a,b)=>id==='hockey'?b.p-a.p:(a.r&&b.r?a.r-b.r:b.p-a.p)).slice(0,id==='hockey'?16:12);
+    h+=`<h3 class="sech" style="margin:14px 0 8px">${esc(c.name.replace('Eastern','Øst').replace('Western','Vest').replace('Conference','').replace('Driver Standings','Førere – sammenlagt').replace('Constructor Standings','Konstruktører'))}</h3><table class="tbl"><tr><th>#</th><th>${id==='hockey'?'Lag':'Navn'}</th>${id==='hockey'?'<th>K</th><th>V</th><th>T</th><th>OT</th>':''}<th>P</th></tr>${rows.map(({e,p},i)=>`<tr data-team="${esc(nm(e))}"><td>${i+1}</td><td class="t">${lg(e)}<span>${esc(nm(e))}</span></td>${id==='hockey'?`<td>${st(e,'gamesPlayed')}</td><td>${st(e,'wins')}</td><td>${st(e,'losses')}</td><td>${st(e,'otLosses')}</td>`:''}<td><b>${p}</b></td></tr>`).join('')}</table>`;
+  }
+  el.innerHTML=h;
+}
+async function spFeedFill(id){
+  const out=[];
+  const ymd=d=>d.toISOString().slice(0,10).replace(/-/g,'');
+  for(const [nm,p] of SPFEED[id]){
+    const urls=id==='hockey'?[-3,-2,-1,0,1,2].map(i=>'?dates='+ymd(new Date(Date.now()+i*864e5))):[''];
+    const js=await Promise.all(urls.map(q=>jget('https://site.api.espn.com/apis/site/v2/sports/'+p+'/scoreboard'+q).catch(()=>null)));
+    for(const j of js)for(const e of ((j&&j.events)||[])){
+      const c=(e.competitions||[])[0]||{},cs=c.competitors||[],st=(e.status||c.status||{}).type||{};
+      let a='',b='',sc='';
+      if(cs.length===2&&cs[0].team){const h=cs.find(x=>x.homeAway==='home')||cs[0],w=cs.find(x=>x!==h);a=h.team.displayName;b=w.team.displayName;if(st.state!=='pre')sc=(h.score||0)+' – '+(w.score||0)}
+      else if(cs.length===2&&cs[0].athlete){a=cs[0].athlete.displayName;b=cs[1].athlete.displayName;if(st.state!=='pre')sc=(cs[0].score||'')+' – '+(cs[1].score||'')}
+      out.push({t:new Date(e.date).getTime(),nm,title:a?a+' – '+b:(e.name||e.shortName),sc,state:st.state||'pre',det:st.shortDetail||'',find:a?a.split(' ').pop()+'|'+b.split(' ').pop():(nm)});
+    }
+  }
+  const el=$('spFeed');if(!el||spOpen!==id)return;
+  out.sort((x,y)=>x.t-y.t);
+  const live=out.filter(x=>x.state==='in'),next=out.filter(x=>x.state==='pre'&&x.t>Date.now()-6*36e5),done=out.filter(x=>x.state==='post').reverse();
+  const row=x=>`<div class="fx ${x.state==='in'?'':''}" data-find="${esc(x.find)}" tabindex="0"><div class="tm">${x.state==='in'?'<span class="liveb">LIVE</span>':(x.state==='post'?'FT':fmtTime(x.t))}</div><div class="tx"><div class="tn"><span>${esc(x.title)}</span>${x.sc?`<b style="margin-left:auto">${esc(x.sc)}</b>`:''}</div><div class="lgn">${esc(x.nm)} · ${esc(fmtDay(x.t))}${x.state==='in'&&x.det?' · '+esc(x.det):''}</div></div>${x.state==='post'?'':'<span class="lk">▶ Se</span>'}</div>`;
+  const sec=(t,l)=>l.length?`<h3 class="sech" style="margin:14px 0 8px">${t}</h3><div class="fxl">${l.slice(0,12).map(row).join('')}</div>`:'';
+  el.innerHTML=(sec('Direkte nå',live)+sec('Kommende',next)+sec('Siste resultater',done))||'<p class="muted">Ingen program funnet akkurat nå (sesongpause?). Se kanalene under.</p>';
+}
+function renderSportDetail(el){
+  const L=DB.live.filter(fvis);const by=rx=>L.filter(c=>rx.test(c.lc)).slice(0,80);
+  const par=spParent(spOpen);
+  const back=`<button class="ghost sback" data-spback="1">← ${par?esc(spName(par)):'Sport'}</button>`;
+  window.scrollTo(0,0);
+  const head=(t,ic)=>`<div class="sdh">${back}<span class="sdi">${ic||''}</span><h1>${esc(t)}</h1></div>`;
+  const sp=SPORTS.find(x=>x.id===spOpen);
+  if(spOpen==='fotball'){
+    el.innerHTML=head('Fotball',IC.fotball)+`<div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div>
+    <div id="spTonight"></div><h3 class="sech" style="margin:14px 0 12px">Turneringer</h3>${fotballTiles()}`;
+    heroFill(el);
+    loadFixtures().then(f=>{if(spOpen!=='fotball')return;const t=tonightList(f);const a=$('spTonight');if(a)a.innerHTML=rail(t.title,t.list,matchCard)}).catch(()=>{});
+    return;
+  }
+  if(spOpen==='tvfb'){spOpen='fotball';goLive({tab:'fb'});return}
+  if(sp){
+    const ch=by(sp.rx);
+    const champ=ch.filter(c=>/\b(vm|em|ol|nm)\b|world cup|verdenscup|championship|olympi|mesterskap|finale|final\b/i.test(c.lc||c.n||c.name||''));
+    el.innerHTML=head(sp.n,IC[sp.ic])+(SPFEED[spOpen]?'<div id="spFeed"><p class="muted">Henter program …</p></div>':'')+(SPSTAND[spOpen]?'<div id="spStand"></div>':'')+(champ.length?rail('🏆 Mesterskap og cup nå',champ.slice(0,24),lcard):'')+(ch.length?`<div class="lgrid">${ch.map(lcard).join('')}</div>`:'<div class="empty">Ingen kanaler funnet.</div>');
+    if(SPFEED[spOpen])spFeedFill(spOpen);if(SPSTAND[spOpen])spStandFill(spOpen);
+    epgHydrate(el);return;
+  }
+  if(spOpen==='brann'){
+    el.innerHTML=head('Brann',IC.fire)+`<div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div>
+    <div id="spBrann"></div><h3 class="sech" style="margin:10px 0 8px">Siste resultater</h3><div id="spRes" class="fxl"><p class="muted">Henter …</p></div>${rail('Brann-kanaler',by(/brann/i),lcard,'live:chip=brann')}`;
+    loadLeagueResults(LEAGUES[0]).then(l=>{const e=$('spRes');if(e&&spOpen==='brann')e.innerHTML=resHtml(l.filter(x=>isBrann(x.h)||isBrann(x.a)).slice(0,8))}).catch(()=>{const e=$('spRes');if(e)e.innerHTML='<p class="muted">Kunne ikke hente resultater.</p>'});
+    heroFill(el);loadFixtures().then(f=>{if(spOpen!=='brann')return;const b=$('spBrann');if(b)b.innerHTML=rail('Neste Brann-kamper',f.brann.slice(0,10),matchCard)}).catch(()=>{});
+    epgHydrate(el);return;
+  }
+  const Lg=LEAGUES.find(l=>l.slug===spOpen)||LEAGUES[0];fbLg=Lg.slug;
+  const b=LGB[Lg.slug]||['',''];
+  el.innerHTML=head(Lg.name,`<i class="lbadge sm" style="--c:${b[1]}">${b[0]}</i>`)+
+  (Lg.slug==='nor.1'?`<div class="ticket" id="heroNext"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Henter …</div></div><div class="tr"></div></div><div id="spBrann"></div>`:'')+`<div id="fhBody"></div>`;
+  if(Lg.slug==='nor.1'){heroFill(el);loadFixtures().then(f=>{if(spOpen!=='nor.1')return;const x=$('spBrann');if(x)x.innerHTML=rail('Neste Brann-kamper',f.brann.slice(0,8),matchCard)}).catch(()=>{})}
   drawLeague();
 }
 const COUNTRIES=[['no','🇳🇴','Norge'],['se','🇸🇪','Sverige'],['dk','🇩🇰','Danmark'],['uk','🇬🇧','England'],['us','🇺🇸','USA']];
+/* ===================== Direkte TV – forside ===================== */
+const CHCAT=[
+  ['sport','Sport',/sport|fotball|football|soccer|eliteserien|premier league|champions|eurosport|dazn|v sport|\btnt\b|espn|nhl|hockey|ishockey/i],
+  ['nyheter','Nyheter',/nyhet|\bnews\b|\bcnn\b|\bbbc\b|euronews|al ?jazeera|\bdw\b|nrk ?2|tv ?2 nyhet/i],
+  ['barn','Barn',/\bbarn\b|\bkids?\b|junior|\bjr\b|nickelodeon|\bnick\b|cartoon|disney|minimax|boomerang|\btoon/i],
+  ['film','Film og serier',/\bfilm\b|movie|cinema|\btcm\b|\baxn\b|\bhbo\b|cinemax|thriller|krim|crime/i],
+  ['dok','Dokumentar',/dokumentar|documentar|discovery|history|nat ?geo|national geographic|animal planet|investigation|viasat (history|explore|nature)/i],
+  ['musikk','Musikk',/music|musikk|\bmtv\b|vh1|nrk p3|mezzo|stingray/i]
+];
+const chByCat=id=>{const r=CHCAT.find(x=>x[0]===id)[2];return DB.live.filter(c=>fvis(c)&&!c.reg&&r.test(c.lc)).sort((a,b)=>(b.no-a.no)||(noRank(a)-noRank(b))||COLL.compare(a.nm,b.nm))};
 function renderTV(){
   const el=$('v-tv');
-  if(!S){el.innerHTML='<h1>📺 <em>Live TV</em></h1><div class="empty">Legg til en kilde først.</div>';return}
-  const cnt={all:0,fav:0,fb:0,brann:0},per={},smp={};
-  for(const c of DB.live){
-    if(!fvis(c))continue;cnt.all++;if(isFav(c))cnt.fav++;if(c.fb)cnt.fb++;if(/brann/i.test(c.lc))cnt.brann++;
-    for(const [t] of COUNTRIES)if(inTab(c,t)){per[t]=(per[t]||0)+1;const a=smp[t]=smp[t]||[];if(c.logo&&a.length<4&&!a.some(x=>x.logo===c.logo)&&(t!=='no'||noRank(c)<4||a.length>=2))a.push(c)}
-  }
-  const mos=a=>`<div class="mos">${(a||[]).map(c=>`<span><img src="${esc(c.logo)}" alt="" loading="lazy"></span>`).join('')}</div>`;
-  const CT=(cls,fl,t,sub,go,m)=>`<div class="ctile ${cls}" data-go="${go}" tabindex="0"><span class="flag">${fl}</span>${m||''}<b>${t}</b><small>${sub}</small></div>`;
-  el.innerHTML=`<div class="pagehead"><h1>📡 Direkte TV</h1></div><p class="sub">Velg land eller kategori.</p>
-  <div class="ctiles">
-    ${COUNTRIES.filter(([t])=>per[t]&&allowedLangs.has(t)).map(([t,fl,n])=>CT('c-'+t,fl,n,per[t]+' kanaler','live:tab='+t,mos(smp[t]))).join('')}
-    ${CT('c-brann','🔥','Brann','Kanaler med Brann'+(cnt.brann?' · '+cnt.brann:''),'live:chip=brann')}
-    ${CT('c-sp','⚽','Fotball',cnt.fb+' kanaler','live:tab=fb')}
-    ${CT('c-sp','★','Favoritter',cnt.fav+' kanaler','live:tab=fav')}
-    ${CT('c-sp','📡','Alle kanaler',cnt.all+' kanaler','live:tab=all')}
-  </div>
-  ${rail('🇳🇴 Norske kanaler – samlet',DB.live.filter(c=>c.no&&fvis(c)).sort((a,b)=>noRank(a)-noRank(b)).slice(0,40),ccard,'live:tab=no')}
-  ${rail('★ Dine favorittkanaler',DB.live.filter(c=>isFav(c)&&fvis(c)).slice(0,30),ccard,'fav:')}`;
+  if(!S){el.innerHTML='<h1>Direkte TV</h1><div class="empty">Legg til en kilde først.</div>';return}
+  const L=DB.live.filter(c=>fvis(c));
+  const per={};for(const c of L){for(const [t] of COUNTRIES)if(inTab(c,t))per[t]=(per[t]||0)+1}
+  const lastLive=hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&fvis(c)&&!c.dup).slice(0,14);
+  const no=L.filter(c=>c.no&&!c.reg).sort((a,b)=>noRank(a)-noRank(b)||COLL.compare(a.nm,b.nm)).slice(0,30);
+  const favs=L.filter(c=>isFav(c)).slice(0,30);
+  const lands=COUNTRIES.filter(([t])=>per[t]&&allowedLangs.has(t)).map(([t,fl,n])=>`<button class="chip" data-go="live:tab=${t}">${fl} ${n}</button>`).join('');
+  el.innerHTML=`<div class="tvh"><h1>Direkte TV</h1><input id="tvq" type="search" placeholder="Søk etter kanal …" autocomplete="off"></div>
+  <div class="pills" id="tvLands"><button class="chip on" data-go="tv:">Oversikt</button><button class="chip" data-go="guide:">📅 TV-guide</button>${lands}<button class="chip" data-go="live:tab=fb">⚽ Fotball</button><button class="chip" data-go="live:chip=brann">Brann</button><button class="chip" data-go="live:tab=all">Alle kanaler</button></div>
+  <div id="tvRes" hidden></div>
+  <div id="tvBody">
+  ${rail('Sist sett',lastLive,lcard)}
+  ${rail('Favoritter',favs,lcard,'fav:')}
+  ${rail('Norske kanaler',no,lcard,'live:tab=no')}
+  ${CHCAT.map(([id,t])=>rail(t,chByCat(id).slice(0,30),lcard,'live:tab=all')).join('')}
+  </div>`;
+  epgHydrate(el);
+  $('tvq').oninput=()=>{clearTimeout(tvqT);tvqT=setTimeout(tvSearch,160)};
 }
+let tvqT;
+function tvSearch(){
+  const q=($('tvq')||{}).value||'',r=$('tvRes'),b=$('tvBody');if(!r)return;
+  if(q.trim().length<2){r.hidden=true;b.hidden=false;return}
+  const res=skRun(DB.live,skq(q.trim()),c=>fvis(c)).sort((a,b)=>(b.no-a.no)||COLL.compare(a.nm,b.nm)).slice(0,60);
+  b.hidden=true;r.hidden=false;
+  r.innerHTML=res.length?`<h3 class="sech" style="margin:6px 0 10px">${res.length} treff</h3><div class="lgrid">${res.map(lcard).join('')}</div>`:'<div class="empty">Ingen kanaler funnet.</div>';
+  epgHydrate(r);
+}
+
+/* ===================== TV-guide ===================== */
+let gdSet='fav';
+const GPX=6,GSPAN=4*60;
+function guideChannels(set){
+  const all=DB.live.filter(c=>fvis(c)&&!c.reg&&c.xt);
+  if(set==='fav')return all.filter(isFav).slice(0,40);
+  if(set==='sport')return chByCat('sport').filter(c=>c.xt).slice(0,40);
+  return all.filter(c=>c.no).sort((a,b)=>noRank(a)-noRank(b)||COLL.compare(a.nm,b.nm)).slice(0,40);
+}
+function renderGuide(){
+  const el=$('v-guide');
+  if(!S){el.innerHTML='<h1>TV-guide</h1><div class="empty">Legg til en kilde først.</div>';return}
+  if(gdSet==='fav'&&!DB.live.some(c=>isFav(c)&&c.xt))gdSet='no';
+  const chs=guideChannels(gdSet);
+  const start=Math.floor((Date.now()-30*60000)/1800000)*1800000,end=start+GSPAN*60000;
+  const hours=[];for(let t=start;t<end;t+=1800000)hours.push(t);
+  el.innerHTML=`<div class="tvh"><h1>TV-guide</h1></div>
+  <div class="pills" id="gdPills"><button class="chip" data-go="tv:">← Direkte TV</button>${[['fav','Favoritter'],['no','Norske'],['sport','Sport']].map(([k,l])=>`<button class="chip ${gdSet===k?'on':''}" data-gd="${k}">${l}</button>`).join('')}</div>
+  <div id="gdNote" class="muted" style="margin:6px 0 10px"></div>
+  <div class="gscroll"><div class="gin" style="width:${190+GSPAN*GPX}px">
+    <div class="ghead"><div class="gch gh0"></div><div class="gtl">${hours.map(t=>`<span style="left:${(t-start)/60000*GPX}px">${fmtTime(t)}</span>`).join('')}</div></div>
+    ${chs.map(c=>`<div class="grow"><div class="gch" data-k="${c.key}" tabindex="0">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt="">`:''}<span>${esc(c.nm||c.name)}</span></div><div class="gtl gprog" data-gk="${c.key}"></div></div>`).join('')}
+    <div class="gnow" style="left:${190+(Date.now()-start)/60000*GPX}px"></div>
+  </div></div>`;
+  if(!chs.length){$('gdNote').textContent=gdSet==='fav'?'Ingen favorittkanaler med programguide ennå – trykk ★ på en kanal.':'Fant ingen kanaler med programguide.';return}
+  let got=0,done=0;
+  chs.forEach(c=>epgGet(c).then(l=>{
+    done++;const row=el.querySelector(`[data-gk="${c.key}"]`);if(!row)return;
+    const items=l.filter(x=>x.e>start&&x.s<end);if(items.length)got++;
+    row.innerHTML=items.map(x=>{const a=Math.max(x.s,start),b=Math.min(x.e,end),now=x.s<=Date.now()&&x.e>Date.now();
+      return `<button class="gp ${now?'now':''}" data-k="${c.key}" title="${esc(x.t)}" style="left:${(a-start)/60000*GPX}px;width:${Math.max(24,(b-a)/60000*GPX-3)}px"><b>${esc(x.t)}</b><small>${fmtTime(x.s)}</small></button>`}).join('');
+    if(done===chs.length&&!got&&$('gdNote'))$('gdNote').textContent='Leverandøren din sender ikke programguide for disse kanalene.';
+  }));
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-gd]');if(b){gdSet=b.dataset.gd;renderGuide()}});
+
+
+/* ===== Strømmestatistikk ===== */
+let qsOn=false,qsT=0;
+function qsTick(){
+  const ovOn=$('ov').classList.contains('on'),pl=ovOn?vodPlayer:livePlayer,el=ovOn?$('qsO'):$('qsL');
+  $('qsL').style.display='none';$('qsO').style.display='none';
+  if(!pl.cur||(!ovOn&&curView!=='live'))return;
+  const s=pl.stats(),dp=s.total?Math.round(s.drop/s.total*1000)/10:0;
+  let v='Venter på bilde …';
+  if(s.w){v=(s.stalls<=1&&dp<2)?'God':(s.stalls<=3&&dp<6)?'OK':'Svak'}
+  el.textContent=s.kind+' · '+(s.w?s.w+'×'+s.h:'–')+(s.fps?' · '+Math.round(s.fps)+' b/s':'')+(s.codec?'\n'+s.codec:'')+
+   (s.mbit?'\nNedlasting: '+s.mbit.toFixed(1)+' Mbit/s'+(s.lvl?' (kanalen '+s.lvl+')':''):'')+
+   '\nBuffer: '+s.buf.toFixed(1)+' s · Hakk: '+s.stalls+(s.start?' · Oppstart: '+(s.start/1000).toFixed(1)+' s':'')+
+   '\nTapte bilder: '+s.drop+'/'+s.total+' ('+dp+'%)\nVurdering: '+v;
+  el.style.display='block';
+}
+function qsToggle(){qsOn=!qsOn;clearInterval(qsT);if(qsOn){qsTick();qsT=setInterval(qsTick,1000)}else{$('qsL').style.display='none';$('qsO').style.display='none'}toast(qsOn?'Statistikk på':'Statistikk av',1200)}
+$('nowQs').onclick=qsToggle;$('ovQs').onclick=qsToggle;
+document.addEventListener('keydown',e=>{if((e.key==='i'||e.key==='I'||e.key==='Info'||e.keyCode===457)&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&($('ov').classList.contains('on')||(curView==='live'&&current&&$('v-live').classList.contains('playing')))){e.preventDefault();qsToggle()}});
+
+/* ===================== Kanalbytte i spilleren ===================== */
+let zapOpen=false,zapSel=0,zapItems=[],zapNum='',zapNumT=0,zapInfoT=0;
+const isFsLive=()=>curView==='live'&&current&&$('v-live').classList.contains('playing')&&($('vwrap').classList.contains('pfs')||document.fullscreenElement===$('vwrap')||document.webkitFullscreenElement===$('vwrap'));
+function zapInfo(c){
+  const el=$('zapI');if(!el)return;
+  clearTimeout(zapInfoT);
+  el.innerHTML=`<div class="zil">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div><div class="zib"><b>${esc(c.nm||c.name)}</b><div class="lcp" id="zapIe"></div></div>`;
+  el.classList.add('on');zapInfoT=setTimeout(()=>el.classList.remove('on'),5000);
+  epgGet(c).then(l=>{if(current&&current.key===c.key){const e=$('zapIe');if(e)epgFill(e,l)}});
+}
+function zapRender(){
+  const L=$('zapL');if(!L)return;
+  const a=Math.max(0,zapSel-4),b=Math.min(zapItems.length,a+11);
+  L.innerHTML=`<div class="zh">Kanaler <small>OK = velg · Tilbake = lukk</small></div>`+zapItems.slice(a,b).map((c,i)=>`<div class="zr ${a+i===zapSel?'on':''} ${current&&c.key===current.key?'cur':''}" data-zi="${a+i}">${c.logo?`<img src="${esc(c.logo)}" alt="">`:'<span class="zph"></span>'}<div class="zrb"><b>${esc(c.nm||c.name)}</b><div class="lcp" data-epg="${c.key}"></div></div></div>`).join('');
+  epgHydrate(L);
+}
+function zapShowList(){
+  if(!current)return;zapItems=filtered.length?filtered:[current];
+  zapSel=Math.max(0,zapItems.findIndex(c=>c.key===current.key));
+  zapOpen=true;$('vwrap').classList.add('zl');zapRender();
+}
+function zapClose(){zapOpen=false;$('vwrap').classList.remove('zl')}
+function zapNumber(d){
+  zapNum=(zapNum+d).slice(0,3);const el=$('zapN');el.textContent=zapNum;el.classList.add('on');
+  clearTimeout(zapNumT);zapNumT=setTimeout(zapNumGo,1500);
+}
+function zapNumGo(){
+  clearTimeout(zapNumT);const n=parseInt(zapNum,10);zapNum='';$('zapN').classList.remove('on');
+  const L=filtered.length?filtered:[];if(!n||n>L.length)return toast('Ingen kanal med det nummeret i listen',1800);
+  selectLive(L[n-1],true);
+}
+document.addEventListener('keydown',e=>{
+  if(curView!=='live'||!current||!$('v-live').classList.contains('playing'))return;
+  const t=document.activeElement,typing=t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName);
+  if(zapOpen){
+    const k=e.key;e.preventDefault();e.stopImmediatePropagation();
+    if(k==='ArrowDown'){zapSel=(zapSel+1)%zapItems.length;zapRender()}
+    else if(k==='ArrowUp'){zapSel=(zapSel-1+zapItems.length)%zapItems.length;zapRender()}
+    else if(k==='PageDown'){zapSel=Math.min(zapItems.length-1,zapSel+8);zapRender()}
+    else if(k==='PageUp'){zapSel=Math.max(0,zapSel-8);zapRender()}
+    else if(k==='Enter'||k===' '){const c=zapItems[zapSel];zapClose();if(c)selectLive(c,true)}
+    else if(k==='Escape'||k==='Backspace'||k==='ArrowLeft'||k==='ArrowRight'||k==='GoBack'||k==='BrowserBack')zapClose();
+    return;
+  }
+  if(typing)return;
+  if(/^[0-9]$/.test(e.key)){e.preventDefault();e.stopImmediatePropagation();zapNumber(e.key);return}
+  if(e.key==='Enter'&&zapNum){e.preventDefault();e.stopImmediatePropagation();zapNumGo();return}
+  if(e.key==='ChannelUp'||e.keyCode===427){e.preventDefault();zap(-1);return}
+  if(e.key==='ChannelDown'||e.keyCode===428){e.preventDefault();zap(1);return}
+  if(!isFsLive())return;
+  if(e.key==='ArrowUp'){e.preventDefault();e.stopImmediatePropagation();zap(-1);return}
+  if(e.key==='ArrowDown'){e.preventDefault();e.stopImmediatePropagation();zap(1);return}
+  if(e.key==='Enter'||e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();e.stopImmediatePropagation();zapShowList();return}
+},true);
+$('vwrap').addEventListener('click',e=>{const r=e.target.closest('.zr');if(!r)return;const c=zapItems[+r.dataset.zi];zapClose();if(c)selectLive(c,true)});
+
 function renderNorsk(){
   const f=a=>a.filter(c=>c.no&&visible(c)).sort(byNew);
   const v=f(DB.vod),sr=f(DB.ser);
@@ -1406,10 +2151,12 @@ function go(sp){
   showView(v,true);
 }
 function appBack(){
+  if(typeof zapOpen!=='undefined'&&zapOpen){zapClose();return true}
   const pf=document.querySelector('.pfs');if(pf&&pf.id!=='ov'){pf.classList.remove('pfs','bar');return true}
   const cm=$('ccMenu');if(cm&&cm.className==='on'){cm.className='';return true}
   if($('ov').classList.contains('on')){closePlayer();return true}
   const d=document.querySelector('dialog[open]');if(d){d.close();return true}
+  if(curView==='fotball'&&spOpen){spOpen=spParent(spOpen);renderFotball();return true}
   if(curView!=='home'){if(navStack.length)goBack();else showView('home',true,true);return true}
   return false;
 }
@@ -1493,11 +2240,11 @@ function moreLive(){
   for(const c of filtered.slice(shown,shown+PAGE)){
     if(!liveFind){const g=groupLabel(c);if(g!==lastG){lastG=g;const h=document.createElement('div');h.className='gh';h.innerHTML=esc(g)+' <small>'+(gCount.get(g)||0)+'</small>';frag.appendChild(h)}}
     const d=document.createElement('div');d.className='ch'+(current&&current.key===c.key?' active':'');d._c=c;
-    d.innerHTML=`<div class="cl">${c.logo?`<img loading="lazy" src="${esc(c.logo)}" alt="">`:''}<div class="ph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</div>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}</div>`+
-      `<div class="cb"><div class="n">${esc(c.nm||c.name)}</div><div class="g">${esc(c.cat)}</div></div><button class="ic star ${isFav(c)?'on':''}" title="Favoritt">★</button><button class="ic hide" title="${showHidden?'Vis igjen':'Skjul kanal'}">${showHidden?'↩':'🚫'}</button>`;
+    d.innerHTML=`<div class="cl">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""${lfix(c)}>`:''}<div class="ph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</div>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}</div>`+
+      `<div class="cb"><div class="n">${esc(c.nm||c.name)}</div><div class="g">${esc(c.cat)}</div><div class="lcp" data-epg="${c.key}"></div></div><button class="ic star ${isFav(c)?'on':''}" title="Favoritt">★</button><button class="ic hide" title="${showHidden?'Vis igjen':'Skjul kanal'}">${showHidden?'↩':'🚫'}</button>`;
     frag.appendChild(d);
   }
-  list.appendChild(frag);shown=Math.min(filtered.length,shown+PAGE);
+  list.appendChild(frag);shown=Math.min(filtered.length,shown+PAGE);epgHydrate(list);
   if(shown<filtered.length){const b=document.createElement('button');b.id='more';b.className='more';b.textContent='Vis flere ('+(filtered.length-shown)+' igjen)';b.onclick=moreLive;list.appendChild(b)}
 }
 function toggleFav(c){isFav(c)?(favs.delete(c.key),favs.delete(String(c.id))):favs.add(c.key);saveFav()}
@@ -1518,12 +2265,14 @@ function selectLive(c,autoplay){
   $('nowName').textContent=c.nm||c.name;syncNow();
   document.querySelectorAll('.ch').forEach(x=>x.classList.toggle('active',!!x._c&&x._c.key===c.key));
   if('mediaSession'in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:c.name,artist:c.cat,artwork:c.logo?[{src:c.logo}]:[]})}catch(e){}
-  if(autoplay){$('v-live').classList.add('playing');$('idle').style.display='none';livePlayer.play(c.url,true);keepAwake();
+  if(c.alts&&!c._grp)c._grp=[c].concat(c.alts);
+  $('nowAlt').hidden=!(c._grp&&c._grp.length>1);
+  if(autoplay){zapInfo(c);$('v-live').classList.add('playing');$('idle').style.display='none';livePlayer.play(c.url,true);keepAwake();
     pushHist({k:c.key,type:'live',name:c.name,logo:c.logo,url:c.url,pos:0,dur:0,ts:Date.now()})}
 }
 function zap(d){
   if(curView!=='live'||!current||!filtered.length)return;
-  const i=filtered.findIndex(c=>c.key===current.key);
+  let i=filtered.findIndex(c=>c.key===current.key);if(i<0)i=d>0?-1:0;
   const n=filtered[(i+d+filtered.length)%filtered.length];selectLive(n,true);
   const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===n.key);if(row)row.scrollIntoView({block:'nearest'});
 }
@@ -1536,6 +2285,7 @@ function toggleFs(){
   else if($('v').webkitEnterFullscreen)$('v').webkitEnterFullscreen();
 }
 $('btnBack').onclick=()=>{livePlayer.stop();current=null;$('v-live').classList.remove('playing');$('idle').style.display='grid';$('nowName').textContent='Ingen kanal valgt';syncNow()};
+$('nowAlt').onclick=()=>{const g=current&&current._grp;if(!g||g.length<2)return;const i=(g.indexOf(current)+1)%g.length,n=g[i];n._grp=g;selectLive(n,true);toast('Kilde '+(i+1)+' av '+g.length+(n.q&&n.q[0]?' · '+n.q[0]:''),2000)};
 $('btnFs').onclick=toggleFs;$('v').addEventListener('dblclick',toggleFs);
 
 /* ---------- Filmer / Serier ---------- */
@@ -1589,7 +2339,7 @@ let bbTimer=0,bbIdx=0,bbTr=0;const trCache={};
 function stopSlider(){clearInterval(bbTimer);clearTimeout(bbTr);bbTimer=0;const el=document.getElementById('bbx');if(el)el.querySelectorAll('.bbv').forEach(x=>{x.innerHTML='';x.classList.remove('on')})}
 function sliderHtml(items,kind){
   if(!items.length)return '';
-  return `<section class="bb" id="bbx">${items.map((c,i)=>{const sv=SERV.find(x=>x.id===c.sv);return `<div class="bbs ${i?'':'on'}" data-k="${c.key}"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbv"></div><div class="bbin"><span class="eyebrow">${kind==='vod'?'Film':'Serie'} i fokus</span><h2>${esc(c.nm||c.name)}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost bbtr" hidden>🎞 Trailer</button><button class="ghost bbsnd" hidden>🔊 Lyd</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></div>`}).join('')}<div class="bbd">${items.map((_,i)=>`<i class="${i?'':'on'}" data-d="${i}"></i>`).join('')}</div></section>`;
+  return `<section class="bb" id="bbx">${items.map((c,i)=>{const sv=SERV.find(x=>x.id===c.sv);return `<div class="bbs ${i?'':'on'}" data-k="${c.key}"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbv"></div><div class="bbin"><span class="eyebrow">${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(c.nm||c.name)}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost bbtr" hidden>🎞 Trailer</button><button class="ghost bbsnd" hidden>🔊 Lyd</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></div>`}).join('')}<div class="bbd">${items.map((_,i)=>`<i class="${i?'':'on'}" data-d="${i}"></i>`).join('')}</div></section>`;
 }
 function startSlider(){
   stopSlider();const root=document.getElementById('bbx');if(!root)return;
@@ -1625,7 +2375,7 @@ function bbHtml(c,kind){
   const sv=SERV.find(x=>x.id===c.sv);
   return `<section class="bb"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbin"><span class="eyebrow">${kind==='vod'?'Film':'Serie'} i fokus</span><h2>${esc(c.nm||c.name)}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></section>`;
 }
-const top10Rail=(items,title)=>items.length?`<section class="rail"><div class="rh"><h3>${title||'🏆 Topp 10 akkurat nå'}</h3></div><div class="rs">${items.map((c,i)=>`<div class="pc t10 ${i>8?'w2':''}" data-k="${c.key}" tabindex="0"><span class="num">${i+1}</span><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div><img loading="lazy" src="${esc(c.logo)}" alt=""></div></div>`).join('')}</div></section>`:'';
+const top10Rail=(items,title)=>items.length?`<section class="rail"><div class="rh"><h3>${rtl(title||'Topp 10 akkurat nå')}</h3></div><div class="rs">${items.map((c,i)=>`<div class="pc t10 ${i>8?'w2':''}" data-k="${c.key}" tabindex="0"><span class="num">${i+1}</span><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div><img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""></div></div>`).join('')}</div>${NAVB}</section>`:'';
 function vodSlider(kind){
   const arr=DB[kind].filter(fvis);
   const sl=arr.filter(c=>c.logo&&c.rt>=6.5).sort(byNew).slice(0,6);
@@ -1703,7 +2453,7 @@ function renderSettings(){
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
    <div class="card"><h3>💾 Sikkerhetskopi / flytt til annen enhet</h3><p>Lagre kilder, favoritter, brukere og innstillinger i én fil, og last den inn på TV-boksen i stedet for å skrive inn alt med fjernkontrollen. <b>Filen inneholder innlogging til IPTV – slett den etterpå.</b></p><button class="primary" data-act="bk:save">Lagre til fil</button> <button data-act="bk:copy">Kopier som tekst</button> <button data-act="bk:load">Last inn fra fil …</button><input id="bkFile" type="file" accept=".json,.txt,application/json" hidden></div>
    <div class="card"><h3>📺 TV-modus</h3><p>For Android TV og fjernkontroll: større knapper, enklere og raskere. Nå: <b>${TVM?'på':'av'}</b> (${({'1':'tvunget på','0':'tvunget av'})[localStorage.getItem('tvmode')]||'automatisk'}).</p><button data-act="tv:auto">Automatisk</button> <button data-act="tv:1">På</button> <button data-act="tv:0">Av</button></div>
-   <div class="card"><h3>ℹ️ Om</h3><p>Min IPTV · server.js ${proxyOn?'<b style="color:var(--ok)">er aktiv</b>':'<b>er ikke aktiv</b> (start start.bat)'}. Bruk bare lovlige kilder du har abonnement på.</p></div>
+   <div class="card"><h3>ℹ️ Om</h3><p>Eskedals Univers · server.js ${proxyOn?'<b style="color:var(--ok)">er aktiv</b>':'<b>er ikke aktiv</b> (start start.bat)'}. Bruk bare lovlige kilder du har abonnement på.</p></div>
   </div>`;
 }
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem('theme',t);t==='brann'?startEmbers():stopEmbers()}
@@ -1794,7 +2544,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   const tag=document.activeElement.tagName;
   if(e.key==='Escape'&&$('ov').classList.contains('on')){closePlayer();return}
-  if(e.key==='Enter'&&document.activeElement.dataset&&(document.activeElement.dataset.k||document.activeElement.dataset.go||document.activeElement.dataset.h)){document.activeElement.click();return}
+  if(e.key==='Enter'&&document.activeElement.dataset&&(document.activeElement.dataset.k||document.activeElement.dataset.go||document.activeElement.dataset.h||document.activeElement.dataset.find)){document.activeElement.click();return}
   if(/INPUT|SELECT|TEXTAREA/.test(tag))return;
   if(e.key==='/'){e.preventDefault();$('gq').focus();return}
   if(curView==='live'){
@@ -1829,7 +2579,7 @@ document.addEventListener('visibilitychange',()=>{document.hidden?stopEmbers():s
 /* ===================== v4: språk, kamper, kamera ===================== */
 function langCard(){
   return `<div class="langs">${LANG_DEF.map(k=>`<label><input type="checkbox" data-lg="${k}" ${allowedLangs.has(k)?'checked':''}> ${LNAME[k]}</label>`).join('')}
-  <label><input type="checkbox" id="dedupeCb" ${dedupeOn?'checked':''}> Skjul duplikater (filmer/serier)</label>
+  <label><input type="checkbox" id="dedupeCb" ${dedupeOn?'checked':''}> Skjul duplikater (filmer, serier og kanaler)</label>
   <label><input type="checkbox" id="adultCb" ${showAdult?'checked':''}> Vis 18+-kanaler (skjult som standard, aldri på forsiden)</label></div>
   <small class="muted">Kanaler uten landskode vises alltid. Andre land skjules.</small>`;
 }
@@ -1876,7 +2626,7 @@ let fxCache={t:0,list:[],brann:[]};
 async function loadFixtures(force){
   if(!force&&Date.now()-fxCache.t<10*60000)return fxCache;
   const jobs=LEAGUES.map(async L=>{
-    try{const j=await jget(ESPN+L.slug+'/scoreboard'+(L.year?'?dates=2026':''));return parseEvents(j,L.name)}catch(e){return []}
+    try{if(L.year)return await loadLeagueFx(L);const j=await jget(ESPN+L.slug+'/scoreboard');return parseEvents(j,L.name)}catch(e){return []}
   });
   const bj=jget(ESPN+'nor.1/teams/620/schedule?fixture=true').then(j=>parseEvents(j,'Eliteserien')).catch(()=>[]);
   window.__fxErr='';
@@ -1905,10 +2655,11 @@ function renderNextBrann(el,list){
   const live=n.state==='in';
   el.innerHTML=`<div class="nextb" data-go="matches" tabindex="0"><small>${live?'<span class="liveb">LIVE</span> Pågår nå':'Neste Brann-kamp'} · ${esc(n.lg)}</small><br><b>${esc(n.h.displayName)} – ${esc(n.a.displayName)}</b><br><span>${live?esc(n.hs)+' – '+esc(n.as)+' · '+esc(n.clock):fmtDay(n.t)+' kl. '+fmtTime(n.t)+' · om '+cd(n.t)}</span></div>`;
 }
-function fxRow(e){
-  const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a);
-  const tn=(t,s)=>`<div class="tn">${t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy">`:''}<span>${esc(t.displayName||t.name)}</span>${live?`<b style="margin-left:auto">${esc(s)}</b>`:''}</div>`;
-  return `<div class="fx ${b?'brann':''}"><div class="tm">${live?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}${live?' · '+esc(e.clock):''}</div></div><button class="lk" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName))}">Finn kanal</button></div>`;
+function fxRow(e,res){
+  const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a),sc=live||res;
+  const tn=(t,s)=>`<div class="tn">${t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy">`:''}<span>${esc(t.displayName||t.name)}</span>${sc?`<b style="margin-left:auto">${esc(s)}</b>`:''}</div>`;
+  if(res)return `<div class="fx res ${b?'brann':''}"><div class="tm">FT</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}</div></div></div>`;
+  return `<div class="fx ${b?'brann':''}" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName))}" tabindex="0"><div class="tm">${live?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}${live?' · '+esc(e.clock):''}</div></div><span class="lk">▶ Se kampen</span></div>`;
 }
 let mTimer=0,mLeague='nor.1',mOnly='all';
 async function renderMatches(force){
@@ -1940,14 +2691,17 @@ function drawFx(){
 function drawTable(){return tableInto($('mTab'),mLeague,0)}
 async function tableInto(el,slug,lim){
   if(!el)return;
+  if(NIFS_ID[slug]){try{const d=await nifsData(slug);
+    el.innerHTML=`<table class="tbl"><tr><th>#</th><th>Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/-</th><th>P</th><th class="nx">Neste kamp</th></tr>${d.table.slice(0,lim||99).map(t=>`<tr data-team="${esc(t.name)}"><td>${t.place}</td><td class="t">${t.logo&&t.logo.url?`<img src="${esc(t.logo.url)}" alt="">`:''}<span>${esc(t.name)}</span></td><td>${t.played}</td><td>${t.won}</td><td>${t.draw}</td><td>${t.lost}</td><td>${t.goalDifference}</td><td><b>${t.points}</b></td><td class="nx"></td></tr>`).join('')}</table><small class="muted">Kilde: NIFS</small>`;
+    if(typeof fillNext==='function')fillNext();return}catch(e){}}
   try{
     const j=await jget(ESPNS+slug+'/standings');
     const groups=(j.children&&j.children.length?j.children:[j]).slice(0,mLeague.startsWith('uefa')?1:1);
     const g=groups[0],ents=(g.standings&&g.standings.entries)||[];
-    if(!ents.length){el.innerHTML='<p class="muted">Ingen tabell tilgjengelig.</p>';return}
+    if(!ents.length){el.innerHTML='<p class="muted">Datakilden (ESPN) har ikke tabell for denne turneringen.</p>';return}
     const st=(e,n)=>{const s=(e.stats||[]).find(x=>x.name===n);return s?(s.displayValue!=null?s.displayValue:s.value):''};
     const rows=ents.map(e=>({e,r:+st(e,'rank')||0})).sort((a,b)=>a.r-b.r);
-    el.innerHTML=`<table class="tbl"><tr><th>#</th><th>Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/-</th><th>P</th></tr>${rows.slice(0,lim||99).map(({e,r},i)=>`<tr class="${isBrann(e.team)?'me':''}"><td>${r||i+1}</td><td class="t">${e.team.logo?`<img src="${esc(e.team.logo)}" alt="">`:(e.team.logos&&e.team.logos[0]?`<img src="${esc(e.team.logos[0].href)}" alt="">`:'')}<span>${esc(e.team.displayName||e.team.name)}</span></td><td>${st(e,'gamesPlayed')}</td><td>${st(e,'wins')}</td><td>${st(e,'ties')||st(e,'draws')}</td><td>${st(e,'losses')}</td><td>${st(e,'pointDifferential')}</td><td><b>${st(e,'points')}</b></td></tr>`).join('')}</table><small class="muted">${esc(g.name||'')} · oppdateres hvert minutt</small>`;
+    el.innerHTML=`<table class="tbl"><tr><th>#</th><th>Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/-</th><th>P</th><th class="nx">Neste kamp</th></tr>${rows.slice(0,lim||99).map(({e,r},i)=>`<tr class="${isBrann(e.team)?'me':''}" data-team="${esc(e.team.displayName||e.team.name)}"><td>${r||i+1}</td><td class="t">${e.team.logo?`<img src="${esc(e.team.logo)}" alt="">`:(e.team.logos&&e.team.logos[0]?`<img src="${esc(e.team.logos[0].href)}" alt="">`:'')}<span>${esc(e.team.displayName||e.team.name)}</span></td><td>${st(e,'gamesPlayed')}</td><td>${st(e,'wins')}</td><td>${st(e,'ties')||st(e,'draws')}</td><td>${st(e,'losses')}</td><td>${st(e,'pointDifferential')}</td><td><b>${st(e,'points')}</b></td><td class="nx"></td></tr>`).join('')}</table><small class="muted">${esc(g.name||'')} · oppdateres hvert minutt</small>`;
   }catch(e){el.innerHTML='<p class="muted">Kunne ikke hente tabell.</p>'}
 }
 const appWin={};
@@ -2086,13 +2840,22 @@ function setFind(a,b){
   let toks=[...new Set([...teamTok(a),...teamTok(b)])];
   if(!toks.length)toks=[foldS(a).split(' ')[0],foldS(b).split(' ')[0]].filter(x=>x&&x.length>2);
   goLive({tab:'all',find:{label:a+' – '+b,toks}});$('q').value='';
+  if(filtered.length){selectLive(filtered[0],true);toast('Spiller '+(filtered[0].nm||filtered[0].name)+(filtered.length>1?' · '+(filtered.length-1)+' andre kanaler i listen':''),3500)}
+  else toast('Fant ingen kanal for kampen ennå – prøv igjen nærmere kampstart',4500);
 }
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-back]')){goBack();return}
   const f=e.target.closest('[data-find]');
   if(f){const [a,b]=f.dataset.find.split('|');setFind(a,b)}
   const fl=e.target.closest('[data-fl]');
-  if(fl){fbLg=fl.dataset.fl;LSset('fbLg',fbLg);document.querySelectorAll('[data-fl]').forEach(x=>x.classList.toggle('on',x===fl));drawLeague()}
+  if(fl){spOpen=fl.dataset.fl;if(LEAGUES.some(l=>l.slug===spOpen)){fbLg=spOpen;LSset('fbLg',fbLg)}if(spOpen==='tvfb'){spOpen='fotball';goLive({tab:'fb'});return}if(curView==='fotball')renderFotball();return}
+  const sg=e.target.closest('[data-seg]');
+  if(sg){const L=LEAGUES.find(l=>l.slug===fbLg)||LEAGUES[0];document.querySelectorAll('#fhSeg button').forEach(x=>x.classList.toggle('on',x===sg));const t=$('fhFx');if(sg.dataset.seg==='res'){t.innerHTML='<p class="muted">Henter resultater …</p>';loadLeagueResults(L).then(l=>{if(fbLg!==L.slug||!document.querySelector('#fhSeg button[data-seg=res].on'))return;$('fhFx').innerHTML=resHtml(l.slice(0,24))})}else renderFx();return}
+  if(e.target.closest('[data-fxmore]')){fxN+=20;renderFx();return}
+  if(e.target.closest('[data-fxclear]')){fxTeam='';renderFx();return}
+  const trm=e.target.closest('#fhTab tr[data-team]');
+  if(trm){fxTeam=trm.dataset.team;fxN=20;const sb=document.querySelector('#fhSeg button[data-seg=fx]');document.querySelectorAll('#fhSeg button').forEach(x=>x.classList.toggle('on',x===sb));renderFx();const fe=$('fhFx');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(e.target.closest('[data-spback]')){spOpen=spParent(spOpen);renderFotball();window.scrollTo(0,0);return}
 });
 
 /* ---- Kameraer (Reolink) ---- */
@@ -2156,7 +2919,7 @@ async function checkAppUpdate(){
   }catch(e){}
 }
 setTimeout(checkAppUpdate,4000);
-detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpdate(false),1500);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
+detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpdate(false),9000);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
 })();
 </script>
 
