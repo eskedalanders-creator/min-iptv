@@ -2,6 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
+<script>/*BOOT*/var APP_BUILD=17;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;document.open();document.write(h);document.close()}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Min IPTV</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -447,6 +448,12 @@ h1{font-size:clamp(30px,4vw,46px)}
 #ccMenu{display:none;position:absolute;right:14px;top:60px;z-index:5;background:#14161f;border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:12px;min-width:260px;max-width:90vw;box-shadow:0 20px 60px #000;flex-direction:column;gap:6px}#ccMenu.on{display:flex}#ccMenu button,#ccMenu a{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:inherit;font:inherit;text-align:left;text-decoration:none;cursor:pointer}#ccMenu button.on{background:var(--accent);border-color:var(--accent);color:var(--onacc)}#ccMenu .ccoff{display:flex;gap:6px;align-items:center}#ccMenu small{opacity:.7}
 #arkivF{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 4px}#arkivF input{flex:1;min-width:200px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:inherit}#arkivF button{padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:inherit;cursor:pointer}
 body.tv :focus{outline:3px solid #fff!important;outline-offset:3px;box-shadow:0 0 0 6px rgba(228,0,43,.7);transform:scale(1.04);z-index:2;position:relative}body.tv{font-size:112%}
+html.tvm *{animation:none!important;transition:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;scroll-behavior:auto!important}
+html.tvm body{font-size:118%}html.tvm #embers,html.tvm canvas#fx{display:none!important}
+html.tvm .bb .bbv{display:none!important}
+html.tvm :focus{outline:4px solid #fff!important;outline-offset:2px;background-color:rgba(228,0,43,.35)}
+html.tvm .poster:focus,html.tvm .pc:focus,html.tvm .cc:focus,html.tvm .ch:focus,html.tvm .app:focus{outline:5px solid #fff!important;transform:none!important}
+html.tvm input,html.tvm select{min-height:44px}html.tvm #gq,html.tvm #clock,html.tvm #prof,html.tvm .brand b{display:none!important}html.tvm #nav button{white-space:nowrap;padding:8px 12px}
 </style>
 </head>
 <body>
@@ -615,7 +622,13 @@ const SERV=[
   {id:'disc',name:'Discovery+',c:'#1d6bff',rx:/discovery|dplay/i},
   {id:'para',name:'Paramount+',c:'#0064ff',rx:/paramount/i}
 ];
-const PAGE=300, GPAGE=72;
+const TVM=(()=>{try{const m=localStorage.getItem('tvmode');if(m==='1')return true;if(m==='0')return false}catch(e){}
+  const ua=navigator.userAgent;if(/Android.*(\bTV\b|AFT|BRAVIA|SHIELD|Chromecast|MiBOX|MIBOX)/i.test(ua))return true;
+  return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())&&!matchMedia('(any-pointer:coarse)').matches&&!('ontouchstart' in window)})();
+if(TVM){document.documentElement.classList.add('tvm');
+  try{for(const sh of document.styleSheets)for(const r of sh.cssRules)if(r.type===4&&/max-width|hover:\s*none/.test(r.media.mediaText))r.media.mediaText='not all'}catch(e){}
+  const fit=()=>{document.documentElement.style.zoom=String(Math.max(.5,innerWidth/1280))};fit();addEventListener('resize',fit)}
+const PAGE=TVM?60:300, GPAGE=TVM?24:72;
 /* ---- språk/land ---- */
 const LMAP={sv:'se',swe:'se',da:'dk',dnk:'dk',dan:'dk',nor:'no',nb:'no',nob:'no',usa:'us',gb:'uk',gbr:'uk',en:'uk',eng:'uk'};
 const CC_OTHER=new Set('de fr it es pt nl be pl tr ar al ro ru ua gr cz sk hu bg rs hr ba si mk in pk af ir iq sa ae eg ma dz tn br mx ca au nz jp kr cn th vn il fi is ee lv lt ch at ie cy mt me xk ge am az by kz uz ph id my sg hk tw lb sy jo ly sd so ng za ke gh sn ci cm et pe cl co ve ec uy py bo cu do pr ex yu'.split(' '));
@@ -1316,6 +1329,37 @@ function go(sp){
   if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',no:!!o.no,kids:!!o.kids,all:!!o.all,sort:'new'};}
   showView(v,true);
 }
+function appBack(){
+  const cm=$('ccMenu');if(cm&&cm.className==='on'){cm.className='';return true}
+  if($('ov').classList.contains('on')){closePlayer();return true}
+  const d=document.querySelector('dialog[open]');if(d){d.close();return true}
+  if(curView!=='home'){if(navStack.length)goBack();else showView('home',true,true);return true}
+  return false;
+}
+if(NATIVE&&!DESKTOP){
+  history.pushState({b:1},'');
+  addEventListener('popstate',()=>{if(appBack())history.pushState({b:1},'')});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'){if(!(NATIVE&&!DESKTOP)&&appBack())e.preventDefault()}});
+async function backupData(){
+  const ls={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^(remote_|boot_try|appok:)/.test(k))continue;ls[k]=localStorage.getItem(k)}
+  const src=(await dbAll()).map(x=>({id:x.id,name:x.name,url:x.url||'',xt:x.xt||null,profile:x.profile,text:(x.url||x.xt)?undefined:x.text}));
+  return JSON.stringify({app:'min-iptv',v:1,ls,src});
+}
+async function restoreData(txt){
+  const j=JSON.parse(txt);if(!j||j.app!=='min-iptv')throw new Error('Dette ser ikke ut som en Min IPTV-sikkerhetskopi');
+  for(const k in j.ls)try{localStorage.setItem(k,j.ls[k])}catch(e){}
+  for(const x of (j.src||[]))await dbPut({id:x.id,name:x.name,url:x.url,xt:x.xt,profile:x.profile,text:x.text,upgraded:0});
+  toast('Gjenopprettet – starter på nytt …',2500);setTimeout(()=>location.reload(),1200);
+}
+async function backup(kind){
+  try{
+    if(kind==='save'){const b=new Blob([await backupData()],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='min-iptv-sikkerhetskopi.json';document.body.appendChild(a);a.click();a.remove();toast('Filen er lagret i Nedlastinger (hvis ingenting skjedde, bruk «Kopier som tekst»).',6000)}
+    else if(kind==='copy'){await navigator.clipboard.writeText(await backupData());toast('Kopiert. Lim inn i en tekstfil og lagre som .json.',6000)}
+    else if(kind==='load')$('bkFile').click();
+  }catch(e){toast('Feilet: '+e.message,6000)}
+}
+document.addEventListener('change',async e=>{if(e.target.id==='bkFile'&&e.target.files[0]){try{await restoreData(await e.target.files[0].text())}catch(err){toast('Kunne ikke lese filen: '+err.message,7000)}}});
 function goBack(){let p=navStack.pop();while(p&&p===curView)p=navStack.pop();showView(p||'home',true,true)}
 function goLive({tab,chip:ch,find}){liveTab=tab||'all';liveChip=ch||null;liveFind=find||null;liveProv=-1;$('q').value='';showView('live',true);buildLiveUI();applyFilter()}
 
@@ -1466,7 +1510,7 @@ function startSlider(){
     bbTr=setTimeout(()=>{v.innerHTML='';v.classList.remove('on');sl.querySelector('.bbimg').style.opacity='';tick()},50000);
   };
   const prep=async sl=>{
-    const c=byKey.get(sl.dataset.k);if(!c||!c.xt)return;
+    const c=byKey.get(sl.dataset.k);if(TVM||!c||!c.xt)return;
     let id=trCache[c.key];
     if(id===undefined){try{const j=await xapi(c.xt,c.t==='vod'?'get_vod_info':'get_series_info',(c.t==='vod'?'&vod_id=':'&series_id=')+c.id);const i=(j&&j.info)||{};id=ytId(i.youtube_trailer||i.trailer||'')}catch(e){id=''}trCache[c.key]=id}
     if(!id||!sl.classList.contains('on'))return;
@@ -1563,6 +1607,8 @@ function renderSettings(){
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
+   <div class="card"><h3>💾 Sikkerhetskopi / flytt til annen enhet</h3><p>Lagre kilder, favoritter, brukere og innstillinger i én fil, og last den inn på TV-boksen i stedet for å skrive inn alt med fjernkontrollen. <b>Filen inneholder innlogging til IPTV – slett den etterpå.</b></p><button class="primary" data-act="bk:save">Lagre til fil</button> <button data-act="bk:copy">Kopier som tekst</button> <button data-act="bk:load">Last inn fra fil …</button><input id="bkFile" type="file" accept=".json,.txt,application/json" hidden></div>
+   <div class="card"><h3>📺 TV-modus</h3><p>For Android TV og fjernkontroll: større knapper, enklere og raskere. Nå: <b>${TVM?'på':'av'}</b> (${({'1':'tvunget på','0':'tvunget av'})[localStorage.getItem('tvmode')]||'automatisk'}).</p><button data-act="tv:auto">Automatisk</button> <button data-act="tv:1">På</button> <button data-act="tv:0">Av</button></div>
    <div class="card"><h3>ℹ️ Om</h3><p>Min IPTV · server.js ${proxyOn?'<b style="color:var(--ok)">er aktiv</b>':'<b>er ikke aktiv</b> (start start.bat)'}. Bruk bare lovlige kilder du har abonnement på.</p></div>
   </div>`;
 }
@@ -1638,6 +1684,8 @@ document.addEventListener('click',e=>{
   if(a){const v=a.dataset.act;
     if(v==='src'){renderSources();$('dlgSrc').showModal()}
     else if(v==='prof'){renderProfiles();$('dlgProf').showModal()}
+    else if(v.startsWith('bk:')){backup(v.slice(3))}
+    else if(v.startsWith('tv:')){const m=v.slice(3);if(m==='auto')localStorage.removeItem('tvmode');else localStorage.setItem('tvmode',m);location.reload()}
     else if(v.startsWith('th:')){setTheme(v.slice(3));renderSettings()}
     else if(v==='unhide'){hidden.clear();saveHid();renderSettings();buildLiveUI()}
     else if(v==='clearhist'){hist=[];saveHist();renderSettings()}}
@@ -1670,7 +1718,7 @@ function tick(){
   raf=requestAnimationFrame(tick);
 }
 function startEmbers(){
-  if(reduce||document.documentElement.dataset.theme!=='brann'||raf||$('ov').classList.contains('on'))return;
+  if(TVM||reduce||document.documentElement.dataset.theme!=='brann'||raf||$('ov').classList.contains('on'))return;
   sizeC();parts=Array.from({length:46},()=>mkP(true));tick();
 }
 function stopEmbers(){cancelAnimationFrame(raf);raf=0;cx.clearRect(0,0,W,H)}
@@ -1857,16 +1905,16 @@ function tvMove(dir){
   for(const el of vis){if(el===cur||cur.contains(el)||el.contains(cur))continue;const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,dx=x-ax,dy=y-ay;
     let pr,or;if(dir==='ArrowRight'){if(dx<=4)continue;pr=dx;or=Math.abs(dy)}else if(dir==='ArrowLeft'){if(dx>=-4)continue;pr=-dx;or=Math.abs(dy)}else if(dir==='ArrowDown'){if(dy<=4)continue;pr=dy;or=Math.abs(dx)}else{if(dy>=-4)continue;pr=-dy;or=Math.abs(dx)}
     const sc=pr+or*2.5;if(sc<bs){bs=sc;best=el}}
-  if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:'center',behavior:'smooth'})}
+  if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:'center',behavior:TVM?'auto':'smooth'})}
 }
 document.addEventListener('keydown',e=>{
   const k=e.key;if(!/^Arrow(Up|Down|Left|Right)$/.test(k)&&k!=='Enter')return;
   const t=document.activeElement,typing=t&&/INPUT|TEXTAREA/.test(t.tagName)&&t.type!=='checkbox'&&t.type!=='file';
   if(/^Arrow/.test(k)){
-    if(typing&&/Left|Right/.test(k))return;
-    if(t&&t.tagName==='SELECT')return;
+    if(!TVM&&typing&&/Left|Right/.test(k))return;
+    if(!TVM&&t&&t.tagName==='SELECT')return;
     if(t&&t.tagName==='VIDEO'&&/Left|Right/.test(k))return;
-    document.body.classList.add('tv');e.preventDefault();tvMove(k);
+    document.body.classList.add('tv');e.preventDefault();if(TVM&&t&&/INPUT|SELECT|TEXTAREA/.test(t.tagName))t.blur();tvMove(k);
   }else if(k==='Enter'&&document.body.classList.contains('tv')&&t&&!/BUTTON|A|INPUT|SELECT|TEXTAREA|VIDEO/.test(t.tagName)){e.preventDefault();t.click()}
 });
 if(/Android.*(TV|AFT|BRAVIA|Chromecast|SHIELD)/i.test(navigator.userAgent))document.body.classList.add('tv');
@@ -1930,6 +1978,23 @@ const clk=()=>{$('clock').textContent=new Date().toLocaleTimeString('nb-NO',{hou
 setTheme(localStorage.getItem('theme')||'brann');
 if(!NATIVE&&'serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 renderProfiles();
+
+/* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
+const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
+try{localStorage.setItem('boot_try','0')}catch(e){}
+async function checkAppUpdate(){
+  if(!NATIVE)return;
+  try{
+    const r=await fetch(UPDATE_BASE+'index.html?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+    let h=await r.text();const m=h.match(/var APP_BUILD=(\d+)/);if(!m)return;
+    const rv=+m[1],cur=Math.max(APP_BUILD,+localStorage.getItem('remote_ver')||0);
+    if(rv<=cur||h.length<50000)return;
+    h=h.split('https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5.0.8/400.css').join('lib/bebas.css').split('https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js').join('lib/hls.min.js').split('https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js').join('lib/mpegts.js');
+    localStorage.setItem('remote_html',h);localStorage.setItem('remote_ver',String(rv));
+    toast('Ny versjon av appen er lastet ned – start appen på nytt for å bruke den.',9000);
+  }catch(e){}
+}
+setTimeout(checkAppUpdate,4000);
 detectProxy().then(loadSources).then(()=>{setTimeout(()=>autoUpdate(false),1500);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
 })();
 </script>
