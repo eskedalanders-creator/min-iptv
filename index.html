@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=71;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=72;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -902,6 +902,29 @@ select option,select optgroup{background:#161a28;color:#fff}
 }
 @media (prefers-reduced-motion:reduce){.cin-cur,.cin-beam,.cin-neon,.cs-bg,.cin-dust b{animation:none!important}}
 html.tvm .cs-btn button{font-size:1.3cqw}
+
+/* v72: kampskjerm i kinosalen */
+.cin.quick .cin-cur{animation:none}
+.cs-slide.mt{background:#04140b}
+.mt-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,#1f8a4a 0,#0b4a26 45%,#04140b 85%),#04140b}
+.mt-bg::before{content:"";position:absolute;inset:8% 6%;border:2px solid rgba(255,255,255,.14);border-radius:6px}
+.mt-bg::after{content:"";position:absolute;left:50%;top:8%;bottom:8%;width:2px;background:rgba(255,255,255,.14);box-shadow:0 0 0 0 transparent}
+.mt-in{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4cqw;color:#fff;text-align:center}
+.mt-in .cs-eye{margin:0}
+.mt-row{display:flex;align-items:center;justify-content:center;gap:4cqw;width:90%}
+.mt-t{flex:1;display:flex;flex-direction:column;align-items:center;gap:.9cqw}
+.mt-t img{height:9.5cqw;width:auto;max-width:12cqw;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}
+.mt-ph{display:grid;place-items:center;width:9cqw;height:9cqw;border-radius:50%;background:rgba(255,255,255,.12);font:800 3cqw Inter,sans-serif}
+.mt-t b{font:800 2cqw/1.1 Inter,sans-serif;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.mt-mid{display:flex;flex-direction:column;align-items:center;gap:.5cqw;min-width:11cqw}
+.mt-mid strong{font:800 4.6cqw/1 'Bebas Neue',Inter,sans-serif;letter-spacing:.05em;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.mt-mid small{font-size:1.1cqw;opacity:.85;text-transform:uppercase;letter-spacing:.14em}
+.cin-th.mtth{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(160deg,#1f8a4a,#0b4a26);color:#fff}
+.cin-th.mtth span{font-size:22px}.cin-th.mtth small{font-size:11px;font-weight:700}
+@media (max-width:760px){
+  .mt-row{gap:2cqw;width:96%}.mt-t img{height:17cqw;max-width:22cqw}.mt-ph{width:16cqw;height:16cqw;font-size:5cqw}
+  .mt-t b{font-size:3.4cqw}.mt-mid{min-width:20cqw}.mt-mid strong{font-size:9cqw}.mt-mid small{font-size:2.4cqw}.mt-in{gap:2.6cqw}
+}
 </style>
 </head>
 <body>
@@ -1826,21 +1849,44 @@ function renderHome(){
   if(!feat.length)feat=vod.concat(ser).filter(c=>c.logo).sort(byNew).slice(0,6);
   el.innerHTML=cinemaHtml(feat)+(newEpRail()?`<div class="hrails nobb">${newEpRail()}</div>`:'');
   startCinema(feat);
+  loadFixtures().then(f=>{
+    if(curView!=='home'||!$('cin'))return;
+    const d0=new Date().toDateString();
+    const ms=(f.list||[]).filter(e=>(e.lg==='Eliteserien'||isBrann(e.h)||isBrann(e.a))&&(e.state==='in'||new Date(e.t).toDateString()===d0)&&e.state!=='post');
+    ms.sort((a,b)=>(b.state==='in')-(a.state==='in')||((isBrann(b.h)||isBrann(b.a))-(isBrann(a.h)||isBrann(a.a)))||a.t-b.t);
+    const mi=ms.slice(0,3).map(e=>({t:'match',key:'m:'+(e.id||e.t),e}));
+    if(!mi.length)return;
+    const all=mi.concat(feat);const old=$('cin');
+    const tmp=document.createElement('div');tmp.innerHTML=cinemaHtml(all,true);
+    old.replaceWith(tmp.firstElementChild);startCinema(all);
+  }).catch(()=>{});
 }
 /* ===================== Kinosal ===================== */
 const WXI=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
 let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0;const cinInfoC={};
 function stopCinema(){clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);cinTimer=cinClock=cinPv=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
-function cinemaHtml(items){
+const cinLogo=t=>t&&(t.logo||(t.logos&&t.logos[0]&&t.logos[0].href))||'';
+function cinMatchSlide(m,i){
+  const e=m.e,live=e.state==='in',nm=t=>t.displayName||t.name||'',fnd=(e.h.shortDisplayName||nm(e.h))+'|'+(e.a.shortDisplayName||nm(e.a));
+  const today=new Date(e.t).toDateString()===new Date().toDateString();
+  const lg=(t)=>cinLogo(t)?`<img src="${esc(cinLogo(t))}" alt="">`:`<span class="mt-ph">${esc(nm(t).slice(0,2))}</span>`;
+  return `<div class="cs-slide mt${i?'':' on'}" data-m="1"><div class="mt-bg"></div><div class="cs-grad"></div>
+   <div class="mt-in"><span class="cs-eye">⚽ ${live?'Direkte nå':(today?'Dagens kamp':'Neste kamp')} · ${esc(e.lg||'Eliteserien')}</span>
+   <div class="mt-row"><div class="mt-t">${lg(e.h)}<b>${esc(nm(e.h))}</b></div>
+   <div class="mt-mid">${live?`<span class="liveb">LIVE</span><strong>${esc(e.hs)} – ${esc(e.as)}</strong><small>${esc(e.clock||'')}</small>`:`<small>${today?'I dag':esc(fmtDay(e.t))}</small><strong>${esc(fmtTime(e.t))}</strong>`}</div>
+   <div class="mt-t">${lg(e.a)}<b>${esc(nm(e.a))}</b></div></div>
+   <div class="cs-btn"><button class="primary" data-find="${esc(fnd)}">▶ Se kampen</button></div></div></div>`;
+}
+function cinemaHtml(items,quick){
   const seats=n=>Array.from({length:n},(_,i)=>`<i class="seat${(i*7+n)%5===0?' h':''}${(i*3+n)%7===0?' h2':''}"></i>`).join('');
-  const sl=items.map((c,i)=>`<div class="cs-slide${i?'':' on'}" data-k="${c.key}"><div class="cs-bg" style="background-image:url('${esc(c.logo)}')"></div><div class="cs-v"></div><div class="cs-grad"></div>
+  const sl=items.map((c,i)=>c.t==='match'?cinMatchSlide(c,i):`<div class="cs-slide${i?'':' on'}" data-k="${c.key}"><div class="cs-bg" style="background-image:url('${esc(c.logo)}')"></div><div class="cs-v"></div><div class="cs-grad"></div>
     <div class="cs-info"><span class="cs-eye">🎟 Anbefalt i kveld · ${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(c.nm||c.name)}</h2>
     <div class="cs-meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}<span class="cs-yr"></span></div><p class="cs-plot"></p>
     <div class="cs-btn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost cs-pv" data-pv="${c.key}">🎬 Visning</button><button class="ghost cs-snd" hidden>🔊</button></div></div>
     <img class="cs-poster" src="${esc(c.logo)}" alt=""></div>`).join('');
-  const th=items.map((c,i)=>`<button class="cin-th${i?'':' on'}" data-ci="${i}" title="${esc(c.nm||c.name)}"><img src="${esc(c.logo)}" alt="" loading="lazy"></button>`).join('');
+  const th=items.map((c,i)=>c.t==='match'?`<button class="cin-th mtth${i?'':' on'}" data-ci="${i}" title="Kamp"><span>⚽</span><small>${c.e.state==='in'?'LIVE':esc(fmtTime(c.e.t))}</small></button>`:`<button class="cin-th${i?'':' on'}" data-ci="${i}" title="${esc(c.nm||c.name)}"><img src="${esc(c.logo)}" alt="" loading="lazy"></button>`).join('');
   const dust=Array.from({length:14},(_,i)=>`<b style="left:${28+((i*37)%44)}%;animation-delay:${-(i*1.7)}s;animation-duration:${9+(i%5)*2}s"></b>`).join('');
-  return `<section class="cin" id="cin"><div class="cin-hall">
+  return `<section class="cin${quick?' quick':''}" id="cin"><div class="cin-hall">
     <div class="cin-wall"><i class="cin-sc l"></i><i class="cin-sc r"></i></div>
     <div class="cin-val"><span class="cin-neon">ESKEDALS UNIVERS · SAL 1</span></div>
     <div class="cin-cur l"></div><div class="cin-cur r"></div>
