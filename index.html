@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=88;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=90;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -581,7 +581,7 @@ html.tvm .rnv{display:none}
 /* filmer/serier */
 @media(min-width:900px){.vlay{display:block}#vside{display:none!important}}
 @media(min-width:900px){html:not(.tvm) #vchips{display:flex!important;flex-wrap:wrap;gap:8px;margin:4px 0 14px}html:not(.tvm) #vsort,html:not(.tvm) #vcat{display:block!important}html:not(.tvm) .vbar{display:flex;gap:10px;margin:14px 0 10px}html:not(.tvm) .vbar input{max-width:320px}html:not(.tvm) .vbar select{width:auto;min-width:190px}}
-html.tvm .vlay{display:grid}
+html.tvm .vlay{display:block}html.tvm #vside{display:none!important}
 .vmain>h1{display:none}
 .vbar{margin:8px 0 6px}
 #vchips{margin:0 0 6px}
@@ -1765,10 +1765,11 @@ function makePlayer(video,msgEl){
     if(live){
       kind='ts';const m=xt(url);const canTs=window.mpegts&&mpegts.isSupported();
       if(/\.m3u8(\?|$)/i.test(url))kind='hls';
+      else if(m&&NATIVE&&!DESKTOP&&!forceHls){src=m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8';kind='nhls'}
       else if(m&&(forceHls||!canTs)){src=m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8';kind='hls'}
       const fail=why=>{
         if(me!==alive)return;
-        if(kind==='ts'&&m&&!forceHls)return play(url,true,true);
+        if((kind==='ts'||kind==='nhls')&&m&&!forceHls)return play(url,true,true);
         if(retries++<3){show('Mistet forbindelsen – prøver igjen …');setTimeout(()=>{if(me===alive)play(url,true,forceHls)},2500);return}
         show('Kunne ikke spille av kanalen. '+(why||'')+(proxyOn?'':' (Hvis strømmen er http, start server.js.)')+' Sjekker årsak …');
         const ac=new AbortController(),tt=setTimeout(()=>ac.abort(),6000);const t1=Date.now();
@@ -1780,7 +1781,7 @@ function makePlayer(video,msgEl){
       if(kind==='hls'&&window.Hls&&Hls.isSupported()){
         hls=new Hls({maxBufferLength:30,maxMaxBufferLength:60,backBufferLength:20,abrEwmaDefaultEstimate:6e6,startFragPrefetch:true,manifestLoadingMaxRetry:3,levelLoadingMaxRetry:4,fragLoadingMaxRetry:5,liveSyncDurationCount:3,liveMaxLatencyDurationCount:10});hls.loadSource(p);hls.attachMedia(video);
         hls.on(Hls.Events.ERROR,(_,d)=>{if(!d.fatal)return;if(d.type===Hls.ErrorTypes.MEDIA_ERROR)hls.recoverMediaError();else fail('('+d.details+')')});
-      }else if(kind==='hls')video.src=p;
+      }else if(kind==='hls'||kind==='nhls')video.src=p;
       else if(canTs){
         mts=mpegts.createPlayer({type:'mpegts',isLive:true,url:p},{liveBufferLatencyChasing:true,liveBufferLatencyMaxLatency:10,liveBufferLatencyMinRemainDuration:3,autoCleanupSourceBuffer:true,autoCleanupMaxBackwardDuration:30,autoCleanupMinBackwardDuration:15});
         mts.attachMediaElement(video);mts.load();mts.on(mpegts.Events.ERROR,(t,d)=>fail('('+d+')'));
@@ -2243,7 +2244,7 @@ async function cinInfo(c){
 }
 async function cin3d(root){
   try{
-    if(window.__c3off||TVM)return;
+    if(window.__c3off||(TVM&&localStorage.getItem('c3off')==='1'))return;
     const hall=root.querySelector('.cin-hall'),cv=root.querySelector('#c3cv'),scr=root.querySelector('.cin-screen');
     if(!hall||!cv||!scr)return;
     const t=document.createElement('canvas');if(!(t.getContext('webgl2')||t.getContext('webgl')))return;
@@ -2251,6 +2252,12 @@ async function cin3d(root){
     if(!document.body.contains(hall))return;
     hall.classList.add('c3');
     window.__c3ctl=await window.__c3m.mount({canvas:cv,screen:scr,hall,stage:hall,mobile:innerWidth<700||TVM,low:TVM});
+    if(TVM){/* vaktbikkje: for treg GPU → tilbake til enkel sal */
+      let n=0,t0=0;const my=window.__c3ctl;
+      const loop=ts=>{if(window.__c3ctl!==my)return;if(!t0)t0=ts;n++;
+        if(ts-t0<6000)return requestAnimationFrame(loop);
+        if(n/((ts-t0)/1000)<14){try{localStorage.setItem('c3off','1')}catch(e){}try{window.__c3m.stopAll()}catch(e){}window.__c3ctl=null;hall.classList.remove('c3');scr.style.transform='';scr.style.width='';scr.style.height='';toast('Enkel kinosal (3D er for tung for denne TV-en)',4000)}};
+      setTimeout(()=>requestAnimationFrame(loop),4000)}
   }catch(e){console.warn('3D feilet',e);const h=document.querySelector('.cin-hall');if(h){h.classList.remove('c3');const s=h.querySelector('.cin-screen');if(s){s.style.transform='';s.style.width='';s.style.height=''}}}
 }
 function startCinema(feat){
