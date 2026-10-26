@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=64;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=66;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -809,6 +809,14 @@ select option,select optgroup{background:#161a28;color:#fff}
 .sbar::-webkit-scrollbar{display:none}
 .schip{flex:0 0 auto;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;font-weight:600;font-size:14px;cursor:pointer}
 .schip.on{background:linear-gradient(135deg,#7c5cff,#4aa3ff);border-color:transparent}
+
+.sdd{position:relative;margin:12px 0 6px;display:inline-block;min-width:180px}
+.sdd .sdd-b{background:#1b1740!important;border:1px solid #7c5cff!important;color:#fff!important}
+.sdd-b{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 16px;border-radius:12px;border:1px solid #7c5cff;background:#1b1740;color:#fff;font-weight:600;font-size:15px;cursor:pointer}
+.sdd-l{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 6px);max-height:260px;overflow:auto;background:#1b1740;border:1px solid #7c5cff;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.55);padding:4px}
+.sdd-i{display:block;width:100%;text-align:left;padding:10px 14px;border:0;border-radius:8px;background:transparent;color:#fff;font-size:15px;cursor:pointer}
+.sdd-i:hover,.sdd-i:focus-visible{background:rgba(124,92,255,.3)}
+.sdd-i.on{background:linear-gradient(135deg,#7c5cff,#4aa3ff);font-weight:700}
 </style>
 </head>
 <body>
@@ -2545,8 +2553,12 @@ async function loadSeries(c){
         url:xtUrl(c.xt,'series',e.id,e.container_extension||'mp4'),pos:h?h.pos:0,dur:h?h.dur:0,ref:c.key,
         next:list[i+1]?()=>playEp(list,i+1):null});
     };
-    box.innerHTML=`<div class="sbar" id="sSeason">${keys.map((k,i)=>`<button class="schip${i?'':' on'}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div><div class="eps" id="eps"></div>`;
-    $('sSeason').onclick=e=>{const b=e.target.closest('.schip');if(!b)return;$('sSeason').querySelectorAll('.schip').forEach(x=>x.classList.toggle('on',x===b));draw(b.dataset.s)};draw(keys[0]);
+    box.innerHTML=`<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(keys[0])}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map((k,i)=>`<button type="button" class="sdd-i${i?'':' on'}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><div class="eps" id="eps"></div>`;
+    const sdd=$('sSeason'),sl=$('sddL');
+    $('sddB').onclick=e=>{e.stopPropagation();sl.hidden=!sl.hidden};
+    sl.onclick=e=>{const b=e.target.closest('.sdd-i');if(!b)return;sl.querySelectorAll('.sdd-i').forEach(x=>x.classList.toggle('on',x===b));$('sddB').firstChild.nodeValue='Sesong '+b.dataset.s;sl.hidden=true;draw(b.dataset.s)};
+    dlg.addEventListener('click',e=>{if(!e.target.closest('#sSeason')&&sl)sl.hidden=true});
+    draw(keys[0]);
   }catch(e){box.innerHTML='<div class="muted" style="margin-top:12px">Kunne ikke hente episoder: '+esc(e.message)+'</div>'}
 }
 
