@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=87;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=88;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1622,7 +1622,7 @@ async function xapi(x,action,extra){
   if(H){
     /* Capacitor: omgå patchet fetch (stack overflow på store svar) */
     let rr;
-    try{rr=await H.get({url:u,responseType:'text',readTimeout:120000,connectTimeout:30000})}catch(e){rr=null}
+    try{rr=await Promise.race([H.get({url:u,responseType:'text',readTimeout:60000,connectTimeout:20000}),new Promise((_,j)=>setTimeout(()=>j(new Error('tidsavbrudd')),75000))])}catch(e){if(e&&e.message==='tidsavbrudd')throw e;rr=null}
     if(rr){
       if(rr.status<200||rr.status>=300)throw new Error('HTTP '+rr.status);
       return typeof rr.data==='string'?JSON.parse(rr.data):rr.data;
@@ -1641,7 +1641,7 @@ async function fetchAll(x,onP){
       const cats=await xapi(x,catAct);
       let list;
       try{
-        if(localStorage.getItem('forcecat')==='1'&&listAct!=='get_live_streams')throw new RangeError('Maximum call stack size exceeded');
+        if((localStorage.getItem('forcecat')==='1'&&listAct!=='get_live_streams')||(NATIVE&&!DESKTOP&&Array.isArray(cats)&&cats.length>1))throw new RangeError('per kategori');
         list=await xapi(x,listAct);
       }catch(e1){
         if(!Array.isArray(cats)||!cats.length)throw e1;
@@ -1652,7 +1652,7 @@ async function fetchAll(x,onP){
           let part1;try{part1=await xapi(x,listAct,'&category_id='+encodeURIComponent(c.category_id))}catch(e2){warn.push(label+' '+cl(c.category_name)+': '+e2.message);continue}
           if(!Array.isArray(part1))continue;
           for(let i=0;i<part1.length;i++){const it=part1[i],k=it[idk];if(seen.has(k))continue;seen.add(k);list.push(it)}}};
-        await Promise.all([wk(),wk(),wk()]);
+        await Promise.all([wk(),wk(),wk(),wk()]);
         if(!list.length)throw e1;
       }
       if(!Array.isArray(list))throw new Error('uventet svar');
