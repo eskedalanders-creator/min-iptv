@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=63;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=64;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -801,6 +801,14 @@ html.tvm button:hover,html.tvm button:active{transform:none}
 #v-live #btnHidden::first-letter{font-size:16px}
 #v-live #btnHidden:not(:empty){line-height:1}
 }
+
+/* v64: lesbare nedtrekksmenyer + sesongknapper */
+:root{color-scheme:dark}
+select option,select optgroup{background:#161a28;color:#fff}
+.sbar{display:flex;gap:8px;overflow-x:auto;padding:12px 0 6px;scrollbar-width:none}
+.sbar::-webkit-scrollbar{display:none}
+.schip{flex:0 0 auto;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;font-weight:600;font-size:14px;cursor:pointer}
+.schip.on{background:linear-gradient(135deg,#7c5cff,#4aa3ff);border-color:transparent}
 </style>
 </head>
 <body>
@@ -1276,7 +1284,7 @@ function setActive(id){
   buildLiveUI();
   const last=localStorage.getItem('last:'+pid);
   if(last&&!current){const c=byKey.get('l:'+last)||DB.live.find(x=>String(x.id)===last);if(c)selectLive(c,false)}
-  showView(curView,true);
+  showView(curView,true);setTimeout(()=>checkNewEps(),5000);
   if(id!=='all'&&S&&S.xt&&!S.data&&!S.upgraded){S.upgraded=1;dbPut(S);refreshSource(S,true)}
 }
 function ssta(t,ok){const s=$('srcStatus');s.textContent=t;s.style.color=ok?'var(--ok)':'#ff7a86';s.style.marginTop='10px';s.style.whiteSpace='pre-wrap'}
@@ -1735,7 +1743,7 @@ function renderHome(){
     top10Rail(top(ser),'Topp 10 serier')+
     rail('Nye serier',nw(ser).slice(0,24),pcard,'series:all=1')+
     rail('Norsk',nw(vod.concat(ser)).filter(c=>c.no).slice(0,24),pcard,'movies:no=1')+
-    rail('Min liste',favs.slice(0,30),c=>c.t==='live'?ccard(c):pcard(c),'fav:')+`</div>`;
+    newEpRail()+rail('Min liste',favs.slice(0,30),c=>c.t==='live'?ccard(c):pcard(c),'fav:')+`</div>`;
   startSlider();epgHydrate(el);
   loadFixtures().then(f=>{const h=$('hSport');if(!h||curView!=='home')return;const t=tonightList(f);h.innerHTML=rail(t.title,t.list,matchCard,'fotball:')}).catch(()=>{});
 }
@@ -2266,7 +2274,7 @@ function moreLive(){
   list.appendChild(frag);shown=Math.min(filtered.length,shown+PAGE);epgHydrate(list);
   if(shown<filtered.length){const b=document.createElement('button');b.id='more';b.className='more';b.textContent='Vis flere ('+(filtered.length-shown)+' igjen)';b.onclick=moreLive;list.appendChild(b)}
 }
-function toggleFav(c){isFav(c)?(favs.delete(c.key),favs.delete(String(c.id))):favs.add(c.key);saveFav()}
+function toggleFav(c){const was=isFav(c);was?(favs.delete(c.key),favs.delete(String(c.id))):favs.add(c.key);saveFav();if(!was&&c.t==='ser'){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}setTimeout(()=>checkNewEps(true),600)}}
 function toggleHide(c){hidden.has(c.key)?hidden.delete(c.key):hidden.add(c.key);saveHid()}
 $('list').onclick=e=>{
   const row=e.target.closest('.ch');if(!row)return;const c=row._c;
@@ -2480,6 +2488,7 @@ function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setIt
 /* ---------- Detaljer ---------- */
 const dlg=$('dlgItem');
 function openItem(c){
+  if(c.t==='ser'){try{const nw=LSget(NEWK(),{});if(nw[c.key]){delete nw[c.key];LSset(NEWK(),nw)}}catch(e){}}
   if(c.t==='live'){current=c;showView('live',true);selectLive(c,true);const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===c.key);if(row)row.scrollIntoView({block:'center'});return}
   const fav=isFav(c);
   dlg.innerHTML=`<div id="dtr" hidden></div><div class="det"><div class="pimg"><div class="pfb">${esc(c.name)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
@@ -2536,10 +2545,48 @@ async function loadSeries(c){
         url:xtUrl(c.xt,'series',e.id,e.container_extension||'mp4'),pos:h?h.pos:0,dur:h?h.dur:0,ref:c.key,
         next:list[i+1]?()=>playEp(list,i+1):null});
     };
-    box.innerHTML=`<div class="bar" style="margin-top:12px"><select id="sSeason" style="max-width:200px">${keys.map(k=>`<option value="${k}">Sesong ${esc(k)}</option>`).join('')}</select></div><div class="eps" id="eps"></div>`;
-    $('sSeason').onchange=e=>draw(e.target.value);draw(keys[0]);
+    box.innerHTML=`<div class="sbar" id="sSeason">${keys.map((k,i)=>`<button class="schip${i?'':' on'}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div><div class="eps" id="eps"></div>`;
+    $('sSeason').onclick=e=>{const b=e.target.closest('.schip');if(!b)return;$('sSeason').querySelectorAll('.schip').forEach(x=>x.classList.toggle('on',x===b));draw(b.dataset.s)};draw(keys[0]);
   }catch(e){box.innerHTML='<div class="muted" style="margin-top:12px">Kunne ikke hente episoder: '+esc(e.message)+'</div>'}
 }
+
+/* ---------- Nye episoder i favoritter ---------- */
+const EPK=()=>K('epseen'),NEWK=()=>K('epnew');
+async function checkNewEps(force){
+  try{
+    if(!force&&Date.now()-(+LSget(K('epchk'),0))<3*3600e3)return;
+    const list=(DB&&DB.ser||[]).filter(c=>isFav(c)&&c.xt).slice(0,40);if(!list.length)return;
+    const seen=LSget(EPK(),{}),nw=LSget(NEWK(),{}),fresh=[];
+    for(const c of list){
+      try{
+        const j=await xapi(c.xt,'get_series_info','&series_id='+c.id);
+        const eps=j.episodes||{};const all=Array.isArray(eps)?(eps.flat?eps.flat():eps):Object.values(eps).flat();
+        const n=all.length,mx=Math.max(0,...all.map(e=>+e.id||0)),prev=seen[c.key];
+        if(prev&&n>prev.n){
+          const add=all.filter(e=>(+e.id||0)>prev.mx).sort((a,b)=>b.id-a.id);const e=add[0]||all[all.length-1]||{};
+          nw[c.key]={n:n-prev.n,t:Date.now(),label:'S'+(e.season||'?')+'E'+(e.episode_num||'?')};fresh.push(c);
+        }
+        seen[c.key]={n,mx};
+      }catch(e){}
+    }
+    LSset(EPK(),seen);LSset(NEWK(),nw);LSset(K('epchk'),Date.now());
+    if(fresh.length){
+      const t='Ny episode: '+fresh.slice(0,3).map(c=>c.name+' '+nw[c.key].label).join(', ')+(fresh.length>3?' …':'');
+      toast('🆕 '+t,9000);
+      try{if('Notification' in window&&Notification.permission==='granted'){
+        const o={body:t,icon:'icon-192.png',tag:'newep'};
+        if(navigator.serviceWorker&&navigator.serviceWorker.ready)navigator.serviceWorker.ready.then(r=>r.showNotification('Eskedals Univers',o)).catch(()=>new Notification('Eskedals Univers',o));
+        else new Notification('Eskedals Univers',o)}}catch(e){}
+      if(curView==='home')try{renderHome()}catch(e){}
+    }
+  }catch(e){}
+}
+function newEpRail(){
+  const nw=LSget(NEWK(),{});const l=Object.keys(nw).map(k=>byKey.get(k)).filter(Boolean);
+  return l.length?rail('🆕 Nye episoder i favorittene',l,pcard):'';
+}
+setInterval(()=>checkNewEps(),3600e3);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(()=>checkNewEps(),2000)});
 
 /* ---------- Klikk-håndtering ---------- */
 document.addEventListener('click',e=>{
