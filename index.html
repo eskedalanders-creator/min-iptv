@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=74;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=75;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -856,8 +856,6 @@ select option,select optgroup{background:#161a28;color:#fff}
 .cs-nav button{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:3cqw;height:3cqw;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:2cqw;line-height:1;cursor:pointer;opacity:.0;transition:opacity .2s}
 .cs-p{left:.8cqw}.cs-n{right:.8cqw}
 .cin-screen:hover .cs-nav button,.cs-nav button:focus-visible{opacity:1}
-.cin-info{position:absolute;right:1.4%;top:9.5%;z-index:11;display:flex;gap:.9cqw;align-items:center;padding:.35cqw 1cqw;border-radius:999px;background:rgba(5,6,12,.62);backdrop-filter:blur(6px);color:#e9e9f5;font:600 1.05cqw/1 Inter,sans-serif;border:1px solid rgba(255,255,255,.12)}
-#cinClk{font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .cin-ths{display:flex;gap:10px;overflow-x:auto;padding:14px 16px 4px;max-width:1560px;margin:0 auto;scrollbar-width:none}
 .cin-ths::-webkit-scrollbar{display:none}
 .cin-th{flex:0 0 auto;width:68px;aspect-ratio:2/3;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:#10121c;cursor:pointer;opacity:.55;transition:.2s}
@@ -948,28 +946,16 @@ html.tvm .cs-btn button{font-size:1.3cqw}
  repeating-linear-gradient(90deg,#241a2a 0 .8cqw,#0d0a12 .8cqw 1cqw)}
 .cin-sw.l{left:0;clip-path:polygon(0 0,100% 0,0 100%)}
 .cin-sw.r{right:0;clip-path:polygon(0 0,100% 0,100% 100%)}
-.cin-lamp{position:absolute;z-index:5;width:1.1cqw;height:2.6cqw;border-radius:.5cqw;background:linear-gradient(#fff0cc,#ffa646);box-shadow:0 0 1.6cqw .8cqw rgba(255,160,70,.55)}
-.cin-lamp.l{left:6.5%;top:calc(100% - var(--fh) + 1.2cqw)}.cin-lamp.r{right:6.5%;top:calc(100% - var(--fh) + 1.2cqw)}
-.cin-exit{position:absolute;z-index:5;left:1.4%;top:calc(100% - var(--fh) + .6cqw);padding:.25cqw .7cqw;border-radius:.3cqw;background:#0d5a2b;color:#d9ffe6;font:800 .8cqw/1 Inter,sans-serif;letter-spacing:.15em;box-shadow:0 0 1.4cqw .5cqw rgba(40,220,110,.5);text-shadow:0 0 .5cqw #5dff9c}
 /* seterader (sett bakfra) */
 .cin-row{position:absolute;left:0;right:0;bottom:var(--b);z-index:6;display:flex;justify-content:center;align-items:flex-end;gap:.6cqw;transform:scale(var(--s));transform-origin:50% 100%}
 .cin-row.back{--s:.6;--b:12.6cqw;filter:brightness(.82)}
 .cin-row.mid{--s:.8;--b:5.2cqw;filter:brightness(.92)}
 .cin-row.front{--s:1;--b:-2.2cqw}
 .cin-gap{flex:0 0 17cqw}
-.seat{position:relative;flex:0 0 6.4cqw;width:6.4cqw;height:7.3cqw;border-radius:2.3cqw 2.3cqw .5cqw .5cqw/2.1cqw 2.1cqw .5cqw .5cqw;background:
- linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,0) 24%,rgba(255,255,255,.07) 50%,rgba(0,0,0,0) 76%,rgba(0,0,0,.55)),
- linear-gradient(180deg,#98172c 0,#721020 42%,#4a0914 100%);
- box-shadow:inset 0 .22cqw 0 rgba(176,206,255,.55),inset 0 -1.3cqw 1.5cqw rgba(0,0,0,.65),0 .3cqw .9cqw rgba(0,0,0,.7)}
-.seat::before,.seat::after{content:"";position:absolute;bottom:0;width:.85cqw;height:3.8cqw;border-radius:.4cqw .4cqw 0 0;background:linear-gradient(90deg,#1a0307,#3a0813,#1a0307)}
-.seat::before{left:-.6cqw}.seat::after{right:-.6cqw}
-.seat u{position:absolute;left:13%;right:13%;top:5%;height:38%;border-radius:1.8cqw 1.8cqw .7cqw .7cqw;background:linear-gradient(180deg,rgba(255,170,190,.2),rgba(255,255,255,0) 60%);box-shadow:inset 0 0 0 .08cqw rgba(0,0,0,.4),inset 0 -.15cqw 0 rgba(0,0,0,.25);text-decoration:none}
-.seat u::after{content:"";position:absolute;left:12%;right:12%;bottom:-.9cqw;height:.08cqw;background:rgba(0,0,0,.45);border-top:.08cqw dashed rgba(255,200,120,.25)}
-.seat em{display:none;position:absolute;left:50%;top:-2.7cqw;width:2.9cqw;height:3.5cqw;margin-left:-1.45cqw;z-index:-1;border-radius:50% 50% 44% 44%;background:radial-gradient(circle at 50% 24%,var(--hr,#1a1410),#050507 78%);box-shadow:inset 0 .18cqw 0 rgba(170,200,255,.4)}
+.seat em{display:none;position:absolute;left:50%;top:-2.7cqw;width:2.9cqw;height:3.5cqw;margin-left:-1.45cqw;z-index:-1;border-radius:50% 50% 44% 44%;background:radial-gradient(circle at 50% 28%,var(--hr,#5a4636),#0b0a0c 80%);box-shadow:inset 0 .18cqw 0 rgba(170,200,255,.4)}
 .seat.h em{display:block}
 .seat.h2 em{top:-3.4cqw}
-.seat.t1 em{--hr:#33231a;width:3cqw;margin-left:-1.5cqw}.seat.t2 em{--hr:#4a3922}.seat.t3 em{--hr:#0b0b12}
-.seat.h::selection{background:none}
+.seat.t1 em{--hr:#8a6a45;width:3cqw;margin-left:-1.5cqw}.seat.t2 em{--hr:#b59b66}.seat.t3 em{--hr:#707078}
 /* lys og atmosfære */
 .cin-glow{position:absolute;inset:0;z-index:7;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(ellipse 58% 62% at 50% 38%,rgba(150,182,255,.16),transparent 72%)}
 .cin-fade{position:absolute;left:0;right:0;bottom:0;height:13cqw;z-index:7;pointer-events:none;background:linear-gradient(transparent,rgba(2,1,3,.78))}
@@ -979,8 +965,7 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 @media (max-width:760px){
   .cin-hall{--fh:30%;--sb:67%}
   .cin-cur{width:7.5%}
-  .cin-sc,.cin-exit{display:none}
-  .cin-lamp{width:2cqw;height:4.4cqw}
+  .cin-sc{display:none}
   .cin-row.back{--b:17cqw}.cin-row.mid{--b:7.1cqw}.cin-row.front{--b:-2.9cqw}
   .cin-stage::after{height:1.8cqw;background-size:5cqw 100%}
   .cin-grain{opacity:.06}
@@ -995,8 +980,44 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 .cin-stage{background:radial-gradient(ellipse 45% 160% at 50% 0,color-mix(in srgb,var(--amb) 42%,transparent),transparent 70%),repeating-linear-gradient(90deg,rgba(0,0,0,.35) 0 1px,transparent 1px 3.4cqw),linear-gradient(#34200f,#1b0f08 70%,#0d0704)}
 .cin-beam{background:linear-gradient(to top,color-mix(in srgb,var(--amb) 34%,white 0%),color-mix(in srgb,var(--amb) 10%,transparent) 50%,transparent)}
 .cin-wall{background:radial-gradient(ellipse 50% 60% at 50% 40%,color-mix(in srgb,var(--amb) 18%,transparent),transparent 75%),linear-gradient(180deg,rgba(255,170,90,.16),rgba(255,170,90,0) 22%),linear-gradient(90deg,rgba(0,0,0,.55),transparent 18%,transparent 82%,rgba(0,0,0,.55)),repeating-linear-gradient(90deg,#1b1624 0 .85cqw,#0b0910 .85cqw 1.05cqw,#2a2030 1.05cqw 1.12cqw),#0a0910}
-.seat{box-shadow:inset 0 .22cqw 0 color-mix(in srgb,var(--amb) 60%,white),inset 0 -1.3cqw 1.5cqw rgba(0,0,0,.65),0 .3cqw .9cqw rgba(0,0,0,.7)}
-.seat em{box-shadow:inset 0 .18cqw 0 color-mix(in srgb,var(--amb) 55%,transparent)}
+.seat em{box-shadow:inset 0 .28cqw 0 color-mix(in srgb,var(--amb) 75%,transparent)}
+
+/* ===================== v75: recliners, dør, autovisning ===================== */
+.cin-defs{position:absolute;width:0;height:0;overflow:hidden}
+.cin-row{gap:.8cqw;align-items:flex-end}
+.cin-gap{flex:0 0 15.6cqw}
+.seat{position:relative;flex:0 0 6.6cqw;width:6.6cqw;height:7.4cqw;color:#2b2b33;--rim:color-mix(in srgb,var(--amb) 70%,white);filter:drop-shadow(0 .3cqw .5cqw rgba(0,0,0,.65))}
+.seat svg{display:block;width:100%;height:100%;overflow:visible}
+.seat .led{position:absolute;left:18%;right:18%;bottom:-.35cqw;height:.28cqw;border-radius:1cqw;background:#ffb35c;box-shadow:0 0 .9cqw .3cqw rgba(255,160,70,.75);opacity:.9}
+.seat em{top:-1.5cqw;width:2.7cqw;height:2.9cqw;margin-left:-1.35cqw;z-index:-1;animation:cinHd 9s ease-in-out infinite;animation-delay:calc(var(--d)*-1.1s);transform-origin:50% 100%}
+.seat.h2 em{top:-2cqw}
+@keyframes cinHd{0%,100%{transform:rotate(0) translateY(0)}22%{transform:rotate(2.2deg) translateY(-.1cqw)}48%{transform:rotate(-1.6deg)}70%{transform:rotate(.6deg) translateY(.12cqw)}}
+.cin-sw svg{position:absolute;inset:0;width:100%;height:100%}
+.cin-sw.r svg{transform:scaleX(-1)}
+.cin-lights{position:absolute;inset:0;z-index:9;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,rgba(255,214,150,.38),rgba(255,190,120,.16) 60%,transparent 90%);animation:cinLt 5.5s ease-in 1.2s both}
+.cin.quick .cin-lights{display:none}
+@keyframes cinLt{from{opacity:1}to{opacity:0}}
+.cin-autob{position:absolute;right:1.4%;top:9.6%;z-index:11;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.4cqw 1cqw;background:rgba(5,6,12,.6);backdrop-filter:blur(6px);color:#e9e9f5;font:600 .95cqw/1 Inter,sans-serif;cursor:pointer;min-height:0;opacity:.75}
+.cin-autob:hover{opacity:1}
+/* Netflix-aktig avspilling */
+.cin.pv .cs-grad{opacity:1;background:linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,0) 38%),linear-gradient(90deg,rgba(0,0,0,.5),transparent 40%)}
+.cin.pv .cs-info>.cs-eye,.cin.pv .cs-info>.cs-meta,.cin.pv .cs-info>.cs-plot{opacity:0;height:0;margin:0;overflow:hidden}
+.cin.pv .cs-info>h2{opacity:1!important;font-size:2.1cqw;margin-bottom:.8cqw;transition:font-size .5s}
+.cin.pv .cs-info{bottom:5%}
+.cin.pv .cs-slide.on .cs-poster{opacity:0}
+.cs-snd{min-height:0}
+.cs-prog{position:absolute;left:0;bottom:0;height:.32cqw;width:0;background:#e50914;z-index:5;box-shadow:0 0 .8cqw rgba(229,9,20,.8);opacity:0}
+.cin.pv .cs-slide.vp .cs-prog{opacity:1;animation:cinProg 38s linear forwards}
+@keyframes cinProg{from{width:0}to{width:100%}}
+@media (max-width:760px){
+  .cin-autob{font-size:2.5cqw;padding:1cqw 2.2cqw;top:7%;right:3%}
+  .cin.pv .cs-info>h2{font-size:4.6cqw}
+  .cin.pv .cs-btn .ghost:not(.cs-pv):not(.cs-snd){display:none}
+  .cin.pv .cs-info{max-width:90%}
+  .cin-sw svg{display:none}
+  .seat em{height:3cqw}
+}
+@media (prefers-reduced-motion:reduce){.seat em,.cin-lights{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1935,8 +1956,9 @@ function renderHome(){
 }
 /* ===================== Kinosal ===================== */
 const WXI=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
-let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0;const cinInfoC={},cinAmb={};
-function stopCinema(){clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);cinTimer=cinClock=cinPv=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
+let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0,cinAuto=0,cinAmbT=0;const cinInfoC={},cinAmb={},cinBad={};
+const cinAutoOn=()=>{try{return localStorage.getItem('cinAuto')!=='0'}catch(e){return true}};
+function stopCinema(){clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);cinTimer=cinClock=cinPv=cinAuto=cinAmbT=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
 const cinLogo=t=>t&&(t.logo||(t.logos&&t.logos[0]&&t.logos[0].href))||'';
 function cinMatchSlide(m,i){
   const e=m.e,live=e.state==='in',nm=t=>t.displayName||t.name||'',fnd=(e.h.shortDisplayName||nm(e.h))+'|'+(e.a.shortDisplayName||nm(e.a));
@@ -1949,26 +1971,28 @@ function cinMatchSlide(m,i){
    <div class="mt-t">${lg(e.a)}<b>${esc(nm(e.a))}</b></div></div>
    <div class="cs-btn"><button class="primary" data-find="${esc(fnd)}">▶ Se kampen</button></div></div></div>`;
 }
+const WALLSVG='<svg class="cin-wsv" viewBox="0 0 160 218" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="dgl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2d34"/><stop offset=".5" stop-color="#1b1d22"/><stop offset="1" stop-color="#0f1013"/></linearGradient><linearGradient id="dgb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9dde3"/><stop offset=".5" stop-color="#8d939c"/><stop offset="1" stop-color="#e8ebef"/></linearGradient><radialGradient id="dgg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#3dff8a" stop-opacity=".55"/><stop offset="1" stop-color="#3dff8a" stop-opacity="0"/></radialGradient><radialGradient id="dga" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffc678" stop-opacity=".7"/><stop offset="1" stop-color="#ffc678" stop-opacity="0"/></radialGradient><linearGradient id="dgs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3d6"/><stop offset="1" stop-color="#ffb35c"/></linearGradient><filter id="dgf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs><ellipse cx="37" cy="24.6" rx="34" ry="26" fill="url(#dgg)"/><polygon points="12.5,201.0 61.5,134.2 61.5,26.7 12.5,44.5" fill="#08090c" stroke="#3a3d45" stroke-width=".8"/><polygon points="16.0,196.2 58.0,139.0 58.0,31.0 16.0,46.2" fill="url(#dgl)"/><polygon points="24.0,57.5 24.0,102.9 34.0,95.1 34.0,52.9" fill="#6f8795" opacity=".55"/><polygon points="24.0,57.5 24.0,102.9 34.0,95.1 34.0,52.9" fill="none" stroke="#050607" stroke-width="1"/><polygon points="16.0,181.2 16.0,196.2 58.0,139.0 58.0,128.2" fill="#0a0b0d" opacity=".7"/><polygon points="20.0,120.7 20.0,126.5 54.0,95.2 54.0,90.7" fill="url(#dgb)"/><polygon points="20.0,120.7 20.0,122.9 54.0,92.4 54.0,90.7" fill="#fff" opacity=".5"/><g transform="translate(26,16.6) matrix(1,-0.362,0,1,0,0)"> <rect x="-1" y="-1" width="24" height="16" rx="2.5" fill="#3dff8a" opacity=".55" filter="url(#dgf)"/> <rect x="0" y="0" width="22" height="14" rx="1.8" fill="#0c7a3c" stroke="#06361b" stroke-width=".8"/> <rect x=".8" y=".8" width="20.4" height="12.4" rx="1.2" fill="#13a853"/> <g stroke="#fff" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" fill="none">  <path d="M12.6,4.6 L10.9,7.6 L13.3,9.4 L12.4,12"/><path d="M10.9,7.6 L8.6,10.6"/><path d="M12.4,5.4 L15,6.6"/><path d="M12.2,5.5 L9.6,5.9"/>  <path d="M16.8,10.6 H19.4 M18.2,9.2 L19.6,10.6 L18.2,12" stroke-width=".9"/> </g> <circle cx="12.9" cy="2.9" r="1.35" fill="#fff"/></g><g transform="translate(100,35.8) matrix(1,-0.362,0,1,0,0)"> <ellipse cx="3" cy="8" rx="17" ry="22" fill="url(#dga)"/> <rect x="0" y="-1" width="6" height="3" rx="1" fill="#8a6a2c"/><rect x="0" y="16" width="6" height="2.5" rx="1" fill="#8a6a2c"/> <rect x=".6" y="1.6" width="4.8" height="14.6" rx="1.6" fill="url(#dgs)"/></g><g transform="translate(134,7.4) matrix(1,-0.362,0,1,0,0) scale(.72)"> <ellipse cx="3" cy="8" rx="17" ry="22" fill="url(#dga)"/> <rect x="0" y="-1" width="6" height="3" rx="1" fill="#8a6a2c"/><rect x="0" y="16" width="6" height="2.5" rx="1" fill="#8a6a2c"/> <rect x=".6" y="1.6" width="4.8" height="14.6" rx="1.6" fill="url(#dgs)"/></g><line x1="0" y1="218" x2="160" y2="0" stroke="#ffb35c" stroke-width="2.4" stroke-dasharray="2.5 8" stroke-linecap="round" opacity=".9" filter="url(#dgf)"/><line x1="0" y1="218" x2="160" y2="0" stroke="#ffe0a8" stroke-width="1.1" stroke-dasharray="2.5 8" stroke-linecap="round"/></svg>';
+const RECLSYM='<svg class="cin-defs" width="0" height="0" aria-hidden="true" style="position:absolute"><defs><linearGradient id="rcH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".62"/><stop offset=".22" stop-color="#000" stop-opacity="0"/><stop offset=".44" stop-color="#fff" stop-opacity=".30"/><stop offset=".62" stop-color="#fff" stop-opacity=".03"/><stop offset=".8" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".68"/></linearGradient><linearGradient id="rcV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></linearGradient><linearGradient id="rcA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".5"/><stop offset=".5" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></linearGradient><symbol id="recl" viewBox="-6 -2 112 124"> <ellipse cx="50" cy="119" rx="46" ry="3.2" fill="#000" opacity=".55"/> <rect x="-3" y="66" width="10" height="52" rx="4.5" fill="currentColor"/><rect x="-3" y="66" width="10" height="52" rx="4.5" fill="url(#rcA)"/> <rect x="93" y="66" width="10" height="52" rx="4.5" fill="currentColor"/><rect x="93" y="66" width="10" height="52" rx="4.5" fill="url(#rcA)"/> <path d="M4,118 C0,86 -1,54 6,34 C12,16 30,10 50,10 C70,10 88,16 94,34 C101,54 100,86 96,118 Z" fill="currentColor"/> <path d="M4,118 C0,86 -1,54 6,34 C12,16 30,10 50,10 C70,10 88,16 94,34 C101,54 100,86 96,118 Z" fill="url(#rcH)"/> <path d="M4,118 C0,86 -1,54 6,34 C12,16 30,10 50,10 C70,10 88,16 94,34 C101,54 100,86 96,118 Z" fill="url(#rcV)"/> <path d="M8,42 C3,68 3,94 7,114 M92,42 C97,68 97,94 93,114" fill="none" stroke="#000" stroke-opacity=".42" stroke-width="2"/> <path d="M50,50 L50,112" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1.5"/><path d="M51.5,50 L51.5,112" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/> <path d="M10,68 Q50,76 90,68 M8,92 Q50,101 92,92" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1.5"/> <path d="M10,69.6 Q50,77.6 90,69.6 M8,93.6 Q50,102.6 92,93.6" fill="none" stroke="#ffdca8" stroke-opacity=".35" stroke-width=".9" stroke-dasharray="2.2 2.2"/> <rect x="15" y="-2" width="70" height="44" rx="19" fill="currentColor"/> <rect x="15" y="-2" width="70" height="44" rx="19" fill="url(#rcH)"/> <rect x="15" y="-2" width="70" height="44" rx="19" fill="url(#rcV)"/> <path d="M19,41 Q50,51 81,41" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="2.4"/> <path d="M22,2.5 Q50,-3.5 78,2.5" fill="none" stroke="var(--rim,#9fb8ff)" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/> <path d="M8,34 C14,18 32,11.5 50,11.5 C68,11.5 86,18 92,34" fill="none" stroke="var(--rim,#9fb8ff)" stroke-opacity=".55" stroke-width="1.4" stroke-linecap="round"/> <path d="M50,22 L50,40" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="1.1"/></symbol></defs></svg>';
 function cinemaHtml(items,quick){
-  const seat=(i,k,r)=>{const h=(i*7+k*5+r*3)%5<2;return `<i class="seat${h?' h':''}${(i+k+r)%3===0?' h2':''} t${(i*3+k+r)%4}"><em></em><u></u></i>`};
+  const seat=(i,k,r)=>{const h=(i*7+k*5+r*3)%5<2;return `<i class="seat${h?' h':''}${(i+k+r)%3===0?' h2':''} t${(i*3+k+r)%4}" style="--d:${(i*5+k*3+r*7)%9}"><em></em><svg viewBox="-6 -2 112 124"><use href="#recl"/></svg><b class="led"></b></i>`};
   const row=(cls,r)=>`<div class="cin-row ${cls}">${Array.from({length:6},(_,i)=>seat(i,0,r)).join('')}<span class="cin-gap"></span>${Array.from({length:6},(_,i)=>seat(i,3,r)).join('')}</div>`;
   const sl=items.map((c,i)=>c.t==='match'?cinMatchSlide(c,i):`<div class="cs-slide${i?'':' on'}" data-k="${c.key}"><div class="cs-bg" style="background-image:url('${esc(c.logo)}')"></div><div class="cs-v"></div><div class="cs-grad"></div>
     <div class="cs-info"><span class="cs-eye">🎟 Anbefalt i kveld · ${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(c.nm||c.name)}</h2>
     <div class="cs-meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}<span class="cs-yr"></span></div><p class="cs-plot"></p>
     <div class="cs-btn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost cs-pv" data-pv="${c.key}">🎬 Visning</button><button class="ghost cs-snd" hidden>🔊</button></div></div>
-    <img class="cs-poster" src="${esc(c.logo)}" alt=""></div>`).join('');
-  const th=items.map((c,i)=>c.t==='match'?`<button class="cin-th mtth${i?'':' on'}" data-ci="${i}" title="Kamp"><span>⚽</span><small>${c.e.state==='in'?'LIVE':esc(fmtTime(c.e.t))}</small></button>`:`<button class="cin-th${i?'':' on'}" data-ci="${i}" title="${esc(c.nm||c.name)}"><img src="${esc(c.logo)}" alt="" loading="lazy"></button>`).join('');
+    <img class="cs-poster" src="${esc(c.logo)}" alt=""><i class="cs-prog"></i></div>`).join('');
+  const th=items.map((c,i)=>c.t==='match'?`<button class="cin-th mtth${i?'':' on'}" data-ci="${i}" title="Kamp"><span>⚽</span><small>${c.e.state==='in'?'LIVE':'KAMP'}</small></button>`:`<button class="cin-th${i?'':' on'}" data-ci="${i}" title="${esc(c.nm||c.name)}"><img src="${esc(c.logo)}" alt="" loading="lazy"></button>`).join('');
   const dust=Array.from({length:14},(_,i)=>`<b style="left:${28+((i*37)%44)}%;animation-delay:${-(i*1.7)}s;animation-duration:${9+(i%5)*2}s"></b>`).join('');
-  return `<section class="cin${quick?' quick':''}" id="cin"><div class="cin-hall">
+  return `<section class="cin${quick?' quick':''}" id="cin"><div class="cin-hall">${RECLSYM}<button class="cin-autob" id="cinAutoB" title="Autovisning av/på"></button>
     <div class="cin-wall"></div><i class="cin-sc l"></i><i class="cin-sc r"></i><div class="cin-cove"></div>
     <div class="cin-val"><span class="cin-neon">ESKEDALS UNIVERS · SAL 1</span></div>
     <div class="cin-cur l"></div><div class="cin-cur r"></div>
     <div class="cin-beam"></div><div class="cin-dust">${dust}</div>
     <div class="cin-screen"><div class="cin-bulbs"></div>${sl}<div class="cs-nav"><button class="cs-p" data-cn="-1" aria-label="Forrige">‹</button><button class="cs-n" data-cn="1" aria-label="Neste">›</button></div></div>
     <div class="cin-stage"></div><div class="cin-floor"></div><div class="cin-aisle"></div><i class="cin-led l"></i><i class="cin-led r"></i>
-    <div class="cin-sw l"></div><div class="cin-sw r"></div><i class="cin-lamp l"></i><i class="cin-lamp r"></i><span class="cin-exit">UTGANG</span>
+    <div class="cin-sw l">${WALLSVG}</div><div class="cin-sw r">${WALLSVG}</div>
     ${row('back',0)}${row('mid',1)}${row('front',2)}
-    <div class="cin-glow"></div><div class="cin-fade"></div><div class="cin-vig"></div><div class="cin-grain"></div>
+    <div class="cin-glow"></div><div class="cin-fade"></div><div class="cin-lights"></div><div class="cin-vig"></div><div class="cin-grain"></div>
   </div><div class="cin-ths" aria-label="Anbefalinger">${th}</div></section>`;
 }
 async function cinInfo(c){
@@ -1993,16 +2017,21 @@ function startCinema(feat){
     if(r.plot)sl.querySelector('.cs-plot').textContent=r.plot.length>230?r.plot.slice(0,227)+'…':r.plot;
     const m=[r.yr,r.dur,r.genre].filter(Boolean).join(' · ');if(m)sl.querySelector('.cs-yr').textContent=m;
   };
-  const stopPv=()=>{clearTimeout(cinPv);root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');root.querySelectorAll('.cs-snd').forEach(b=>b.hidden=true);tick()};
+  const stopPv=()=>{clearTimeout(cinPv);clearInterval(cinAmbT);root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');root.querySelectorAll('.cs-snd').forEach(b=>b.hidden=true);amb(slides[cinIdx]);tick()};
   const tick=()=>{clearInterval(cinTimer);if(!TVM&&!root.classList.contains('pv'))cinTimer=setInterval(()=>show(cinIdx+1),9000)};
   function show(i){
-    cinIdx=(i+slides.length)%slides.length;
+    cinIdx=(i+slides.length)%slides.length;clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);
     root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');
     slides.forEach((sl,j)=>sl.classList.toggle('on',j===cinIdx));ths.forEach((t,j)=>t.classList.toggle('on',j===cinIdx));
     const t=ths[cinIdx];if(t&&t.scrollIntoView)try{t.parentElement.scrollTo({left:t.offsetLeft-t.parentElement.clientWidth/2+t.offsetWidth/2,behavior:'smooth'})}catch(e){}
     fill(slides[cinIdx]);fill(slides[(cinIdx+1)%slides.length]);amb(slides[cinIdx]);
+    const cs=slides[cinIdx];if(cinAutoOn()&&cs.dataset.k)cinAuto=setTimeout(()=>{startPv(cs,byKey.get(cs.dataset.k),true)},2600);
   }
   const hall=root.querySelector('.cin-hall');
+  const colOf=d=>{let R=0,G=0,B=0,W=0;
+    for(let i=0;i<d.length;i+=4){const mx=Math.max(d[i],d[i+1],d[i+2]),mn=Math.min(d[i],d[i+1],d[i+2]);const w=.15+(mx-mn)/255*2+(mx>60?.3:0);R+=d[i]*w;G+=d[i+1]*w;B+=d[i+2]*w;W+=w}
+    R/=W;G/=W;B/=W;const m=Math.max(R,G,B)||1,f=215/m;const L=(R+G+B)/3*f,sat=1.35;R=L+(R*f-L)*sat;G=L+(G*f-L)*sat;B=L+(B*f-L)*sat;
+    const cl=v=>Math.max(0,Math.min(255,v|0));return `rgb(${cl(R)},${cl(G)},${cl(B)})`};
   const amb=async sl=>{
     const k=sl.dataset.k;let col=null;
     if(!k){col='rgb(60,200,110)'}
@@ -2012,15 +2041,33 @@ function startCinema(feat){
       if(c&&c.logo){try{
         const r=await fetch(px(c.logo));const bm=await createImageBitmap(await r.blob());
         const cv=document.createElement('canvas');cv.width=cv.height=12;const g=cv.getContext('2d');g.drawImage(bm,0,0,12,12);
-        const d=g.getImageData(0,0,12,12).data;let R=0,G=0,B=0,W=0;
-        for(let i=0;i<d.length;i+=4){const mx=Math.max(d[i],d[i+1],d[i+2]),mn=Math.min(d[i],d[i+1],d[i+2]);const w=.15+(mx-mn)/255*2+(mx>60?.3:0);R+=d[i]*w;G+=d[i+1]*w;B+=d[i+2]*w;W+=w}
-        R/=W;G/=W;B/=W;const m=Math.max(R,G,B)||1,f=215/m;
-        const L=(R+G+B)/3*f,sat=1.35;R=L+(R*f-L)*sat;G=L+(G*f-L)*sat;B=L+(B*f-L)*sat;
-        const cl=v=>Math.max(0,Math.min(255,v|0));
-        col=`rgb(${cl(R)},${cl(G)},${cl(B)})`;cinAmb[k]=col}catch(e){}
+        const d=g.getImageData(0,0,12,12).data;col=colOf(d);cinAmb[k]=col}catch(e){}
       }
     }
     if(sl.classList.contains('on')&&hall)hall.style.setProperty('--amb',col||'rgb(150,182,255)');
+  };
+  const hs=k=>[...String(k)].reduce((a,ch)=>(a*31+ch.charCodeAt(0))|0,7)>>>0;
+  const sampleEl=el=>{try{const cv=document.createElement('canvas');cv.width=cv.height=12;const g=cv.getContext('2d');g.drawImage(el,0,0,12,12);const d=g.getImageData(0,0,12,12).data;return colOf(d)}catch(e){return null}};
+  const autoLbl=()=>{const b=$('cinAutoB');if(b)b.textContent=cinAutoOn()?'🎬 Autovisning: på':'🎬 Autovisning: av'};autoLbl();
+  const startPv=async(sl,c,auto)=>{
+    if(!sl||!c||root.classList.contains('pv'))return;
+    if(auto&&cinBad[c.key])return;
+    const r=await cinInfo(c);const url=c.t==='vod'?c.url:r.ep;
+    if(!url){if(!auto)toast('Ingen visning tilgjengelig for denne',3000);return}
+    if(!sl.classList.contains('on')||root.classList.contains('pv'))return;
+    clearInterval(cinTimer);root.classList.add('pv');
+    const v=sl.querySelector('.cs-v');v.innerHTML='<video muted playsinline></video>';const vd=v.firstChild;
+    const btn=sl.querySelector('.cs-pv');
+    const fail=()=>{if(!root.classList.contains('pv')||!sl.classList.contains('on'))return;cinBad[c.key]=1;stopPv();if(!auto)toast('Visningen kunne ikke startes akkurat nå',3500)};
+    vd.onloadedmetadata=()=>{try{if(isFinite(vd.duration)&&vd.duration>120)vd.currentTime=Math.min(vd.duration*(.18+(hs(c.key)%28)/100),5400)}catch(e){}vd.play().catch(()=>{})};
+    vd.onplaying=()=>{v.classList.add('on');sl.querySelector('.cs-snd').hidden=false;sl.classList.add('vp');clearInterval(cinAmbT);cinAmbT=setInterval(()=>{const col=sampleEl(vd);if(col&&hall)hall.style.setProperty('--amb',col)},1200)};
+    vd.onerror=fail;
+    vd.onended=()=>{if(auto){stopPv();show(cinIdx+1)}else stopPv()};
+    vd.src=px(url);
+    sl.querySelector('.cs-snd').onclick=ev=>{ev.stopPropagation();vd.muted=!vd.muted;ev.currentTarget.textContent=vd.muted?'🔊':'🔇'};
+    if(btn)btn.textContent='■ Stopp';
+    cinPv=setTimeout(()=>{if(auto){stopPv();show(cinIdx+1)}else stopPv()},auto?38000:60000);
+    setTimeout(()=>{if(root.classList.contains('pv')&&!v.classList.contains('on'))fail()},12000);
   };
   let tx=0;const scr=root.querySelector('.cin-screen');
   scr.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
@@ -2033,20 +2080,10 @@ function startCinema(feat){
     if(p){
       const sl=p.closest('.cs-slide'),c=byKey.get(p.dataset.pv);if(!c)return;
       if(root.classList.contains('pv')){stopPv();return}
-      const r=await cinInfo(c);const url=c.t==='vod'?c.url:r.ep;
-      if(!url){toast('Ingen visning tilgjengelig for denne',3000);return}
-      clearInterval(cinTimer);root.classList.add('pv');
-      const v=sl.querySelector('.cs-v');v.innerHTML='<video muted playsinline></video>';const vd=v.firstChild;
-      vd.onloadedmetadata=()=>{try{if(isFinite(vd.duration)&&vd.duration>120)vd.currentTime=Math.min(vd.duration*.25,900)}catch(e){}vd.play().catch(()=>{})};
-      vd.onplaying=()=>{v.classList.add('on');sl.querySelector('.cs-snd').hidden=false};
-      vd.onerror=()=>{stopPv();toast('Visningen kunne ikke startes akkurat nå',3500)};
-      vd.src=px(url);
-      sl.querySelector('.cs-snd').onclick=ev=>{ev.stopPropagation();vd.muted=!vd.muted;ev.currentTarget.textContent=vd.muted?'🔊':'🔇'};
-      p.textContent='■ Stopp';
-      cinPv=setTimeout(()=>{stopPv()},60000);
-      setTimeout(()=>{if(root.classList.contains('pv')&&!v.classList.contains('on')){stopPv();toast('Visningen kunne ikke startes akkurat nå',3500)}},12000);
-      return;
+      delete cinBad[c.key];startPv(sl,c,false);return;
     }
+    const ab=e.target.closest('#cinAutoB');
+    if(ab){e.stopPropagation();const on=!cinAutoOn();try{localStorage.setItem('cinAuto',on?'1':'0')}catch(x){}autoLbl();if(!on){clearTimeout(cinAuto);if(root.classList.contains('pv'))stopPv()}else show(cinIdx);return}
   };
   // restore label when stopped
   new MutationObserver(()=>{if(!root.classList.contains('pv'))root.querySelectorAll('.cs-pv').forEach(b=>b.textContent='🎬 Visning')}).observe(root,{attributes:true,attributeFilter:['class']});

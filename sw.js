@@ -1,5 +1,5 @@
 // Cacher selve appen slik at den starter raskt. Proxy (/p), spillelister og strømmer går alltid rett ut.
-const CACHE = 'min-iptv-v74';
+const CACHE = 'min-iptv-v75';
 const LIBS = ['./lib/hls.min.js', './lib/mpegts.js'];
 const FILES = ['./', './index.html', './manifest.webmanifest', './bg.svg', './icon.svg', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
