@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=96;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=97;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4260,6 +4260,78 @@ export async function mount(o){
   }
 
 
+
+  /* ---------- sesongfigur: nisse (jul) / skummel fyr (halloween) går ut og inn døra ---------- */
+  if(SEA==='jul'||SEA==='nyttaar'||SEA==='halloween'){
+    const SC=SEA==='halloween';
+    const fig=new T.Group();fig.visible=false;group.add(fig);
+    const skin=mk(SC?0xbfc9b8:0xe8b896,{roughness:.8}),coat=mk(SC?0x08080c:0xc81d25,{roughness:.9}),blk=mk(0x111111),wht=mk(0xf4f4f4,{roughness:.95});
+    const part=(g,m,x,y,z)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);fig.add(o);return o};
+    const piv=(x,y)=>{const p=new T.Group();p.position.set(x,y,0);fig.add(p);return p};
+    const legL=piv(-.12,.8),legR=piv(.12,.8);
+    [legL,legR].forEach(p=>{const l=new T.Mesh(new T.BoxGeometry(.16,.8,.2),SC?coat:blk);l.position.y=-.4;p.add(l)});
+    const armL=piv(-.34,1.6),armR=piv(.34,1.6);
+    [armL,armR].forEach(p=>{const a=new T.Mesh(new T.BoxGeometry(.11,SC?.95:.7,.11),SC?skin:coat);a.position.y=SC?-.46:-.34;p.add(a);if(!SC){const h=new T.Mesh(new T.SphereGeometry(.07,8,6),wht);h.position.y=-.72;p.add(h)}});
+    if(SC){
+      part(new T.ConeGeometry(.5,1.75,14),coat,0,.88,0);
+      part(new T.SphereGeometry(.24,12,10),coat,0,1.86,-.02).scale.set(1,1.15,1.05);
+      const face=part(new T.SphereGeometry(.17,12,10),skin,0,1.84,.1);face.scale.set(.9,1.1,.7);
+      const eM=bas(0xff1a0a);[-.07,.07].forEach(x=>part(new T.SphereGeometry(.032,8,6),eM,x,1.88,.2));
+      const eg=new T.Sprite(new T.SpriteMaterial({map:glowTex('rgba(255,30,10,A)'),blending:T.AdditiveBlending,depthWrite:false,transparent:true,opacity:.9}));eg.scale.set(.7,.4,1);eg.position.set(0,1.88,.25);fig.add(eg);
+      fig.userData.eg=eg;
+    }else{
+      part(new T.CylinderGeometry(.27,.36,.95,12),coat,0,1.22,0);
+      part(new T.CylinderGeometry(.285,.285,.1,12),blk,0,1.0,0);
+      part(new T.BoxGeometry(.1,.1,.03),mk(0xe8c040,{metalness:.6}),0,1.0,.29);
+      part(new T.CylinderGeometry(.3,.3,.06,12),wht,0,.74,0);
+      part(new T.SphereGeometry(.2,12,10),skin,0,1.83,0);
+      part(new T.SphereGeometry(.2,12,10),wht,0,1.72,.1).scale.set(1,.9,.8);
+      part(new T.SphereGeometry(.04,6,6),mk(0xd88a7a),0,1.84,.19);
+      const hat=part(new T.ConeGeometry(.22,.5,12),coat,0,2.13,-.03);hat.rotation.x=-.25;
+      part(new T.TorusGeometry(.2,.06,6,14),wht,0,1.97,0).rotation.x=Math.PI/2;
+      part(new T.SphereGeometry(.07,8,6),wht,0,2.38,-.14);
+      part(new T.SphereGeometry(.3,12,10),mk(0x6b4a2a,{roughness:1}),0,1.2,-.4).scale.set(1,1.1,.9);
+    }
+    const WP=[[-6.4,-.7],[-5,-.9],[-.3,-1.7],[-.3,-3],[-.3,-4.9]],cum=[0];
+    for(let i=1;i<WP.length;i++)cum.push(cum[i-1]+Math.hypot(WP[i][0]-WP[i-1][0],WP[i][1]-WP[i-1][1]));
+    const LEN=cum[cum.length-1];
+    const at=d=>{d=Math.max(0,Math.min(LEN,d));let i=1;while(i<WP.length-1&&cum[i]<d)i++;const u=(d-cum[i-1])/(cum[i]-cum[i-1]||1),a=WP[i-1],b=WP[i];return{x:a[0]+(b[0]-a[0])*u,z:a[1]+(b[1]-a[1])*u,dx:b[0]-a[0],dz:b[1]-a[1]}};
+    const yAt=(x,z)=>{const r=Math.hypot(x,z-ZC),ang=Math.atan2(Math.abs(x),z-ZC);if(ang>=A)return 0;let y=.3;for(const rw of rows)if(r>=rw.r-.75)y=rw.y+.3;return y};
+    const R=(a,b)=>a+Math.random()*(b-a);
+    let st='wait',tm=R(6,12),d=0,face=Math.PI,ph=0,pw=0;
+    const place=(x,z,ry)=>{fig.position.set(x,yAt(x,z),z);fig.rotation.y=ry};
+    anim.push((t,dt)=>{
+      tm-=dt;let moving=false,wave=0;
+      if(st==='wait'){fig.visible=false;if(tm<=0){st='in';d=0}}
+      else if(st==='in'||st==='out'){
+        const sp=SC?.95:1.15;d+=(st==='in'?1:-1)*sp*dt;moving=true;
+        const p=at(d),dir=st==='in'?1:-1;
+        face=Math.atan2(p.dx*dir,p.dz*dir);
+        let ry=face;fig.rotation.y+=(ry-fig.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI;
+        place(p.x,p.z,fig.rotation.y);fig.visible=p.x>-6.0;
+        if(st==='in'&&d>=LEN){st='stand';tm=SC?R(2.2,3.2):R(3.5,5)}
+        if(st==='out'&&d<=0){fig.visible=false;if(SC){st='gone';tm=R(7,20)}else{st='wait';tm=R(30,75)}}
+      }else if(st==='stand'){
+        const ry=SC?0:.35;fig.rotation.y+=((ry-fig.rotation.y+Math.PI*3)%(Math.PI*2)-Math.PI)*Math.min(1,dt*(SC?1.2:2.5));
+        wave=SC?0:1;
+        if(tm<=0){st='out'}
+      }else if(st==='gone'){
+        fig.visible=false;
+        if(tm<=0){st='pop';tm=R(2,3);const x=R(-.5,.5);place(x,-4.2,0);fig.userData.t0=tm}
+      }else if(st==='pop'){
+        const e=fig.userData.t0-tm;
+        fig.visible=e<.5?Math.sin(e*60)>0:(tm<.35?Math.sin(tm*70)>0:true);
+        if(fig.userData.eg)fig.userData.eg.material.opacity=.7+Math.sin(t*30)*.3;
+        if(tm<=0){fig.visible=false;st='wait';tm=R(35,80)}
+      }
+      if(moving){ph+=dt*sp0();pw=1}else pw=Math.max(0,pw-dt*4);
+      const sw=Math.sin(ph)*.6*pw;legL.rotation.x=sw;legR.rotation.x=-sw;
+      if(wave){armR.rotation.z=2.5+Math.sin(t*7)*.35;armL.rotation.x=0}
+      else{armL.rotation.z=0;armR.rotation.z=0;armL.rotation.x=-sw*.8;armR.rotation.x=sw*.8}
+      if(SC&&st==='stand'||SC&&st==='pop'){armL.rotation.x=armR.rotation.x=-.5}
+    });
+    function sp0(){return SC?6:7.5}
+  }
 
   /* ---------- kamera, størrelse, projeksjon ---------- */
   let W=0,Hh=0;
