@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=90;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=91;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -581,7 +581,7 @@ html.tvm .rnv{display:none}
 /* filmer/serier */
 @media(min-width:900px){.vlay{display:block}#vside{display:none!important}}
 @media(min-width:900px){html:not(.tvm) #vchips{display:flex!important;flex-wrap:wrap;gap:8px;margin:4px 0 14px}html:not(.tvm) #vsort,html:not(.tvm) #vcat{display:block!important}html:not(.tvm) .vbar{display:flex;gap:10px;margin:14px 0 10px}html:not(.tvm) .vbar input{max-width:320px}html:not(.tvm) .vbar select{width:auto;min-width:190px}}
-html.tvm .vlay{display:block}html.tvm #vside{display:none!important}
+html.tvm .cin-hall{max-width:min(100%,calc((var(--tvh,720px) - 150px)*1.7857))}html.tvm .vlay{display:block}html.tvm #vside{display:none!important}
 .vmain>h1{display:none}
 .vbar{margin:8px 0 6px}
 #vchips{margin:0 0 6px}
@@ -1316,7 +1316,7 @@ const TVM=(()=>{try{const m=localStorage.getItem('tvmode');if(m==='1')return tru
   return screen.width>=900&&screen.width>screen.height&&!matchMedia('(any-pointer:coarse)').matches})();
 if(TVM){document.documentElement.classList.add('tvm');
   try{for(const sh of document.styleSheets)for(const r of sh.cssRules)if(r.type===4&&/max-width|hover:\s*none/.test(r.media.mediaText))r.media.mediaText='not all'}catch(e){}
-  const fit=()=>{document.documentElement.style.zoom=String(Math.max(.5,innerWidth/1280))};fit();addEventListener('resize',fit)}
+  const fit=()=>{const z=Math.max(.5,innerWidth/1280);document.documentElement.style.zoom=String(z);document.documentElement.style.setProperty('--tvh',(innerHeight/z)+'px')};fit();addEventListener('resize',fit)}
 const PAGE=TVM?36:300, GPAGE=TVM?18:72;
 /* ---- språk/land ---- */
 const LMAP={sv:'se',swe:'se',da:'dk',dnk:'dk',dan:'dk',nor:'no',nb:'no',nob:'no',usa:'us',gb:'uk',gbr:'uk',en:'uk',eng:'uk'};
@@ -2309,6 +2309,7 @@ function startCinema(feat){
   const hs=k=>[...String(k)].reduce((a,ch)=>(a*31+ch.charCodeAt(0))|0,7)>>>0;
   const sampleEl=el=>{try{const cv=document.createElement('canvas');cv.width=cv.height=12;const g=cv.getContext('2d');g.drawImage(el,0,0,12,12);const d=g.getImageData(0,0,12,12).data;return colOf(d)}catch(e){return null}};
   const autoLbl=()=>{const b=$('cinAutoB');if(b)b.textContent=cinAutoOn()?'🎬 Autovisning: på':'🎬 Autovisning: av'};autoLbl();
+  const dbg=t=>{try{let d=root.querySelector('#cinDbg');if(!d){d=document.createElement('div');d.id='cinDbg';d.style.cssText='position:absolute;left:8px;bottom:6px;z-index:9;font:600 12px sans-serif;color:#ffd27a;background:rgba(0,0,0,.55);padding:2px 8px;border-radius:8px;pointer-events:none';(root.querySelector('.cin-hall')||root).appendChild(d)}d.textContent=t;clearTimeout(d._t);d._t=setTimeout(()=>d.remove(),9000)}catch(e){}};
   const startPv=async(sl,c,auto)=>{
     if(!sl||!c||root.classList.contains('pv'))return;
     if(auto&&cinBad[c.key])return;
@@ -2316,13 +2317,13 @@ function startCinema(feat){
     if(r.yt&&!(auto&&cinBad['y'+c.key])){
       if(!sl.classList.contains('on')||root.classList.contains('pv'))return;
       clearInterval(cinTimer);root.classList.add('pv');
-      const v=sl.querySelector('.cs-v');v.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${r.yt}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1" allow="autoplay; encrypted-media"></iframe>`;
+      const v=sl.querySelector('.cs-v');v.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${r.yt}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media"></iframe>`;
       const fr=v.firstChild,btn=sl.querySelector('.cs-pv');let muted=true,done=0;
       const send=(f,a)=>{try{fr.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
       const end=()=>{if(done)return;done=1;window.removeEventListener('message',onm);if(!root.classList.contains('pv'))return;if(auto){stopPv();show(cinIdx+1)}else stopPv()};
       const bad=()=>{if(done)return;done=1;window.removeEventListener('message',onm);cinBad['y'+c.key]=1;if(!root.classList.contains('pv')||!sl.classList.contains('on'))return;stopPv();startPv(sl,c,auto)};
       const onm=ev=>{if(ev.source!==fr.contentWindow)return;let d=ev.data;try{if(typeof d==='string')d=JSON.parse(d)}catch(e){return}
-        if(d.event==='onError')bad();
+        if(d.event==='onError'){dbg('YouTube-feil '+(d.info||'')+' – prøver strøm');bad()}
         const st=d.info&&d.info.playerState!==undefined?d.info.playerState:(d.event==='onStateChange'?d.info:undefined);
         if(st===1&&!v.classList.contains('on')){v.classList.add('on');sl.querySelector('.cs-snd').hidden=false;sl.classList.add('vp');const k=cinAmb[c.key];if(k&&hall)hall.style.setProperty('--amb',k)}
         if(st===0)end()};
@@ -2331,15 +2332,15 @@ function startCinema(feat){
       sl.querySelector('.cs-snd').onclick=ev=>{ev.stopPropagation();muted=!muted;send(muted?'mute':'unMute');ev.currentTarget.textContent=muted?'🔊':'🔇'};
       if(btn)btn.textContent='■ Stopp';
       cinPv=setTimeout(end,auto?52000:90000);
-      setTimeout(()=>{if(!done&&!v.classList.contains('on'))bad()},9000);
+      setTimeout(()=>{if(!done&&!v.classList.contains('on')){dbg('YouTube startet ikke (9 s) – prøver strøm');bad()}},9000);
       return;
     }
-    if(!url){if(!auto)toast('Ingen visning tilgjengelig for denne',3000);return}
+    if(!url){dbg('Ingen trailer funnet for '+(c.nm||c.name||''));if(!auto)toast('Ingen visning tilgjengelig for denne',3000);return}
     if(!sl.classList.contains('on')||root.classList.contains('pv'))return;
     clearInterval(cinTimer);root.classList.add('pv');
     const v=sl.querySelector('.cs-v');v.innerHTML='<video muted playsinline></video>';const vd=v.firstChild;
     const btn=sl.querySelector('.cs-pv');
-    const fail=()=>{if(!root.classList.contains('pv')||!sl.classList.contains('on'))return;cinBad[c.key]=1;stopPv();if(!auto)toast('Visningen kunne ikke startes akkurat nå',3500)};
+    const fail=()=>{if(!root.classList.contains('pv')||!sl.classList.contains('on'))return;dbg('Strømvisning feilet');cinBad[c.key]=1;stopPv();if(!auto)toast('Visningen kunne ikke startes akkurat nå',3500)};
     vd.onloadedmetadata=()=>{try{if(isFinite(vd.duration)&&vd.duration>120)vd.currentTime=Math.min(vd.duration*(.18+(hs(c.key)%28)/100),5400)}catch(e){}vd.play().catch(()=>{})};
     vd.onplaying=()=>{v.classList.add('on');sl.querySelector('.cs-snd').hidden=false;sl.classList.add('vp');clearInterval(cinAmbT);cinAmbT=setInterval(()=>{const col=sampleEl(vd);if(col&&hall)hall.style.setProperty('--amb',col)},1200)};
     vd.onerror=fail;
