@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=79;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=80;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2216,7 +2216,7 @@ async function cin3d(root){
     if(!window.__c3m){window.__c3m=await import(URL.createObjectURL(new Blob([$('c3src').textContent],{type:'text/javascript'})))}
     if(!document.body.contains(hall))return;
     hall.classList.add('c3');
-    window.__c3ctl=await window.__c3m.mount({canvas:cv,screen:scr,hall,stage:hall,mobile:innerWidth<700});
+    window.__c3ctl=await window.__c3m.mount({canvas:cv,screen:scr,hall,stage:hall,mobile:innerWidth<700||TVM,low:TVM});
   }catch(e){console.warn('3D feilet',e);const h=document.querySelector('.cin-hall');if(h){h.classList.remove('c3');const s=h.querySelector('.cin-screen');if(s){s.style.transform='';s.style.width='';s.style.height=''}}}
 }
 function startCinema(feat){
@@ -3710,7 +3710,7 @@ function homog(p){
 export async function mount(o){
   await loadThree();
   stopAll();
-  const {canvas,screen,hall,mobile}=o;
+  const {canvas,screen,hall,mobile,low}=o;
   const mob=!!mobile;
   const renderer=new T.WebGLRenderer({canvas,antialias:!mob,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
   renderer.setClearColor(0x000000,0);
@@ -3929,8 +3929,8 @@ export async function mount(o){
   let W=0,Hh=0;
   const px=new T.Vector3(),camBase=new T.Vector3(),look=new T.Vector3();
   function fit(){
-    const sr=o.stage.getBoundingClientRect();W=Math.max(2,Math.round(sr.width));Hh=Math.max(2,Math.round(sr.height));
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,mob?1.5:1.75));renderer.setSize(W,Hh,false);
+    W=Math.max(2,hall.clientWidth);Hh=Math.max(2,hall.clientHeight);
+    const zm=parseFloat(document.documentElement.style.zoom)||1;renderer.setPixelRatio(low?Math.min(1,window.devicePixelRatio||1):Math.min((window.devicePixelRatio||1)*zm,mob?1.5:(zm>1?1.5:1.75)));renderer.setSize(W,Hh,false);
     cam.aspect=W/Hh;
     const portrait=cam.aspect<1.25;
     if(portrait){cam.fov=2*Math.atan(Math.tan(32*Math.PI/180)/cam.aspect)*180/Math.PI;camBase.set(1.0,2.2,-1.5);look.set(-.2,2.0,-11)}
@@ -3980,7 +3980,7 @@ export async function mount(o){
   }
   raf=requestAnimationFrame(tick);setTimeout(()=>{curT=0},900);
   const ctl={curtain(closed){curT=closed?1:0},stop(){stopped=true;cancelAnimationFrame(raf);window.removeEventListener('pointermove',onMove);ro.disconnect();
-    scene.traverse(n=>{if(n.geometry)n.geometry.dispose&&n.geometry.dispose()});renderer.dispose();screen.style.transform=''}};
+    scene.traverse(n=>{if(n.geometry&&n.geometry.dispose)n.geometry.dispose();const m=n.material;if(m){(Array.isArray(m)?m:[m]).forEach(x=>{for(const k in x){const v=x[k];if(v&&v.isTexture)v.dispose()}x.dispose&&x.dispose()})}});renderer.dispose();try{renderer.forceContextLoss()}catch(e){}screen.style.transform=''}};
   active=ctl;return ctl;
 }
 </script>
