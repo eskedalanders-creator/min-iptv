@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=101;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=102;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1844,7 +1844,7 @@ function openPlayer(ctx){
   vodPlayer.play(ctx.url,false);
   extSub=null;subOff=0;v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());$('ccMenu').className='';
   v.textTracks.onaddtrack=()=>setTimeout(pickNo,300);
-  v.onloadedmetadata=()=>{if(startAt)try{v.currentTime=startAt}catch(e){}setTimeout(pickNo,500)};
+  v.onloadedmetadata=()=>{if(startAt)try{v.currentTime=startAt}catch(e){}setTimeout(pickNo,500);setTimeout(()=>{try{const it=byKey.get(ovCtx&&(ovCtx.ref||ovCtx.k));if(ovCtx&&subOn()&&!(it&&it.lg==='no')&&!hasNoSub()&&localStorage.getItem('os_key'))autoSub(false)}catch(e){}},3500)};
   v.ontimeupdate=()=>{
     if(Date.now()-lastSave<5000||!ovCtx)return;lastSave=Date.now();
     pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
@@ -1875,7 +1875,47 @@ function pickNo(){
   if([...v.textTracks].some(t=>t.mode==='showing'))return;
   const t=[...v.textTracks].find(isNoTrack);if(t)t.mode='showing';
 }
-function ccMenu(){
+/* ===== Automatisk norsk undertekst (OpenSubtitles) ===== */
+let osTok=null;
+async function osReq(m,path,body,auth){
+  const h={'Api-Key':localStorage.getItem('os_key')||'','Content-Type':'application/json','Accept':'application/json'};
+  if(auth)h.Authorization='Bearer '+auth;
+  const u=/^https?:/.test(path)?path:'https://api.opensubtitles.com/api/v1'+path;
+  const C=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
+  if(C){const r=await C.request({method:m,url:u,headers:Object.assign({'User-Agent':'EskedalsUnivers v1'},h),data:body,responseType:'text',readTimeout:25000,connectTimeout:15000});if(r.status<200||r.status>=300)throw new Error('HTTP '+r.status);return typeof r.data==='string'?JSON.parse(r.data):r.data}
+  const r=await fetch(u,{method:m,headers:h,body:body?JSON.stringify(body):undefined});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();
+}
+async function osText(u){
+  const C=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
+  if(C){const r=await C.get({url:u,responseType:'text',readTimeout:25000,connectTimeout:15000});if(r.status<200||r.status>=300)throw new Error('HTTP '+r.status);return String(r.data)}
+  const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return r.text();
+}
+const hasNoSub=()=>{const v=$('ovv');return !!extSub||[...v.textTracks].some(t=>t.mode==='showing'&&isNoTrack(t))};
+async function autoSub(manual){
+  const ctx=ovCtx;if(!ctx)return;
+  if(!localStorage.getItem('os_key')||!localStorage.getItem('os_user')){if(manual){toast('Sett først opp automatisk undertekst (nøkkel + brukernavn).',3500);ccMenu(true)}return}
+  const sta=t=>{const e=document.getElementById('osSta');if(e)e.textContent=t};
+  try{
+    sta('Søker …');if(manual)toast('Søker etter norsk undertekst …',2000);
+    const tt=(ctx.title||'').trim(),m=tt.match(/^(.*?)\s*[–-]\s*S(\d+)\s*E(\d+)/i);
+    const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*[|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/\s+/g,' ').trim();
+    const yr=(tt.match(/\(((?:19|20)\d\d)\)/)||[])[1];
+    let q='/subtitles?languages=no,nb&order_by=download_count&query='+encodeURIComponent(name.toLowerCase());
+    if(m)q+='&type=episode&season_number='+(+m[2])+'&episode_number='+(+m[3]);else{q+='&type=movie';if(yr)q+='&year='+yr}
+    const j=await osReq('GET',q);
+    const hit=(j.data||[]).find(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);
+    if(!hit){sta('Fant ingen norsk undertekst.');if(manual)toast('Fant ingen norsk undertekst.',3000);return}
+    if(!osTok){const l=await osReq('POST','/login',{username:localStorage.getItem('os_user'),password:localStorage.getItem('os_pass')||''});osTok=l.token}
+    sta('Laster ned …');
+    const d=await osReq('POST','/download',{file_id:hit.attributes.files[0].file_id,sub_format:'srt'},osTok);
+    const raw=await osText(d.link);
+    if(ovCtx!==ctx)return;
+    extSub={raw,vtt:false};subOff=0;applyExtSub();
+    sta('✔ Lagt inn'+(d.remaining!=null?' ('+d.remaining+' igjen i dag)':''));
+    toast('🇳🇴 Norsk undertekst lagt inn automatisk',3000);
+  }catch(e){osTok=null;const msg=String(e&&e.message||e);sta('Feil: '+msg);toast('Undertekst: '+(/401|403/.test(msg)?'feil nøkkel eller innlogging':/406|429/.test(msg)?'dagens grense er nådd':msg),4000)}
+}
+function ccMenu(setup){
   const m=$('ccMenu'),v=$('ovv');
   const tr=[...v.textTracks].filter(t=>t.kind==='subtitles'||t.kind==='captions');
   const cur=tr.find(t=>t.mode==='showing');
@@ -1885,7 +1925,12 @@ function ccMenu(){
    ${tr.map((t,i)=>`<button data-t="${i}" class="${t===cur?'on':''}">${esc(t.label||t.language||'Spor '+(i+1))}${isNoTrack(t)?' 🇳🇴':''}</button>`).join('')||'<small>Ingen undertekster følger med strømmen.</small>'}
    <button data-t="file">📄 Last inn .srt / .vtt fra fil …</button>
    <div class="ccoff">Forsinkelse <button data-o="-0.5">−0,5s</button><button data-o="0.5">+0,5s</button><small>${subOff.toFixed(1)}s</small></div>
-   <a href="https://www.opensubtitles.org/no/search/sublanguageid-nor/moviename-${q}" target="_blank" rel="noopener">🔎 Finn norsk undertekst på nett</a>
+   <button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><small id="osSta" style="display:block;opacity:.8"></small>
+   <button data-t="osset">⚙ ${localStorage.getItem('os_key')?'Endre':'Sett opp'} automatisk undertekst</button>
+   ${setup===true||!localStorage.getItem('os_key')&&setup==='x'?'':''}
+   <div id="osForm" style="display:${setup===true?'block':'none'};padding:6px 0"><small>Gratis konto på opensubtitles.com → «API consumers» gir nøkkel.</small>
+    <input id="osK" placeholder="API-nøkkel" value="${esc(localStorage.getItem('os_key')||'')}" style="width:100%;margin:3px 0"><input id="osU" placeholder="Brukernavn" value="${esc(localStorage.getItem('os_user')||'')}" style="width:100%;margin:3px 0"><input id="osP" type="password" placeholder="Passord" value="${esc(localStorage.getItem('os_pass')||'')}" style="width:100%;margin:3px 0"><button data-t="ossave">Lagre</button></div>
+   <a href="https://www.opensubtitles.org/no/search/sublanguageid-nor/moviename-${q}" target="_blank" rel="noopener">🔎 Søk manuelt på nett</a>
    <label class="chk"><input id="ccAuto" type="checkbox" ${subOn()?'checked':''}> Velg norsk automatisk på ikke-norske titler</label>
    <button data-t="close">Lukk</button>`;
   m.className='on';
@@ -1916,6 +1961,9 @@ $('ccMenu').onclick=e=>{
   const t=b.dataset.t;
   if(t==='close'){$('ccMenu').className='';return}
   if(t==='file'){$('ccFile').click();return}
+  if(t==='osauto'){autoSub(true);return}
+  if(t==='osset'){const f=$('osForm');if(f)f.style.display=f.style.display==='none'?'block':'none';return}
+  if(t==='ossave'){localStorage.setItem('os_key',$('osK').value.trim());localStorage.setItem('os_user',$('osU').value.trim());localStorage.setItem('os_pass',$('osP').value);osTok=null;toast('Lagret. Norsk undertekst hentes nå automatisk.',3000);ccMenu();return}
   const tr=[...v.textTracks].filter(x=>x.kind==='subtitles'||x.kind==='captions');
   tr.forEach(x=>x.mode='disabled');
   if(t!=='off'&&tr[+t])tr[+t].mode='showing';
