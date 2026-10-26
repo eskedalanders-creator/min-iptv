@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=77;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=78;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1118,6 +1118,7 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 }
 
 /* v77: ekte 3D-sal */
+.cs-v iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;background:#000}
 .cin-hall .c3-cv{display:none}
 .cin-hall.c3{background:#050205}
 .cin-hall.c3 .c3-cv{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
@@ -2057,9 +2058,9 @@ function renderHome(){
 }
 /* ===================== Kinosal ===================== */
 const WXI=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
-let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0,cinAuto=0,cinAmbT=0;const cinInfoC={},cinAmb={},cinBad={};
+let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0,cinAuto=0,cinAmbT=0;const cinInfoC=window.__cinI={},cinAmb={},cinBad={};
 const cinAutoOn=()=>{try{return localStorage.getItem('cinAuto')!=='0'}catch(e){return true}};
-function stopCinema(){try{window.__c3m&&window.__c3m.stopAll()}catch(e){}clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);cinTimer=cinClock=cinPv=cinAuto=cinAmbT=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
+function stopCinema(){try{window.__c3ctl=null;window.__c3m&&window.__c3m.stopAll()}catch(e){}clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);cinTimer=cinClock=cinPv=cinAuto=cinAmbT=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
 const cinLogo=t=>t&&(t.logo||(t.logos&&t.logos[0]&&t.logos[0].href))||'';
 function cinMatchSlide(m,i){
   const e=m.e,live=e.state==='in',nm=t=>t.displayName||t.name||'',fnd=(e.h.shortDisplayName||nm(e.h))+'|'+(e.a.shortDisplayName||nm(e.a));
@@ -2201,7 +2202,7 @@ async function cinInfo(c){
     if(!c.xt)throw 0;
     const j=await xapi(c.xt,c.t==='vod'?'get_vod_info':'get_series_info',(c.t==='vod'?'&vod_id=':'&series_id=')+c.id);
     const i=(j&&j.info)||{};let bd=i.backdrop_path;if(Array.isArray(bd))bd=bd[0];
-    r={bd:bd||'',plot:cl(i.plot||i.description||''),yr:String(i.releasedate||i.releaseDate||i.year||'').slice(0,4),dur:cl(i.duration||''),genre:cl(i.genre||''),ep:null};
+    r={yt:ytId(i.youtube_trailer||i.trailer||''),bd:bd||'',plot:cl(i.plot||i.description||''),yr:String(i.releasedate||i.releaseDate||i.year||'').slice(0,4),dur:cl(i.duration||''),genre:cl(i.genre||''),ep:null};
     if(c.t==='ser'){const eps=j.episodes||{};const all=Array.isArray(eps)?(eps.flat?eps.flat():eps):Object.values(eps).flat();const e=all.slice().sort((a,b)=>(+b.id||0)-(+a.id||0))[0];if(e)r.ep=xtUrl(c.xt,'series',e.id,e.container_extension||'mp4')}
   }catch(e){}
   cinInfoC[c.key]=r;return r;
@@ -2215,7 +2216,7 @@ async function cin3d(root){
     if(!window.__c3m){window.__c3m=await import(URL.createObjectURL(new Blob([$('c3src').textContent],{type:'text/javascript'})))}
     if(!document.body.contains(hall))return;
     hall.classList.add('c3');
-    await window.__c3m.mount({canvas:cv,screen:scr,hall,stage:hall,mobile:innerWidth<700});
+    window.__c3ctl=await window.__c3m.mount({canvas:cv,screen:scr,hall,stage:hall,mobile:innerWidth<700});
   }catch(e){console.warn('3D feilet',e);const h=document.querySelector('.cin-hall');if(h){h.classList.remove('c3');const s=h.querySelector('.cin-screen');if(s){s.style.transform='';s.style.width='';s.style.height=''}}}
 }
 function startCinema(feat){
@@ -2228,10 +2229,17 @@ function startCinema(feat){
     if(r.plot)sl.querySelector('.cs-plot').textContent=r.plot.length>230?r.plot.slice(0,227)+'…':r.plot;
     const m=[r.yr,r.dur,r.genre].filter(Boolean).join(' · ');if(m)sl.querySelector('.cs-yr').textContent=m;
   };
+  const hall0=root.querySelector('.cin-hall');let cinShown=0;
   const stopPv=()=>{clearTimeout(cinPv);clearInterval(cinAmbT);root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');root.querySelectorAll('.cs-snd').forEach(b=>b.hidden=true);amb(slides[cinIdx]);tick()};
   const tick=()=>{clearInterval(cinTimer);if(!TVM&&!root.classList.contains('pv'))cinTimer=setInterval(()=>show(cinIdx+1),9000)};
+  let swi=0;
   function show(i){
-    cinIdx=(i+slides.length)%slides.length;clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);
+    const ct=window.__c3ctl;
+    if(ct&&ct.curtain&&hall0.classList.contains('c3')&&!swi&&slides.length>1&&cinShown){swi=1;clearInterval(cinTimer);ct.curtain(true);setTimeout(()=>{show0(i);setTimeout(()=>{ct.curtain(false);swi=0;if(!root.classList.contains('pv'))tick()},450)},1250);return}
+    if(swi)return;show0(i);
+  }
+  function show0(i){
+    cinShown=1;cinIdx=(i+slides.length)%slides.length;clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);
     root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');
     slides.forEach((sl,j)=>sl.classList.toggle('on',j===cinIdx));ths.forEach((t,j)=>t.classList.toggle('on',j===cinIdx));
     const t=ths[cinIdx];if(t&&t.scrollIntoView)try{t.parentElement.scrollTo({left:t.offsetLeft-t.parentElement.clientWidth/2+t.offsetWidth/2,behavior:'smooth'})}catch(e){}
@@ -2264,6 +2272,27 @@ function startCinema(feat){
     if(!sl||!c||root.classList.contains('pv'))return;
     if(auto&&cinBad[c.key])return;
     const r=await cinInfo(c);const url=c.t==='vod'?c.url:r.ep;
+    if(r.yt&&!(auto&&cinBad['y'+c.key])){
+      if(!sl.classList.contains('on')||root.classList.contains('pv'))return;
+      clearInterval(cinTimer);root.classList.add('pv');
+      const v=sl.querySelector('.cs-v');v.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${r.yt}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&enablejsapi=1" allow="autoplay; encrypted-media"></iframe>`;
+      const fr=v.firstChild,btn=sl.querySelector('.cs-pv');let muted=true,done=0;
+      const send=(f,a)=>{try{fr.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
+      const end=()=>{if(done)return;done=1;window.removeEventListener('message',onm);if(!root.classList.contains('pv'))return;if(auto){stopPv();show(cinIdx+1)}else stopPv()};
+      const bad=()=>{if(done)return;done=1;window.removeEventListener('message',onm);cinBad['y'+c.key]=1;if(!root.classList.contains('pv')||!sl.classList.contains('on'))return;stopPv();startPv(sl,c,auto)};
+      const onm=ev=>{if(ev.source!==fr.contentWindow)return;let d=ev.data;try{if(typeof d==='string')d=JSON.parse(d)}catch(e){return}
+        if(d.event==='onError')bad();
+        const st=d.info&&d.info.playerState!==undefined?d.info.playerState:(d.event==='onStateChange'?d.info:undefined);
+        if(st===1&&!v.classList.contains('on')){v.classList.add('on');sl.querySelector('.cs-snd').hidden=false;sl.classList.add('vp');const k=cinAmb[c.key];if(k&&hall)hall.style.setProperty('--amb',k)}
+        if(st===0)end()};
+      window.addEventListener('message',onm);
+      fr.onload=()=>{try{fr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*')}catch(e){}[0,800,2000].forEach(t=>setTimeout(()=>{if(!done)try{fr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*')}catch(e){}},t))};
+      sl.querySelector('.cs-snd').onclick=ev=>{ev.stopPropagation();muted=!muted;send(muted?'mute':'unMute');ev.currentTarget.textContent=muted?'🔊':'🔇'};
+      if(btn)btn.textContent='■ Stopp';
+      cinPv=setTimeout(end,auto?52000:90000);
+      setTimeout(()=>{if(!done&&!v.classList.contains('on'))bad()},9000);
+      return;
+    }
     if(!url){if(!auto)toast('Ingen visning tilgjengelig for denne',3000);return}
     if(!sl.classList.contains('on')||root.classList.contains('pv'))return;
     clearInterval(cinTimer);root.classList.add('pv');
@@ -3760,15 +3789,20 @@ export async function mount(o){
   const glowW=new T.SpriteMaterial({map:glowTex('rgba(255,225,170,A)'),blending:T.AdditiveBlending,depthWrite:false,transparent:true,opacity:.7});
   for(let i=0;i<26;i+=2){const s=new T.Sprite(glowW);s.scale.set(.5,.5,1);s.position.set(-5.4+i*.432,.2,ROOM.z0+1.46);group.add(s)}
   // gardiner med folder
-  function curtain(x0,x1,sign){
-    const w=x1-x0,seg=60,g=new T.PlaneGeometry(w,ROOM.h-.1,seg,1);const p=g.attributes.position;
-    for(let i=0;i<p.count;i++){const u=(p.getX(i)+w/2)/w;p.setZ(i,Math.sin(u*Math.PI*10)*.09+Math.sin(u*Math.PI*23)*.025)}
+  const curt=[];
+  function curtain(side){
+    const w=6.5,g=new T.PlaneGeometry(w,4.95,90,1);const p=g.attributes.position;
+    for(let i=0;i<p.count;i++){const u=(p.getX(i)+w/2)/w;p.setZ(i,Math.sin(u*Math.PI*13)*.1+Math.sin(u*Math.PI*31)*.02)}
     g.computeVertexNormals();
-    const m=new T.Mesh(g,new T.MeshStandardMaterial({color:0x9b0f18,roughness:.75,emissive:0x2a0306,emissiveIntensity:1,side:T.DoubleSide}));
-    m.position.set((x0+x1)/2,(ROOM.h-.1)/2,ROOM.z0+.35);group.add(m);
-    const cord=new T.Mesh(new T.CylinderGeometry(.04,.04,w*.9,8),mMetal);cord.rotation.z=Math.PI/2;cord.position.set((x0+x1)/2,1.6,ROOM.z0+.5);group.add(cord);
+    const m=new T.Mesh(g,new T.MeshStandardMaterial({color:0xa5111a,roughness:.7,emissive:0x2e0408,emissiveIntensity:1,side:T.DoubleSide}));
+    m.position.x=-side*w/2;
+    const gr=new T.Group();gr.position.set(side*6.45,2.475,ROOM.z0+.4);gr.add(m);group.add(gr);
+    const rod=new T.Mesh(new T.CylinderGeometry(.03,.03,6.5,8),mMetal);rod.rotation.z=Math.PI/2;rod.position.set(side*6.45-side*3.25,4.97,ROOM.z0+.4);group.add(rod);
+    curt.push(gr);gr.scale.x=1;
   }
-  curtain(-6.4,-5.45);curtain(5.45,6.4);
+  curtain(-1);curtain(1);
+  let curS=1,curT=1;const OPEN=.3;
+
 
   /* ---------- seter ---------- */
   const SEATW=.92;
@@ -3914,6 +3948,7 @@ export async function mount(o){
     if(document.hidden)return;
     
     const t=(now-t0)/1000,dt=Math.min(.1,(now-lastT)/1000||.016);lastT=now;
+    curS+=(curT-curS)*Math.min(1,dt*2.6);const cs=OPEN+(1.02-OPEN)*curS;curt.forEach(c=>c.scale.x=cs);
     readAmb();amb.lerp(ambT,Math.min(1,dt*3));
     SL.color.copy(amb);SL2.color.copy(amb);SL3.color.copy(amb);
     SL.intensity=22+Math.sin(t*7.3)*1.4+Math.sin(t*2.1)*2;
@@ -3934,8 +3969,8 @@ export async function mount(o){
     const h=homog(pts);
     screen.style.transform=`matrix3d(${h.a/SWpx},${h.d/SWpx},0,${h.g/SWpx},${h.b/SHpx},${h.e/SHpx},0,${h.h/SHpx},0,0,1,0,${h.c},${h.f},0,1)`;
   }
-  raf=requestAnimationFrame(tick);
-  const ctl={stop(){stopped=true;cancelAnimationFrame(raf);window.removeEventListener('pointermove',onMove);ro.disconnect();
+  raf=requestAnimationFrame(tick);setTimeout(()=>{curT=0},900);
+  const ctl={curtain(closed){curT=closed?1:0},stop(){stopped=true;cancelAnimationFrame(raf);window.removeEventListener('pointermove',onMove);ro.disconnect();
     scene.traverse(n=>{if(n.geometry)n.geometry.dispose&&n.geometry.dispose()});renderer.dispose();screen.style.transform=''}};
   active=ctl;return ctl;
 }
