@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=86;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=87;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1634,10 +1634,10 @@ async function xapi(x,action,extra){
 }
 const cl=v=>String(v==null?'':v).replace(/[\r\n]+/g,' ').trim();
 async function fetchAll(x,onP){
-  const warn=[];
+  const warn=[];const doneT=[];
   const part=async(label,catAct,listAct,map)=>{
     try{
-      onP&&onP('Henter '+label+' …');
+      onP&&onP((doneT.length?'✔ '+doneT.join(' · ')+'\n':'')+'Henter '+label+' …');
       const cats=await xapi(x,catAct);
       let list;
       try{
@@ -1648,7 +1648,7 @@ async function fetchAll(x,onP){
         /* store svar (f.eks. Capacitor/TV): hent én kategori om gangen */
         const seen=new Set();list=[];const cq=cats.slice();let done=0;
         const idk=listAct==='get_series'?'series_id':'stream_id';
-        const wk=async()=>{while(cq.length){const c=cq.shift();onP&&onP('Henter '+label+' '+(++done)+'/'+cats.length+' …');
+        const wk=async()=>{while(cq.length){const c=cq.shift();onP&&onP((doneT.length?'✔ '+doneT.join(' · ')+'\n':'')+'Henter '+label+' '+(++done)+'/'+cats.length+' …');
           let part1;try{part1=await xapi(x,listAct,'&category_id='+encodeURIComponent(c.category_id))}catch(e2){warn.push(label+' '+cl(c.category_name)+': '+e2.message);continue}
           if(!Array.isArray(part1))continue;
           for(let i=0;i<part1.length;i++){const it=part1[i],k=it[idk];if(seen.has(k))continue;seen.add(k);list.push(it)}}};
@@ -1660,10 +1660,15 @@ async function fetchAll(x,onP){
       return list.map(s=>map(s,cm[s.category_id]||'Andre'));
     }catch(e){warn.push(label+': '+e.message);return null}
   };
-  const [live,vod,ser]=await Promise.all([
-    part('kanaler','get_live_categories','get_live_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c]),
-    part('filmer','get_vod_categories','get_vod_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c,s.container_extension||'mp4',s.rating||s.rating_5based||0,s.added||0]),
-    part('serier','get_series_categories','get_series',(s,c)=>[s.series_id,cl(s.name),cl(s.cover),c,s.rating||s.rating_5based||0,s.last_modified||0,cl(s.plot).slice(0,300)])]);
+  const part0=part;
+  const pp=async(lbl,...a)=>{const r=await part0(lbl,...a);doneT.push(lbl+' '+(r?r.length:'feilet'));onP&&onP('✔ '+doneT.join(' · '));return r};
+  const jobs=[
+    ()=>pp('kanaler','get_live_categories','get_live_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c]),
+    ()=>pp('filmer','get_vod_categories','get_vod_streams',(s,c)=>[s.stream_id,cl(s.name),cl(s.stream_icon),c,s.container_extension||'mp4',s.rating||s.rating_5based||0,s.added||0]),
+    ()=>pp('serier','get_series_categories','get_series',(s,c)=>[s.series_id,cl(s.name),cl(s.cover),c,s.rating||s.rating_5based||0,s.last_modified||0,cl(s.plot).slice(0,300)])];
+  let live,vod,ser;
+  if(NATIVE){live=await jobs[0]();vod=await jobs[1]();ser=await jobs[2]()}
+  else [live,vod,ser]=await Promise.all(jobs.map(f=>f()));
   if(!live)throw new Error('Live-TV: '+warn.join('; ')+' (sjekk brukernavn/passord)');
   return {data:{live,vod:vod||[],ser:ser||[]},warn};
 }
