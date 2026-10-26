@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=93;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=94;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1285,6 +1285,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const RX_NO_TOKEN=/(^|[^A-Za-z0-9])NO([^A-Za-z0-9]|$)/;
 const RX_NO_WORD=/norge|norway|norsk|norwegian|\bnrk\b|tv ?norge|tvnorge|nordic|nordisk|🇳🇴/i;
 const RX_FOOTBALL=/fotball|football|soccer|eliteserien|obos|premier league|champions league|europa league|conference league|uefa|la ?liga|bundesliga|serie a|ligue ?1|eredivisie|\bepl\b|\bucl\b|\buel\b|sport|dazn|bein|eurosport|viaplay|v ?sport|tv ?2 ?sport|sky sports|arena|eleven|match ?tv|tnt|brann|\bvs\.?\b/i;
+const RX_XMAS=/\bjul(e|en|eaften|ekalender|enisse|etre|esang|emusikk)?\b|christmas|xmas|x-mas|\bno[eë]l\b|navidad|natale|weihnacht|\bsanta\b|\bnisse|grinch|rudolph|reindeer|nutcracker|home alone|polar express|krampus|scrooge|snowman|frosty|jingle bell|\bthe elf\b|\belf\b/i;
 const RX_KIDS=/barn|kids|children|junior|cartoon|tegnefilm|family|familie|disney|nick|toon/i;
 const CHIPS=[
   {id:'brann',label:'🔥 Brann',cls:'brannc',rx:/brann/i},
@@ -1513,6 +1514,7 @@ function fin(c){
   c.no=(RX_NO_TOKEN.test(hay)||RX_NO_WORD.test(hay))?1:0;
   c.fb=c.t==='live'&&RX_FOOTBALL.test(hay)?1:0;
   c.kid=c.t!=='live'&&RX_KIDS.test(hay)?1:0;
+  c.xm=c.t!=='live'&&RX_XMAS.test(hay)?1:0;
   if(c.t==='live'&&c.logo)c.logo=String(c.logo).replace(/(\/stalker_portal\/misc\/logos\/)\d+\//,'$1original/');
   if(c.t!=='live'&&c.logo)c.logo=String(c.logo).replace(/(image\.tmdb\.org\/t\/p\/)(?:original|w\d{3,4})\//,'$1w342/');
   c.lg=langOf(c);c.dup=0;c.nm=cleanName(c);
@@ -2982,10 +2984,11 @@ function renderVodShell(kind){
     <select id="vcat"><option value="">Alle kategorier (${cats.length})</option>${cats.map(c=>`<option ${vf.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
     <select id="vsort"><option value="new" ${vf.sort==='new'?'selected':''}>Nylig lagt til</option><option value="az" ${vf.sort==='az'?'selected':''}>A–Å</option><option value="rt" ${vf.sort==='rt'?'selected':''}>Høyest rating</option></select></div>
   <div class="bar" id="vchips">
-    <button class="chip ${!vf.svc&&!vf.no&&!vf.kids&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
+    <button class="chip ${!vf.svc&&!vf.no&&!vf.kids&&!vf.xmas&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
     <button class="chip ${vf.all?'on':''}" data-f="grid">☰ Alle titler</button>
     <button class="chip ${vf.no?'on':''}" data-f="no">🇳🇴 Norsk</button>
     <button class="chip ${vf.kids?'on':''}" data-f="kids">🧸 Barn</button>
+    <button class="chip ${vf.xmas?'on':''}" data-f="xmas">🎄 Jul</button>
     ${SERV.filter(s=>cnt[s.id]).map(s=>`<button class="chip ${vf.svc===s.id?'on':''}" data-f="svc:${s.id}"><span style="color:${s.c}">●</span> ${s.name}<small>${cnt[s.id]}</small></button>`).join('')}
   </div>
   <div id="vrails"></div><div class="grid" id="vgrid"></div><div id="vmore"></div></div></div>`;
@@ -2994,9 +2997,9 @@ function renderVodShell(kind){
   $('vcat').onchange=e=>{vf.cat=e.target.value;updateGrid();vsideBuild(cats)};
   $('vsort').onchange=e=>{vf.sort=e.target.value;updateGrid();vsideBuild(cats)};
   $('vchips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const f=b.dataset.f;
-    if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.all=false;vf.q='';vf.cat=''}
+    if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.xmas=false;vf.all=false;vf.q='';vf.cat=''}
     else if(f==='grid'){vf.all=!vf.all}
-    else if(f==='no')vf.no=!vf.no;else if(f==='kids')vf.kids=!vf.kids;
+    else if(f==='no')vf.no=!vf.no;else if(f==='kids')vf.kids=!vf.kids;else if(f==='xmas')vf.xmas=!vf.xmas;
     else{const s=f.split(':')[1];vf.svc=vf.svc===s?'':s}
     vf.cat='';renderVodShell(vkind)};
   updateGrid();
@@ -3064,12 +3067,12 @@ function vodRails(kind){
 }
 function updateGrid(){
   const q=vf.q.trim().toLowerCase();
-  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.kids||c.kid);
+  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.kids||c.kid)&&(!vf.xmas||c.xm);
   vlist=q?skRun(DB[vkind],skq(q),vpred):DB[vkind].filter(vpred);
   if(vf.sort==='az')vlist.sort((a,b)=>a.name.localeCompare(b.name,'no'));
   else if(vf.sort==='rt')vlist.sort((a,b)=>b.rt-a.rt);
   else vlist.sort(byNew);
-  const browse=!(vf.svc||vf.no||vf.kids||vf.cat||q||vf.all);
+  const browse=!(vf.svc||vf.no||vf.kids||vf.xmas||vf.cat||q||vf.all);
   stopSlider();
   $('vbb').innerHTML=browse?vodSlider(vkind):'';
   $('vrails').innerHTML=browse?vodRails(vkind):'';
