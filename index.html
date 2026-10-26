@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=70;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=71;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -821,7 +821,7 @@ select option,select optgroup{background:#161a28;color:#fff}
 /* ===================== v67: Kinosal ===================== */
 #v-home{padding:0!important}
 .cin{position:relative;background:radial-gradient(ellipse at 50% 0%,#1c0a10 0%,#07080d 70%);padding:0 0 14px}
-.cin-hall{position:relative;max-width:1240px;margin:0 auto;aspect-ratio:100/64;overflow:hidden;container-type:inline-size;background:#08090f;isolation:isolate}
+.cin-hall{position:relative;max-width:1560px;margin:0 auto;aspect-ratio:100/64;overflow:hidden;container-type:inline-size;background:#08090f;isolation:isolate}
 .cin-wall{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#0d0f19 0 46px,#121524 46px 50px),linear-gradient(#0a0b12,#05060a);z-index:0}
 .cin-sc{position:absolute;top:24%;width:1.6%;height:9%;border-radius:4px;background:linear-gradient(#ffd9a0,#e8a24a);box-shadow:0 0 28px 10px rgba(255,190,110,.28)}
 .cin-sc.l{left:3.5%}.cin-sc.r{right:3.5%}
@@ -877,7 +877,7 @@ select option,select optgroup{background:#161a28;color:#fff}
 .cin-row.front .seat.h{background-image:radial-gradient(ellipse at 50% -10%,#030307 0 28%,transparent 29%),linear-gradient(180deg,#5d0b19,#25030a)}
 .cin-info{position:absolute;right:1.4%;top:9.5%;z-index:11;display:flex;gap:.9cqw;align-items:center;padding:.35cqw 1cqw;border-radius:999px;background:rgba(5,6,12,.62);backdrop-filter:blur(6px);color:#e9e9f5;font:600 1.05cqw/1 Inter,sans-serif;border:1px solid rgba(255,255,255,.12)}
 #cinClk{font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.cin-ths{display:flex;gap:10px;overflow-x:auto;padding:14px 16px 4px;max-width:1240px;margin:0 auto;scrollbar-width:none}
+.cin-ths{display:flex;gap:10px;overflow-x:auto;padding:14px 16px 4px;max-width:1560px;margin:0 auto;scrollbar-width:none}
 .cin-ths::-webkit-scrollbar{display:none}
 .cin-th{flex:0 0 auto;width:68px;aspect-ratio:2/3;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:#10121c;cursor:pointer;opacity:.55;transition:.2s}
 .cin-th img{width:100%;height:100%;object-fit:cover;display:block}
