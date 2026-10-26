@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=73;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=74;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -986,6 +986,17 @@ html.tvm .cs-btn button{font-size:1.3cqw}
   .cin-grain{opacity:.06}
 }
 @media (prefers-reduced-motion:reduce){.cin-grain{animation:none!important}}
+
+/* v73b: omgivelseslys som følger filmen */
+@property --amb{syntax:'<color>';inherits:true;initial-value:rgb(150,182,255)}
+.cin-hall{--amb:rgb(150,182,255);transition:--amb 1.4s ease}
+.cin-glow{background:radial-gradient(ellipse 60% 64% at 50% 38%,color-mix(in srgb,var(--amb) 26%,transparent),transparent 72%)}
+.cin-screen{box-shadow:0 0 0 .22cqw #0b0c12,0 0 0 .34cqw rgba(217,164,65,.55),0 0 8cqw 1.8cqw color-mix(in srgb,var(--amb) 34%,transparent),0 0 30cqw 6cqw color-mix(in srgb,var(--amb) 18%,transparent)}
+.cin-stage{background:radial-gradient(ellipse 45% 160% at 50% 0,color-mix(in srgb,var(--amb) 42%,transparent),transparent 70%),repeating-linear-gradient(90deg,rgba(0,0,0,.35) 0 1px,transparent 1px 3.4cqw),linear-gradient(#34200f,#1b0f08 70%,#0d0704)}
+.cin-beam{background:linear-gradient(to top,color-mix(in srgb,var(--amb) 34%,white 0%),color-mix(in srgb,var(--amb) 10%,transparent) 50%,transparent)}
+.cin-wall{background:radial-gradient(ellipse 50% 60% at 50% 40%,color-mix(in srgb,var(--amb) 18%,transparent),transparent 75%),linear-gradient(180deg,rgba(255,170,90,.16),rgba(255,170,90,0) 22%),linear-gradient(90deg,rgba(0,0,0,.55),transparent 18%,transparent 82%,rgba(0,0,0,.55)),repeating-linear-gradient(90deg,#1b1624 0 .85cqw,#0b0910 .85cqw 1.05cqw,#2a2030 1.05cqw 1.12cqw),#0a0910}
+.seat{box-shadow:inset 0 .22cqw 0 color-mix(in srgb,var(--amb) 60%,white),inset 0 -1.3cqw 1.5cqw rgba(0,0,0,.65),0 .3cqw .9cqw rgba(0,0,0,.7)}
+.seat em{box-shadow:inset 0 .18cqw 0 color-mix(in srgb,var(--amb) 55%,transparent)}
 </style>
 </head>
 <body>
@@ -1924,7 +1935,7 @@ function renderHome(){
 }
 /* ===================== Kinosal ===================== */
 const WXI=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
-let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0;const cinInfoC={};
+let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0;const cinInfoC={},cinAmb={};
 function stopCinema(){clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);cinTimer=cinClock=cinPv=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
 const cinLogo=t=>t&&(t.logo||(t.logos&&t.logos[0]&&t.logos[0].href))||'';
 function cinMatchSlide(m,i){
@@ -1958,7 +1969,6 @@ function cinemaHtml(items,quick){
     <div class="cin-sw l"></div><div class="cin-sw r"></div><i class="cin-lamp l"></i><i class="cin-lamp r"></i><span class="cin-exit">UTGANG</span>
     ${row('back',0)}${row('mid',1)}${row('front',2)}
     <div class="cin-glow"></div><div class="cin-fade"></div><div class="cin-vig"></div><div class="cin-grain"></div>
-    <div class="cin-info" id="cinWx"><span id="cinClk">--:--</span><span id="cinW"></span></div>
   </div><div class="cin-ths" aria-label="Anbefalinger">${th}</div></section>`;
 }
 async function cinInfo(c){
@@ -1990,8 +2000,28 @@ function startCinema(feat){
     root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');
     slides.forEach((sl,j)=>sl.classList.toggle('on',j===cinIdx));ths.forEach((t,j)=>t.classList.toggle('on',j===cinIdx));
     const t=ths[cinIdx];if(t&&t.scrollIntoView)try{t.parentElement.scrollTo({left:t.offsetLeft-t.parentElement.clientWidth/2+t.offsetWidth/2,behavior:'smooth'})}catch(e){}
-    fill(slides[cinIdx]);fill(slides[(cinIdx+1)%slides.length]);
+    fill(slides[cinIdx]);fill(slides[(cinIdx+1)%slides.length]);amb(slides[cinIdx]);
   }
+  const hall=root.querySelector('.cin-hall');
+  const amb=async sl=>{
+    const k=sl.dataset.k;let col=null;
+    if(!k){col='rgb(60,200,110)'}
+    else if(cinAmb[k])col=cinAmb[k];
+    else{
+      const c=byKey.get(k);
+      if(c&&c.logo){try{
+        const r=await fetch(px(c.logo));const bm=await createImageBitmap(await r.blob());
+        const cv=document.createElement('canvas');cv.width=cv.height=12;const g=cv.getContext('2d');g.drawImage(bm,0,0,12,12);
+        const d=g.getImageData(0,0,12,12).data;let R=0,G=0,B=0,W=0;
+        for(let i=0;i<d.length;i+=4){const mx=Math.max(d[i],d[i+1],d[i+2]),mn=Math.min(d[i],d[i+1],d[i+2]);const w=.15+(mx-mn)/255*2+(mx>60?.3:0);R+=d[i]*w;G+=d[i+1]*w;B+=d[i+2]*w;W+=w}
+        R/=W;G/=W;B/=W;const m=Math.max(R,G,B)||1,f=215/m;
+        const L=(R+G+B)/3*f,sat=1.35;R=L+(R*f-L)*sat;G=L+(G*f-L)*sat;B=L+(B*f-L)*sat;
+        const cl=v=>Math.max(0,Math.min(255,v|0));
+        col=`rgb(${cl(R)},${cl(G)},${cl(B)})`;cinAmb[k]=col}catch(e){}
+      }
+    }
+    if(sl.classList.contains('on')&&hall)hall.style.setProperty('--amb',col||'rgb(150,182,255)');
+  };
   let tx=0;const scr=root.querySelector('.cin-screen');
   scr.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
   scr.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50){show(cinIdx+(d<0?1:-1));tick()}},{passive:true});
@@ -2021,9 +2051,6 @@ function startCinema(feat){
   // restore label when stopped
   new MutationObserver(()=>{if(!root.classList.contains('pv'))root.querySelectorAll('.cs-pv').forEach(b=>b.textContent='🎬 Visning')}).observe(root,{attributes:true,attributeFilter:['class']});
   show(0);tick();
-  // klokke + vær
-  const clk=()=>{const e=$('cinClk');if(e)e.textContent=new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();cinClock=setInterval(clk,15000);
-  cinWeather();
 }
 async function cinWeather(){
   try{
