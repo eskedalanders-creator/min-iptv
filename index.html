@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=81;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=82;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1641,19 +1641,22 @@ async function fetchAll(x,onP){
   if(!live)throw new Error('Live-TV: '+warn.join('; ')+' (sjekk brukernavn/passord)');
   return {data:{live,vod:vod||[],ser:ser||[]},warn};
 }
-async function refreshSource(s,quiet){
+let refBusy=0;
+async function refreshSource(s,quiet){if(refBusy&&quiet)return false;refBusy++;try{return await refreshSource0(s,quiet)}finally{refBusy--}}
+async function refreshSource0(s,quiet){
   try{
     const onP=t=>quiet?toast('Oppdaterer kilden: '+t):ssta(t,true);
-    let text=null,data=null,warn=[];
+    let text=null,data=null,warn=[],step='start';
+    step='henter';
     if(s.xt){try{const r=await fetchAll(s.xt,onP);data=r.data;warn=r.warn}catch(e){if(!s.url)throw e;warn.push('Xtream feilet ('+e.message+'), prøver M3U')}}
     if(!data&&s.url){text=await fetchText(s.url,n=>onP('Henter M3U … '+(n/1048576).toFixed(1)+' MB'))}
     if(data){s.data=data;delete s.text}else if(text){s.text=text;delete s.data}
-    s.updated=Date.now();
-    await dbPut(s);await loadSources();
+    s.updated=Date.now();step='lagrer';
+    await dbPut(s);step='laster';await loadSources();
     toast(quiet?'Kilden er oppdatert ✔':'',quiet?3500:0);
     if(!quiet)ssta('Oppdatert. '+warn.join(' · '),true);
     return true;
-  }catch(e){toast('');if(!quiet)ssta('Oppdatering feilet: '+e.message);else toast('Kunne ikke oppdatere kilden: '+e.message,6000);return false}
+  }catch(e){toast('');const dg=' ['+(typeof step==='string'?step:'?')+'] '+String(e&&e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/\(.*[\/\\]/,'(').replace(/^at /,'')).join(' | ');if(!quiet)ssta('Oppdatering feilet: '+e.message+dg);else toast('Kunne ikke oppdatere kilden: '+e.message+dg,20000);return false}
 }
 $('srcAdd').onclick=async()=>{
   const name=$('sName').value.trim()||'Kilde';
