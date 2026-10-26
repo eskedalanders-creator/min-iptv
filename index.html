@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=103;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=104;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1832,7 +1832,30 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 /* ===================== Historikk / fortsett å se ===================== */
 function pushHist(e){
   hist=hist.filter(h=>h.k!==e.k);hist.unshift(e);hist=hist.slice(0,40);saveHist();
+syncSoon();
 }
+/* ---- Synk «Fortsett å se» via Firebase ---- */
+const SYNC_DB='https://eskedals-univers-default-rtdb.europe-west1.firebasedatabase.app',SYNC_CODE0='01hewaxwhszp6nj5diphz2kdhmyo';
+const syncCode=()=>{const v=localStorage.getItem('sync_code');return v===null?SYNC_CODE0:v};
+const syncKey=()=>{const p=profiles.find(x=>x.id===pid);return String((p&&p.name)||'bruker').toLowerCase().replace(/[^a-z0-9æøå]/g,'')||'bruker'};
+let syncSta='',syncT=0,syncBusy=0;
+async function syncGet(c){const r=await fetch(SYNC_DB+'/sync/'+c+'.json');if(!r.ok)throw new Error('HTTP '+r.status);const s=await r.json();if(!s)return{};try{return JSON.parse(s)||{}}catch(e){return{}}}
+async function syncPut(c,o){const r=await fetch(SYNC_DB+'/sync/'+c+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(JSON.stringify(o))});if(!r.ok)throw new Error('HTTP '+r.status)}
+function mergeHist(a,b){const m=new Map();for(const e of a.concat(b||[])){if(!e||!e.k)continue;const o=m.get(e.k);if(!o||(e.ts||0)>(o.ts||0))m.set(e.k,Object.assign({},o&&!e.url&&o.url?{url:o.url}:{},e))}
+  return [...m.values()].sort((x,y)=>(y.ts||0)-(x.ts||0)).slice(0,40)}
+async function cloudSync(push){const c=syncCode();if(!c||c.length<20||syncBusy)return;syncBusy=1;
+  try{const d=await syncGet(c);d.p=d.p||{};const key=syncKey();
+    const had=JSON.stringify(hist.map(h=>h.k+h.ts));
+    hist=mergeHist(hist,d.p[key]);saveHist();
+    if(push!==false){d.p[key]=hist.map(h=>{const o=Object.assign({},h);delete o.url;return o});await syncPut(c,d)}
+    syncSta='Synket '+new Date().toLocaleTimeString('no',{hour:'2-digit',minute:'2-digit'});
+    if(had!==JSON.stringify(hist.map(h=>h.k+h.ts))&&!$('ov').classList.contains('on')&&curView==='home')renderHome();
+  }catch(e){syncSta='Feil: '+e.message}finally{syncBusy=0}
+  const s=$('syncSta');if(s)s.textContent=syncSta}
+function syncSoon(ms){clearTimeout(syncT);syncT=setTimeout(()=>cloudSync(),ms==null?20000:ms)}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudSync()});
+setTimeout(()=>cloudSync(),2500);
+
 let ovCtx=null,lastSave=0;
 function openPlayer(ctx){
   ovCtx=ctx;
@@ -1977,7 +2000,7 @@ $('ccFile').onchange=async e=>{
 function closePlayer(){
   const v=$('ovv');
   if(ovCtx&&v.currentTime>5)pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
-  ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on','pfs','bar');startEmbers();
+  ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on','pfs','bar');startEmbers();syncSoon(500);
   if(document.fullscreenElement)document.exitFullscreen();
   if(curView==='home')renderHome();
 }
@@ -3205,6 +3228,7 @@ function renderSettings(){
    <div class="card"><h3>🎨 Tema</h3><p>Bytt mellom Brann-rødt og kino-gull.</p><button data-act="th:brann" class="${th==='brann'?'primary':''}">🔥 Brann</button> <button data-act="th:kino" class="${th==='kino'?'primary':''}">🎬 Kino</button></div>
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
+   <div class="card"><h3>🔄 Synk mellom enheter</h3><p>«Fortsett å se» deles automatisk mellom enhetene dine (bobil, hjemme, TV). Status: <b id="syncSta">${syncCode()?esc(syncSta||'på'):'av'}</b></p><button class="primary" data-act="syncnow">Synk nå</button> <button data-act="synctog">${syncCode()?'Slå av':'Slå på'}</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
    <div class="card"><h3>💾 Sikkerhetskopi / flytt til annen enhet</h3><p>Lagre kilder, favoritter, brukere og innstillinger i én fil, og last den inn på TV-boksen i stedet for å skrive inn alt med fjernkontrollen. <b>Filen inneholder innlogging til IPTV – slett den etterpå.</b></p><button class="primary" data-act="bk:save">Lagre til fil</button> <button data-act="bk:copy">Kopier som tekst</button> <button data-act="bk:load">Last inn fra fil …</button><input id="bkFile" type="file" accept=".json,.txt,application/json" hidden></div>
    <div class="card"><h3>📺 TV-modus</h3><p>For Android TV og fjernkontroll: større knapper, enklere og raskere. Nå: <b>${TVM?'på':'av'}</b> (${({'1':'tvunget på','0':'tvunget av'})[localStorage.getItem('tvmode')]||'automatisk'}).</p><button data-act="tv:auto">Automatisk</button> <button data-act="tv:1">På</button> <button data-act="tv:0">Av</button></div>
@@ -3328,10 +3352,13 @@ document.addEventListener('click',e=>{
   const h=e.target.closest('[data-h]');
   if(h){const x=hist.find(y=>y.k===h.dataset.h);if(!x)return;
     if(x.type==='live'){const c=byKey.get(x.k);if(c)openItem(c);return}
+    if(!x.url){const c=byKey.get(x.ref||x.k);if(c){openItem(c);return}toast('Finner ikke tittelen i denne kilden');return}
     openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,ref:x.ref});return}
   const a=e.target.closest('[data-act]');
   if(a){const v=a.dataset.act;
-    if(v==='src'){renderSources();$('dlgSrc').showModal()}
+    if(v==='syncnow'){toast('Synker …');cloudSync().then(()=>toast(syncSta))}
+    else if(v==='synctog'){if(syncCode())localStorage.setItem('sync_code','');else localStorage.removeItem('sync_code');toast(syncCode()?'Synk på':'Synk av');if(syncCode())cloudSync();if(curView==='settings')renderSettings()}
+    else if(v==='src'){renderSources();$('dlgSrc').showModal()}
     else if(v==='prof'){renderProfiles();$('dlgProf').showModal()}
     else if(v.startsWith('bk:')){backup(v.slice(3))}
     else if(v.startsWith('tv:')){const m=v.slice(3);if(m==='auto')localStorage.removeItem('tvmode');else localStorage.setItem('tvmode',m);location.reload()}
