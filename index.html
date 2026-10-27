@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=110;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=111;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1633,19 +1633,22 @@ async function fetchText(url,onP){
 }
 async function xapi(x,action,extra){
   let hs;try{hs=altsFor(x)}catch(e){hs=[x.host]}
-  let last;for(const h of hs){try{return await xapi1(x,action,extra,h)}catch(e){last=e;if(e&&/^HTTP 4/.test(e.message||''))break}}
+  let last;const errs=[];for(const h of hs){try{return await xapi1(x,action,extra,h)}catch(e){last=e;errs.push(String((e&&e.message)||e).slice(0,110));if(e&&/^HTTP 4/.test(e.message||''))break}}
+  if(errs.length>1){const e2=new Error(errs.join(' | '));throw e2}
   throw last}
 async function xapi1(x,action,extra,host){
   const u=host+'/player_api.php?username='+encodeURIComponent(x.user)+'&password='+encodeURIComponent(x.pass)+(action?'&action='+action:'')+(extra||'');
   const H=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
   if(H){
     /* Capacitor: omgå patchet fetch (stack overflow på store svar) */
-    let rr;
-    try{rr=await Promise.race([H.get({url:u,responseType:'text',readTimeout:60000,connectTimeout:20000}),new Promise((_,j)=>setTimeout(()=>j(new Error('tidsavbrudd')),75000))])}catch(e){if(e&&e.message==='tidsavbrudd')throw e;rr=null}
+    let rr,he=null;
+    try{rr=await Promise.race([H.get({url:u,responseType:'text',readTimeout:60000,connectTimeout:20000}),new Promise((_,j)=>setTimeout(()=>j(new Error('tidsavbrudd')),75000))])}catch(e){if(e&&e.message==='tidsavbrudd')throw e;rr=null;he=e}
     if(rr){
       if(rr.status<200||rr.status>=300)throw new Error('HTTP '+rr.status);
       return typeof rr.data==='string'?JSON.parse(rr.data):rr.data;
     }
+    /* Ikke fall tilbake på Capacitors patchede fetch (den velter seg og skjuler den ekte feilen) */
+    throw new Error('Nettverksfeil mot '+String(host).replace(/^https?:\/\//,'')+': '+String((he&&(he.message||he.code||he))||'ingen svar').slice(0,120));
   }
   const r=await fetch(px(u));
   if(!r.ok)throw new Error('HTTP '+r.status);
