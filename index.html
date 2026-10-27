@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=117;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=118;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -151,7 +151,7 @@ video{width:100%;height:100%;background:#000}
 #ov{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column}
 #ov.on{display:flex}
 #dtr{aspect-ratio:16/9;width:100%;margin-bottom:12px;border-radius:12px;overflow:hidden;background:#000}#dtr[hidden]{display:none}#dtr iframe{width:100%;height:100%;border:0}
-#ov.pfs .ovbar{display:none}#ov.pfs.bar .ovbar{display:flex;position:absolute;top:0;left:0;right:0;z-index:5}
+#ov:not(.pfs) .ovbar{position:absolute;top:0;left:0;right:0;z-index:5;transition:opacity .35s}#ov.ovhide:not(.pfs) .ovbar{opacity:0;pointer-events:none}#ov.ovhide{cursor:none}#ov.pfs .ovbar{display:none}#ov.pfs.bar .ovbar{display:flex;position:absolute;top:0;left:0;right:0;z-index:5}
 #vwrap.pfs{position:fixed;inset:0;z-index:90;aspect-ratio:auto;width:100vw;height:100vh}
 .ovbar{display:flex;gap:8px;align-items:center;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.2))}
 .ovbar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
@@ -2140,6 +2140,11 @@ function fsToggle(el){
   if(!(NATIVE&&!DESKTOP)&&el.requestFullscreen){el.requestFullscreen().catch(()=>el.classList.add('pfs'))}else el.classList.add('pfs');
 }
 $('ovFs').onclick=()=>fsToggle($('ov'));
+/* Auto-skjul toppraden i spilleren (vises ved mus/tastetrykk/trykk) */
+(()=>{const ov=$('ov');let t;const hide=()=>{if(!ov.classList.contains('on'))return;const m=$('ccMenu');if(m&&getComputedStyle(m).display!=='none'){t=setTimeout(hide,3000);return}ov.classList.add('ovhide')};
+  const show=()=>{ov.classList.remove('ovhide');clearTimeout(t);t=setTimeout(hide,3500)};
+  ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(ev=>document.addEventListener(ev,()=>{if(ov.classList.contains('on'))show()},true));
+  let was=false;new MutationObserver(()=>{const on=ov.classList.contains('on');if(on===was)return;was=on;if(on)show();else{ov.classList.remove('ovhide');clearTimeout(t)}}).observe(ov,{attributes:true,attributeFilter:['class']})})();
 let pfsT;const pfsBar=pf=>{pf.classList.add('bar');clearTimeout(pfsT);pfsT=setTimeout(()=>pf.classList.remove('bar'),6000)};
 document.addEventListener('keydown',e=>{const pf=document.querySelector('.pfs');if(!pf)return;
   const isOv=pf.id==='ov',v=$('ovv'),bar=pf.classList.contains('bar');
