@@ -4109,7 +4109,7 @@ $('cTest').onclick=()=>{const c=readCam();const im=$('cPrev');$('cStat').textCon
   /* Windows-appen: alltid fullskjerm (uten vinduskant) – går inn igjen ved første tastetrykk/klikk */
   if(DESKTOP){const go=ev=>{try{if(localStorage.getItem('kiosk')==='0'||fsOn()||(ev&&ev.target===b))return;if(W){W.fs(true);setTimeout(upd,300)}else document.documentElement.requestFullscreen().catch(()=>{})}catch(_){}};
     try{if(!localStorage.getItem('kiosk_v2')){localStorage.removeItem('kiosk');localStorage.setItem('kiosk_v2','1')}}catch(_){}
-    if(W&&localStorage.getItem('kiosk')!=='0'){setTimeout(()=>{try{if(!W.isFs())W.fs(true);upd()}catch(_){}},800)}
+    if(W){setTimeout(()=>{try{const want=localStorage.getItem('kiosk')!=='0';if(W.isFs()!==want)W.fs(want);upd()}catch(_){}},800)}
     ['keydown','mousedown','touchstart'].forEach(t=>document.addEventListener(t,go,true));try{go()}catch(_){}}
   document.addEventListener('fullscreenchange',upd);upd()})();
 const clk=()=>{$('clock').textContent=new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();setInterval(clk,15000);
