@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=121;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=122;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3396,7 +3396,11 @@ function openItem(c){
   $('dTr').onclick=()=>{const b=$('dtr');
     if(!b.hidden){b.hidden=true;b.innerHTML='';$('dTr').textContent='🎞 Trailer';return}
     if(trId){b.innerHTML=`<iframe src="https://www.youtube.com/embed/${trId}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;b.hidden=false;$('dTr').textContent='⏹ Skjul trailer';b.scrollIntoView({block:'nearest'})}
-    else{const q=encodeURIComponent(String(c.name).replace(/^[A-Z]{2}\s*[-|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').trim()+' trailer');openApp('youtube','https://www.youtube.com/results?search_query='+q,'YouTube')}};
+    else{const qq=String(c.name).replace(/^[A-Z]{2}\s*[-|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').trim()+' trailer',q=encodeURIComponent(qq);
+      if(NATIVE||TVM){/* Aldri forlat appen (fjernkontrollen kommer ikke tilbake): finn trailer og spill den her */
+        $('dTr').textContent='⏳ Søker …';
+        ytFind(qq).then(id=>{$('dTr').textContent='🎞 Trailer';if(!id){toast('Fant ingen trailer til denne',4000);return}trId=id;$('dTr').click()}).catch(()=>{$('dTr').textContent='🎞 Trailer';toast('Fant ingen trailer til denne',4000)});return}
+      openApp('youtube','https://www.youtube.com/results?search_query='+q,'YouTube')}};
   $('dFav').onclick=()=>{toggleFav(c);$('dFav').textContent=isFav(c)?'★ Fjern favoritt':'☆ Favoritt';if(curView==='home')renderHome()};
   $('dHide').onclick=()=>{toggleHide(c);dlg.close();showView(curView,true)};
   if(c.t==='vod'){
@@ -3881,6 +3885,18 @@ setTheme(localStorage.getItem('theme')||'brann');
 if(!NATIVE&&'serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 renderProfiles();
 
+async function ytFind(q){
+  const to=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('t')),ms))]);
+  const E=encodeURIComponent(q);
+  const get=async u=>{const r=await to(netReq('GET',u),7000);if(!r.ok)throw new Error('http');return r.text};
+  const tries=[
+    async()=>{const j=JSON.parse(await get('https://pipedapi.kavin.rocks/search?q='+E+'&filter=videos'));const it=(j.items||[]).find(x=>/watch\?v=/.test(x.url||''));return it&&it.url.split('v=')[1].split('&')[0]},
+    async()=>{const j=JSON.parse(await get('https://yewtu.be/api/v1/search?type=video&q='+E));const it=(j||[]).find(x=>x.videoId);return it&&it.videoId},
+    async()=>{const j=JSON.parse(await get('https://inv.nadeko.net/api/v1/search?type=video&q='+E));const it=(j||[]).find(x=>x.videoId);return it&&it.videoId},
+    async()=>{const t=await get('https://www.youtube.com/results?hl=en&search_query='+E);const m=t.match(/"videoId":"([\w-]{11})"/);return m&&m[1]}
+  ];
+  for(const f of tries){try{const id=await f();if(id&&/^[\w-]{11}$/.test(id))return id}catch(e){}}
+  return null}
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
 const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
 try{localStorage.setItem('boot_try','0')}catch(e){}
