@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=138;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=139;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3203,6 +3203,12 @@ if(NATIVE&&!DESKTOP){
   addEventListener('popstate',()=>{if(appBack())history.pushState({b:1},'')});
 }
 window.appBack=appBack;
+/* Fjernkontroll: Hjem / Innstillinger (F8/F9 kan brukes av tastaturmapping) */
+window.appHome=()=>{try{if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
+window.appSettings=()=>{try{if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
+document.addEventListener('keydown',e=>{const t=e.target,tg=(t&&t.tagName)||'';if(/INPUT|TEXTAREA|SELECT/.test(tg))return;
+  if(e.key==='F9'||e.key==='Settings'||e.key==='AppSwitch'){e.preventDefault();appSettings()}
+  else if(e.key==='F8'||e.key==='BrowserHome'||e.key==='GoHome'||e.keyCode===172){e.preventDefault();appHome()}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'||e.key==='XF86Back'||e.key==='Back'||e.keyCode===166||e.keyCode===4||e.keyCode===10009||e.keyCode===461){if(!(NATIVE&&!DESKTOP)&&appBack())e.preventDefault()}});
 /* Windows/PC: fjernkontroller sender ofte «Nettleser tilbake» (app-kommando/historikk/musknapp 4) eller Backspace */
 if(DESKTOP){history.pushState({b:1},'');addEventListener('popstate',()=>{appBack();history.pushState({b:1},'')})}
