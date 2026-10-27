@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=153;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=154;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1348,10 +1348,11 @@ const LNAME={no:'Norge',se:'Sverige',dk:'Danmark',us:'USA',uk:'Storbritannia/eng
 const LANG_DEF=['no','se','dk','us','uk'];
 let allowedLangs=new Set(LSget('langs',LANG_DEF));
 let showAdult=LSget('adult',false);
+let noAsia=LSget('noasia',true);
 ['ku','hi','ur','bn','ta','te','ml','ko','ja','zh','vi','ms','tl','he','sw','am','fa','ps','ne','si','km','lo','mn','da2'].forEach(x=>CC_OTHER.add(x));
 const RX_SCRIPT=/[\u0370-\u03FF\u0400-\u052F\u0590-\u08FF\u0900-\u0DFF\u0E00-\u0EFF\u1000-\u109F\u10A0-\u10FF\u1100-\u11FF\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
 const RX_ADULT_L=/xxx|porn|adult|18\+|\+18|erotic|erotik|hustler|playboy|brazzers|penthouse|red ?light|dorcel|vivid|milf|hentai|fetish|\bnude|naked|sexy|playmen|babestation|sextreme|private (tv|spice)|\bsex\b|\bsexo\b|\bsexe\b/i;
-const RX_ADULT_V=/xxx|porn|adult|18\+|\+18|erotic|erotik|hentai/i;
+const RX_ADULT_V=/\bxxx\b|porn|\bfor adults\b|erotic|erotik|hentai|onlyfans|brazzers/i;
 const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
 function evTime(c){
   if(c.t!=='live')return 0;
@@ -1539,6 +1540,8 @@ const RXN_XMAS=/\bjul(e|en|eaften|ekalender|enisse|enissen|etre|esang|emusikk|es
 const RXN_NOJUL=/blåfjell|månetoppen|tre nøtter til askepott|snekker andersen|skomakergata|reisen til julestjernen|julestjernen|putti plutti|julenatt|jul på|nissene|stargate.*jul|juleønsket|kalle og englene|teodor|olsenbanden.*jul|grevinnen og hovmesteren|jul i (skomakergata|blåfjell)|en jul|jul for|norsk jul|julekalender|nrk.*jul|tv ?2.*jul|bjarne betjent/i;
 const RXC_EXTRA=/audiobook|\bmusic\b|\bmusik\b|musique|concert|spectacles|karaoke|sport|soccer|ufc|wwe|wrestling|formula ?1|\bf1\b|boxing|fussball|football|rugby|motogp|golf|cyclisme|basketball|handball|workout|partidos|wrc|moto\b|رياضه|مصارعة|المباريات|podcast|بودكاست/i;
 const RXN_EXTRA=/^\s*MV\s*-/;
+const RXA_CC=/^(KR|KP|JP|CN|TW|HK|MO|TH|VN|PH|ID|MY|SG|KH|LA|MM|MN|IN|PK|BD|LK|NP|AF|IR|IQ|SY|LB|JO|PS|SA|AE|QA|KW|BH|OM|YE|EG|TR|KZ|UZ|AZ)$/;
+const RXA_CAT=/\basia|asian|asiatique|asiatico|anime\b|animi\b|manga|crunchyroll|bollywood|hindi|tamil|telugu|malayalam|kannada|punjabi|marathi|gujarati|bengali|korean|k-?drama|\bchina\b|chinese|japan|turkish|turksih|persian|kurdish|\barab|ramadan|pakistan|\bindia|philippin|tagalog|osn\+|shahid|turkey|t[üu]rk|yerli|dizi/i;
 const SVPFX={NF:'netflix',AMZ:'prime',PV:'prime','D+':'disney',DSNP:'disney',VP:'viaplay',HBO:'hbo',MAX:'hbo','ATV+':'apple',APL:'apple','A+':'apple',SKY:'sky',PAR:'para','P+':'para'};
 function vodClass(c){
   const nm=c.name||'',cat=c.cat||'';
@@ -1554,6 +1557,7 @@ function vodClass(c){
   c.xm=(RXC_XMAS.test(cat)||RXN_XMAS.test(hayT))?1:0;
   c.njul=c.xm&&(c.no||RXN_NOJUL.test(hayT))?1:0;
   c.xtra=(RXC_EXTRA.test(cat)||RXN_EXTRA.test(nm))?1:0;
+  c.asia=((cc&&RXA_CC.test(cc))||RXA_CAT.test(cat))?1:0;
   c.svp='';for(const t of tk){if(SVPFX[t]){c.svp=SVPFX[t];break}}
 }
 function fin(c){
@@ -2365,7 +2369,7 @@ const lgFix=u=>String(u||'').replace(/(\/stalker_portal\/misc\/logos\/)\d+\//,'$
 const hcard=h=>{const pct=h.dur?Math.min(100,Math.round(h.pos/h.dur*100)):0;
   return `<div class="pc" data-h="${esc(h.k)}" tabindex="0" style="flex-basis:210px;width:210px"><div class="pimg${h.type==='live'?' hlive':''}" style="aspect-ratio:16/9"><div class="pfb">${esc(h.name)}</div>${h.logo?`<img loading="lazy" decoding="async" src="${esc(h.type==='live'?lgFix(h.logo):h.logo)}" alt="">`:''}${pct?`<div style="position:absolute;left:0;bottom:0;height:5px;width:${pct}%;background:var(--accent)"></div>`:''}</div><div class="pt">${esc(h.name)}${h.dur?` <small>· ${Math.max(1,Math.round((h.dur-h.pos)/60))} min igjen</small>`:''}</div></div>`};
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'){if(/\/logos\/original\//.test(t.src)&&!t._lf){t._lf=1;t.src=t.src.replace('/logos/original/','/logos/320/');return}if(t.classList.contains('skb')){t.replaceWith(document.createTextNode('🔥'));return}t.remove()}},true);
-const visible=c=>!hidden.has(c.key)&&!c.dup&&langOk(c)&&(showAdult||!c.adult)&&!isPast(c)&&!c.junk;
+const visible=c=>!hidden.has(c.key)&&!c.dup&&langOk(c)&&(showAdult||!c.adult)&&!(noAsia&&c.asia)&&!isPast(c)&&!c.junk;
 const fvis=c=>visible(c)&&!c.adult;
 const rtl=t=>/^</.test(t)?t:String(t).replace(/^[\p{Extended_Pictographic}\p{Regional_Indicator}★▶\uFE0F\u200d\s]+/u,'');
 const NAVB='<button class="rnv l" data-rs="-1" tabindex="-1" aria-hidden="true">‹</button><button class="rnv r" data-rs="1" tabindex="-1" aria-hidden="true">›</button>';
@@ -3803,13 +3807,15 @@ document.addEventListener('visibilitychange',()=>{document.hidden?stopEmbers():s
 function langCard(){
   return `<div class="langs">${LANG_DEF.map(k=>`<label><input type="checkbox" data-lg="${k}" ${allowedLangs.has(k)?'checked':''}> ${LNAME[k]}</label>`).join('')}
   <label><input type="checkbox" id="dedupeCb" ${dedupeOn?'checked':''}> Skjul duplikater (filmer, serier og kanaler)</label>
-  <label><input type="checkbox" id="adultCb" ${showAdult?'checked':''}> Vis 18+-kanaler (skjult som standard, aldri på forsiden)</label></div>
+  <label><input type="checkbox" id="asiaCb" ${noAsia?'checked':''}> Skjul asiatisk, indisk, tyrkisk og Midtøsten-innhold (også anime)</label>
+  <label><input type="checkbox" id="adultCb" ${showAdult?'checked':''}> Vis porno (skjult som standard, aldri på forsiden). Vanlige filmer med 18-årsgrense vises alltid.</label></div>
   <small class="muted">Kanaler uten landskode vises alltid. Andre land skjules.</small>`;
 }
 document.addEventListener('change',e=>{
   const t=e.target;
   if(t.dataset&&t.dataset.lg){const s=new Set([...document.querySelectorAll('[data-lg]')].filter(x=>x.checked).map(x=>x.dataset.lg));allowedLangs=s;LSset('langs',[...s]);afterLang()}
   else if(t.id==='dedupeCb'){dedupeOn=t.checked;LSset('dedupe',dedupeOn);afterLang()}
+  else if(t.id==='asiaCb'){noAsia=t.checked;LSset('noasia',noAsia);afterLang()}
   else if(t.id==='adultCb'){if(t.checked&&!confirm('Er du 18 år eller eldre?')){t.checked=false;return}showAdult=t.checked;LSset('adult',showAdult);afterLang()}
 });
 function afterLang(){try{dedupe();buildLiveUI();applyFilter()}catch(e){}toast('Lagret',1200)}
