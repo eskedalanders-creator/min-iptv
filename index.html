@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=115;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=116;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4514,11 +4514,11 @@ export async function mount(o){
     W=Math.max(2,hall.clientWidth);Hh=Math.max(2,hall.clientHeight);
     const zm=parseFloat(document.documentElement.style.zoom)||1;renderer.setPixelRatio(low?Math.min(1,window.devicePixelRatio||1):Math.min((window.devicePixelRatio||1)*zm,mob?1.5:(zm>1?1.5:1.75)));renderer.setSize(W,Hh,false);
     cam.aspect=W/Hh;
-    const portrait=cam.aspect<1.25;
-    if(portrait){cam.fov=2*Math.atan(Math.tan(32*Math.PI/180)/cam.aspect)*180/Math.PI;camBase.set(1.0,2.2,-1.5);look.set(-.2,2.0,-11)}
+    const portrait=cam.aspect<.95;
+    if(portrait){cam.fov=Math.min(78,2*Math.atan(Math.tan(32*Math.PI/180)/cam.aspect)*180/Math.PI);camBase.set(.7,3.7,1.9);look.set(0,2.15,-10)}
     else{const hf=64*Math.PI/180;cam.fov=2*Math.atan(Math.tan(hf/2)/cam.aspect)*180/Math.PI;camBase.set(.7,3.7,1.9);look.set(0,2.15,-10)}
     cam.updateProjectionMatrix();
-    const pt=cam.aspect<1.25;SWpx=Math.round(W*(pt?.88:.62));SHpx=Math.round(SWpx/(pt?1.6:2.35));
+    const pt=cam.aspect<.95;SWpx=Math.round(W*(pt?.88:.62));SHpx=Math.round(SWpx/(pt?1.6:2.35));
     screen.style.width=SWpx+'px';screen.style.height=SHpx+'px';
   }
   let SWpx=1200,SHpx=510;
