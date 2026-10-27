@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=133;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=134;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1143,6 +1143,9 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 .cin-hall.c3 .cin-fade{display:none}
 .cin-hall.c3 .cin-vig{z-index:6;opacity:.7}.cin-hall.c3 .cin-grain{display:none}
 </style>
+<style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
+html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
+<script>(function(){try{var d=document.documentElement,L=localStorage.getItem('lite');var on=L==='1'||(L!=='0'&&!!window.IPTV_DESKTOP);if(on)d.classList.add('lite');window.LITE=on}catch(e){}})()</script>
 </head>
 <body>
 <canvas id="embers"></canvas>
@@ -3574,7 +3577,7 @@ function tick(){
   raf=requestAnimationFrame(tick);
 }
 function startEmbers(){
-  if(TVM||reduce||document.documentElement.dataset.theme!=='brann'||raf||$('ov').classList.contains('on'))return;
+  if(TVM||reduce||window.LITE||document.documentElement.dataset.theme!=='brann'||raf||$('ov').classList.contains('on'))return;
   sizeC();parts=Array.from({length:46},()=>mkP(true));tick();
 }
 function stopEmbers(){cancelAnimationFrame(raf);raf=0;cx.clearRect(0,0,W,H)}
