@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=120;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=121;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1164,6 +1164,7 @@ html.tvm .cs-btn button{font-size:1.3cqw}
   <input id="gq" type="search" placeholder="Søk …  ( / )" autocomplete="off">
   <button class="bpill" id="bBrann"><img class="skb" onerror="this.replaceWith(document.createTextNode('🔥'))" src="https://a.espncdn.com/i/teamlogos/soccer/500/620.png" alt=""> Brann</button>
   <select id="prof" title="Bruker"></select>
+  <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bRl" title="Last appen på nytt (henter ny versjon)" aria-label="Last på nytt" onclick="location.reload()">⟳</button>
   <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bFs" title="Fullskjerm (F11)" aria-label="Fullskjerm">⛶</button>
   <span id="clock"></span>
 </header>
@@ -3892,7 +3893,9 @@ async function checkAppUpdate(){
     if(rv<=cur||h.length<50000)return;
     h=h.split('https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5.0.8/400.css').join('lib/bebas.css').split('https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js').join('lib/hls.min.js').split('https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js').join('lib/mpegts.js');
     localStorage.setItem('remote_html',h);localStorage.setItem('remote_ver',String(rv));
-    toast('Ny versjon av appen er lastet ned – start appen på nytt for å bruke den.',9000);
+    const busy=()=>{try{return $('ov').classList.contains('on')||($('v-live').classList.contains('playing')&&current)}catch(e){return false}};
+    if(!busy()){toast('Ny versjon lastet ned – laster appen på nytt om 5 sekunder …',6000);setTimeout(()=>{if(!busy())location.reload()},5500)}
+    else toast('Ny versjon er klar – bruk ⟳ øverst (eller start appen på nytt) når du er ferdig å se.',9000);
   }catch(e){}
 }
 setTimeout(checkAppUpdate,4000);
