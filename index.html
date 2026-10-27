@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=144;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=145;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2261,7 +2261,7 @@ function closePlayer(){
   const v=$('ovv');
   if(ovCtx&&v.currentTime>5)pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
   ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on','pfs','bar');startEmbers();syncSoon(500);
-  if(document.fullscreenElement)document.exitFullscreen();
+  if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen();
   if(curView==='home')renderHome();
 }
 $('ovClose').onclick=closePlayer;
@@ -2270,7 +2270,7 @@ $('ovCopy').onclick=async()=>{if(!ovCtx)return;try{await navigator.clipboard.wri
 function fsToggle(el){
   if(document.fullscreenElement){document.exitFullscreen().catch(()=>{});return}
   if(el.classList.contains('pfs')){el.classList.remove('pfs','bar');return}
-  if(!(NATIVE&&!DESKTOP)&&el.requestFullscreen){el.requestFullscreen().catch(()=>el.classList.add('pfs'))}else el.classList.add('pfs');
+  if(!NATIVE&&el.requestFullscreen){el.requestFullscreen().catch(()=>el.classList.add('pfs'))}else el.classList.add('pfs');
 }
 $('ovFs').onclick=()=>fsToggle($('ov'));
 /* Auto-skjul toppraden i spilleren (vises ved mus/tastetrykk/trykk) */
@@ -3117,7 +3117,7 @@ document.addEventListener('keydown',e=>{if((e.key==='i'||e.key==='I'||e.key==='I
 
 /* ===================== Kanalbytte i spilleren ===================== */
 let zapOpen=false,zapSel=0,zapItems=[],zapNum='',zapNumT=0,zapInfoT=0;
-const exitLiveFs=()=>{try{if(zapOpen)zapClose()}catch(_){}$('vwrap').classList.remove('pfs','bar');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})};
+const exitLiveFs=()=>{try{if(zapOpen)zapClose()}catch(_){}$('vwrap').classList.remove('pfs','bar');if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{})};
 const isFsLive=()=>curView==='live'&&current&&$('v-live').classList.contains('playing')&&($('vwrap').classList.contains('pfs')||document.fullscreenElement===$('vwrap')||document.webkitFullscreenElement===$('vwrap'));
 function zapInfo(c){
   const el=$('zapI');if(!el)return;
@@ -3214,8 +3214,8 @@ if(NATIVE&&!DESKTOP){
 }
 window.appBack=appBack;
 /* Fjernkontroll: Hjem / Innstillinger (F8/F9 kan brukes av tastaturmapping) */
-window.appHome=()=>{try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
-window.appSettings=()=>{try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
+window.appHome=()=>{try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
+window.appSettings=()=>{try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
 document.addEventListener('keydown',e=>{const t=e.target,tg=(t&&t.tagName)||'';if(/INPUT|TEXTAREA|SELECT/.test(tg))return;
   if(e.key==='F9'||e.key==='Settings'||e.key==='AppSwitch'){e.preventDefault();appSettings()}
   else if(e.key==='F8'||e.key==='BrowserHome'||e.key==='GoHome'||e.keyCode===172){e.preventDefault();appHome()}
@@ -3341,7 +3341,7 @@ function zap(d){
 }
 if('mediaSession'in navigator){try{navigator.mediaSession.setActionHandler('previoustrack',()=>zap(-1));navigator.mediaSession.setActionHandler('nexttrack',()=>zap(1))}catch(e){}}
 function toggleFs(){
-  if(NATIVE&&!DESKTOP){fsToggle($('vwrap'));return}
+  if(NATIVE){const w=$('vwrap');if(w.classList.contains('pfs'))w.classList.remove('pfs','bar');else w.classList.add('pfs');return}
   const el=$('vwrap');
   if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);
   else if(el.requestFullscreen)el.requestFullscreen();
@@ -4055,7 +4055,10 @@ $('cTest').onclick=()=>{const c=readCam();const im=$('cPrev');$('cStat').textCon
 (()=>{const b=$('bFs');if(!b)return;if(NATIVE&&!DESKTOP||TVM){b.style.display='none';return}
   const fsOn=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
   const upd=()=>{b.textContent=fsOn()?'🗗':'⛶';b.title=fsOn()?'Avslutt fullskjerm (Esc)':'Fullskjerm (F11)'};
-  b.onclick=()=>{try{if(fsOn())(document.exitFullscreen||document.webkitExitFullscreen).call(document);else{const e=document.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}};
+  b.onclick=()=>{try{if(fsOn()){localStorage.setItem('kiosk','0');(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{localStorage.setItem('kiosk','1');const e=document.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}};
+  /* Windows-appen: alltid fullskjerm (uten vinduskant) – går inn igjen ved første tastetrykk/klikk */
+  if(DESKTOP){const go=ev=>{try{if(localStorage.getItem('kiosk')==='0'||fsOn()||(ev&&ev.target===b))return;document.documentElement.requestFullscreen().catch(()=>{})}catch(_){}};
+    ['keydown','mousedown','touchstart'].forEach(t=>document.addEventListener(t,go,true));try{go()}catch(_){}}
   document.addEventListener('fullscreenchange',upd);upd()})();
 const clk=()=>{$('clock').textContent=new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();setInterval(clk,15000);
 setTheme(localStorage.getItem('theme')||'brann');
