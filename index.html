@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=109;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=110;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1632,7 +1632,11 @@ async function fetchText(url,onP){
   return s+dec.decode();
 }
 async function xapi(x,action,extra){
-  const u=x.host+'/player_api.php?username='+encodeURIComponent(x.user)+'&password='+encodeURIComponent(x.pass)+(action?'&action='+action:'')+(extra||'');
+  let hs;try{hs=altsFor(x)}catch(e){hs=[x.host]}
+  let last;for(const h of hs){try{return await xapi1(x,action,extra,h)}catch(e){last=e;if(e&&/^HTTP 4/.test(e.message||''))break}}
+  throw last}
+async function xapi1(x,action,extra,host){
+  const u=host+'/player_api.php?username='+encodeURIComponent(x.user)+'&password='+encodeURIComponent(x.pass)+(action?'&action='+action:'')+(extra||'');
   const H=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
   if(H){
     /* Capacitor: omgå patchet fetch (stack overflow på store svar) */
@@ -1785,6 +1789,7 @@ function makePlayer(video,msgEl){
       else if(m&&(forceHls||!canTs)){src=m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8';kind='hls'}
       const fail=why=>{
         if(me!==alive)return;
+        try{const hm=String(url).match(/^(https?:\/\/[^\/]+)/);if(hm)hostFail(hm[1])}catch(x){}
         try{dlog('play',(why||'')+' '+kind+' '+(live?'live':'vod')+' err='+(video.error?video.error.code+':'+(video.error.message||''):'-')+' '+url)}catch(x){}
         if((kind==='ts'||kind==='nhls')&&m&&!forceHls)return play(url,true,true);
         if(retries++<3){show('Mistet forbindelsen – prøver igjen …');setTimeout(()=>{if(me===alive)play(url,true,forceHls)},2500);return}
@@ -1913,14 +1918,22 @@ var accUse={},accRemote={},accT=0,accLast={};
 const accList=()=>(sources||[]).filter(s=>s.xt&&s.xt.host&&s.xt.user);
 const accPref=()=>localStorage.getItem('acct_pref')||'auto';
 function accBusy(id,who){const u=accUse[id];if(u&&u.who!==who)return 'denne enheten';const r=accRemote[id];if(r&&r.d!==dlDev&&Date.now()-r.t<75000)return r.d;return ''}
+/* ---- Reserveadresser (fallback-portaler) per konto ---- */
+var hostBad={};
+const hostNorm=h=>{h=String(h||'').trim().replace(/\/+$/,'');if(h&&!/^https?:\/\//i.test(h))h='http://'+h;return h};
+function acctAlts(){try{return JSON.parse(localStorage.getItem('acct_alts')||'{}')||{}}catch(e){return{}}}
+function hostsOf(a){const al=(acctAlts()[a.id]||[]).map(hostNorm).filter(Boolean);return [hostNorm(a.xt.host)].concat(al.filter(h=>h!==hostNorm(a.xt.host)))}
+function hostFail(h){h=hostNorm(h);const o=hostBad[h]||{n:0,t:0};const now=Date.now();o.n=(now-o.t<60000)?o.n+1:1;o.t=now;if(o.n>=2)o.until=now+300000;hostBad[h]=o}
+function bestHost(a){const L=hostsOf(a),now=Date.now();return L.find(h=>!(hostBad[h]&&hostBad[h].until>now))||L[0]}
+function altsFor(x){const a=accList().find(a=>a.xt===x||(hostNorm(a.xt.host)===hostNorm(x.host)&&a.xt.user===x.user));return a?hostsOf(a):[hostNorm(x.host)]}
 function accRewrite(url,who){try{
   const L=accList();if(!L.length)return url;
   const m=String(url).match(/^(https?:\/\/[^\/]+)\/(live|movie|series)\/([^\/]+)\/([^\/]+)\/(.+)$/i);if(!m)return url;
   const dec=s=>{try{return decodeURIComponent(s)}catch(e){return s}};
-  const cur=L.find(a=>a.xt.host.replace(/\/+$/,'')===m[1]&&a.xt.user===dec(m[3]));if(!cur)return url;
+  const cur=L.find(a=>hostsOf(a).includes(m[1])&&a.xt.user===dec(m[3]));if(!cur)return url;
   accRefresh();
   if(who==='pv'){const anyMain=Object.keys(accUse).some(k=>accUse[k].who!=='pv');
-    if(L.length<2)return anyMain?null:(accUse[cur.id]={who,t:Date.now()},accBeatSoon(),url)}
+    if(L.length<2)return anyMain?null:(accUse[cur.id]={who,t:Date.now()},accBeatSoon(),bestHost(cur)+'/'+m[2]+'/'+m[3]+'/'+m[4]+'/'+m[5])}
   let order=L.slice();const pref=accPref();const first=pref!=='auto'?(L.find(a=>a.id===pref)||cur):cur;
   order=[first].concat(order.filter(a=>a!==first));
   let pick=order.find(a=>!accBusy(a.id,who));
@@ -1928,8 +1941,15 @@ function accRewrite(url,who){try{
   else if(pick!==first&&accLast[who]!==pick.id&&who!=='pv')toast('«'+first.name+'» er i bruk – bruker «'+pick.name+'»',4000);
   if(who!=='pv')accLast[who]=pick.id;
   accUse[pick.id]={who,t:Date.now()};accBeatSoon();
-  const x=pick.xt;return x.host.replace(/\/+$/,'')+'/'+m[2]+'/'+encodeURIComponent(x.user)+'/'+encodeURIComponent(x.pass)+'/'+m[5];
+  const x=pick.xt;return bestHost(pick)+'/'+m[2]+'/'+encodeURIComponent(x.user)+'/'+encodeURIComponent(x.pass)+'/'+m[5];
 }catch(e){return url}}
+function altsDlg(){let d=$('dlgAlts');if(!d){d=document.createElement('dialog');d.id='dlgAlts';d.style.cssText='max-width:520px;width:92vw;padding:22px;border-radius:14px;background:var(--bg2,#1b1b22);color:inherit;border:1px solid #444';
+  d.innerHTML='<h3 style="margin:0 0 8px">🌐 Reserveadresser</h3><p style="margin:0 0 10px">Velg konto og skriv én adresse per linje (f.eks. http://server.no:80). Bare adresser, ikke brukernavn eller passord.</p><select id="alSel" style="width:100%;padding:10px;margin-bottom:10px"></select><textarea id="alTxt" rows="5" style="width:100%;padding:10px;box-sizing:border-box;font-size:16px" spellcheck="false"></textarea><div style="display:flex;gap:8px;margin-top:12px"><button class="primary" id="alSave">Lagre</button><button id="alX">Lukk</button></div>';
+  document.body.appendChild(d);
+  const fill=()=>{$('alTxt').value=(acctAlts()[$('alSel').value]||[]).join('\n')};
+  $('alSel').onchange=fill;$('alX').onclick=()=>d.close();
+  $('alSave').onclick=()=>{const o=acctAlts();const l=$('alTxt').value.split(/\s+/).map(hostNorm).filter(Boolean);o[$('alSel').value]=[...new Set(l)];try{localStorage.setItem('acct_alts',JSON.stringify(o))}catch(e){}toast('Lagret');fsSoon(2000);d.close();if(curView==='settings')renderSettings()}}
+  $('alSel').innerHTML=accList().map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');$('alSel').dispatchEvent(new Event('change'));d.showModal()}
 function accRelease(who){let ch=0;for(const k in accUse)if(accUse[k].who===who){delete accUse[k];ch=1}if(ch)accBeatSoon()}
 function accBeatSoon(){clearTimeout(accT);accT=setTimeout(accBeat,1500)}
 async function accRefresh(){const sid=localStorage.getItem('sync_id');if(!sid||accRefresh.t>Date.now()-15000)return;accRefresh.t=Date.now();try{accRemote=(await syncGet(sid+'u')).a||{}}catch(e){}}
@@ -3316,6 +3336,7 @@ function renderSettings(){
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
    ${accList().length>1?`<div class="card"><h3>🔀 Konto for avspilling</h3><p>Hver konto tåler én strøm om gangen. «Auto» velger en ledig konto og bytter hvis den valgte er i bruk (også på andre enheter). Favoritter, innstillinger og «Fortsett å se» er felles for alle kontoer.</p><button data-act="acc:auto" class="${accPref()==='auto'?'primary':''}">🔄 Auto</button> ${accList().map(a=>`<button data-act="acc:${a.id}" class="${accPref()===a.id?'primary':''}">${esc(a.name)} ${accBusy(a.id,'x')?'🔴':'🟢'}</button>`).join(' ')}<p><small>🟢 ledig · 🔴 i bruk${accList().some(a=>accBusy(a.id,'x'))?' ('+accList().filter(a=>accBusy(a.id,'x')).map(a=>esc(a.name)+': '+esc(accBusy(a.id,'x'))).join(', ')+')':''}</small></p></div>`:''}
+   ${accList().length?`<div class="card"><h3>🌐 Reserveadresser</h3><p>Hvis hovedadressen ikke svarer, prøver appen reserveadressene automatisk. ${accList().map(a=>esc(a.name)+': '+(acctAlts()[a.id]||[]).length+' reserve').join(' · ')}</p><button data-act="altsopen">Rediger reserveadresser</button></div>`:''}
    <div class="card"><h3>🔑 Full synk (kilder, favoritter, innstillinger)</h3><p>${localStorage.getItem('sync_phrase')?'Koblet til. Kode: <b>'+esc(fsFmt(localStorage.getItem('sync_phrase')))+'</b> – skriv den inn på nye enheter, så kommer alt av seg selv.':'Opprett en kode én gang, og skriv den inn på nye enheter – da hentes M3U-lister, innlogging, favoritter og brukere automatisk (kryptert).'}</p><button class="primary" data-act="fsopen">${localStorage.getItem('sync_phrase')?'Vis kode':'Koble til / opprett kode'}</button> ${localStorage.getItem('sync_phrase')?'<button data-act="fspush">Last opp nå</button> <button data-act="fspull">Hent fra skyen</button> <button data-act="fsoff">Koble fra</button>':''}</div>
    <div class="card"><h3>🔄 Synk mellom enheter</h3><p>«Fortsett å se» deles automatisk mellom enhetene dine (bobil, hjemme, TV). Status: <b id="syncSta">${syncCode()?esc(syncSta||'på'):'av'}</b></p><button class="primary" data-act="syncnow">Synk nå</button> <button data-act="synctog">${syncCode()?'Slå av':'Slå på'}</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
@@ -3445,7 +3466,8 @@ document.addEventListener('click',e=>{
     openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,ref:x.ref});return}
   const a=e.target.closest('[data-act]');
   if(a){const v=a.dataset.act;
-    if(v.startsWith('acc:')){localStorage.setItem('acct_pref',v.slice(4));toast('Konto valgt');renderSettings()}
+    if(v==='altsopen'){try{altsDlg()}catch(x){toast(x.message)}}
+    else if(v.startsWith('acc:')){localStorage.setItem('acct_pref',v.slice(4));toast('Konto valgt');renderSettings()}
     else if(v==='fsopen'){try{fsDlg()}catch(x){toast(x.message)}}
     else if(v==='fspush'){toast('Laster opp …');fsPush().then(()=>toast('Lastet opp'),x=>toast('Feil: '+x.message))}
     else if(v==='fspull'){toast('Henter …');fsFetch(localStorage.getItem('sync_phrase')).then(async r=>{if(!r)return toast('Ingenting i skyen ennå');await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))},x=>toast('Feil: '+x.message))}
