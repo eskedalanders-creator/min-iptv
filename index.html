@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=108;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=109;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1771,11 +1771,11 @@ function makePlayer(video,msgEl){
   let hls=null,mts=null,retries=0,cur=null,alive=0,stalls=0,t0=0;
   video.addEventListener('waiting',()=>{if(cur)stalls++});
   const show=t=>{msgEl.textContent=t;msgEl.style.display=t?'block':'none'};
-  function stop(){alive++;if(hls){hls.destroy();hls=null}if(mts){try{mts.destroy()}catch(e){}mts=null}video.removeAttribute('src');video.load();show('')}
+  function stop(){try{accRelease(video.id||'v')}catch(e){}alive++;if(hls){hls.destroy();hls=null}if(mts){try{mts.destroy()}catch(e){}mts=null}video.removeAttribute('src');video.load();show('')}
   const xt=u=>u.match(/^(https?:\/\/[^\/]+)\/live\/([^\/]+)\/([^\/]+)\/(\d+)(?:\.(ts|m3u8))?(\?.*)?$/i);
   function play(url,live,forceHls){
     if(!window.__libsDone){stop();const m0=alive;show('Laster …');window.__libs.then(()=>{if(m0===alive)play(url,live,forceHls)});return}
-    stop();const me=alive;cur={url,live};
+    stop();url=accRewrite(url,video.id||'v');const me=alive;cur={url,live};
     stalls=0;t0=Date.now();show('Laster …');if(live)epgHold=Date.now()+10000;clearInterval(video._lt);video._lt=setInterval(()=>{if(me!==alive||!video.paused&&video.readyState>2){clearInterval(video._lt);return}const sec=Math.round((Date.now()-t0)/1000);if(live&&sec>=1)show('Laster … '+sec+' s');if(live&&sec>=(kind==='ts'?7:12)&&!video._t1){clearInterval(video._lt);video.onerror&&video.onerror()}},1000);video.onplaying=()=>{clearInterval(video._lt);show('');retries=0;epgHold=0;if(!video._t1)video._t1=Date.now()-t0};video._t1=0;
     let src=url,kind='file';
     if(live){
@@ -1908,6 +1908,36 @@ async function dlFlush(){const id=localStorage.getItem('sync_id');if(!id||!dlQ.l
 window.addEventListener('error',ev=>{if(ev.target&&ev.target!==window)return;dlog('err',(ev.message||'')+' @'+String(ev.filename||'').split('/').pop()+':'+ev.lineno)});
 window.addEventListener('unhandledrejection',ev=>dlog('rej',ev.reason&&(ev.reason.message||ev.reason)));
 setTimeout(()=>dlog('boot','v'+APP_BUILD+' '+dlDev+' '+innerWidth+'x'+innerHeight+' '+(navigator.userAgent.match(/(Android [\d.]+|Windows NT [\d.]+|Chrome\/[\d.]+)/g)||[]).join(' ')+(window.Capacitor?' cap':'')),6000);
+/* ---- Kontoer: velg konto, 1 strøm per konto (auto-bytte til ledig konto) ---- */
+var accUse={},accRemote={},accT=0,accLast={};
+const accList=()=>(sources||[]).filter(s=>s.xt&&s.xt.host&&s.xt.user);
+const accPref=()=>localStorage.getItem('acct_pref')||'auto';
+function accBusy(id,who){const u=accUse[id];if(u&&u.who!==who)return 'denne enheten';const r=accRemote[id];if(r&&r.d!==dlDev&&Date.now()-r.t<75000)return r.d;return ''}
+function accRewrite(url,who){try{
+  const L=accList();if(!L.length)return url;
+  const m=String(url).match(/^(https?:\/\/[^\/]+)\/(live|movie|series)\/([^\/]+)\/([^\/]+)\/(.+)$/i);if(!m)return url;
+  const dec=s=>{try{return decodeURIComponent(s)}catch(e){return s}};
+  const cur=L.find(a=>a.xt.host.replace(/\/+$/,'')===m[1]&&a.xt.user===dec(m[3]));if(!cur)return url;
+  accRefresh();
+  if(who==='pv'){const anyMain=Object.keys(accUse).some(k=>accUse[k].who!=='pv');
+    if(L.length<2)return anyMain?null:(accUse[cur.id]={who,t:Date.now()},accBeatSoon(),url)}
+  let order=L.slice();const pref=accPref();const first=pref!=='auto'?(L.find(a=>a.id===pref)||cur):cur;
+  order=[first].concat(order.filter(a=>a!==first));
+  let pick=order.find(a=>!accBusy(a.id,who));
+  if(!pick){if(who==='pv')return null;pick=order[0];if(L.length>1)toast('Alle kontoer er i bruk – dette kan avbryte en annen strøm',5000)}
+  else if(pick!==first&&accLast[who]!==pick.id&&who!=='pv')toast('«'+first.name+'» er i bruk – bruker «'+pick.name+'»',4000);
+  if(who!=='pv')accLast[who]=pick.id;
+  accUse[pick.id]={who,t:Date.now()};accBeatSoon();
+  const x=pick.xt;return x.host.replace(/\/+$/,'')+'/'+m[2]+'/'+encodeURIComponent(x.user)+'/'+encodeURIComponent(x.pass)+'/'+m[5];
+}catch(e){return url}}
+function accRelease(who){let ch=0;for(const k in accUse)if(accUse[k].who===who){delete accUse[k];ch=1}if(ch)accBeatSoon()}
+function accBeatSoon(){clearTimeout(accT);accT=setTimeout(accBeat,1500)}
+async function accRefresh(){const sid=localStorage.getItem('sync_id');if(!sid||accRefresh.t>Date.now()-15000)return;accRefresh.t=Date.now();try{accRemote=(await syncGet(sid+'u')).a||{}}catch(e){}}
+async function accBeat(){const sid=localStorage.getItem('sync_id');if(!sid)return;try{const c=sid+'u',d=await syncGet(c),o=d.a||{};
+  for(const k in o)if(o[k].d===dlDev||Date.now()-o[k].t>120000)delete o[k];
+  for(const k in accUse)o[k]={d:dlDev,t:Date.now()};
+  await syncPut(c,{a:o});accRemote=o}catch(e){}}
+setInterval(()=>{if(Object.keys(accUse).length)accBeat();else if(document.visibilityState==='visible')accRefresh()},30000);
 setTimeout(async()=>{try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(r&&r.ts>(+localStorage.getItem('sync_fts')||0)){
   const fresh=!(await dbAll()).length;if(fresh){await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))}else toast('Nyere oppsett finnes i skyen – Innstillinger → Synk → Hent fra skyen',7000)}}catch(e){}},4000);
 
@@ -2436,7 +2466,7 @@ function startCinema(feat){
     const m=[r.yr,r.dur,r.genre].filter(Boolean).join(' · ');if(m)sl.querySelector('.cs-yr').textContent=m;
   };
   const hall0=root.querySelector('.cin-hall');let cinShown=0;
-  const stopPv=()=>{clearTimeout(cinPv);clearInterval(cinAmbT);root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');root.querySelectorAll('.cs-snd').forEach(b=>b.hidden=true);amb(slides[cinIdx]);tick()};
+  const stopPv=()=>{try{accRelease('pv')}catch(e){}clearTimeout(cinPv);clearInterval(cinAmbT);root.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')});root.classList.remove('pv');root.querySelectorAll('.cs-snd').forEach(b=>b.hidden=true);amb(slides[cinIdx]);tick()};
   const tick=()=>{clearInterval(cinTimer);if(!TVM&&!root.classList.contains('pv'))cinTimer=setInterval(()=>show(cinIdx+1),13000)};
   let swi=0;
   function show(i){
@@ -2512,7 +2542,8 @@ function startCinema(feat){
     vd.onplaying=()=>{v.classList.add('on');sl.querySelector('.cs-snd').hidden=false;sl.classList.add('vp');clearInterval(cinAmbT);cinAmbT=setInterval(()=>{const col=sampleEl(vd);if(col&&hall)hall.style.setProperty('--amb',col)},1200)};
     vd.onerror=fail;
     vd.onended=()=>{if(auto){stopPv();show(cinIdx+1)}else stopPv()};
-    vd.src=px(url);
+    const url2=accRewrite(url,'pv');if(!url2){fail();return}
+    vd.src=px(url2);
     sl.querySelector('.cs-snd').onclick=ev=>{ev.stopPropagation();vd.muted=!vd.muted;ev.currentTarget.textContent=vd.muted?'🔊':'🔇'};
     if(btn)btn.textContent='■ Stopp';
     cinPv=setTimeout(()=>{if(auto){stopPv();show(cinIdx+1)}else stopPv()},auto?38000:60000);
@@ -2995,13 +3026,13 @@ if(NATIVE&&!DESKTOP){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'){if(!(NATIVE&&!DESKTOP)&&appBack())e.preventDefault()}});
 async function backupData(){
-  const ls={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^(remote_|boot_try|appok:)/.test(k))continue;ls[k]=localStorage.getItem(k)}
+  const ls={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^(remote_|boot_try|appok:|src:|acct_pref|dev_id|sync_fts)/.test(k))continue;ls[k]=localStorage.getItem(k)}
   const src=(await dbAll()).map(x=>({id:x.id,name:x.name,url:x.url||'',xt:x.xt||null,profile:x.profile,text:(x.url||x.xt)?undefined:x.text}));
   return JSON.stringify({app:'min-iptv',v:1,ls,src});
 }
 async function restoreData(txt){
   const j=JSON.parse(txt);if(!j||j.app!=='min-iptv')throw new Error('Dette ser ikke ut som en Min IPTV-sikkerhetskopi');
-  for(const k in j.ls)try{localStorage.setItem(k,j.ls[k])}catch(e){}
+  for(const k in j.ls)if(!/^(src:|acct_pref|dev_id|sync_fts)/.test(k))try{localStorage.setItem(k,j.ls[k])}catch(e){}
   for(const x of (j.src||[]))await dbPut({id:x.id,name:x.name,url:x.url,xt:x.xt,profile:x.profile,text:x.text,upgraded:0});
   toast('Gjenopprettet – starter på nytt …',2500);setTimeout(()=>location.reload(),1200);
 }
@@ -3284,6 +3315,7 @@ function renderSettings(){
    <div class="card"><h3>🎨 Tema</h3><p>Bytt mellom Brann-rødt og kino-gull.</p><button data-act="th:brann" class="${th==='brann'?'primary':''}">🔥 Brann</button> <button data-act="th:kino" class="${th==='kino'?'primary':''}">🎬 Kino</button></div>
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
+   ${accList().length>1?`<div class="card"><h3>🔀 Konto for avspilling</h3><p>Hver konto tåler én strøm om gangen. «Auto» velger en ledig konto og bytter hvis den valgte er i bruk (også på andre enheter). Favoritter, innstillinger og «Fortsett å se» er felles for alle kontoer.</p><button data-act="acc:auto" class="${accPref()==='auto'?'primary':''}">🔄 Auto</button> ${accList().map(a=>`<button data-act="acc:${a.id}" class="${accPref()===a.id?'primary':''}">${esc(a.name)} ${accBusy(a.id,'x')?'🔴':'🟢'}</button>`).join(' ')}<p><small>🟢 ledig · 🔴 i bruk${accList().some(a=>accBusy(a.id,'x'))?' ('+accList().filter(a=>accBusy(a.id,'x')).map(a=>esc(a.name)+': '+esc(accBusy(a.id,'x'))).join(', ')+')':''}</small></p></div>`:''}
    <div class="card"><h3>🔑 Full synk (kilder, favoritter, innstillinger)</h3><p>${localStorage.getItem('sync_phrase')?'Koblet til. Kode: <b>'+esc(fsFmt(localStorage.getItem('sync_phrase')))+'</b> – skriv den inn på nye enheter, så kommer alt av seg selv.':'Opprett en kode én gang, og skriv den inn på nye enheter – da hentes M3U-lister, innlogging, favoritter og brukere automatisk (kryptert).'}</p><button class="primary" data-act="fsopen">${localStorage.getItem('sync_phrase')?'Vis kode':'Koble til / opprett kode'}</button> ${localStorage.getItem('sync_phrase')?'<button data-act="fspush">Last opp nå</button> <button data-act="fspull">Hent fra skyen</button> <button data-act="fsoff">Koble fra</button>':''}</div>
    <div class="card"><h3>🔄 Synk mellom enheter</h3><p>«Fortsett å se» deles automatisk mellom enhetene dine (bobil, hjemme, TV). Status: <b id="syncSta">${syncCode()?esc(syncSta||'på'):'av'}</b></p><button class="primary" data-act="syncnow">Synk nå</button> <button data-act="synctog">${syncCode()?'Slå av':'Slå på'}</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
@@ -3413,7 +3445,8 @@ document.addEventListener('click',e=>{
     openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,ref:x.ref});return}
   const a=e.target.closest('[data-act]');
   if(a){const v=a.dataset.act;
-    if(v==='fsopen'){try{fsDlg()}catch(x){toast(x.message)}}
+    if(v.startsWith('acc:')){localStorage.setItem('acct_pref',v.slice(4));toast('Konto valgt');renderSettings()}
+    else if(v==='fsopen'){try{fsDlg()}catch(x){toast(x.message)}}
     else if(v==='fspush'){toast('Laster opp …');fsPush().then(()=>toast('Lastet opp'),x=>toast('Feil: '+x.message))}
     else if(v==='fspull'){toast('Henter …');fsFetch(localStorage.getItem('sync_phrase')).then(async r=>{if(!r)return toast('Ingenting i skyen ennå');await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))},x=>toast('Feil: '+x.message))}
     else if(v==='fsoff'){['sync_phrase','sync_id','sync_fts'].forEach(k=>localStorage.removeItem(k));toast('Frakoblet');renderSettings()}
