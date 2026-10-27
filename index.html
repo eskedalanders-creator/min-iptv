@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=135;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=136;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2057,6 +2057,21 @@ async function osText(u){
   const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return r.text();
 }
 const hasNoSub=()=>{const v=$('ovv');return (!!extSub&&extSub.lang!=='en')||[...v.textTracks].some(t=>t.mode==='showing'&&isNoTrack(t))};
+async function movieHash(url){
+  try{
+    const g=async(rng)=>{const c=new AbortController();const t=setTimeout(()=>c.abort(),8000);try{return await fetch(url,{headers:{Range:'bytes='+rng},signal:c.signal})}finally{clearTimeout(t)}};
+    const r1=await g('0-65535');if(r1.status!==206)return null;
+    const size=+(r1.headers.get('content-range')||'').split('/')[1];if(!(size>131072))return null;
+    const b1=new DataView(await r1.arrayBuffer());
+    const r2=await g((size-65536)+'-'+(size-1));if(r2.status!==206)return null;
+    const b2=new DataView(await r2.arrayBuffer());
+    if(b1.byteLength<65536||b2.byteLength<65536)return null;
+    let h=BigInt(size);const M=(1n<<64n)-1n;
+    for(const b of [b1,b2])for(let i=0;i<65536;i+=8)h=(h+b.getBigUint64(i,true))&M;
+    return h.toString(16).padStart(16,'0');
+  }catch(e){return null}
+}
+function srtEnd(raw){let mx=0;const re=/-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;while((m=re.exec(raw)))mx=Math.max(mx,(+m[1])*3600+(+m[2])*60+(+m[3]));return mx}
 async function autoSub(manual,next){
   const ctx=ovCtx;if(!ctx)return;
   const sta=t=>{const e=document.getElementById('osSta');if(e)e.textContent=t};
@@ -2069,8 +2084,9 @@ async function autoSub(manual,next){
     const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*(?:[|:]|-\s)\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/\s+/g,' ').trim();
     const yr=(tt.match(/\(((?:19|20)\d\d)\)/)||[])[1];
     const nm=encodeURIComponent(name.toLowerCase());
+    sta('Beregner filsignatur …');const mh=await movieHash(ctx.url);dlog('sub','moviehash '+mh);
     const find=async langs=>{
-      const base='/subtitles?languages='+langs+'&ai_translated=include&machine_translated=include';
+      const base='/subtitles?languages='+langs+'&ai_translated=include&machine_translated=include'+(mh?'&moviehash='+mh:'');
       const qs=[];
       if(m){const sn=+m[2],ep=+m[3];
         qs.push(base+'&query='+nm+'&type=episode&season_number='+sn+'&episode_number='+ep);
@@ -2080,7 +2096,7 @@ async function autoSub(manual,next){
       for(const q of qs){
         try{const j=await osReq('GET',q);const all=(j.data||[]).filter(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);dlog('sub',langs+' '+all.length+' treff');
           if(all.length){
-            const sc=d=>{const a=d.attributes;return (a.ai_translated||a.machine_translated?0:1e9)+(a.from_trusted?5e8:0)+(a.download_count||0)};
+            const sc=d=>{const a=d.attributes;return (a.moviehash_match?2e9:0)+(a.ai_translated||a.machine_translated?0:1e9)+(a.from_trusted?5e8:0)+(a.download_count||0)};
             all.sort((x,y)=>sc(y)-sc(x));return all}}catch(e){dlog('sub','søk-feil '+((e&&e.message)||e));if(/401|403|406|429/.test(String(e&&e.message)))throw e}
       }
       return null};
@@ -2094,13 +2110,20 @@ async function autoSub(manual,next){
     ctx._cands=c.slice(0,8);ctx._ci=0;ctx._clang=lang;hit=c[0];
     }
     if(!osTok&&localStorage.getItem('os_user')){const l=await osReq('POST','/login',{username:localStorage.getItem('os_user'),password:localStorage.getItem('os_pass')||''});osTok=l.token}
-    sta('Laster ned …');
-    const d=await osReq('POST','/download',{file_id:hit.attributes.files[0].file_id,sub_format:'srt'},osTok);
-    const raw=await osText(d.link);
+    const dl=async h=>{sta('Laster ned …');const d=await osReq('POST','/download',{file_id:h.attributes.files[0].file_id,sub_format:'srt'},osTok);return {d,raw:await osText(d.link)}};
+    let {d,raw}=await dl(hit);
+    if(!next&&ctx._cands&&!hit.attributes.moviehash_match){
+      const v=$('ovv'),dur=(v.duration&&isFinite(v.duration))?v.duration:(ctx.dur||0);
+      for(let k=1;dur>600&&k<4&&ctx._cands.length>k;k++){
+        const e=srtEnd(raw);if(e>dur*.75&&e<dur*1.03)break;
+        sta('Passer ikke varigheten – prøver fil '+(k+1)+' …');
+        ctx._ci=k;const x=await dl(ctx._cands[k]);raw=x.raw;d=x.d;
+      }
+    }
     if(ovCtx!==ctx)return;
     extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}applyExtSub();
     const n=ctx._cands.length;
-    sta((lang==='en'?'✔ Engelsk lagt inn':'✔ Lagt inn')+' (fil '+(ctx._ci+1)+' av '+n+')'+(d.remaining!=null?' – '+d.remaining+' igjen i dag':''));
+    sta((lang==='en'?'✔ Engelsk lagt inn':'✔ Lagt inn')+(ctx._cands[ctx._ci]&&ctx._cands[ctx._ci].attributes.moviehash_match?' (eksakt treff på filen)':'')+' (fil '+(ctx._ci+1)+' av '+n+')'+(d.remaining!=null?' – '+d.remaining+' igjen i dag':''));
     toast((lang==='en'?'🇬🇧 Engelsk':'🇳🇴 Norsk')+' undertekst '+(ctx._ci+1)+'/'+n+' lagt inn',3500);
   }catch(e){osTok=null;const msg=String(e&&e.message||e);sta('Feil: '+msg);dlog('sub','OS-feil: '+msg);toast('Undertekst: '+(/401|403/.test(msg)?'feil nøkkel eller innlogging':/406|429/.test(msg)?'dagens grense er nådd':msg),4000)}
 }
