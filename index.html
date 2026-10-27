@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=148;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=149;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3215,18 +3215,51 @@ if(NATIVE&&!DESKTOP){
 }
 window.appBack=appBack;
 
+/* ===== Fjernkontroll lest direkte via HID (Windows-appen) ===== */
+const HIDK={last:'',lastT:0};
+const hidMap=()=>{try{return JSON.parse(localStorage.getItem('hidmap')||'{}')}catch(_){return{}}};
+function hidDo(a){if(!a)return;if(window.IPTV_WIN&&IPTV_WIN.hidAction)IPTV_WIN.hidAction(a);else{const f={home:window.appHome,back:window.appBack,settings:window.appSettings}[a];f&&f()}}
+function hidRep(e){
+  const d=e.device,b=new Uint8Array(e.data.buffer,e.data.byteOffset,e.data.byteLength);
+  if(!b.some(x=>x)){HIDK.last='';return}
+  const hex=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');
+  const col=(d.collections||[]).find(c=>(c.inputReports||[]).some(r=>r.reportId===e.reportId))||(d.collections||[])[0]||{};
+  const page=col.usagePage||0,sig=d.vendorId.toString(16)+':'+d.productId.toString(16)+':'+e.reportId+':'+hex;
+  const now=Date.now();if(sig===HIDK.last&&now-HIDK.lastT<1500){HIDK.lastT=now;return}HIDK.last=sig;HIDK.lastT=now;
+  window.dispatchEvent(new CustomEvent('hidkey',{detail:{sig,page,hex,rid:e.reportId}}));
+  const kt=document.getElementById('kbTestD');if(kt&&kt.open)return;
+  let a=hidMap()[sig];
+  if(!a&&page===0x0C){for(let i=0;i+1<b.length;i++){const u=b[i]|(b[i+1]<<8);if(u===0x224){a='back';break}if(u===0x223){a='home';break}}}
+  hidDo(a);
+}
+async function hidInit(){
+  if(!DESKTOP||!navigator.hid)return;
+  try{for(const d of await navigator.hid.getDevices()){
+    if(d.opened||d._iptv)continue;
+    const cs=d.collections||[];if(cs.length&&cs.every(c=>c.usagePage===1&&(c.usage===2||c.usage===6)))continue;
+    try{await d.open();d._iptv=1;d.addEventListener('inputreport',hidRep)}catch(_){}
+  }}catch(e){dlog&&dlog('hid','feil '+e)}
+}
+if(DESKTOP&&navigator.hid){navigator.hid.addEventListener('connect',()=>setTimeout(hidInit,500));setTimeout(hidInit,1500)}
+document.addEventListener('keydown',e=>{if(!DESKTOP)return;const kt=document.getElementById('kbTestD');if(kt&&kt.open)return;const m=hidMap();const a=m['key:'+e.key]||(e.key==='ContextMenu'?'settings':null);if(a){e.preventDefault();e.stopImmediatePropagation();hidDo(a)}},true);
+
 window.kbTest=function(){
   let d=document.getElementById('kbTestD');
   if(!d){d=document.createElement('dialog');d.id='kbTestD';d.style.cssText='background:#14161f;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:20px;min-width:420px;max-width:90vw';
-    d.innerHTML='<h3 style="margin:0 0 8px">🎮 Trykk på knappene på fjernkontrollen</h3><p style="opacity:.8;margin:0 0 10px">Testen avsluttes automatisk etter 20 sekunder uten trykk.</p><div id="kbTestL" style="font:15px monospace;line-height:1.7;max-height:50vh;overflow:auto"></div>';document.body.appendChild(d)}
+    d.innerHTML='<h3 style="margin:0 0 8px">🎮 Trykk på knappene på fjernkontrollen</h3><p style="opacity:.8;margin:0 0 10px">Testen avsluttes etter 30 sekunder uten trykk. Velg «Lær knapp» med piltastene + OK, og trykk så knappen.</p><div style="margin:0 0 10px">Lær knapp: <button class="kl" data-l="home">🏠 Hjem</button> <button class="kl" data-l="back">← Tilbake</button> <button class="kl" data-l="settings">⚙ Innstillinger</button> <button class="kl" data-l="clear">Nullstill</button> <small id="kbLearn" style="display:block;opacity:.85;margin-top:6px"></small></div><div id="kbTestL" style="font:15px monospace;line-height:1.7;max-height:50vh;overflow:auto"></div>';document.body.appendChild(d)}
   const L=d.querySelector('#kbTestL');L.innerHTML='<i>Venter på tastetrykk …</i>';let t;
-  const add=x=>{if(L.querySelector('i'))L.innerHTML='';L.insertAdjacentHTML('afterbegin','<div>'+x+'</div>');clearTimeout(t);t=setTimeout(stop,20000)};
-  const kd=e=>{e.preventDefault();e.stopImmediatePropagation();add('Tast: <b>'+esc(e.key)+'</b> · kode '+esc(e.code||'-')+' · nr '+e.keyCode)};
+  const add=x=>{if(L.querySelector('i'))L.innerHTML='';L.insertAdjacentHTML('afterbegin','<div>'+x+'</div>');clearTimeout(t);t=setTimeout(stop,30000)};
+  const kd=e=>{if(e.key==='Enter'&&e.target&&e.target.classList&&e.target.classList.contains('kl'))return;if(/^Arrow(Left|Right)$/.test(e.key)&&e.target&&e.target.classList&&e.target.classList.contains('kl')){e.preventDefault();e.stopImmediatePropagation();const bs=[...d.querySelectorAll('.kl')],i=bs.indexOf(e.target);(bs[i+(e.key==='ArrowLeft'?-1:1)]||e.target).focus();return}e.preventDefault();e.stopImmediatePropagation();add('Tast: <b>'+esc(e.key)+'</b> · kode '+esc(e.code||'-')+' · nr '+e.keyCode);if(learn){const m=hidMap();m['key:'+e.key]=learn;localStorage.setItem('hidmap',JSON.stringify(m));LS.textContent='✔ Lært tast '+e.key+' → '+learn;learn=null}};
   const ac=e=>add('Windows-kommando: <b>'+esc(e.detail)+'</b>');
+  let learn=null;const LS=d.querySelector('#kbLearn');
+  d.querySelectorAll('.kl').forEach(b=>b.onclick=()=>{const l=b.dataset.l;if(l==='clear'){localStorage.removeItem('hidmap');LS.textContent='Alle lærte knapper er nullstilt.';return}learn=l;LS.textContent='Trykk nå på knappen på fjernkontrollen som skal være «'+b.textContent+'» …'});
+  const hk=e=>{const x=e.detail;add('HID: side '+x.page.toString(16)+' · rapport '+x.rid+' · '+x.hex);
+    if(learn){const m=hidMap();m[x.sig]=learn;localStorage.setItem('hidmap',JSON.stringify(m));LS.textContent='✔ Lært! Knappen gjør nå: '+learn;learn=null}};
+  window.addEventListener('hidkey',hk);
   const mu=e=>{if(e.button>2){e.preventDefault();add('Museknapp '+e.button)}};
-  function stop(){window.removeEventListener('keydown',kd,true);window.removeEventListener('appcmd',ac);window.removeEventListener('mouseup',mu,true);try{d.close()}catch(_){}}
+  function stop(){window.removeEventListener('hidkey',hk);window.removeEventListener('keydown',kd,true);window.removeEventListener('appcmd',ac);window.removeEventListener('mouseup',mu,true);try{d.close()}catch(_){}}
   window.addEventListener('keydown',kd,true);window.addEventListener('appcmd',ac);window.addEventListener('mouseup',mu,true);
-  t=setTimeout(stop,20000);d.showModal();
+  t=setTimeout(stop,30000);d.showModal();try{hidInit()}catch(_){}setTimeout(()=>{const b=d.querySelector('.kl');b&&b.focus()},50);
 };
 /* Fjernkontroll: Hjem / Innstillinger (F8/F9 kan brukes av tastaturmapping) */
 window.appHome=()=>{{const kt=document.getElementById('kbTestD');if(kt&&kt.open)return}try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
