@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=126;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=127;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -874,6 +874,7 @@ select option,select optgroup{background:#161a28;color:#fff}
 .cin-th{flex:0 0 auto;width:68px;aspect-ratio:2/3;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:#10121c;cursor:pointer;opacity:.55;transition:.2s}
 .cin-th img{width:100%;height:100%;object-fit:cover;display:block}
 html,body,*{scrollbar-width:none!important}*::-webkit-scrollbar,::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+#tvsKb{display:none;margin:10px 0 4px}#tvsD.osk #tvsKb{display:block}.kbr{display:flex;gap:6px;margin-bottom:6px;justify-content:center}.kk{min-width:44px;flex:1;max-width:70px;padding:10px 0;font-size:20px;font-weight:700;border-radius:10px;text-align:center}.kk.w{max-width:none;flex:3}.kk.m{max-width:none;flex:1.5;font-size:16px}
 .pstrip{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 14px;background:#050406}.pst-l{color:var(--muted);font-size:13px;margin-right:4px}.pst{border-radius:999px;padding:6px 14px;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:inherit;cursor:pointer}.pst.on{background:linear-gradient(180deg,var(--accent2),var(--accent));color:var(--onacc);border-color:var(--accent)}html.tvm .pst{min-height:44px;font-size:18px;padding:8px 20px}
 .cin-th.on{opacity:1;border-color:#ffd58a;transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,200,120,.25)}
 .cin-th:hover,.cin-th:focus-visible{opacity:1}
@@ -1235,7 +1236,7 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 
 <dialog id="dlgItem"></dialog>
 
-<dialog id="tvsD"><h2>🔍 Søk</h2><input id="tvsQ" type="search" placeholder="Skriv og trykk OK" autocomplete="off"><div class="actions"><button id="tvsX">Avbryt</button><button id="tvsGo" class="primary">Søk</button></div></dialog>
+<dialog id="tvsD" class="tvpick"><h2>🔍 Søk</h2><input id="tvsQ" type="search" placeholder="Skriv og trykk OK" autocomplete="off"><div id="tvsKb" aria-label="Skjermtastatur"></div><div class="actions"><button id="tvsX">Avbryt</button><button id="tvsGo" class="primary">Søk</button></div></dialog>
 <dialog id="tvaD"><h2 id="tvaT">Kanal</h2><div class="actions" style="flex-direction:column;align-items:stretch"><button id="tvaPlay" class="primary">▶ Spill av</button><button id="tvaFav">★ Favoritt</button><button id="tvaHide">🚫 Skjul</button><button id="tvaX">Lukk</button></div></dialog>
 <dialog id="tvfD" class="tvpick"><h2>🎚 Velg kanaler</h2><div id="tvfB"></div><div class="actions"><button id="tvfX" class="primary">Ferdig</button></div></dialog>
 <dialog id="dlgSrc">
@@ -3760,7 +3761,17 @@ function tvSearchGo(){
   if((curView==='movies'||curView==='series')&&set('vq'))return;
   set('gq');
 }
-$('tvSearch').onclick=()=>{$('tvsQ').value='';$('tvsD').showModal();$('tvsQ').focus()};
+const OSK_ON=()=>TVM||DESKTOP;
+function buildOsk(){const rows=['1234567890','qwertyuiopå','asdfghjkløæ','zxcvbnm-.'];
+  $('tvsKb').innerHTML=rows.map(r=>`<div class="kbr">${[...r].map(c=>`<button class="kk" data-kb="${c}">${c}</button>`).join('')}</div>`).join('')+
+  `<div class="kbr"><button class="kk w" data-kb=" ">Mellomrom</button><button class="kk m" data-kb="BS">⌫ Slett</button><button class="kk m" data-kb="CL">Tøm</button></div>`}
+$('tvsD').addEventListener('keydown',e=>{if(e.target===$('tvsQ')||e.ctrlKey||e.metaKey||e.altKey)return;const q=$('tvsQ');
+  if(e.key==='Backspace'){e.preventDefault();e.stopPropagation();q.value=q.value.slice(0,-1);q.dispatchEvent(new Event('input',{bubbles:true}));return}
+  if(e.key.length===1&&/[\p{L}\p{N} .\-]/u.test(e.key)&&!(e.key===' '&&e.target.classList.contains('kk')&&false)){if(e.key===' '&&e.target.tagName==='BUTTON')return;e.preventDefault();q.value+=e.key.toLowerCase();q.dispatchEvent(new Event('input',{bubbles:true}))}});
+$('tvsKb').onclick=e=>{const b=e.target.closest('.kk');if(!b)return;const q=$('tvsQ'),k=b.dataset.kb;
+  if(k==='BS')q.value=q.value.slice(0,-1);else if(k==='CL')q.value='';else q.value+=k;q.dispatchEvent(new Event('input',{bubbles:true}))};
+$('tvSearch').onclick=()=>{$('tvsQ').value='';const on=OSK_ON();$('tvsD').classList.toggle('osk',on);if(on&&!$('tvsKb').firstChild)buildOsk();
+  $('tvsD').showModal();if(on){const f=$('tvsKb').querySelector('.kk');if(f)f.focus();$('tvsQ').readOnly=false}else{$('tvsQ').readOnly=false;$('tvsQ').focus()}};
 $('tvsGo').onclick=tvSearchGo;$('tvsX').onclick=()=>$('tvsD').close();
 $('tvsQ').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tvSearchGo()}});
 const tvfSum=()=>{const g=id=>{const e=$(id).querySelector('.chip.on');return e?e.childNodes[0].textContent.trim():''};$('tvFilt').textContent='🎚 '+[g('tabs'),g('chips'),g('provs')].filter(Boolean).join(' · ')+'  ▾'};
