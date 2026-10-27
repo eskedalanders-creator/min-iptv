@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=131;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=132;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2061,18 +2061,27 @@ async function autoSub(manual){
   try{
     sta('Søker …');toast(manual?'Søker etter norsk undertekst …':'🔎 Søker etter undertekst …',2000);
     const tt=(ctx.title||'').trim(),m=tt.match(/^(.*?)\s*[–-]\s*S(\d+)\s*E(\d+)/i);
-    const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*[|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/\s+/g,' ').trim();
+    const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*(?:[|:]|-\s)\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/\s+/g,' ').trim();
     const yr=(tt.match(/\(((?:19|20)\d\d)\)/)||[])[1];
-    let q='/subtitles?languages=no,nb&order_by=download_count&query='+encodeURIComponent(name.toLowerCase());
-    if(m)q+='&type=episode&season_number='+(+m[2])+'&episode_number='+(+m[3]);else{q+='&type=movie';if(yr)q+='&year='+yr}
-    let j=await osReq('GET',q),lang='no';
-    let hit=(j.data||[]).find(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);
+    const nm=encodeURIComponent(name.toLowerCase()),nm2=encodeURIComponent(name.replace(/\s*\(.*$/,'').toLowerCase());
+    const find=async langs=>{
+      const base='/subtitles?languages='+langs+'&ai_translated=include&machine_translated=include';
+      const qs=[];
+      if(m){const sn=+m[2],ep=+m[3];
+        qs.push(base+'&query='+nm+'&type=episode&season_number='+sn+'&episode_number='+ep);
+        qs.push(base+'&query='+nm+'%20s'+String(sn).padStart(2,'0')+'e'+String(ep).padStart(2,'0'));
+        qs.push(base+'&query='+nm+'&season_number='+sn+'&episode_number='+ep)}
+      else{qs.push(base+'&query='+nm+'&type=movie'+(yr?'&year='+yr:''));qs.push(base+'&query='+nm+(yr?'%20'+yr:''))}
+      for(const q of qs){
+        try{const j=await osReq('GET',q);const hit=(j.data||[]).find(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);dlog('sub',langs+' '+(j.data||[]).length+' treff');if(hit)return hit}catch(e){dlog('sub','søk-feil '+((e&&e.message)||e));if(/401|403|406|429/.test(String(e&&e.message)))throw e}
+      }
+      return null};
+    let lang='no',hit=await find('no,nb');
     if(!hit){
       if([...$('ovv').textTracks].some(t=>t.mode==='showing'))return;/* har allerede en undertekst (f.eks. engelsk i filen) */
       sta('Fant ikke norsk – prøver engelsk …');
-      j=await osReq('GET',q.replace('languages=no,nb','languages=en'));lang='en';
-      hit=(j.data||[]).find(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);
-      if(!hit){sta('Fant ingen undertekst.');if(manual)toast('Fant ingen undertekst.',3000);return}
+      lang='en';hit=await find('en');
+      if(!hit){sta('Fant ingen undertekst (søkte: '+name+(m?' S'+m[2]+'E'+m[3]:'')+').');if(manual)toast('Fant ingen undertekst.',3000);return}
     }
     if(!osTok&&localStorage.getItem('os_user')){const l=await osReq('POST','/login',{username:localStorage.getItem('os_user'),password:localStorage.getItem('os_pass')||''});osTok=l.token}
     sta('Laster ned …');
