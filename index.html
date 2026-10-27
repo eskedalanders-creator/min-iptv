@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=154;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=155;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3248,6 +3248,18 @@ if(NATIVE&&!DESKTOP){
 }
 window.appBack=appBack;
 
+window.pcPower=function(a){
+  const W=window.IPTV_WIN;
+  if(!W||!W.power){toast('Krever nyeste Windows-app (Min-IPTV-Windows.exe)',5000);return}
+  let d=document.getElementById('pwD');if(d)d.remove();
+  d=document.createElement('dialog');d.id='pwD';d.style.cssText='background:#14161f;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:24px;min-width:380px;text-align:center';
+  d.innerHTML='<h3 style="margin:0 0 14px">'+(a==='off'?'Slå av PC-en?':'Starte PC-en på nytt?')+'</h3><button id="pwNo" class="primary">Avbryt</button> <button id="pwYes" style="background:#c62f3b;color:#fff;border-color:#c62f3b">'+(a==='off'?'⏻ Slå av':'⟳ Start på nytt')+'</button>';
+  document.body.appendChild(d);d.showModal();d.querySelector('#pwNo').focus();
+  d.querySelector('#pwNo').onclick=()=>d.close();
+  d.querySelector('#pwYes').onclick=()=>{d.querySelector('h3').textContent=a==='off'?'Slår av …':'Starter på nytt …';try{syncSoon&&cloudSync&&cloudSync()}catch(_){}setTimeout(()=>W.power(a),800)};
+  d.addEventListener('keydown',e=>{if(/^Arrow(Left|Right)$/.test(e.key)){e.preventDefault();e.stopPropagation();(document.activeElement.id==='pwNo'?d.querySelector('#pwYes'):d.querySelector('#pwNo')).focus()}});
+};
+
 /* ===== Fjernkontroll lest direkte via HID (Windows-appen) ===== */
 const HIDK={last:'',lastT:0};
 const hidMap=()=>{try{return JSON.parse(localStorage.getItem('hidmap')||'{}')}catch(_){return{}}};
@@ -3610,6 +3622,7 @@ function renderSearch(q){
 function renderSettings(){
   const th=localStorage.getItem('theme')||'brann';
   $('v-settings').innerHTML=`<h1>⚙️ <em>Innstillinger</em></h1><div class="set">
+   ${DESKTOP?`<div class="card"><h3>⏻ Slå av PC-en</h3><p>Slår av eller starter maskinen på nytt.</p><button class="primary" onclick="pcPower('off')">⏻ Slå av</button> <button onclick="pcPower('restart')">⟳ Start på nytt</button></div>`:''}
    ${DESKTOP?`<div class="card"><h3>🎮 Test fjernkontroll</h3><p>Viser hva hver knapp på fjernkontrollen sender, så knappene kan kobles riktig.</p><button class="primary" id="kbTestBtn" onclick="kbTest()">Start test</button></div>`:''}
 
    <div class="card"><h3>📡 Kilder</h3><p>Legg til, oppdater eller bytt spilleliste (M3U / Xtream).</p><button class="primary" data-act="src">Åpne kilder</button></div>
