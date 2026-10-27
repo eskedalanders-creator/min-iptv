@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=136;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=137;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1999,7 +1999,7 @@ function openPlayer(ctx){
   const v=$('ovv');
   const startAt=ctx.pos>10&&(!ctx.dur||ctx.pos<ctx.dur-30)?ctx.pos:0;
   vodPlayer.play(ctx.url,false);
-  extSub=null;subOff=0;v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());$('ccMenu').className='';
+  extSub=null;subOff=0;subScale=1;v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());$('ccMenu').className='';
   v.textTracks.onaddtrack=()=>setTimeout(pickNo,300);
   v.onloadedmetadata=()=>{if(startAt)try{v.currentTime=startAt}catch(e){}setTimeout(pickNo,500);maybeAutoSub()};
   v.ontimeupdate=()=>{
@@ -2013,11 +2013,77 @@ function openPlayer(ctx){
 const isEnTrack=t=>/^(en|eng)\b/i.test(t.language||'')||/engelsk|english/i.test(t.label||'');
 const isNoTrack=t=>/^(no|nb|nn|nor)\b/i.test(t.language||'')||/norsk|norw|bokm|nynorsk/i.test(t.label||'');
 const subOn=()=>localStorage.getItem('nosub')!=='0';
-let extSub=null,subOff=0;
+let extSub=null,subOff=0,subScale=1;
 function srt2vtt(t,off){
-  const sh=(h,m,sec,ms)=>{let x=((+h)*3600+(+m)*60+(+sec))*1000+(+ms)+off*1000;if(x<0)x=0;const H=Math.floor(x/3600000),M=Math.floor(x/60000)%60,S=Math.floor(x/1000)%60,MS=Math.round(x%1000);return String(H).padStart(2,'0')+':'+String(M).padStart(2,'0')+':'+String(S).padStart(2,'0')+'.'+String(MS).padStart(3,'0')};
+  const sh=(h,m,sec,ms)=>{let x=(((+h)*3600+(+m)*60+(+sec))*1000+(+ms))*subScale+off*1000;if(x<0)x=0;const H=Math.floor(x/3600000),M=Math.floor(x/60000)%60,S=Math.floor(x/1000)%60,MS=Math.round(x%1000);return String(H).padStart(2,'0')+':'+String(M).padStart(2,'0')+':'+String(S).padStart(2,'0')+'.'+String(MS).padStart(3,'0')};
   t=t.replace(/^\uFEFF/,'').replace(/\r/g,'');
   return 'WEBVTT\n\n'+t.replace(/(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g,(m,a,b,c,d,e,f,g,h)=>sh(a,b,c,d)+' --> '+sh(e,f,g,h));
+}
+
+/* ===== Automatisk synk av undertekst mot tale i lyden ===== */
+const AS={ac:null,an:null,src:null,ok:false,ctx:null,smp:[],timer:0,fb:null,done:0,last:null};
+function asInit(){
+  if(!DESKTOP)return false;/* bare i Windows-appen (ingen CORS-begrensning på lyd) */
+  try{
+    if(!AS.ac){AS.ac=new (window.AudioContext||window.webkitAudioContext)()}
+    if(AS.ac.state!=='running'){AS.ac.resume();if(AS.ac.state!=='running')return false}
+    if(!AS.src){const v=$('ovv');AS.src=AS.ac.createMediaElementSource(v);AS.an=AS.ac.createAnalyser();AS.an.fftSize=2048;AS.an.smoothingTimeConstant=0;
+      AS.src.connect(AS.ac.destination);AS.src.connect(AS.an);AS.fb=new Float32Array(AS.an.frequencyBinCount)}
+    return true}catch(e){dlog('sync','init-feil '+e);return false}
+}
+function asCues(raw){const out=[];const re=/(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;
+  while((m=re.exec(raw)))out.push([(+m[1])*3600+(+m[2])*60+(+m[3])+(+m[4])/1000,(+m[5])*3600+(+m[6])*60+(+m[7])+(+m[8])/1000]);return out}
+function asStart(ctx){
+  clearInterval(AS.timer);AS.smp=[];AS.ctx=ctx;AS.done=0;AS.last=null;
+  if(!extSub||extSub.vtt)return;
+  let tries=0;
+  AS.timer=setInterval(()=>{
+    if(ovCtx!==ctx||!extSub){clearInterval(AS.timer);return}
+    const v=$('ovv');
+    if(!AS.ok){AS.ok=asInit();if(!AS.ok){if(++tries>50)clearInterval(AS.timer);return}}
+    if(v.paused||v.seeking||v.readyState<3)return;
+    AS.an.getFloatFrequencyData(AS.fb);
+    const hz=AS.ac.sampleRate/AS.an.fftSize,a=Math.round(300/hz),b=Math.round(3400/hz);
+    let sp=0,lo=0,n=0;for(let i=a;i<b;i++){sp+=Math.pow(10,AS.fb[i]/10);n++}
+    for(let i=1;i<a;i++)lo+=Math.pow(10,AS.fb[i]/10);
+    if(!isFinite(sp))return;
+    AS.smp.push([v.currentTime,10*Math.log10(sp/n+1e-12),10*Math.log10(sp/(sp+lo+1e-12)+1e-12)]);
+    const N=AS.smp.length;
+    if(N===600||N===1200||N===2400||N===4200)asSolve(ctx);
+  },100);
+}
+function asSolve(ctx){
+  try{
+  const cues=asCues(extSub.raw);if(cues.length<20)return;
+  const S=AS.smp;let me=0,me2=0;for(const x of S){me+=x[1];me2+=x[2]}me/=S.length;me2/=S.length;
+  let sd=0;for(const x of S)sd+=(x[1]-me)**2;sd=Math.sqrt(sd/S.length)||1;
+  const B=5;/* 0,2 s bins */
+  const bm=new Map();for(const x of S){const i=Math.round(x[0]*B),v=Math.max(-2,Math.min(3,(x[1]-me)/sd))+(x[2]-me2)/6;const o=bm.get(i);if(o){o[1]+=v;o[2]++}else bm.set(i,[i,v,1])}
+  const smp=[...bm.values()].map(x=>[x[0],x[1]/x[2]]);
+  let mv=0;for(const x of smp)mv+=x[1];mv/=smp.length;for(const x of smp)x[1]-=mv;
+  const R=600*B;/* ±10 min */
+  let best={sc:-1e9};const all=[];
+  for(const k of [1,25/23.976,23.976/25]){
+    const end=Math.ceil(cues[cues.length-1][1]*k*B)+2,A=new Float32Array(end);
+    for(const c of cues)for(let i=Math.floor(c[0]*k*B);i<Math.ceil(c[1]*k*B)&&i<end;i++)A[i]=1;
+    let dens=0;for(let i=0;i<end;i++)dens+=A[i];dens/=end;
+    for(let o=-R;o<=R;o++){let sc=0;
+      for(let j=0;j<smp.length;j++){const i=smp[j][0]-o;sc+=smp[j][1]*((i>=0&&i<end?A[i]:0)-dens)}
+      all.push(sc);if(sc>best.sc)best={sc,o,k}}
+  }
+  let m=0;for(const x of all)m+=x;m/=all.length;let sdv=0;for(const x of all)sdv+=(x-m)**2;sdv=Math.sqrt(sdv/all.length)||1;
+  const z=(best.sc-m)/sdv,off=best.o/B;
+  dlog('sync','N='+S.length+' off='+off.toFixed(1)+' k='+best.k.toFixed(4)+' z='+z.toFixed(1));
+  if(z<5)return;
+  const agree=AS.last&&Math.abs(AS.last.off-off)<0.6&&AS.last.k===best.k;
+  AS.last={off,k:best.k};
+  if(Math.abs(subOff-off)<0.25&&subScale===best.k){if(agree){AS.done=1;clearInterval(AS.timer)}return}
+  subOff=off;subScale=best.k;
+  try{localStorage.setItem('suboff_'+(ctx.ref||ctx.k||ctx.title),subOff)}catch(_){}
+  applyExtSub();
+  toast('🎯 Undertekst synket automatisk ('+(off>=0?'+':'')+off.toFixed(1).replace('.',',')+' s)',3000);
+  if(agree){AS.done=1;clearInterval(AS.timer)}
+  }catch(e){dlog('sync','feil '+e)}
 }
 function applyExtSub(){
   const v=$('ovv');v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());
@@ -2121,7 +2187,7 @@ async function autoSub(manual,next){
       }
     }
     if(ovCtx!==ctx)return;
-    extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}applyExtSub();
+    extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}subScale=1;applyExtSub();asStart(ctx);
     const n=ctx._cands.length;
     sta((lang==='en'?'✔ Engelsk lagt inn':'✔ Lagt inn')+(ctx._cands[ctx._ci]&&ctx._cands[ctx._ci].attributes.moviehash_match?' (eksakt treff på filen)':'')+' (fil '+(ctx._ci+1)+' av '+n+')'+(d.remaining!=null?' – '+d.remaining+' igjen i dag':''));
     toast((lang==='en'?'🇬🇧 Engelsk':'🇳🇴 Norsk')+' undertekst '+(ctx._ci+1)+'/'+n+' lagt inn',3500);
@@ -2184,7 +2250,7 @@ $('ccMenu').onclick=e=>{
 };
 $('ccFile').onchange=async e=>{
   const f=e.target.files[0];if(!f)return;
-  extSub={raw:await f.text(),vtt:/\.vtt$/i.test(f.name)};subOff=0;applyExtSub();$('ccMenu').className='';toast('Undertekst lastet: '+f.name,3000);e.target.value='';
+  extSub={raw:await f.text(),vtt:/\.vtt$/i.test(f.name)};subOff=0;subScale=1;applyExtSub();asStart(ovCtx);$('ccMenu').className='';toast('Undertekst lastet: '+f.name,3000);e.target.value='';
 };
 function closePlayer(){
   const v=$('ovv');
