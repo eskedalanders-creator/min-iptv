@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=128;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=129;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2004,7 +2004,7 @@ function openPlayer(ctx){
     if(Date.now()-lastSave<5000||!ovCtx)return;lastSave=Date.now();
     pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
   };
-  v.onended=()=>{if(ovCtx&&ovCtx.next)ovCtx.next();};
+  v.onended=()=>{if(ovCtx){const d=Math.floor(v.duration||0);if(d>0)pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:d,dur:d,ts:Date.now(),ref:ovCtx.ref});if(ovCtx.next){toast('▶ Neste episode …',2500);ovCtx.next()}}};
   keepAwake();
 }
 /* ===== Undertekst ===== */
@@ -3451,7 +3451,7 @@ async function loadSeries(c){
     if(!keys.length){box.innerHTML='<div class="muted" style="margin-top:12px">Ingen episoder funnet.</div>';return}
     const draw=sk=>{
       const list=seasons[sk];
-      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id);return `<div class="ep" data-i="${i}"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(cl(e.title)||('Episode '+(i+1)))}${h&&h.dur?` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`:''}</span><span>▶</span></div>`}).join('');
+      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id);return `<div class="ep" data-i="${i}"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(cl(e.title)||('Episode '+(i+1)))}${h&&h.dur?(h.pos/h.dur>=.9?` <small style="color:var(--ok)">· ✓ Sett</small>`:` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`):''}</span><span>▶</span></div>`}).join('');
       $('eps').onclick=ev=>{const r=ev.target.closest('.ep');if(!r)return;playEp(list,+r.dataset.i)};
     };
     const playEp=(list,i)=>{
@@ -3459,7 +3459,7 @@ async function loadSeries(c){
       const h=hist.find(x=>x.k==='e:'+e.id);
       openPlayer({k:'e:'+e.id,type:'ep',title:c.name+' – S'+(e.season||'?')+'E'+(e.episode_num||i+1)+' '+cl(e.title),logo:(e.info&&e.info.movie_image)||c.logo,
         url:xtUrl(c.xt,'series',e.id,e.container_extension||'mp4'),pos:h?h.pos:0,dur:h?h.dur:0,ref:c.key,
-        next:list[i+1]?()=>playEp(list,i+1):null});
+        next:list[i+1]?()=>playEp(list,i+1):(()=>{const sk=keys.find(k=>seasons[k]===list),ns=keys[keys.indexOf(sk)+1];return ns!==undefined&&seasons[ns]&&seasons[ns][0]?()=>playEp(seasons[ns],0):null})()});
     };
     box.innerHTML=`<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(keys[0])}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map((k,i)=>`<button type="button" class="sdd-i${i?'':' on'}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><div class="eps" id="eps"></div>`;
     const sdd=$('sSeason'),sl=$('sddL');
