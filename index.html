@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=107;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=108;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1785,6 +1785,7 @@ function makePlayer(video,msgEl){
       else if(m&&(forceHls||!canTs)){src=m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8';kind='hls'}
       const fail=why=>{
         if(me!==alive)return;
+        try{dlog('play',(why||'')+' '+kind+' '+(live?'live':'vod')+' err='+(video.error?video.error.code+':'+(video.error.message||''):'-')+' '+url)}catch(x){}
         if((kind==='ts'||kind==='nhls')&&m&&!forceHls)return play(url,true,true);
         if(retries++<3){show('Mistet forbindelsen – prøver igjen …');setTimeout(()=>{if(me===alive)play(url,true,forceHls)},2500);return}
         show('Kunne ikke spille av kanalen. '+(why||'')+(proxyOn?'':' (Hvis strømmen er http, start server.js.)')+' Sjekker årsak …');
@@ -1896,6 +1897,17 @@ function fsDlg(){let d=$('dlgSync');if(!d){d=document.createElement('dialog');d.
   $('fsInfo').innerHTML=has?'Denne enheten er koblet til. Koden din: <b>'+esc(fsFmt(has))+'</b>':'Skriv inn koden fra en annen enhet for å hente <b>alle kilder, favoritter og innstillinger</b> automatisk – eller opprett en ny kode her.';
   $('fsCode').value=has?fsFmt(has):'';$('fsMsg').textContent='';d.showModal();return d}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&Date.now()-(+localStorage.getItem('sync_fts')||0)>600000)fsSoon(500)});
+/* ---- Feillogg til skyen (kun når synk-kode er satt) – slik at feil på TV-boksen kan leses ---- */
+const dlDev=(()=>{let i=localStorage.getItem('dev_id');if(!i){i=Math.random().toString(36).slice(2,6);try{localStorage.setItem('dev_id',i)}catch(e){}}return(DESKTOP?'exe':NATIVE?'apk':'web')+(TVM?'-tv':'')+'-'+i})();
+let dlQ=[],dlT=0,dlSeen={};
+const dlScrub=s=>String(s==null?'':s).replace(/https?:\/\/([^\/\s?#'")]+)[^\s'")]*/g,'$1/…').replace(/(username|password|token|key)=[^&\s]+/gi,'$1=…').slice(0,300);
+function dlog(k,m){try{const id=localStorage.getItem('sync_id');if(!id)return;const msg=dlScrub(m),sk=k+msg;dlSeen[sk]=(dlSeen[sk]||0)+1;if(dlSeen[sk]>3||dlQ.length>40)return;
+  dlQ.push({t:Date.now(),d:dlDev,b:APP_BUILD,k,m:msg});clearTimeout(dlT);dlT=setTimeout(dlFlush,10000)}catch(e){}}
+async function dlFlush(){const id=localStorage.getItem('sync_id');if(!id||!dlQ.length)return;const q=dlQ;dlQ=[];
+  try{const c=id+'l',d=await syncGet(c);let e=(d.e||[]).concat(q);e.sort((a,b)=>a.t-b.t);e=e.slice(-150);await syncPut(c,{e})}catch(x){}}
+window.addEventListener('error',ev=>{if(ev.target&&ev.target!==window)return;dlog('err',(ev.message||'')+' @'+String(ev.filename||'').split('/').pop()+':'+ev.lineno)});
+window.addEventListener('unhandledrejection',ev=>dlog('rej',ev.reason&&(ev.reason.message||ev.reason)));
+setTimeout(()=>dlog('boot','v'+APP_BUILD+' '+dlDev+' '+innerWidth+'x'+innerHeight+' '+(navigator.userAgent.match(/(Android [\d.]+|Windows NT [\d.]+|Chrome\/[\d.]+)/g)||[]).join(' ')+(window.Capacitor?' cap':'')),6000);
 setTimeout(async()=>{try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(r&&r.ts>(+localStorage.getItem('sync_fts')||0)){
   const fresh=!(await dbAll()).length;if(fresh){await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))}else toast('Nyere oppsett finnes i skyen – Innstillinger → Synk → Hent fra skyen',7000)}}catch(e){}},4000);
 
