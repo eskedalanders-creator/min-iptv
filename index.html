@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=147;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=148;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3197,6 +3197,7 @@ function go(sp){
   showView(v,true);
 }
 function appBack(){
+  {const kt=document.getElementById('kbTestD');if(kt&&kt.open)return true}
   const nw=Date.now();if(window.__bk&&nw-window.__bk<350)return true;window.__bk=nw;
   if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement){document.exitFullscreen().catch(()=>{});return true}
   if(typeof zapOpen!=='undefined'&&zapOpen){zapClose();return true}
@@ -3213,8 +3214,22 @@ if(NATIVE&&!DESKTOP){
   addEventListener('popstate',()=>{if(appBack())history.pushState({b:1},'')});
 }
 window.appBack=appBack;
+
+window.kbTest=function(){
+  let d=document.getElementById('kbTestD');
+  if(!d){d=document.createElement('dialog');d.id='kbTestD';d.style.cssText='background:#14161f;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:20px;min-width:420px;max-width:90vw';
+    d.innerHTML='<h3 style="margin:0 0 8px">🎮 Trykk på knappene på fjernkontrollen</h3><p style="opacity:.8;margin:0 0 10px">Testen avsluttes automatisk etter 20 sekunder uten trykk.</p><div id="kbTestL" style="font:15px monospace;line-height:1.7;max-height:50vh;overflow:auto"></div>';document.body.appendChild(d)}
+  const L=d.querySelector('#kbTestL');L.innerHTML='<i>Venter på tastetrykk …</i>';let t;
+  const add=x=>{if(L.querySelector('i'))L.innerHTML='';L.insertAdjacentHTML('afterbegin','<div>'+x+'</div>');clearTimeout(t);t=setTimeout(stop,20000)};
+  const kd=e=>{e.preventDefault();e.stopImmediatePropagation();add('Tast: <b>'+esc(e.key)+'</b> · kode '+esc(e.code||'-')+' · nr '+e.keyCode)};
+  const ac=e=>add('Windows-kommando: <b>'+esc(e.detail)+'</b>');
+  const mu=e=>{if(e.button>2){e.preventDefault();add('Museknapp '+e.button)}};
+  function stop(){window.removeEventListener('keydown',kd,true);window.removeEventListener('appcmd',ac);window.removeEventListener('mouseup',mu,true);try{d.close()}catch(_){}}
+  window.addEventListener('keydown',kd,true);window.addEventListener('appcmd',ac);window.addEventListener('mouseup',mu,true);
+  t=setTimeout(stop,20000);d.showModal();
+};
 /* Fjernkontroll: Hjem / Innstillinger (F8/F9 kan brukes av tastaturmapping) */
-window.appHome=()=>{try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
+window.appHome=()=>{{const kt=document.getElementById('kbTestD');if(kt&&kt.open)return}try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
 window.appSettings=()=>{try{if(document.fullscreenElement&&document.fullscreenElement!==document.documentElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
 document.addEventListener('keydown',e=>{const t=e.target,tg=(t&&t.tagName)||'';if(/INPUT|TEXTAREA|SELECT/.test(tg))return;
   if(e.key==='F9'||e.key==='Settings'||e.key==='AppSwitch'){e.preventDefault();appSettings()}
@@ -3532,6 +3547,7 @@ function renderSettings(){
    <div class="card"><h3>🔑 Full synk (kilder, favoritter, innstillinger)</h3><p>${localStorage.getItem('sync_phrase')?'Koblet til. Kode: <b>'+esc(fsFmt(localStorage.getItem('sync_phrase')))+'</b> – skriv den inn på nye enheter, så kommer alt av seg selv.':'Opprett en kode én gang, og skriv den inn på nye enheter – da hentes M3U-lister, innlogging, favoritter og brukere automatisk (kryptert).'}</p><button class="primary" data-act="fsopen">${localStorage.getItem('sync_phrase')?'Vis kode':'Koble til / opprett kode'}</button> ${localStorage.getItem('sync_phrase')?'<button data-act="fspush">Last opp nå</button> <button data-act="fspull">Hent fra skyen</button> <button data-act="fsoff">Koble fra</button>':''}</div>
    <div class="card"><h3>🔄 Synk mellom enheter</h3><p>«Fortsett å se» deles automatisk mellom enhetene dine (bobil, hjemme, TV). Status: <b id="syncSta">${syncCode()?esc(syncSta||'på'):'av'}</b></p><button class="primary" data-act="syncnow">Synk nå</button> <button data-act="synctog">${syncCode()?'Slå av':'Slå på'}</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
+   ${DESKTOP?`<div class="card"><h3>🎮 Test fjernkontroll</h3><p>Viser hva hver knapp på fjernkontrollen sender, så knappene kan kobles riktig.</p><button class="primary" id="kbTestBtn" onclick="kbTest()">Start test</button></div>`:''}
    <div class="card"><h3>💾 Sikkerhetskopi / flytt til annen enhet</h3><p>Lagre kilder, favoritter, brukere og innstillinger i én fil, og last den inn på TV-boksen i stedet for å skrive inn alt med fjernkontrollen. <b>Filen inneholder innlogging til IPTV – slett den etterpå.</b></p><button class="primary" data-act="bk:save">Lagre til fil</button> <button data-act="bk:copy">Kopier som tekst</button> <button data-act="bk:load">Last inn fra fil …</button><input id="bkFile" type="file" accept=".json,.txt,application/json" hidden></div>
    <div class="card"><h3>📺 TV-modus</h3><p>For Android TV og fjernkontroll: større knapper, enklere og raskere. Nå: <b>${TVM?'på':'av'}</b> (${({'1':'tvunget på','0':'tvunget av'})[localStorage.getItem('tvmode')]||'automatisk'}).</p><button data-act="tv:auto">Automatisk</button> <button data-act="tv:1">På</button> <button data-act="tv:0">Av</button></div>
    <div class="card"><h3>ℹ️ Om</h3><p>Eskedals Univers · server.js ${proxyOn?'<b style="color:var(--ok)">er aktiv</b>':'<b>er ikke aktiv</b> (start start.bat)'}. Bruk bare lovlige kilder du har abonnement på.</p></div>
