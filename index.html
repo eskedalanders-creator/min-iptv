@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=143;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=144;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3117,6 +3117,7 @@ document.addEventListener('keydown',e=>{if((e.key==='i'||e.key==='I'||e.key==='I
 
 /* ===================== Kanalbytte i spilleren ===================== */
 let zapOpen=false,zapSel=0,zapItems=[],zapNum='',zapNumT=0,zapInfoT=0;
+const exitLiveFs=()=>{try{if(zapOpen)zapClose()}catch(_){}$('vwrap').classList.remove('pfs','bar');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})};
 const isFsLive=()=>curView==='live'&&current&&$('v-live').classList.contains('playing')&&($('vwrap').classList.contains('pfs')||document.fullscreenElement===$('vwrap')||document.webkitFullscreenElement===$('vwrap'));
 function zapInfo(c){
   const el=$('zapI');if(!el)return;
@@ -3128,7 +3129,7 @@ function zapInfo(c){
 function zapRender(){
   const L=$('zapL');if(!L)return;
   const a=Math.max(0,zapSel-4),b=Math.min(zapItems.length,a+11);
-  L.innerHTML=`<div class="zh">Kanaler <small>OK = velg · Tilbake = lukk</small></div>`+zapItems.slice(a,b).map((c,i)=>`<div class="zr ${a+i===zapSel?'on':''} ${current&&c.key===current.key?'cur':''}" data-zi="${a+i}">${c.logo?`<img src="${esc(c.logo)}" alt="">`:'<span class="zph"></span>'}<div class="zrb"><b>${esc(c.nm||c.name)}</b><div class="lcp" data-epg="${c.key}"></div></div></div>`).join('');
+  L.innerHTML=`<div class="zh">Kanaler <small>OK = velg · ◀ = ut av fullskjerm · Tilbake = lukk</small></div>`+zapItems.slice(a,b).map((c,i)=>`<div class="zr ${a+i===zapSel?'on':''} ${current&&c.key===current.key?'cur':''}" data-zi="${a+i}">${c.logo?`<img src="${esc(c.logo)}" alt="">`:'<span class="zph"></span>'}<div class="zrb"><b>${esc(c.nm||c.name)}</b><div class="lcp" data-epg="${c.key}"></div></div></div>`).join('');
   epgHydrate(L);
 }
 function zapShowList(){
@@ -3156,7 +3157,9 @@ document.addEventListener('keydown',e=>{
     else if(k==='PageDown'){zapSel=Math.min(zapItems.length-1,zapSel+8);zapRender()}
     else if(k==='PageUp'){zapSel=Math.max(0,zapSel-8);zapRender()}
     else if(k==='Enter'||k===' '){const c=zapItems[zapSel];zapClose();if(c)selectLive(c,true)}
-    else if(k==='Escape'||k==='Backspace'||k==='ArrowLeft'||k==='ArrowRight'||k==='GoBack'||k==='BrowserBack')zapClose();
+    else if(k==='ArrowLeft'){exitLiveFs()}
+    else if(k==='F8'||k==='F9'){exitLiveFs();setTimeout(()=>{(k==='F8'?window.appHome:window.appSettings)()},50)}
+    else if(k==='Escape'||k==='Backspace'||k==='ArrowRight'||k==='GoBack'||k==='BrowserBack'||e.keyCode===166)zapClose();
     return;
   }
   if(typing)return;
@@ -3165,6 +3168,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ChannelUp'||e.keyCode===427){e.preventDefault();zap(-1);return}
   if(e.key==='ChannelDown'||e.keyCode===428){e.preventDefault();zap(1);return}
   if(!isFsLive())return;
+  if(e.key==='Escape'||e.key==='Backspace'||e.key==='GoBack'||e.key==='BrowserBack'||e.keyCode===166){e.preventDefault();e.stopImmediatePropagation();exitLiveFs();return}
   if(e.key==='ArrowUp'){e.preventDefault();e.stopImmediatePropagation();zap(-1);return}
   if(e.key==='ArrowDown'){e.preventDefault();e.stopImmediatePropagation();zap(1);return}
   if(e.key==='Enter'||e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();e.stopImmediatePropagation();zapShowList();return}
@@ -3210,8 +3214,8 @@ if(NATIVE&&!DESKTOP){
 }
 window.appBack=appBack;
 /* Fjernkontroll: Hjem / Innstillinger (F8/F9 kan brukes av tastaturmapping) */
-window.appHome=()=>{try{if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
-window.appSettings=()=>{try{if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
+window.appHome=()=>{try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="home"]');if(b)b.click();else showView('home',true)}catch(e){}};
+window.appSettings=()=>{try{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});document.querySelectorAll('.pfs').forEach(x=>x.classList.remove('pfs','bar'));if($('ov').classList.contains('on'))closePlayer();document.querySelectorAll('dialog[open]').forEach(d=>d.close());const b=document.querySelector('[data-v="settings"]');if(b)b.click();else showView('settings',true)}catch(e){}};
 document.addEventListener('keydown',e=>{const t=e.target,tg=(t&&t.tagName)||'';if(/INPUT|TEXTAREA|SELECT/.test(tg))return;
   if(e.key==='F9'||e.key==='Settings'||e.key==='AppSwitch'){e.preventDefault();appSettings()}
   else if(e.key==='F8'||e.key==='BrowserHome'||e.key==='GoHome'||e.keyCode===172){e.preventDefault();appHome()}
