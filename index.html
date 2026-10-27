@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=104;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=105;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1415,8 +1415,8 @@ let pid=localStorage.getItem('pid');
 if(!profiles.find(p=>p.id===pid))pid=profiles[0].id;
 const K=k=>k+':'+pid;
 let favs=new Set(LSget(K('fav'),[])), hidden=new Set(LSget(K('hid'),[])), hist=LSget(K('hist'),[]);
-const saveFav=()=>LSset(K('fav'),[...favs]);
-const saveHid=()=>LSset(K('hid'),[...hidden]);
+const saveFav=()=>{LSset(K('fav'),[...favs]);if(typeof fsSoon==='function')fsSoon()};
+const saveHid=()=>{LSset(K('hid'),[...hidden]);if(typeof fsSoon==='function')fsSoon()};
 const saveHist=()=>LSset(K('hist'),hist);
 const isFav=c=>favs.has(c.key)||(c.t==='live'&&favs.has(String(c.id)));
 function renderProfiles(){
@@ -1698,7 +1698,7 @@ async function refreshSource0(s,quiet){
     if(!data&&s.url){text=await fetchText(s.url,n=>onP('Henter M3U … '+(n/1048576).toFixed(1)+' MB'))}
     if(data){s.data=data;delete s.text}else if(text){s.text=text;delete s.data}
     s.updated=Date.now();step='lagrer';
-    await dbPut(s);step='laster';await loadSources();
+    await dbPut(s);step='laster';await loadSources();if(typeof fsSoon==='function')fsSoon(3000);
     toast(quiet?'Kilden er oppdatert ✔':'',quiet?3500:0);
     if(!quiet)ssta('Oppdatert. '+warn.join(' · '),true);
     return true;
@@ -1728,7 +1728,7 @@ $('srcAdd').onclick=async()=>{
     s.updated=Date.now();await dbPut(s);
     ['sName','sUrl','sHost','sUser','sPass'].forEach(i=>$(i).value='');$('sFile').value='';
     localStorage.setItem('src:'+pid,s.id);
-    await loadSources();ssta('Lagt til!',true);
+    await loadSources();if(typeof fsSoon==='function')fsSoon(3000);ssta('Lagt til!',true);
     $('dlgSrc').close();showView('home');
   }catch(e){
     ssta('Kunne ikke hente listen (v'+APP_BUILD+'):\n'+e.message+'\n'+String(e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/https?:\/\/[^ )]*\//g,'')).join('\n')+(proxyOn?'':'\n\nTips: Start server.js (start.bat) – da omgår appen nettleserens blokkering av http-adresser.'));
@@ -1747,7 +1747,7 @@ $('srcList').onclick=async e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.updall){b.textContent='…';await autoUpdate(true);b.textContent='Oppdater alle';return}
   if(b.dataset.use){current=null;livePlayer.stop();setActive(b.dataset.use);renderSources();const sn=b.dataset.use==='all'?'Alle kilder':((sources.find(x=>x.id===b.dataset.use)||{}).name||'Kilden');ssta('✔ Bruker nå: '+sn,true)}
-  if(b.dataset.del){await dbDel(b.dataset.del);await loadSources()}
+  if(b.dataset.del){await dbDel(b.dataset.del);await loadSources();if(typeof fsSoon==='function')fsSoon(3000)}
   if(b.dataset.upd){const s=sources.find(x=>x.id===b.dataset.upd);b.textContent='…';await refreshSource(s,false);b.textContent='Oppdater'}
 };
 const autoOn=()=>localStorage.getItem('autoupd')!=='0';
@@ -1836,7 +1836,7 @@ syncSoon();
 }
 /* ---- Synk «Fortsett å se» via Firebase ---- */
 const SYNC_DB='https://eskedals-univers-default-rtdb.europe-west1.firebasedatabase.app',SYNC_CODE0='01hewaxwhszp6nj5diphz2kdhmyo';
-const syncCode=()=>{const v=localStorage.getItem('sync_code');return v===null?SYNC_CODE0:v};
+const syncCode=()=>{const v=localStorage.getItem('sync_code'),i=localStorage.getItem('sync_id');return v===null?(i?i+'h':SYNC_CODE0):v};
 const syncKey=()=>{const p=profiles.find(x=>x.id===pid);return String((p&&p.name)||'bruker').toLowerCase().replace(/[^a-z0-9æøå]/g,'')||'bruker'};
 let syncSta='',syncT=0,syncBusy=0;
 async function syncGet(c){const r=await fetch(SYNC_DB+'/sync/'+c+'.json');if(!r.ok)throw new Error('HTTP '+r.status);const s=await r.json();if(!s)return{};try{return JSON.parse(s)||{}}catch(e){return{}}}
@@ -1855,6 +1855,47 @@ async function cloudSync(push){const c=syncCode();if(!c||c.length<20||syncBusy)r
 function syncSoon(ms){clearTimeout(syncT);syncT=setTimeout(()=>cloudSync(),ms==null?20000:ms)}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudSync()});
 setTimeout(()=>cloudSync(),2500);
+/* ---- Full synk: kilder, favoritter, innstillinger – kryptert med synk-koden ---- */
+function u8b64(u){let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)}
+function b64u8(b){const s=atob(b),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u}
+const fsNorm=p=>String(p||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const fsFmt=p=>fsNorm(p).replace(/(.{4})(?=.)/g,'$1-').toUpperCase();
+async function fsDerive(phrase){
+  if(!(window.crypto&&crypto.subtle))throw new Error('Kryptering er ikke tilgjengelig her – bruk appen eller localhost');
+  const n=fsNorm(phrase);if(n.length<10)throw new Error('Koden er for kort');
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(n),'PBKDF2',false,['deriveBits']);
+  const bits=new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:new TextEncoder().encode('eskedals-univers-sync-v1'),iterations:150000},km,512));
+  const id=[...bits.slice(0,16)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  const key=await crypto.subtle.importKey('raw',bits.slice(32),'AES-GCM',false,['encrypt','decrypt']);
+  return{id,key,n}}
+async function fsPush(){const ph=localStorage.getItem('sync_phrase');if(!ph)return;
+  const {id,key}=await fsDerive(ph);const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(await backupData())));
+  const o={v:1,ts:Date.now(),iv:u8b64(iv),ct:u8b64(ct)};await syncPut(id,o);localStorage.setItem('sync_fts',String(o.ts));return o.ts}
+async function fsFetch(ph){const {id,key}=await fsDerive(ph);const d=await syncGet(id);if(!d||!d.ct)return null;
+  let t;try{t=new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64u8(d.iv)},key,b64u8(d.ct)))}catch(e){throw new Error('Kunne ikke dekryptere')}
+  return{ts:d.ts,text:t,id}}
+let fsT=0;const fsSoon=ms=>{if(!localStorage.getItem('sync_phrase'))return;clearTimeout(fsT);fsT=setTimeout(()=>fsPush().catch(()=>{}),ms||30000)};
+async function fsConnect(ph,create){
+  const {id,n}=await fsDerive(ph);
+  if(create){localStorage.setItem('sync_phrase',n);localStorage.setItem('sync_id',id);localStorage.removeItem('sync_code');await fsPush();return 'push'}
+  const r=await fsFetch(n);if(!r)throw new Error('Fant ingen data for denne koden');
+  await restoreData(r.text);localStorage.setItem('sync_phrase',n);localStorage.setItem('sync_id',id);localStorage.setItem('sync_fts',String(r.ts));return 'pull'}
+function fsDlg(){let d=$('dlgSync');if(!d){d=document.createElement('dialog');d.id='dlgSync';d.style.cssText='max-width:520px;width:92vw;padding:22px;border-radius:14px;background:var(--bg2,#1b1b22);color:inherit;border:1px solid #444';
+  d.innerHTML='<h3 style="margin:0 0 8px">🔄 Synk-kode</h3><div id="fsInfo" style="margin-bottom:10px"></div><input id="fsCode" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters" autocomplete="off" spellcheck="false" style="width:100%;padding:12px;font-size:20px;letter-spacing:2px;margin-bottom:12px;box-sizing:border-box"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" id="fsGo">Koble til</button><button id="fsNew">Opprett ny kode</button><button id="fsX">Lukk</button></div><p id="fsMsg" style="min-height:1.4em;margin:12px 0 0"></p>';
+  document.body.appendChild(d);
+  const msg=(t,bad)=>{const m=$('fsMsg');m.textContent=t;m.style.color=bad?'#ff7a86':'var(--ok,#7fd88a)'};
+  $('fsX').onclick=()=>d.close();
+  $('fsGo').onclick=async()=>{try{msg('Kobler til …');const w=await fsConnect($('fsCode').value,false);msg(w==='pull'?'Hentet alt – starter på nytt …':'Ferdig')}catch(e){msg(e.message,1)}};
+  $('fsNew').onclick=async()=>{try{const a='abcdefghjkmnpqrstuvwxyz23456789',r=crypto.getRandomValues(new Uint8Array(12));const p=[...r].map(x=>a[x%a.length]).join('');
+    msg('Oppretter …');await fsConnect(p,true);$('fsCode').value=fsFmt(p);msg('Ferdig! Skriv ned koden: '+fsFmt(p)+' – den trengs på de andre enhetene.');if(curView==='settings')renderSettings()}catch(e){msg(e.message,1)}}}
+  const has=localStorage.getItem('sync_phrase');
+  $('fsInfo').innerHTML=has?'Denne enheten er koblet til. Koden din: <b>'+esc(fsFmt(has))+'</b>':'Skriv inn koden fra en annen enhet for å hente <b>alle kilder, favoritter og innstillinger</b> automatisk – eller opprett en ny kode her.';
+  $('fsCode').value=has?fsFmt(has):'';$('fsMsg').textContent='';d.showModal();return d}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&Date.now()-(+localStorage.getItem('sync_fts')||0)>600000)fsSoon(500)});
+setTimeout(async()=>{try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(r&&r.ts>(+localStorage.getItem('sync_fts')||0)){
+  const fresh=!(await dbAll()).length;if(fresh){await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))}else toast('Nyere oppsett finnes i skyen – Innstillinger → Synk → Hent fra skyen',7000)}}catch(e){}},4000);
+
 
 let ovCtx=null,lastSave=0;
 function openPlayer(ctx){
@@ -2165,7 +2206,7 @@ function tonightList(f){
 }
 function renderHome(){
   const el=$('v-home');
-  if(!S){el.innerHTML=`<h1>Velkommen til <em>Eskedals Univers</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button>`;return}
+  if(!S){el.innerHTML=`<h1>Velkommen til <em>Eskedals Univers</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button> <button data-act="fsopen">🔄 Hent alt med synk-kode</button>`;return}
   const first0=cinEpItems();const first=first0.length?first0:[{t:'welcome',key:'w'}];
   el.innerHTML=cinemaHtml(first)+(newEpRail()?`<div class="hrails nobb">${newEpRail()}</div>`:'');
   startCinema(first);
@@ -3228,6 +3269,7 @@ function renderSettings(){
    <div class="card"><h3>🎨 Tema</h3><p>Bytt mellom Brann-rødt og kino-gull.</p><button data-act="th:brann" class="${th==='brann'?'primary':''}">🔥 Brann</button> <button data-act="th:kino" class="${th==='kino'?'primary':''}">🎬 Kino</button></div>
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
+   <div class="card"><h3>🔑 Full synk (kilder, favoritter, innstillinger)</h3><p>${localStorage.getItem('sync_phrase')?'Koblet til. Kode: <b>'+esc(fsFmt(localStorage.getItem('sync_phrase')))+'</b> – skriv den inn på nye enheter, så kommer alt av seg selv.':'Opprett en kode én gang, og skriv den inn på nye enheter – da hentes M3U-lister, innlogging, favoritter og brukere automatisk (kryptert).'}</p><button class="primary" data-act="fsopen">${localStorage.getItem('sync_phrase')?'Vis kode':'Koble til / opprett kode'}</button> ${localStorage.getItem('sync_phrase')?'<button data-act="fspush">Last opp nå</button> <button data-act="fspull">Hent fra skyen</button> <button data-act="fsoff">Koble fra</button>':''}</div>
    <div class="card"><h3>🔄 Synk mellom enheter</h3><p>«Fortsett å se» deles automatisk mellom enhetene dine (bobil, hjemme, TV). Status: <b id="syncSta">${syncCode()?esc(syncSta||'på'):'av'}</b></p><button class="primary" data-act="syncnow">Synk nå</button> <button data-act="synctog">${syncCode()?'Slå av':'Slå på'}</button></div>
    <div class="card"><h3>🕘 Fortsett å se</h3><p>${hist.length} oppføringer i historikken.</p><button data-act="clearhist" ${hist.length?'':'disabled'}>Tøm historikk</button></div>
    <div class="card"><h3>💾 Sikkerhetskopi / flytt til annen enhet</h3><p>Lagre kilder, favoritter, brukere og innstillinger i én fil, og last den inn på TV-boksen i stedet for å skrive inn alt med fjernkontrollen. <b>Filen inneholder innlogging til IPTV – slett den etterpå.</b></p><button class="primary" data-act="bk:save">Lagre til fil</button> <button data-act="bk:copy">Kopier som tekst</button> <button data-act="bk:load">Last inn fra fil …</button><input id="bkFile" type="file" accept=".json,.txt,application/json" hidden></div>
@@ -3356,7 +3398,11 @@ document.addEventListener('click',e=>{
     openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,ref:x.ref});return}
   const a=e.target.closest('[data-act]');
   if(a){const v=a.dataset.act;
-    if(v==='syncnow'){toast('Synker …');cloudSync().then(()=>toast(syncSta))}
+    if(v==='fsopen'){try{fsDlg()}catch(x){toast(x.message)}}
+    else if(v==='fspush'){toast('Laster opp …');fsPush().then(()=>toast('Lastet opp'),x=>toast('Feil: '+x.message))}
+    else if(v==='fspull'){toast('Henter …');fsFetch(localStorage.getItem('sync_phrase')).then(async r=>{if(!r)return toast('Ingenting i skyen ennå');await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))},x=>toast('Feil: '+x.message))}
+    else if(v==='fsoff'){['sync_phrase','sync_id','sync_fts'].forEach(k=>localStorage.removeItem(k));toast('Frakoblet');renderSettings()}
+    else if(v==='syncnow'){toast('Synker …');cloudSync().then(()=>toast(syncSta))}
     else if(v==='synctog'){if(syncCode())localStorage.setItem('sync_code','');else localStorage.removeItem('sync_code');toast(syncCode()?'Synk på':'Synk av');if(syncCode())cloudSync();if(curView==='settings')renderSettings()}
     else if(v==='src'){renderSources();$('dlgSrc').showModal()}
     else if(v==='prof'){renderProfiles();$('dlgProf').showModal()}
