@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=145;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=146;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4053,11 +4053,12 @@ $('cTest').onclick=()=>{const c=readCam();const im=$('cPrev');$('cStat').textCon
 
 /* ---------- Klokke og start ---------- */
 (()=>{const b=$('bFs');if(!b)return;if(NATIVE&&!DESKTOP||TVM){b.style.display='none';return}
-  const fsOn=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const W=window.IPTV_WIN;const fsOn=()=>{if(W)try{return !!W.isFs()}catch(_){}return !!(document.fullscreenElement||document.webkitFullscreenElement)};
   const upd=()=>{b.textContent=fsOn()?'🗗':'⛶';b.title=fsOn()?'Avslutt fullskjerm (Esc)':'Fullskjerm (F11)'};
-  b.onclick=()=>{try{if(fsOn()){localStorage.setItem('kiosk','0');(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{localStorage.setItem('kiosk','1');const e=document.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}};
+  b.onclick=()=>{if(W){const on=!fsOn();localStorage.setItem('kiosk',on?'1':'0');W.fs(on);setTimeout(upd,300);return}try{if(fsOn()){localStorage.setItem('kiosk','0');(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{localStorage.setItem('kiosk','1');const e=document.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}catch(x){}};
   /* Windows-appen: alltid fullskjerm (uten vinduskant) – går inn igjen ved første tastetrykk/klikk */
-  if(DESKTOP){const go=ev=>{try{if(localStorage.getItem('kiosk')==='0'||fsOn()||(ev&&ev.target===b))return;document.documentElement.requestFullscreen().catch(()=>{})}catch(_){}};
+  if(DESKTOP){const go=ev=>{try{if(localStorage.getItem('kiosk')==='0'||fsOn()||(ev&&ev.target===b))return;if(W){W.fs(true);setTimeout(upd,300)}else document.documentElement.requestFullscreen().catch(()=>{})}catch(_){}};
+    if(W&&localStorage.getItem('kiosk')==='0'){try{W.fs(false)}catch(_){}}
     ['keydown','mousedown','touchstart'].forEach(t=>document.addEventListener(t,go,true));try{go()}catch(_){}}
   document.addEventListener('fullscreenchange',upd);upd()})();
 const clk=()=>{$('clock').textContent=new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();setInterval(clk,15000);
