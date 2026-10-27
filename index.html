@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=152;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=153;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1324,7 +1324,7 @@ const SERV=[
   {id:'hbo',name:'HBO Max',c:'#7b3cff',rx:/\bhbo\b|(^|[^a-z])max([^a-z]|$)/i},
   {id:'disney',name:'Disney+',c:'#1a45d8',rx:/disney/i},
   {id:'prime',name:'Prime Video',c:'#00a8e1',rx:/prime ?video|amazon|(^|[^a-z])prime([^a-z]|$)/i},
-  {id:'apple',name:'Apple TV+',c:'#9a9aa5',rx:/apple ?tv/i},
+  {id:'apple',name:'Apple TV+',c:'#9a9aa5',rx:/apple ?(tv|\+)/i},
   {id:'sky',name:'SkyShowtime',c:'#2a5bd7',rx:/sky ?showtime/i},
   {id:'tv2',name:'TV 2 Play',c:'#e2001a',rx:/tv ?2 ?(play|sumo)|tv2 ?play/i},
   {id:'nrk',name:'NRK',c:'#0a8cff',rx:/\bnrk\b/i},
@@ -1528,6 +1528,34 @@ function skTest(c,Q){
   return Q.toks.every(t=>c.sk.includes(t)||w.some(x=>x.startsWith(t)||(t.length>=4&&skLev(x.slice(0,t.length+1),t)<=(t.length>=7?2:1))));
 }
 function skRun(list,Q0,pred){const Q={toks:Q0.toks,comp:Q0.comp,fz:false};let r=list.filter(c=>pred(c)&&skTest(c,Q));if(!r.length&&Q.comp.length>=3){Q.fz=true;r=list.filter(c=>pred(c)&&skTest(c,Q))}return r}
+
+/* ===== Klassifisering av filmer/serier (bygget på leverandørens faktiske kategorier) ===== */
+const RXC_NO=/^\W*(NORGE|NORSK|NORWAY|NORWEGIAN)\b/i, RXC_SE=/^\W*(SVENSK|SVENSKA|SVERIGE|SWEDEN)\b/i, RXC_DK=/^\W*(DANSK|DANSKE|DANMARK)\b/i, RXC_FI=/^\W*(SUOMI|SUOMEN)\b/i, RXC_IS=/ÍSLAND|^\W*ISLANDS?\b/i, RXC_NORDIC=/^\W*NORDIC\b/i;
+const RXC_KIDS=/\b(barn|børn|kids?|kinder|kinderen|enfants|children|infantil(es)?|bambini|dzieci|krakkar|lapset|[cç]ocuk|ni[ñn]as?|family|familie|families)\b|animation|animaci|animazione|anim[ée]e\b|animação|cartoon|tegnefilm|nickelodeon|dreamworks|pixar|ghibli|كرتون|أطفال|اطفال|ΠΑΙΔΙΚΑ|ДЕЦА|کارتون|PËR FËMIJË/i;
+const RXC_NOTKIDS=/anime|manga|adult|horror|terror|horreur|stand-?up|adult-?swim|for adults|للكبار/i;
+const RXN_NOTKIDS=/family guy|bob'?s burgers|simpsons|south park|american dad|futurama|rick and morty|\barcher\b|big mouth|bojack|f is for family|beavis|king of the hill|harley quinn|invincible|castlevania|blue eye samurai|disenchantment|solar opposites|the boys|hazbin|helluva|velma|krapopolis|central park|inside job|paradise pd|brickleberry|digman|clone high|mr\. pickles/i;
+const RXC_XMAS=/christmas|weihnacht|kerst|navidad|no[ëe]l\b|[śs]wi[ąa]teczn|الكريسماس|\bjul\b|julefilm/i;
+const RXN_XMAS=/\bjul(e|en|eaften|ekalender|enisse|enissen|etre|esang|emusikk|estjernen|efortelling|ehjerte|egave|eønske|ekveld|enatt|ebord|emorgen)?\b|\bjulen\b|christmas|xmas|x-mas|navidad|natale|weihnacht|\bsanta\b|\bnissen?e?\b|grinch|rudolph|reindeer|nutcracker|nøtteknekker|home alone|alene hjemme|polar express|krampus|scrooge|snømann|frosty|jingle|mistletoe|\bnoel\b(?! fielding)|^elf\b|\belf \(2003\)|yule|\bjulestjern|blåfjell|månetoppen|tre nøtter til askepott|snekker andersen|skomakergata|grevinnen og hovmesteren|dinner for one|putti plutti|julekalender|bjarne betjent|jul i/i;
+const RXN_NOJUL=/blåfjell|månetoppen|tre nøtter til askepott|snekker andersen|skomakergata|reisen til julestjernen|julestjernen|putti plutti|julenatt|jul på|nissene|stargate.*jul|juleønsket|kalle og englene|teodor|olsenbanden.*jul|grevinnen og hovmesteren|jul i (skomakergata|blåfjell)|en jul|jul for|norsk jul|julekalender|nrk.*jul|tv ?2.*jul|bjarne betjent/i;
+const RXC_EXTRA=/audiobook|\bmusic\b|\bmusik\b|musique|concert|spectacles|karaoke|sport|soccer|ufc|wwe|wrestling|formula ?1|\bf1\b|boxing|fussball|football|rugby|motogp|golf|cyclisme|basketball|handball|workout|partidos|wrc|moto\b|رياضه|مصارعة|المباريات|podcast|بودكاست/i;
+const RXN_EXTRA=/^\s*MV\s*-/;
+const SVPFX={NF:'netflix',AMZ:'prime',PV:'prime','D+':'disney',DSNP:'disney',VP:'viaplay',HBO:'hbo',MAX:'hbo','ATV+':'apple',APL:'apple','A+':'apple',SKY:'sky',PAR:'para','P+':'para'};
+function vodClass(c){
+  const nm=c.name||'',cat=c.cat||'';
+  const pm=/^\s*([A-Z0-9+]{1,6}(?:-[A-Z0-9+]{1,6})*)\s*-\s*/.exec(nm),tk=new Set(pm?pm[1].split('-'):[]);
+  const cc=(/\(([A-Z]{2})\)\s*(?:\[[^\]]*\]\s*)?$/.exec(nm)||[])[1]||'';c.cc=cc;
+  const catNo=RXC_NO.test(cat),nordCat=RXC_SE.test(cat)||RXC_DK.test(cat)||RXC_FI.test(cat)||RXC_IS.test(cat);
+  const foreign=[...tk].some(t=>{const k0=t.toLowerCase(),k=LMAP[k0]||k0;return k!=='fi'&&k!=='is'&&typeof CC_OTHER!=='undefined'&&CC_OTHER.has(k)});
+  c.no=cc?(cc==='NO'&&!foreign?1:0):((catNo||tk.has('NO'))?1:0);
+  c.nord=cc?(/^(SE|DK|FI|IS)$/.test(cc)&&!foreign?1:0):((nordCat||tk.has('SE')||tk.has('DK')||tk.has('FI')||tk.has('IS'))&&!c.no?1:0);
+  c.nt=(tk.has('SC')||RXC_NORDIC.test(cat)||catNo||nordCat||c.no||c.nord)?1:0;
+  const hayT=nm.replace(/^\s*[A-Z0-9+]{1,6}(?:-[A-Z0-9+]{1,6})*\s*-\s*/,'');
+  c.kid=(RXC_KIDS.test(cat)&&!RXC_NOTKIDS.test(cat)&&!RXN_NOTKIDS.test(hayT))?1:0;
+  c.xm=(RXC_XMAS.test(cat)||RXN_XMAS.test(hayT))?1:0;
+  c.njul=c.xm&&(c.no||RXN_NOJUL.test(hayT))?1:0;
+  c.xtra=(RXC_EXTRA.test(cat)||RXN_EXTRA.test(nm))?1:0;
+  c.svp='';for(const t of tk){if(SVPFX[t]){c.svp=SVPFX[t];break}}
+}
 function fin(c){
   c.key=c.t[0]+':'+c.id;
   c.cat=c.cat||'Andre';
@@ -1549,9 +1577,9 @@ function fin(c){
     else if(PROV_NO.test(c.name)){c.no=1;c.lg='no'}
     c.pv=provOf(c);
   }c.ev=evTime(c);c.adult=c.t==='live'?(RX_ADULT_L.test(c.name+' '+c.cat)?1:0):((RX_ADULT_V.test(c.cat)||RX_ADULT_V.test(c.name))?1:0);
-  if(c.t!=='live'){const cc=(/\(([A-Z]{2})\)\s*$/.exec(c.name)||/\(([A-Z]{2})\)\s*(?:\[[^\]]*\]\s*)?$/.exec(c.name)||[])[1];if(cc)c.no=cc==='NO'?1:0}
+  if(c.t!=='live')vodClass(c);
   c.sv='';
-  if(c.t!=='live')for(const s of SERV)if(s.rx.test(hay)){c.sv=s.id;break}
+  if(c.t!=='live'){for(const s of SERV)if(s.rx.test(c.cat||'')){c.sv=s.id;break}if(!c.sv)c.sv=c.svp||''}
   return c;
 }
 function parseM3U(text){
@@ -3194,7 +3222,7 @@ function go(sp){
   const [v,o]=parseSpec(sp);
   if(v==='norsk')return renderNorsk();
   if(v==='live')return goLive({tab:o.tab||'all',chip:o.chip||null});
-  if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',no:!!o.no,kids:!!o.kids,all:!!o.all,sort:'new'};}
+  if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',no:!!o.no,kids:!!o.kids,all:!!o.all,xmas:!!o.xmas,njul:!!o.njul,nt:!!o.nt,sort:'new'};}
   showView(v,true);
 }
 function appBack(){
@@ -3440,10 +3468,12 @@ function renderVodShell(kind){
     <select id="vcat"><option value="">Alle kategorier (${cats.length})</option>${cats.map(c=>`<option ${vf.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
     <select id="vsort"><option value="new" ${vf.sort==='new'?'selected':''}>Nylig lagt til</option><option value="az" ${vf.sort==='az'?'selected':''}>A–Å</option><option value="rt" ${vf.sort==='rt'?'selected':''}>Høyest rating</option></select></div>
   <div class="bar" id="vchips">
-    <button class="chip ${!vf.svc&&!vf.no&&!vf.kids&&!vf.xmas&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
+    <button class="chip ${!vf.svc&&!vf.no&&!vf.kids&&!vf.xmas&&!vf.njul&&!vf.nt&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
     <button class="chip ${vf.all?'on':''}" data-f="grid">☰ Alle titler</button>
     <button class="chip ${vf.no?'on':''}" data-f="no">🇳🇴 Norsk</button>
+    <button class="chip ${vf.nt?'on':''}" data-f="nt">💬 Nordisk tekst</button>
     <button class="chip ${vf.kids?'on':''}" data-f="kids">🧸 Barn</button>
+    <button class="chip ${vf.njul?'on':''}" data-f="njul">🎅 Norsk jul</button>
     <button class="chip ${vf.xmas?'on':''}" data-f="xmas">🎄 Jul</button>
     ${SERV.filter(s=>cnt[s.id]).map(s=>`<button class="chip ${vf.svc===s.id?'on':''}" data-f="svc:${s.id}"><span style="color:${s.c}">●</span> ${s.name}<small>${cnt[s.id]}</small></button>`).join('')}
   </div>
@@ -3453,9 +3483,9 @@ function renderVodShell(kind){
   $('vcat').onchange=e=>{vf.cat=e.target.value;updateGrid();vsideBuild(cats)};
   $('vsort').onchange=e=>{vf.sort=e.target.value;updateGrid();vsideBuild(cats)};
   $('vchips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const f=b.dataset.f;
-    if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.xmas=false;vf.all=false;vf.q='';vf.cat=''}
+    if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.xmas=false;vf.njul=false;vf.nt=false;vf.all=false;vf.q='';vf.cat=''}
     else if(f==='grid'){vf.all=!vf.all}
-    else if(f==='no')vf.no=!vf.no;else if(f==='kids')vf.kids=!vf.kids;else if(f==='xmas')vf.xmas=!vf.xmas;
+    else if(f==='no')vf.no=!vf.no;else if(f==='kids')vf.kids=!vf.kids;else if(f==='xmas'){vf.xmas=!vf.xmas;if(vf.xmas)vf.njul=false}else if(f==='njul'){vf.njul=!vf.njul;if(vf.njul)vf.xmas=false}else if(f==='nt')vf.nt=!vf.nt;
     else{const s=f.split(':')[1];vf.svc=vf.svc===s?'':s}
     vf.cat='';renderVodShell(vkind)};
   updateGrid();
@@ -3509,8 +3539,10 @@ function vodSlider(kind){
   return sliderHtml(sl.length?sl:(f?[f]:[]),kind);
 }
 function vodRails(kind){
-  const arr=DB[kind].filter(fvis),pg=kind==='vod'?'movies':'series';
+  const arr0=DB[kind].filter(fvis),arr=arr0.filter(c=>!c.xtra),pg=kind==='vod'?'movies':'series';
   const newest=arr.slice().sort(byNew);
+  const mo=new Date().getMonth(),julTid=mo>=10||mo===0;
+  const julR=rail(kind==='vod'?'🎅 Norsk jul':'🎅 Norske juleserier',newest.filter(c=>c.njul).slice(0,24),pcard,pg+':njul=1')+rail(kind==='vod'?'🎄 Julefilmer':'🎄 Juleserier',newest.filter(c=>c.xm&&!c.njul&&c.logo).slice(0,24),pcard,pg+':xmas=1');
   const feat=arr.filter(c=>c.logo&&c.rt>=6.5).sort(byNew).slice(0,30);
   const f=feat.length?feat[Math.floor(Date.now()/36e5)%feat.length]:newest.find(c=>c.logo);
   const top=arr.filter(c=>c.logo&&c.rt>0).sort(byNew).slice(0,220).sort((a,b)=>b.rt-a.rt).slice(0,10);
@@ -3518,17 +3550,20 @@ function vodRails(kind){
   return top10Rail(top)+
     rail('🆕 Nylig lagt til',newest.slice(0,24),pcard,pg+':all=1')+
     rail('🇳🇴 Norsk',newest.filter(c=>c.no).slice(0,24),pcard,pg+':no=1')+
+    (julTid?julR:'')+
     rail('🧸 For barna',newest.filter(c=>c.kid).slice(0,24),pcard,pg+':kids=1')+
+    rail('💬 Med nordisk tekst',newest.filter(c=>c.nt&&!c.no&&c.logo).slice(0,24),pcard,pg+':nt=1')+
+    (julTid?'':julR)+
     rail('⭐ Høyest rating',arr.filter(c=>c.rt>=7.5&&c.logo).sort((a,b)=>b.rt-a.rt).slice(0,24),pcard,pg+':all=1')+svc;
 }
 function updateGrid(){
   const q=vf.q.trim().toLowerCase();
-  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.kids||c.kid)&&(!vf.xmas||c.xm);
+  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.kids||c.kid)&&(!vf.xmas||(c.xm&&!c.njul))&&(!vf.njul||c.njul)&&(!vf.nt||c.nt);
   vlist=q?skRun(DB[vkind],skq(q),vpred):DB[vkind].filter(vpred);
   if(vf.sort==='az')vlist.sort((a,b)=>a.name.localeCompare(b.name,'no'));
   else if(vf.sort==='rt')vlist.sort((a,b)=>b.rt-a.rt);
   else vlist.sort(byNew);
-  const browse=!(vf.svc||vf.no||vf.kids||vf.xmas||vf.cat||q||vf.all);
+  const browse=!(vf.svc||vf.no||vf.kids||vf.xmas||vf.njul||vf.nt||vf.cat||q||vf.all);
   stopSlider();
   $('vbb').innerHTML=browse?vodSlider(vkind):'';
   $('vrails').innerHTML=browse?vodRails(vkind):'';
