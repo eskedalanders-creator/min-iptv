@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=159;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=160;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2078,14 +2078,16 @@ function asInit(){
   try{
     if(!AS.ac){AS.ac=new (window.AudioContext||window.webkitAudioContext)()}
     if(AS.ac.state!=='running'){AS.ac.resume();if(AS.ac.state!=='running')return false}
-    if(!AS.src){const v=$('ovv');AS.src=AS.ac.createMediaElementSource(v);AS.an=AS.ac.createAnalyser();AS.an.fftSize=2048;AS.an.smoothingTimeConstant=0;
-      AS.src.connect(AS.ac.destination);AS.src.connect(AS.an);AS.fb=new Float32Array(AS.an.frequencyBinCount)}
+    /* NB: bruker captureStream (kopi av lyden) – rører aldri selve avspillingen, så lyden kan ikke forsvinne */
+    const v=$('ovv');const cs=v.captureStream||v.mozCaptureStream;if(!cs)return false;
+    const ms=cs.call(v);if(!ms.getAudioTracks().length)return false;
+    if(AS.ms!==ms||!AS.src){try{AS.src&&AS.src.disconnect()}catch(_){}AS.ms=ms;AS.src=AS.ac.createMediaStreamSource(ms);if(!AS.an){AS.an=AS.ac.createAnalyser();AS.an.fftSize=2048;AS.an.smoothingTimeConstant=0;AS.fb=new Float32Array(AS.an.frequencyBinCount)}AS.src.connect(AS.an)}
     return true}catch(e){dlog('sync','init-feil '+e);return false}
 }
 function asCues(raw){const out=[];const re=/(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;
   while((m=re.exec(raw)))out.push([(+m[1])*3600+(+m[2])*60+(+m[3])+(+m[4])/1000,(+m[5])*3600+(+m[6])*60+(+m[7])+(+m[8])/1000]);return out}
 function asStart(ctx){
-  clearInterval(AS.timer);AS.smp=[];AS.ctx=ctx;AS.done=0;AS.last=null;
+  clearInterval(AS.timer);AS.smp=[];AS.ctx=ctx;AS.done=0;AS.last=null;AS.ok=false;
   if(!extSub||extSub.vtt)return;
   let tries=0;
   AS.timer=setInterval(()=>{
