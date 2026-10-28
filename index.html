@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=158;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=159;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1151,6 +1151,10 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 .cin-hall.c3 .cin-screen{left:0;top:0;width:1200px;aspect-ratio:auto;transform-origin:0 0;border:0;border-radius:0;box-shadow:none;z-index:3;container-type:normal}
 .cin-hall.c3 .cin-fade{display:none}
 .cin-hall.c3 .cin-vig{z-index:6;opacity:.7}.cin-hall.c3 .cin-grain{display:none}
+
+/* v159: bredere kino, uten skilt og trailer-stripe */
+@media (min-aspect-ratio:1/1){.cin-hall{max-width:100%!important;width:100%;aspect-ratio:auto!important;height:calc(100vh - 84px);border-radius:0!important}html.tvm .cin-hall{height:calc(var(--tvh,720px) - 70px)}}
+.cin-ths{display:none!important}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4506,7 +4510,7 @@ export async function mount(o){
   const base=new T.Mesh(new T.BoxGeometry(.05,.25,15.8),mDark);base.position.set(ROOM.x0+.03,.13,-4);group.add(base);
 
   /* ---------- lerret, ramme, scene, gardin ---------- */
-  const SW=9.6,SH=SW/(o.stage&&o.stage.clientWidth&&o.stage.clientWidth/o.stage.clientHeight<1.25?1.6:2.35),SC=new T.Vector3(0,2.95,ROOM.z0+.1);
+  const PTS=!!(o.stage&&o.stage.clientWidth&&o.stage.clientWidth/o.stage.clientHeight<1.25),SW=PTS?9.6:11.2,SH=SW/(PTS?1.6:2.35),SC=new T.Vector3(0,PTS?2.95:3.15,ROOM.z0+.1);
   const corners=[[-1,1],[1,1],[1,-1],[-1,-1]].map(([sx,sy])=>new T.Vector3(SC.x+sx*SW/2,SC.y+sy*SH/2,SC.z));
   const hole=new T.Mesh(new T.PlaneGeometry(SW,SH),new T.ShaderMaterial({vertexShader:'void main(){gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'void main(){gl_FragColor=vec4(0.);}',blending:T.NoBlending,transparent:false}));hole.position.copy(SC);hole.renderOrder=-10;group.add(hole);
   const frame=new T.Group();
@@ -4526,7 +4530,7 @@ export async function mount(o){
   // gardiner med folder
   const curt=[];
   function curtain(side){
-    const w=6.5,H=4.95,g=new T.PlaneGeometry(w,H,160,24);const p=g.attributes.position;
+    const w=6.5,H=5.75,g=new T.PlaneGeometry(w,H,160,24);const p=g.attributes.position;
     const col=new Float32Array(p.count*3);let zmin=9,zmax=-9;
     for(let i=0;i<p.count;i++){
       const u=(p.getX(i)+w/2)/w,v=(p.getY(i)+H/2)/H;
@@ -4541,11 +4545,11 @@ export async function mount(o){
     const m=new T.Mesh(g,new T.MeshPhysicalMaterial({color:0x8a0b14,vertexColors:true,roughness:.92,sheen:1,sheenColor:new T.Color(0xff4a4a),sheenRoughness:.55,emissive:0x1a0205,side:T.DoubleSide}));
     m.position.x=-side*w/2;
     const gr=new T.Group();gr.position.set(side*6.45,H/2,ROOM.z0+.4);gr.add(m);group.add(gr);
-    const rod=new T.Mesh(new T.CylinderGeometry(.03,.03,6.5,8),mMetal);rod.rotation.z=Math.PI/2;rod.position.set(side*6.45-side*3.25,4.99,ROOM.z0+.4);group.add(rod);
+    const rod=new T.Mesh(new T.CylinderGeometry(.03,.03,6.5,8),mMetal);rod.rotation.z=Math.PI/2;rod.position.set(side*6.45-side*3.25,5.79,ROOM.z0+.4);group.add(rod);
     curt.push(gr);gr.scale.x=1;
   }
   curtain(-1);curtain(1);
-  let curS=1,curT=1;const OPEN=.3;
+  let curS=1,curT=1;const OPEN=.1;
 
 
   /* ---------- seter ---------- */
@@ -4609,7 +4613,7 @@ export async function mount(o){
   const LG=new T.PointLight(0x40ff90,mob?1.5:2.5,4,2);LG.position.set(ROOM.x0+.6,2.4,dz);group.add(LG);lights.push(LG);
 
   // skilt over lerretet: gullramme, pærer og neon
-  const neon=new T.Group();neon.position.set(0,5.44,ROOM.z0+.18);group.add(neon);
+  const neon=new T.Group();neon.position.set(0,5.44,ROOM.z0+.18);group.add(neon);neon.visible=false;
   const NAME='ESKEDALS UNIVERS',U=.066,ADV=6.3*U;
   const nameW=(NAME.length-1)*ADV+4*U;
   const BT=SEA_TXT||'SAL 1',U2=BT==='SAL 1'?.052:.04,badgeW=Math.max(1.5,((BT.length-1)*6.3+4)*U2+.5),gap=.55,total=nameW+gap+badgeW;
