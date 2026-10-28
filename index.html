@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=161;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=162;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2192,7 +2192,7 @@ async function movieHash(url){
   }catch(e){return null}
 }
 function srtEnd(raw){let mx=0;const re=/-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;while((m=re.exec(raw)))mx=Math.max(mx,(+m[1])*3600+(+m[2])*60+(+m[3]));return mx}
-async function autoSub(manual,next){
+async function autoSub(manual,next,opt){
   const ctx=ovCtx;if(!ctx)return;
   const sta=t=>{const e=document.getElementById('osSta');if(e)e.textContent=t};
   try{
@@ -2240,6 +2240,7 @@ async function autoSub(manual,next){
         ctx._ci=k;const x=await dl(ctx._cands[k]);raw=x.raw;d=x.d;
       }
     }
+    if(opt&&opt.raw)return {raw,lang};
     if(ovCtx!==ctx)return;
     extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}subScale=1;applyExtSub();asStart(ctx);
     const n=ctx._cands.length;
@@ -3272,14 +3273,22 @@ window.appBack=appBack;
 const vlcP=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.IptvCast&&Capacitor.Plugins.IptvCast.openVlc?Capacitor.Plugins.IptvCast:null;
 let vlcHasW=null;
 const vlcOk=()=>{if(vlcP())return true;const W=window.IPTV_WIN;if(W&&W.vlcHas){if(vlcHasW===null)try{vlcHasW=!!W.vlcHas()}catch(_){vlcHasW=false}return vlcHasW}return false};
-const vlcAuto=()=>{try{return localStorage.getItem('vlcAuto')==='1'}catch(_){return false}};
+const vlcAuto=()=>{try{return localStorage.getItem('vlcAuto')!=='0'}catch(_){return true}};
 async function playVlc(ctx,pos){
   if(!ctx)return;try{vodPlayer.stop()}catch(_){}try{$('ovv').pause()}catch(_){}
   const m=$('ovmsg');if(m){m.style.display='';m.textContent='🎞 Spilles i VLC med innebygd tekst. Tilbake eller 🏠 Hjem avslutter.'}
   window.__vlcCtx=ctx;
   try{
     if(vlcP())await vlcP().openVlc({url:ctx.url,title:ctx.title||'',position:pos||0});
-    else await window.IPTV_WIN.vlcPlay({url:ctx.url,title:ctx.title||'',pos:pos||0});
+    else{await window.IPTV_WIN.vlcPlay({url:ctx.url,title:ctx.title||'',pos:pos||0});
+      if(subOn()&&window.IPTV_WIN.vlcSubs)setTimeout(async()=>{try{
+        if(window.__vlcCtx!==ctx)return;
+        const tr=await window.IPTV_WIN.vlcSubs();dlog('sub','VLC-spor: '+JSON.stringify(tr));
+        if(tr&&tr.some(x=>/norw|norsk|norweg|bokm|\bnor\b|\bnob\b|\bnb\b|\bno\b/i.test(x)))return; /* innebygd norsk – VLC har valgt den */
+        const r=await autoSub(false,false,{raw:true});
+        if(r&&r.raw&&window.__vlcCtx===ctx){await window.IPTV_WIN.vlcAddSub(r.raw);toast((r.lang==='en'?'🇬🇧 Engelsk':'🇳🇴 Norsk')+' undertekst lagt til i VLC',3500)}
+      }catch(e){dlog('sub','VLC-tekst feilet: '+((e&&e.message)||e))}},7000);
+    }
   }catch(e){window.__vlcCtx=null;const nv=/novlc/.test(String(e&&e.message||e));
     toast(nv?(vlcP()?'Installer VLC fra Google Play først':'VLC er ikke installert på denne PC-en – last ned fra videolan.org'):'VLC: '+((e&&e.message)||e),6000);
     if(m)m.textContent='';vodPlayer.play(ctx.url,false)}
