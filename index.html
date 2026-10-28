@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=157;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=158;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1218,6 +1218,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
         <button class="ic" id="nowHide" title="Skjul kanal">🚫</button>
         <button id="nowQs" title="Vis strømmestatistikk (tast I)">📊 Info</button>
         <button id="nowAlt" hidden title="Prøv en annen kilde for denne kanalen">🔁 Annen kilde</button>
+        <button id="btnCast" style="display:none">📺 Cast</button>
         <button id="btnFs">Fullskjerm</button>
         <button id="btnBack">☰ Kanalliste</button>
       </div>
@@ -1238,7 +1239,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <div class="ovbar">
     <button id="ovClose">✕ Lukk</button><b id="ovTitle"></b>
     <button id="ovNext" style="display:none">Neste ▶</button>
-    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovQs">📊 Info</button><button id="ovCopy">Kopier lenke</button>
+    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovQs">📊 Info</button><button id="ovCast" style="display:none">📺 Cast</button><button id="ovCopy">Kopier lenke</button>
     <button id="ovFs">⛶</button>
   </div>
   
@@ -3256,6 +3257,49 @@ if(NATIVE&&!DESKTOP){
   addEventListener('popstate',()=>{if(appBack())history.pushState({b:1},'')});
 }
 window.appBack=appBack;
+
+/* ===== Cast (Chromecast) – Android-appen (innebygd) og Windows-appen ===== */
+const castP=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.IptvCast;
+const castW=()=>window.IPTV_WIN&&IPTV_WIN.castScan?IPTV_WIN:null;
+const castOk=()=>!!(castP()||castW());
+let castDev=null;
+function castMime(u){const e=((String(u).split('?')[0].match(/\.(\w+)$/)||[])[1]||'').toLowerCase();return e==='m3u8'?'application/x-mpegurl':e==='mkv'?'video/x-matroska':e==='ts'?'video/mp2t':e==='webm'?'video/webm':'video/mp4'}
+function castPick(list){return new Promise(res=>{
+  let d=document.getElementById('castD');if(d)d.remove();
+  d=document.createElement('dialog');d.id='castD';d.style.cssText='background:#14161f;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:22px;min-width:380px';
+  d.innerHTML='<h3 style="margin:0 0 12px">📺 Velg skjerm</h3>'+list.map((x,i)=>`<button class="castI" data-i="${i}" style="display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px;font-size:17px">📺 ${esc(x.name)}</button>`).join('')+(castDev?'<button class="castI" data-i="stop" style="display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px">⏹ Stopp casting</button>':'')+'<button class="castI" data-i="x" style="display:block;width:100%;margin:10px 0 0;padding:10px">Avbryt</button>';
+  document.body.appendChild(d);d.showModal();const bs=[...d.querySelectorAll('.castI')];bs[0].focus();
+  d.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();e.stopPropagation();const i=bs.indexOf(document.activeElement);(bs[(i+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length]).focus()}});
+  d.onclick=e=>{const b=e.target.closest('.castI');if(!b)return;d.close();d.remove();const i=b.dataset.i;res(i==='x'?null:i==='stop'?'stop':list[+i])};
+  d.addEventListener('close',()=>res(null));
+})}
+async function castNow(o){
+  if(!o||!o.url){toast('Ingenting å caste',2500);return}
+  let url=o.url;if(o.live&&/\.ts(\?|$)/.test(url))url=url.replace(/\.ts(\?|$)/,'.m3u8$1');
+  const mime=castMime(url),P=castP(),W=castW();
+  const pause=()=>{try{const v=$('ovv');if($('ov').classList.contains('on'))v.pause();else{const lv=$('v');lv&&lv.pause()}}catch(_){}};
+  if(P){
+    try{if(!P._l){P._l=1;P.addListener('castState',x=>{if(x.state==='started'){castDev=x.device||'Chromecast';pause();toast('📺 Spiller på '+castDev,4000)}else if(x.state==='ended'){castDev=null;toast('Casting avsluttet',2500)}else if(x.state==='failed')toast('Fikk ikke koblet til Chromecast',4000);else if(x.state==='error')toast('Cast-feil: '+(x.error||''),5000)})}
+      const r=await P.cast({url,title:o.title||'',image:o.image||'',mime,position:o.pos||0,live:!!o.live});
+      if(r&&r.connected){pause();toast('📺 Sendt til '+(castDev||'Chromecast'),3500)}}
+    catch(e){toast('Cast: '+((e&&e.message)||e),5000)}
+    return}
+  if(W){
+    toast('🔎 Leter etter Chromecast …',4000);
+    let list=[];try{list=await W.castScan()}catch(e){}
+    if(!list.length&&!castDev){toast('Fant ingen Chromecast på nettverket',5000);return}
+    const pick=await castPick(list);if(!pick)return;
+    if(pick==='stop'){try{await W.castStop()}catch(_){}castDev=null;toast('Casting stoppet',2500);return}
+    toast('📺 Kobler til '+pick.name+' …',4000);
+    try{await W.castPlay({host:pick.host,port:pick.port,url,title:o.title||'',image:o.image||'',mime,pos:o.pos||0,live:!!o.live});castDev=pick.name;pause();toast('📺 Spiller på '+pick.name,4000)}
+    catch(e){toast('Cast feilet: '+((e&&e.message)||e),6000)}
+    return}
+  toast('Cast krever Android-appen eller Windows-appen',4000);
+}
+setTimeout(()=>{if(!castOk())return;['ovCast','btnCast'].forEach(id=>{const b=$(id);if(b)b.style.display=''});
+  $('ovCast').onclick=()=>{const c=ovCtx;if(!c)return;castNow({url:c.url,title:c.title,image:c.logo,pos:$('ovv').currentTime||0,live:c.type==='live'})};
+  $('btnCast').onclick=()=>{if(!current)return toast('Velg en kanal først',2500);castNow({url:current.url,title:current.nm||current.name,image:current.logo,live:true})};
+},0);
 
 window.pcPower=function(a){
   const W=window.IPTV_WIN;
