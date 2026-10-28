@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=160;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=161;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1243,7 +1243,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <div class="ovbar">
     <button id="ovClose">✕ Lukk</button><b id="ovTitle"></b>
     <button id="ovNext" style="display:none">Neste ▶</button>
-    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovQs">📊 Info</button><button id="ovCast" style="display:none">📺 Cast</button><button id="ovCopy">Kopier lenke</button>
+    <button id="ovCC">💬 Tekst</button><button id="ovAV">🔊 Lyd/bilde</button><button id="ovQs">📊 Info</button><button id="ovVlc" style="display:none">🎞 VLC</button><button id="ovCast" style="display:none">📺 Cast</button><button id="ovCopy">Kopier lenke</button>
     <button id="ovFs">⛶</button>
   </div>
   
@@ -2049,6 +2049,7 @@ function openPlayer(ctx){
   $('ov').classList.remove('bar');$('ov').classList.add('on');stopEmbers();if(TVM||(NATIVE&&!DESKTOP))$('ov').classList.add('pfs');
   const v=$('ovv');
   const startAt=ctx.pos>10&&(!ctx.dur||ctx.pos<ctx.dur-30)?ctx.pos:0;
+  if(vlcAuto()&&vlcOk()&&ctx.type!=='live'){playVlc(ctx,startAt);return}
   vodPlayer.play(ctx.url,false);
   extSub=null;subOff=0;subScale=1;v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());$('ccMenu').className='';
   v.textTracks.onaddtrack=()=>setTimeout(pickNo,300);
@@ -2256,7 +2257,7 @@ function ccMenu(setup){
    ${tr.map((t,i)=>`<button data-t="${i}" class="${t===cur?'on':''}">${esc(t.label||t.language||'Spor '+(i+1))}${isNoTrack(t)?' 🇳🇴':''}</button>`).join('')||'<small>Ingen undertekster følger med strømmen.</small>'}
    <button data-t="file">📄 Last inn .srt / .vtt fra fil …</button>
    <div class="ccoff">Forsinkelse <button data-o="-5">−5s</button><button data-o="-1">−1s</button><button data-o="-0.5">−0,5s</button><button data-o="0.5">+0,5s</button><button data-o="1">+1s</button><button data-o="5">+5s</button><small>${subOff.toFixed(1)}s</small></div>
-   <button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><small id="osSta" style="display:block;opacity:.8"></small>
+   ${vlcOk()?`<button data-t="vlc">🎞 Spill i VLC – innebygd norsk tekst (anbefalt)</button><button data-t="vlcauto">${vlcAuto()?'✅':'⬜'} Bruk alltid VLC for filmer og serier</button>`:''}<button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><small id="osSta" style="display:block;opacity:.8"></small>
    <button data-t="osset">⚙ Konto for flere nedlastinger (valgfritt)</button>
    ${setup===true||!localStorage.getItem('os_key')&&setup==='x'?'':''}
    <div id="osForm" style="display:${setup===true?'block':'none'};padding:6px 0"><small>Fungerer uten dette (5 per døgn). Logg inn med din OpenSubtitles-konto for å bruke kontoens kvote.</small>
@@ -2291,6 +2292,8 @@ $('ccMenu').onclick=e=>{
   if(b.dataset.o){subOff+=+b.dataset.o;try{localStorage.setItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)),subOff)}catch(_){}if(extSub&&!extSub.vtt)applyExtSub();ccMenu();return}
   const t=b.dataset.t;
   if(t==='close'){$('ccMenu').className='';return}
+  if(t==='vlc'){$('ccMenu').className='';const c=ovCtx;if(c&&c.type!=='live')playVlc(c,$('ovv').currentTime||0);else toast('VLC brukes for filmer og serier',2500);return}
+  if(t==='vlcauto'){try{localStorage.setItem('vlcAuto',vlcAuto()?'0':'1')}catch(_){}toast(vlcAuto()?'Filmer og serier spilles nå i VLC':'Filmer og serier spilles i appen',3000);ccMenu();return}
   if(t==='file'){$('ccFile').click();return}
   if(t==='osauto'){autoSub(true);return}
   if(t==='osnext'){autoSub(true,true);return}
@@ -2306,6 +2309,7 @@ $('ccFile').onchange=async e=>{
   extSub={raw:await f.text(),vtt:/\.vtt$/i.test(f.name)};subOff=0;subScale=1;applyExtSub();asStart(ovCtx);$('ccMenu').className='';toast('Undertekst lastet: '+f.name,3000);e.target.value='';
 };
 function closePlayer(){
+  try{if(window.__vlcCtx&&window.IPTV_WIN&&IPTV_WIN.vlcStop)IPTV_WIN.vlcStop()}catch(_){}
   const v=$('ovv');
   if(ovCtx&&v.currentTime>5)pushHist({k:ovCtx.k,type:ovCtx.type,name:ovCtx.title,logo:ovCtx.logo,url:ovCtx.url,pos:Math.floor(v.currentTime),dur:Math.floor(v.duration||0),ts:Date.now(),ref:ovCtx.ref});
   ovCtx=null;vodPlayer.stop();$('ov').classList.remove('on','pfs','bar');startEmbers();syncSoon(500);
@@ -3263,6 +3267,27 @@ if(NATIVE&&!DESKTOP){
   addEventListener('popstate',()=>{if(appBack())history.pushState({b:1},'')});
 }
 window.appBack=appBack;
+
+/* ===== VLC: innebygde undertekster (norsk tekst fra leverandørens filer) ===== */
+const vlcP=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.IptvCast&&Capacitor.Plugins.IptvCast.openVlc?Capacitor.Plugins.IptvCast:null;
+let vlcHasW=null;
+const vlcOk=()=>{if(vlcP())return true;const W=window.IPTV_WIN;if(W&&W.vlcHas){if(vlcHasW===null)try{vlcHasW=!!W.vlcHas()}catch(_){vlcHasW=false}return vlcHasW}return false};
+const vlcAuto=()=>{try{return localStorage.getItem('vlcAuto')==='1'}catch(_){return false}};
+async function playVlc(ctx,pos){
+  if(!ctx)return;try{vodPlayer.stop()}catch(_){}try{$('ovv').pause()}catch(_){}
+  const m=$('ovmsg');if(m){m.style.display='';m.textContent='🎞 Spilles i VLC med innebygd tekst. Tilbake eller 🏠 Hjem avslutter.'}
+  window.__vlcCtx=ctx;
+  try{
+    if(vlcP())await vlcP().openVlc({url:ctx.url,title:ctx.title||'',position:pos||0});
+    else await window.IPTV_WIN.vlcPlay({url:ctx.url,title:ctx.title||'',pos:pos||0});
+  }catch(e){window.__vlcCtx=null;const nv=/novlc/.test(String(e&&e.message||e));
+    toast(nv?(vlcP()?'Installer VLC fra Google Play først':'VLC er ikke installert på denne PC-en – last ned fra videolan.org'):'VLC: '+((e&&e.message)||e),6000);
+    if(m)m.textContent='';vodPlayer.play(ctx.url,false)}
+}
+window.addEventListener('vlcend',e=>{const ctx=window.__vlcCtx;window.__vlcCtx=null;if(!ctx)return;const d=e.detail||{};
+  if(d.pos>5)try{pushHist({k:ctx.k,type:ctx.type,name:ctx.title,logo:ctx.logo,url:ctx.url,pos:Math.floor(d.len&&d.pos>d.len-60?d.len:d.pos),dur:Math.floor(d.len||ctx.dur||0),ts:Date.now(),ref:ctx.ref})}catch(_){}
+  if(ovCtx===ctx){ovCtx=null;$('ov').classList.remove('on','pfs','bar');try{startEmbers()}catch(_){}if(curView==='home')try{renderHome()}catch(_){}}});
+setTimeout(()=>{if(!vlcOk())return;const b=$('ovVlc');if(b){b.style.display='';b.onclick=()=>{const c=ovCtx;if(!c||c.type==='live')return toast('VLC brukes for filmer og serier',2500);playVlc(c,$('ovv').currentTime||c.pos||0)}}},0);
 
 /* ===== Cast (Chromecast) – Android-appen (innebygd) og Windows-appen ===== */
 const castP=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.IptvCast;
