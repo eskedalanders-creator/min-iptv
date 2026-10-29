@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=163;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=164;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1155,6 +1155,8 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 /* v159: bredere kino, uten skilt og trailer-stripe */
 @media (min-aspect-ratio:1/1){.cin-hall{max-width:100%!important;width:100%;aspect-ratio:auto!important;height:calc(100vh - 84px);border-radius:0!important}html.tvm .cin-hall{height:calc(var(--tvh,720px) - 70px)}}
 .cin-ths{display:none!important}
+
+.cam.pfs{position:fixed!important;inset:0;z-index:9999;margin:0;border-radius:0;background:#000}.cam.pfs .camv{height:100vh;aspect-ratio:auto}.cam.pfs .camv video{width:100%;height:100%;object-fit:contain}.cam.pfs .camb{position:absolute;left:12px;top:10px;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:8px}.camv video{width:100%;height:100%;object-fit:cover;background:#000}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4249,13 +4251,45 @@ const camBase=c=>`http://${c.host}:${c.port||80}`;
 const camSnap=c=>px(camBase(c)+`/cgi-bin/api.cgi?cmd=Snap&channel=${c.ch||0}&rs=${Math.random().toString(36).slice(2,8)}&user=${encodeURIComponent(c.user)}&password=${encodeURIComponent(c.pass)}`);
 const camFlv=c=>px(camBase(c)+`/flv?port=1935&app=bcs&stream=channel${c.ch||0}_${c.main?'main':'sub'}.bcs&user=${encodeURIComponent(c.user)}&password=${encodeURIComponent(c.pass)}`);
 function stopCams(){camTimers.forEach(clearInterval);camTimers=[];camPlayers.forEach(p=>{try{p.pause();p.unload();p.detachMediaElement();p.destroy()}catch(e){}});camPlayers=[]}
-function renderCams(){
+/* Live fra Eskedals Kamera (opptaksprogrammet på kontor-PC-en) */
+const CAMSRV_DEF=['http://localhost:8090','http://100.67.209.80:8090'];
+async function camSrvFind(){
+  const list=[...new Set([LSget('camsrv',''),...CAMSRV_DEF].filter(Boolean))];
+  for(const u of list){try{const c=new AbortController();const t=setTimeout(()=>c.abort(),2500);const r=await fetch(u.replace(/\/$/,'')+'/api/status',{signal:c.signal,credentials:'include'});clearTimeout(t);if(r.ok){const j=await r.json();return {url:u.replace(/\/$/,''),st:j}}}catch(e){}}
+  return null}
+function camLiveTile(box,url){
+  if(!window.mpegts||!mpegts.getFeatureList().mseLivePlayback){box.innerHTML='<p class="muted" style="padding:20px">Live-video støttes ikke her.</p>';return}
+  box.innerHTML='<video muted autoplay playsinline></video>';const vid=box.firstChild;
+  const p=mpegts.createPlayer({type:'mpegts',isLive:true,url},{enableWorker:!NATIVE,liveBufferLatencyChasing:true,liveBufferLatencyMaxLatency:2.5,liveBufferLatencyMinRemain:.5});
+  p.attachMediaElement(vid);p.load();p.play().catch(()=>{});camPlayers.push(p);
+  let n=0;p.on(mpegts.Events.ERROR,()=>{if(n++<6)setTimeout(()=>{try{p.unload();p.load();p.play().catch(()=>{})}catch(e){}},3000)});
+}
+async function renderCams(){
   stopCams();
   const v=$('v-cams');
-  v.innerHTML=`<h2>📷 Kamera</h2><div class="chips"><button class="chip" id="camAdd">＋ Legg til kamera</button></div>
+  v.innerHTML='<h2>📷 Kamera</h2><p class="muted">Kobler til kamera …</p>';
+  const srv=await camSrvFind();
+  if(curView!=='cams')return;
+  if(srv&&srv.st.cams&&srv.st.cams.length){
+    const q=LSget('camq','main');
+    v.innerHTML=`<h2>📷 Kamera</h2><div class="chips"><button class="chip" id="camQ">Kvalitet: ${q==='main'?'Skarp':'Rask'}</button><button class="chip" id="camLyd">🔇 Lyd av</button><button class="chip" id="camSrv">⚙ Kamera-server</button></div>
+    <div class="cams">${srv.st.cams.map((c,i)=>`<div class="cam" tabindex="0" data-cf="${i}"><div class="camv" id="cv${i}"></div><div class="camb"><b>${esc(c.name)}</b><span class="muted" id="cp${i}">${c.person?'👤 Person nå':''}</span></div></div>`).join('')}</div>
+    <p class="muted">OK / klikk på et kamera = fullskjerm. Tilbake = ut.</p>`;
+    srv.st.cams.forEach((c,i)=>camLiveTile($('cv'+i),srv.url+'/live/'+encodeURIComponent(c.name)+'.ts?q='+q));
+    $('camQ').onclick=()=>{LSset('camq',q==='main'?'sub':'main');renderCams()};
+    $('camLyd').onclick=e=>{const on=e.currentTarget.textContent.includes('av');v.querySelectorAll('video').forEach(x=>x.muted=!on);e.currentTarget.textContent=on?'🔊 Lyd på':'🔇 Lyd av'};
+    $('camSrv').onclick=()=>{const u=prompt('Adresse til kamera-serveren:',LSget('camsrv','')||srv.url);if(u!==null){LSset('camsrv',u.trim());renderCams()}};
+    v.querySelectorAll('[data-cf]').forEach(t=>t.onclick=()=>{const was=t.classList.contains('pfs');document.querySelectorAll('.cam.pfs').forEach(x=>x.classList.remove('pfs'));if(!was)t.classList.add('pfs')});
+    camTimers.push(setInterval(async()=>{try{const r=await fetch(srv.url+'/api/status',{credentials:'include'});const j=await r.json();j.cams.forEach((c,i)=>{const e=$('cp'+i);if(e)e.textContent=c.person?'👤 Person nå':''})}catch(e){}},3000));
+    return}
+  renderCamsOld(v,srv);
+}
+function renderCamsOld(v,srv){
+  v.innerHTML=`<h2>📷 Kamera</h2><div class="chips"><button class="chip" id="camAdd">＋ Legg til kamera</button><button class="chip" id="camSrv">⚙ Kamera-server</button></div>${srv?'':'<p class="muted">Fant ikke kamera-serveren (Eskedals Kamera på kontor-PC-en). Sjekk at PC-en er på, eller legg inn adressen under «Kamera-server».</p>'}
   ${cams.length?`<div class="cams">${cams.map((c,i)=>`<div class="cam"><div class="camv" id="cv${i}"><img class="snap" id="cs${i}" alt=""></div><div class="camb"><b>${esc(c.name||'Kamera')}</b><button class="lk" data-cl="${i}">Live</button><button class="lk" data-ce="${i}">Rediger</button></div></div>`).join('')}</div>`
   :`<div class="card"><p>Ingen kamera lagt til ennå. Trykk «Legg til kamera», og skriv inn IP-adressen til Reolink Home Hub (eller kameraet), brukernavn og passord.</p><p class="muted">Hjemme fungerer dette direkte. Fra bobilen trenger du VPN (f.eks. Tailscale) til hjemmenettverket.</p></div>`}`;
   $('camAdd').onclick=()=>openCam(-1);
+  $('camSrv').onclick=()=>{const u=prompt('Adresse til kamera-serveren (f.eks. http://100.67.209.80:8090):',LSget('camsrv',''));if(u!==null){LSset('camsrv',u.trim());renderCams()}};
   v.querySelectorAll('[data-ce]').forEach(b=>b.onclick=()=>openCam(+b.dataset.ce));
   v.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>camLive(+b.dataset.cl));
   cams.forEach((c,i)=>{const im=$('cs'+i);const f=()=>{im.src=camSnap(c)};f();camTimers.push(setInterval(f,2500))});
