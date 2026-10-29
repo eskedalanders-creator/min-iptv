@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=164;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=165;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -4272,15 +4272,23 @@ async function renderCams(){
   if(curView!=='cams')return;
   if(srv&&srv.st.cams&&srv.st.cams.length){
     const q=LSget('camq','main');
-    v.innerHTML=`<h2>📷 Kamera</h2><div class="chips"><button class="chip" id="camQ">Kvalitet: ${q==='main'?'Skarp':'Rask'}</button><button class="chip" id="camLyd">🔇 Lyd av</button><button class="chip" id="camSrv">⚙ Kamera-server</button></div>
-    <div class="cams">${srv.st.cams.map((c,i)=>`<div class="cam" tabindex="0" data-cf="${i}"><div class="camv" id="cv${i}"></div><div class="camb"><b>${esc(c.name)}</b><span class="muted" id="cp${i}">${c.person?'👤 Person nå':''}</span></div></div>`).join('')}</div>
-    <p class="muted">OK / klikk på et kamera = fullskjerm. Tilbake = ut.</p>`;
-    srv.st.cams.forEach((c,i)=>camLiveTile($('cv'+i),srv.url+'/live/'+encodeURIComponent(c.name)+'.ts?q='+q));
+    const groups=[...new Set(srv.st.cams.map(c=>c.group||'Hjemme'))];let g=LSget('camg','Hjemme');if(!groups.includes(g))g=groups[0];
+    const cl=srv.st.cams.filter(c=>(c.group||'Hjemme')===g),many=cl.length>4;
+    const lu=c=>srv.url+'/live/'+encodeURIComponent(c.name)+'.ts?q='+q;
+    v.innerHTML=`<h2>📷 Kamera</h2><div class="chips">${groups.length>1?groups.map(x=>`<button class="chip ${x===g?'on':''}" data-cg="${esc(x)}">${esc(x)} <small>${srv.st.cams.filter(c=>(c.group||'Hjemme')===x).length}</small></button>`).join(''):''}<button class="chip" id="camQ">Kvalitet: ${q==='main'?'Skarp':'Rask'}</button><button class="chip" id="camLyd">🔇 Lyd av</button><button class="chip" id="camSrv">⚙ Kamera-server</button></div>
+    <div class="cams">${cl.map((c,i)=>`<div class="cam" tabindex="0" data-cf="${i}"><div class="camv" id="cv${i}">${many?`<img class="snap" id="cs${i}" alt="">`:''}</div><div class="camb"><b>${esc(c.name.replace(/^Jobb /,''))}</b><span class="muted" id="cp${i}">${c.person?'👤 Person nå':many?'▶ OK for live':''}</span></div></div>`).join('')}</div>
+    <p class="muted">OK / klikk på et kamera = ${many?'live i ':''}fullskjerm. Tilbake = ut.</p>`;
+    if(many){const ref=()=>cl.forEach((c,i)=>{const im=$('cs'+i);if(!im||im._b)return;im._b=1;const n=new Image();n.onload=()=>{im.src=n.src;im._b=0};n.onerror=()=>{im._b=0};n.src=srv.url+'/snap/'+encodeURIComponent(c.name)+'?t='+Date.now()});ref();camTimers.push(setInterval(ref,6000))}
+    else cl.forEach((c,i)=>camLiveTile($('cv'+i),lu(c)));
+    v.querySelectorAll('[data-cg]').forEach(b=>b.onclick=()=>{LSset('camg',b.dataset.cg);renderCams()});
     $('camQ').onclick=()=>{LSset('camq',q==='main'?'sub':'main');renderCams()};
     $('camLyd').onclick=e=>{const on=e.currentTarget.textContent.includes('av');v.querySelectorAll('video').forEach(x=>x.muted=!on);e.currentTarget.textContent=on?'🔊 Lyd på':'🔇 Lyd av'};
     $('camSrv').onclick=()=>{const u=prompt('Adresse til kamera-serveren:',LSget('camsrv','')||srv.url);if(u!==null){LSset('camsrv',u.trim());renderCams()}};
-    v.querySelectorAll('[data-cf]').forEach(t=>t.onclick=()=>{const was=t.classList.contains('pfs');document.querySelectorAll('.cam.pfs').forEach(x=>x.classList.remove('pfs'));if(!was)t.classList.add('pfs')});
-    camTimers.push(setInterval(async()=>{try{const r=await fetch(srv.url+'/api/status',{credentials:'include'});const j=await r.json();j.cams.forEach((c,i)=>{const e=$('cp'+i);if(e)e.textContent=c.person?'👤 Person nå':''})}catch(e){}},3000));
+    v.querySelectorAll('[data-cf]').forEach(t=>t.onclick=()=>{const i=+t.dataset.cf,was=t.classList.contains('pfs');
+      document.querySelectorAll('.cam.pfs').forEach(x=>{x.classList.remove('pfs');if(many){const j=+x.dataset.cf;const bx=$('cv'+j);camPlayers.filter(p=>p._i===j).forEach(p=>{try{p.destroy()}catch(e){}});camPlayers=camPlayers.filter(p=>p._i!==j);bx.innerHTML=`<img class="snap" id="cs${j}" alt="">`}});
+      if(!was){t.classList.add('pfs');if(many){camLiveTile($('cv'+i),lu(cl[i]));const p=camPlayers[camPlayers.length-1];if(p)p._i=i}}});
+    new MutationObserver(()=>{if(!many)return;v.querySelectorAll('.cam').forEach(x=>{const j=+x.dataset.cf;if(!x.classList.contains('pfs')&&camPlayers.some(p=>p._i===j)){camPlayers.filter(p=>p._i===j).forEach(p=>{try{p.destroy()}catch(e){}});camPlayers=camPlayers.filter(p=>p._i!==j);$('cv'+j).innerHTML=`<img class="snap" id="cs${j}" alt="">`}})}).observe(v,{subtree:true,attributes:true,attributeFilter:['class']});
+    camTimers.push(setInterval(async()=>{try{const r=await fetch(srv.url+'/api/status',{credentials:'include'});const j=await r.json();cl.forEach((c,i)=>{const n=j.cams.find(x=>x.name===c.name);const e=$('cp'+i);if(e&&n)e.textContent=n.person?'👤 Person nå':many?'▶ OK for live':''})}catch(e){}},3000));
     return}
   renderCamsOld(v,srv);
 }
