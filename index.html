@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=168;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=169;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -184,7 +184,12 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 .eps{max-height:42vh;overflow:auto;margin-top:10px;border-top:1px solid var(--line)}
 .ep{display:flex;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
 .ep:hover{background:rgba(255,255,255,.07)}
-.ep .epsn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted,#999);font-weight:800;cursor:pointer;padding:0}
+.ep .epsn{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.25);font-weight:800;cursor:pointer;font-size:14px}
+.ep .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ep:focus{outline:3px solid var(--accent);outline-offset:-3px;background:rgba(255,255,255,.08)}
+.serbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.serbar .sdd{margin:0}
+.serhint{font-size:12px;flex-basis:100%}
 .ep .epsn.on{background:var(--ok,#1aa05a);border-color:transparent;color:#fff}
 .ep.epnext{background:rgba(255,255,255,.07);box-shadow:inset 3px 0 0 var(--accent)}
 .ep .n{width:34px;color:var(--accent2);font-weight:700}
@@ -3840,8 +3845,8 @@ async function loadSeries(c,auto){
     let curSk=keys[0];
     const draw=sk=>{
       curSk=sk;const list=seasons[sk];
-      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id),sn=isSeen('e:'+e.id);return `<div class="ep" data-i="${i}" tabindex="0"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(cl(e.title)||('Episode '+(i+1)))}${sn?` <small style="color:var(--ok)">· ✓ Sett</small>`:h&&h.dur&&h.pos>10?` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`:''}</span><button type="button" class="epsn${sn?' on':''}" data-sn="${i}" title="${sn?'Merk som ikke sett':'Merk som sett'}">✓</button><span>▶</span></div>`}).join('');
-      $('eps').onclick=ev=>{const b=ev.target.closest('[data-sn]');if(b){ev.stopPropagation();const e=list[+b.dataset.sn];setSeen('e:'+e.id,!isSeen('e:'+e.id));draw(sk);serDone();return}const r=ev.target.closest('.ep');if(!r)return;playEp(list,+r.dataset.i)};
+      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id),sn=isSeen('e:'+e.id);const tt=(cl(e.title)||'').replace(/^.*?\bS\d+\s*E\d+\s*[-–:]?\s*/i,'').trim()||('Episode '+(e.episode_num||i+1));return `<div class="ep" data-i="${i}"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(tt)}${!sn&&h&&h.dur&&h.pos>10?` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`:''}</span><span class="epsn${sn?' on':''}" data-sn="${i}" title="Klikk (eller hold OK inne) for å merke som sett">✓</span></div>`}).join('');
+      $('eps').onclick=ev=>{const b=ev.target.closest('[data-sn]');if(b){ev.stopPropagation();const i=+b.dataset.sn,e=list[i],f=document.activeElement&&document.activeElement.classList.contains('ep');setSeen('e:'+e.id,!isSeen('e:'+e.id));draw(sk);serDone();const r=$('eps').querySelector(`[data-i="${i}"]`);if(r){if(f){r.tabIndex=0;r.focus({preventScroll:true})}const nb=r.querySelector('[data-sn]');b.classList.toggle('on',nb.classList.contains('on'))}return}const r=ev.target.closest('.ep');if(!r)return;playEp(list,+r.dataset.i)};
     };
     dlg._serAll=on=>{allEps.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});setSeen(c.key,on);draw(curSk)};
     const playEp=(list,i)=>{
@@ -3863,9 +3868,9 @@ async function loadSeries(c,auto){
       else{const ni=allEps.indexOf(last)+1;const nx=allEps.slice(ni).find(e=>!isSeen('e:'+e.id))||allEps[ni];if(nx){tgt=pos(nx);lbl='▶ Neste: S'+tgt.k+'E'+(nx.episode_num||tgt.i+1)}}}
     else{const fe=allEps.find(e=>!isSeen('e:'+e.id));if(fe){tgt=pos(fe);lbl='▶ Start S'+tgt.k+'E'+(fe.episode_num||tgt.i+1)}}
     const sk0=tgt?tgt.k:keys[0];
-    box.innerHTML=`${tgt?`<div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="primary" id="dRes">${esc(lbl)}</button><button id="dSeasonSeen">✓ Merk sesongen som sett</button></div>`:`<div class="actions" style="justify-content:flex-start;margin-top:12px"><button id="dSeasonSeen">✓ Merk sesongen som sett</button></div>`}<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(sk0)}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map(k=>`<button type="button" class="sdd-i${k===sk0?' on':''}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><div class="eps" id="eps"></div>`;
+    box.innerHTML=`<div class="serbar">${tgt?`<button class="primary" id="dRes">${esc(lbl)}</button>`:''}<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(sk0)}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map(k=>`<button type="button" class="sdd-i${k===sk0?' on':''}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><button id="dSeasonSeen">✓ Sesong sett</button><span class="muted serhint">Hold OK inne på en episode for å merke den som sett</span></div><div class="eps" id="eps"></div>`;
     if(tgt)$('dRes').onclick=()=>playEp(seasons[tgt.k],tgt.i);
-    $('dSeasonSeen').onclick=()=>{const l=seasons[curSk],on=!l.every(e=>isSeen('e:'+e.id));l.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});saveSeen();syncSoon();draw(curSk);serDone();$('dSeasonSeen').textContent=on?'↺ Sesongen ikke sett':'✓ Merk sesongen som sett'};
+    $('dSeasonSeen').onclick=()=>{const l=seasons[curSk],on=!l.every(e=>isSeen('e:'+e.id));l.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});saveSeen();syncSoon();draw(curSk);serDone();$('dSeasonSeen').textContent=on?'↺ Sesong ikke sett':'✓ Sesong sett'};
     const sdd=$('sSeason'),sl=$('sddL');
     $('sddB').onclick=e=>{e.stopPropagation();sl.hidden=!sl.hidden};
     sl.onclick=e=>{const b=e.target.closest('.sdd-i');if(!b)return;sl.querySelectorAll('.sdd-i').forEach(x=>x.classList.toggle('on',x===b));$('sddB').firstChild.nodeValue='Sesong '+b.dataset.s;sl.hidden=true;draw(b.dataset.s)};
@@ -4200,6 +4205,11 @@ function tvfOpen(){
 $('tvFilt').onclick=tvfOpen;$('tvfX').onclick=()=>$('tvfD').close();
 $('tvfB').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;$(b.dataset.s).querySelectorAll('.chip')[+b.dataset.i].click();tvfOpen();$('tvfB').querySelector('.chip.on')&&0};
 let tvaRow=null,enT=0,enLong=false;
+/* Episoder: OK = spill av, hold OK inne (0,6 s) = merk som sett / ikke sett */
+let epT=0,epLong=false;
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=document.activeElement;if(!t||!t.classList||!t.classList.contains('ep'))return;e.preventDefault();e.stopImmediatePropagation();
+  if(!e.repeat){epT=Date.now();epLong=false;clearTimeout(t._lp);t._lp=setTimeout(()=>{if(epT&&!epLong){epLong=true;const b=t.querySelector('[data-sn]');if(b){b.click();toast(b.classList.contains('on')?'✓ Merket som sett':'↺ Merket som ikke sett',1800)}}},600)}},true);
+document.addEventListener('keyup',e=>{if(e.key!=='Enter'||!epT)return;const t=document.activeElement;e.preventDefault();e.stopImmediatePropagation();if(t&&t._lp)clearTimeout(t._lp);const long=epLong;epT=0;epLong=false;if(!long&&t&&t.classList&&t.classList.contains('ep'))t.click()},true);
 function tvActions(row){const c=row._c;if(!c)return;tvaRow=row;$('tvaT').textContent=c.nm||c.name;
   $('tvaFav').textContent=isFav(c)?'★ Fjern favoritt':'☆ Legg til favoritt';$('tvaHide').textContent=hidden.has(c.key)?'↩ Vis igjen':'🚫 Skjul kanal';
   $('tvaD').showModal();$('tvaPlay').focus()}
