@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=172;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=173;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -158,7 +158,10 @@ video{width:100%;height:100%;background:#000}
 #ov.on{display:flex}
 #dtr{aspect-ratio:16/9;width:100%;margin-bottom:12px;border-radius:12px;overflow:hidden;background:#000}#dtr[hidden]{display:none}#dtr iframe{width:100%;height:100%;border:0}
 #ov:not(.pfs) .ovbar{position:absolute;top:0;left:0;right:0;z-index:5;transition:opacity .35s}#ov.ovhide:not(.pfs) .ovbar{opacity:0;pointer-events:none}#ov.ovhide{cursor:none}#ov.pfs .ovbar{display:none}#ov.pfs.bar .ovbar{display:flex;position:absolute;top:0;left:0;right:0;z-index:5}
-#vwrap.pfs{position:fixed;inset:0;z-index:90;aspect-ratio:auto;width:100vw;height:100vh}
+#vwrap.pfs{position:fixed;inset:0;z-index:90;aspect-ratio:auto;width:100vw;height:100vh;transform:none;border-radius:0;margin:0}
+#vwrap.pfs video{width:100%;height:100%;object-fit:contain;background:#000}
+body.tv #vwrap.pfs,body.tv #vwrap.pfs:focus,body.tv #vwrap.pfs :focus,body.tv video:focus,body.tv #ov.pfs :focus{transform:none!important;box-shadow:none!important;outline:none!important}
+#vwrap.pfs{position:fixed!important}
 .ovbar{display:flex;gap:8px;align-items:center;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.2))}
 .ovbar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 #ovw{position:relative;flex:1;min-height:0}
@@ -3579,6 +3582,8 @@ function zap(d){
   const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===n.key);if(row)row.scrollIntoView({block:'nearest'});
 }
 if('mediaSession'in navigator){try{navigator.mediaSession.setActionHandler('previoustrack',()=>zap(-1));navigator.mediaSession.setActionHandler('nexttrack',()=>zap(1))}catch(e){}}
+/* Fullskjerm for direkte-TV: skjul avspillingslinja (kontrollene) og sørg for at vinduet også er i fullskjerm */
+new MutationObserver(()=>{const on=$('vwrap').classList.contains('pfs');$('v').controls=!on;if(on&&window.IPTV_WIN&&IPTV_WIN.fs){try{if(!IPTV_WIN.isFs())IPTV_WIN.fs(true)}catch(e){}}}).observe($('vwrap'),{attributes:true,attributeFilter:['class']});
 function toggleFs(){
   if(NATIVE){const w=$('vwrap');if(w.classList.contains('pfs'))w.classList.remove('pfs','bar');else w.classList.add('pfs');return}
   const el=$('vwrap');
