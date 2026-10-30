@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=169;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=170;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -175,6 +175,27 @@ dialog .chk input{width:auto}
 .pl{display:flex;gap:6px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px;margin-top:6px}
 .pl span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+.dx-dlg{width:min(1000px,96vw)!important;padding:0!important;position:relative;overflow:hidden auto;background:#0a0c13!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px!important;box-shadow:0 30px 90px rgba(0,0,0,.75)!important}
+.dx-bg{position:absolute;left:0;right:0;top:0;height:380px;background-size:cover;background-position:center 25%;filter:blur(30px) saturate(1.4);opacity:.5;transform:scale(1.25);pointer-events:none}
+.dx-fade{position:absolute;left:0;right:0;top:0;height:600px;background:linear-gradient(180deg,rgba(10,12,19,.2) 0%,rgba(10,12,19,.75) 60%,#0a0c13 100%);pointer-events:none}
+.dx-close{position:absolute;top:16px;right:16px;z-index:5;width:48px;height:48px;padding:0;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center;cursor:pointer}
+.dx-close:hover,.dx-close:focus{background:#fff;color:#0a0c13;outline:none;transform:scale(1.08)}
+.det.dx{grid-template-columns:210px 1fr;gap:30px;padding:32px 32px 10px;position:relative;z-index:1}
+.dx .pimg{width:210px;border-radius:14px;overflow:hidden;box-shadow:0 22px 50px rgba(0,0,0,.65)}
+.dx-kick{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);font-weight:800;margin-bottom:6px}
+.dx h2{font-size:34px;font-weight:800;line-height:1.1;margin:0 60px 10px 0}
+.dx .meta span{background:rgba(255,255,255,.12);font-weight:600}.dx .meta .rt1{background:rgba(255,200,60,.18);color:#ffd166}
+.dx .plot{max-height:none;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;color:#cfcbd8;font-size:15px;line-height:1.55}
+.dx-act{justify-content:flex-start!important;gap:10px!important;margin-top:20px!important}
+.dx-act button,#dser .serbar button{border-radius:999px;padding:11px 16px;font-weight:700;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff}
+.dx-act .primary{background:#fff!important;color:#0a0c13!important;border-color:#fff!important;padding:12px 28px;font-size:16px}
+.dx-act #dFav.on{color:#ffd166}.dx-act #dSeen.on{background:rgba(26,160,90,.9);border-color:transparent}
+.dx-act .dx-hide{color:#ff8a95}
+.dx-dlg button:focus-visible,.dx-dlg .dx-act button:focus{outline:3px solid var(--accent);outline-offset:3px}
+.dx-dlg #dtr{position:relative;z-index:1;margin:0 32px}
+.dx-dlg #dser{position:relative;z-index:1;padding:4px 32px 26px}
+.dx-dlg .eps{max-height:46vh}
+@media (max-width:700px){.det.dx{grid-template-columns:1fr;padding:22px 18px 6px}.dx .pimg{width:130px}.dx h2{font-size:24px}.dx-dlg #dser{padding:4px 18px 20px}}
 .det{display:grid;grid-template-columns:170px 1fr;gap:18px}
 .det .pimg{width:170px}
 .det h2{font-size:24px;letter-spacing:0;margin-bottom:4px}
@@ -3793,25 +3814,29 @@ function openItem(c,auto){
   if(c.t==='ser'){try{const nw=LSget(NEWK(),{});if(nw[c.key]){delete nw[c.key];LSset(NEWK(),nw);_nwC=null;document.querySelectorAll('.pc[data-k="'+CSS.escape(c.key)+'"] .newep').forEach(x=>x.remove())}}catch(e){}}
   if(c.t==='live'){current=c;showView('live',true);selectLive(c,true);const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===c.key);if(row)row.scrollIntoView({block:'center'});return}
   const fav=isFav(c);
-  dlg.innerHTML=`<div id="dtr" hidden></div><div class="det"><div class="pimg"><div class="pfb">${esc(c.name)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
-   <div><h2>${esc(c.name)}</h2><div class="meta" id="dmeta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}<span>${esc(c.cat)}</span>${c.sv?`<span>${esc(SERV.find(s=>s.id===c.sv).name)}</span>`:''}</div>
+  const dTitle=String(c.nm||c.name).replace(/^[A-Z]{2,3}\s*[-|:]\s*/,'').replace(/\s*[\(\[](?:[A-Z]{2,3}|\d{4}|MULTI[^)\]]*)[\)\]]/gi,'').trim()||c.name;
+  dlg.classList.add('dx-dlg');
+  dlg.innerHTML=`${c.logo?`<div class="dx-bg" style="background-image:url('${esc(c.logo).replace(/'/g,'%27')}')"></div>`:''}<div class="dx-fade"></div><button class="dx-close" id="dClose" title="Lukk (Tilbake)">✕</button>
+   <div class="det dx"><div class="pimg"><div class="pfb">${esc(dTitle)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
+   <div class="dx-info"><div class="dx-kick">${c.t==='ser'?'Serie':'Film'}${c.sv&&SERV.find(s=>s.id===c.sv)?' · '+esc(SERV.find(s=>s.id===c.sv).name):''}</div><h2>${esc(dTitle)}</h2><div class="meta" id="dmeta">${c.rt?`<span class="rt1">★ ${c.rt.toFixed(1)}</span>`:''}<span>${esc(c.cat)}</span></div>
    <div class="plot" id="dplot">${esc(c.pl||'')}</div>
-   <div class="actions" style="justify-content:flex-start">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dTr">🎞 Trailer</button><button id="dFav">${fav?'★ Fjern favoritt':'☆ Favoritt'}</button><button id="dSeen">${isSeen(c.key)?'↺ Merk som ikke sett':'✓ Merk som sett'}</button><button id="dHide" class="danger">🚫 Skjul</button><button id="dClose">Lukk</button></div></div></div>
+   <div class="actions dx-act">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dFav" class="${fav?'on':''}">${fav?'★ Favoritt':'☆ Favoritt'}</button><button id="dSeen" class="${isSeen(c.key)?'on':''}">${isSeen(c.key)?'✓ Sett':'✓ Merk som sett'}</button><button id="dTr">🎞 Trailer</button><button id="dHide" class="dx-hide" title="Skjul tittelen">🚫</button></div></div></div>
+   <div id="dtr" hidden></div>
    ${c.t==='ser'?`<div id="dser"><div class="muted" style="margin-top:12px">Henter episoder …</div></div>`:''}`;
-  dlg.showModal();
+  dlg.showModal();setTimeout(()=>{const f=$('dPlay')||$('dFav');if(f&&!dlg.contains(document.activeElement)||document.activeElement===$('dClose'))f&&f.focus()},30);
   $('dClose').onclick=()=>dlg.close();
   let trId=ytId(c.tr||'');dlg._setTr=id=>{if(id&&!trId)trId=id};
   $('dTr').onclick=()=>{const b=$('dtr');
     if(!b.hidden){b.hidden=true;b.innerHTML='';$('dTr').textContent='🎞 Trailer';return}
-    if(trId){b.innerHTML=`<iframe src="https://www.youtube.com/embed/${trId}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;b.hidden=false;$('dTr').textContent='⏹ Skjul trailer';b.scrollIntoView({block:'nearest'})}
+    if(trId){b.innerHTML=`<iframe src="https://www.youtube.com/embed/${trId}?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;b.hidden=false;$('dTr').textContent='⏹ Lukk trailer';b.scrollIntoView({block:'nearest'})}
     else{const qq=String(c.name).replace(/^[A-Z]{2}\s*[-|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').trim()+' trailer',q=encodeURIComponent(qq);
       if(NATIVE||TVM){/* Aldri forlat appen (fjernkontrollen kommer ikke tilbake): finn trailer og spill den her */
         $('dTr').textContent='⏳ Søker …';
         ytFind(qq).then(id=>{$('dTr').textContent='🎞 Trailer';if(!id){toast('Fant ingen trailer til denne',4000);return}trId=id;$('dTr').click()}).catch(()=>{$('dTr').textContent='🎞 Trailer';toast('Fant ingen trailer til denne',4000)});return}
       openApp('youtube','https://www.youtube.com/results?search_query='+q,'YouTube')}};
-  $('dFav').onclick=()=>{toggleFav(c);$('dFav').textContent=isFav(c)?'★ Fjern favoritt':'☆ Favoritt';if(curView==='home')renderHome()};
+  $('dFav').onclick=()=>{toggleFav(c);const f=isFav(c);$('dFav').textContent=f?'★ Favoritt':'☆ Favoritt';$('dFav').classList.toggle('on',f);if(curView==='home')renderHome()};
   $('dHide').onclick=()=>{toggleHide(c);dlg.close();showView(curView,true)};
-  $('dSeen').onclick=()=>{const on=!isSeen(c.key);setSeen(c.key,on);if(c.t==='ser'&&dlg._serAll)dlg._serAll(on);$('dSeen').textContent=on?'↺ Merk som ikke sett':'✓ Merk som sett'};
+  $('dSeen').onclick=()=>{const on=!isSeen(c.key);setSeen(c.key,on);if(c.t==='ser'&&dlg._serAll)dlg._serAll(on);$('dSeen').textContent=on?'✓ Sett':'✓ Merk som sett';$('dSeen').classList.toggle('on',on)};
   if(c.t==='vod'){
     const h=hist.find(x=>x.k===c.key);
     if(h&&h.pos>10)$('dPlay').textContent='▶ Fortsett ('+Math.floor(h.pos/60)+' min)';
@@ -3841,7 +3866,7 @@ async function loadSeries(c,auto){
     const keys=Object.keys(seasons).sort((a,b)=>a-b);
     if(!keys.length){box.innerHTML='<div class="muted" style="margin-top:12px">Ingen episoder funnet.</div>';return}
     const allEps=keys.flatMap(k=>seasons[k]);
-    const serDone=()=>{const d=allEps.every(e=>isSeen('e:'+e.id));if(d!==seen.has(c.key)){setSeen(c.key,d);const b=$('dSeen');if(b)b.textContent=d?'↺ Merk som ikke sett':'✓ Merk som sett'}};
+    const serDone=()=>{const d=allEps.every(e=>isSeen('e:'+e.id));if(d!==seen.has(c.key)){setSeen(c.key,d);const b=$('dSeen');if(b){b.textContent=d?'✓ Sett':'✓ Merk som sett';b.classList.toggle('on',d)}}};
     let curSk=keys[0];
     const draw=sk=>{
       curSk=sk;const list=seasons[sk];
@@ -3869,7 +3894,7 @@ async function loadSeries(c,auto){
     else{const fe=allEps.find(e=>!isSeen('e:'+e.id));if(fe){tgt=pos(fe);lbl='▶ Start S'+tgt.k+'E'+(fe.episode_num||tgt.i+1)}}
     const sk0=tgt?tgt.k:keys[0];
     box.innerHTML=`<div class="serbar">${tgt?`<button class="primary" id="dRes">${esc(lbl)}</button>`:''}<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(sk0)}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map(k=>`<button type="button" class="sdd-i${k===sk0?' on':''}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><button id="dSeasonSeen">✓ Sesong sett</button><span class="muted serhint">Hold OK inne på en episode for å merke den som sett</span></div><div class="eps" id="eps"></div>`;
-    if(tgt)$('dRes').onclick=()=>playEp(seasons[tgt.k],tgt.i);
+    if(tgt){const rb=$('dRes'),act=dlg.querySelector('.dx-act');if(rb&&act)act.prepend(rb);rb.onclick=()=>playEp(seasons[tgt.k],tgt.i)}
     $('dSeasonSeen').onclick=()=>{const l=seasons[curSk],on=!l.every(e=>isSeen('e:'+e.id));l.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});saveSeen();syncSoon();draw(curSk);serDone();$('dSeasonSeen').textContent=on?'↺ Sesong ikke sett':'✓ Sesong sett'};
     const sdd=$('sSeason'),sl=$('sddL');
     $('sddB').onclick=e=>{e.stopPropagation();sl.hidden=!sl.hidden};
