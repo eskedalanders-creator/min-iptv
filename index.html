@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=171;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=172;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -175,7 +175,7 @@ dialog .chk input{width:auto}
 .pl{display:flex;gap:6px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px;margin-top:6px}
 .pl span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 hr{border:none;border-top:1px solid var(--line);margin:14px 0}
-.dx-dlg{width:min(1000px,96vw)!important;padding:0!important;position:relative;overflow:hidden auto;background:#0a0c13!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px!important;box-shadow:0 30px 90px rgba(0,0,0,.75)!important}
+.dx-dlg{width:min(1000px,96vw)!important;padding:0!important;overflow:hidden auto;background:#0a0c13!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px!important;box-shadow:0 30px 90px rgba(0,0,0,.75)!important}
 .dx-bg{position:absolute;left:0;right:0;top:0;height:380px;background-size:cover;background-position:center 25%;filter:blur(30px) saturate(1.4);opacity:.5;transform:scale(1.25);pointer-events:none}
 .dx-fade{position:absolute;left:0;right:0;top:0;height:600px;background:linear-gradient(180deg,rgba(10,12,19,.2) 0%,rgba(10,12,19,.75) 60%,#0a0c13 100%);pointer-events:none}
 .dx-close{position:absolute;top:16px;right:16px;z-index:5;width:48px;height:48px;padding:0;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:20px;line-height:1;display:grid;place-items:center;cursor:pointer}
