@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=170;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=171;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -850,6 +850,17 @@ html.tvm button:hover,html.tvm button:active{transform:none}
 #v-live #provs .pl2{display:none}
 #v-live #provs>*{flex:0 0 auto;white-space:nowrap;padding:5px 12px!important;font-size:13px!important;min-height:0!important;height:32px}
 #v-live #tools{flex-wrap:nowrap;gap:6px;padding:4px 10px 6px}
+/* TV-modus: bredere kanalliste mens det spilles, én kolonne, navn over to linjer, kompakt topp */
+html.tvm #v-live.playing #side{width:540px;max-width:44%}
+html.tvm #v-live.playing #list{grid-template-columns:1fr;gap:8px;padding:10px}
+html.tvm #v-live.playing #list .ch{padding:8px 12px 8px 8px}
+html.tvm #list .ch .n{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.25}
+html.tvm #sidetop{flex-wrap:nowrap;padding:10px 12px 6px;gap:10px}
+html.tvm #findBar{flex-wrap:nowrap;overflow:hidden}
+html.tvm #findBar>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.tvm #findBar .chip{flex:none;padding:6px 12px}
+html.tvm #tools{display:none!important}
+html.tvm #v-live.finding #tvHint{display:none}
 #v-live #tools input{flex:1 1 40%;min-width:0;height:38px;font-size:14px;padding:0 10px}
 #v-live #tools .row{flex:1 1 60%;min-width:0}
 #v-live #tools select{height:38px;font-size:13px;min-width:0;flex:1}
@@ -3516,6 +3527,7 @@ function applyFilter(){
   };
   const arr=Q?skRun(DB.live,Q,filt):DB.live.filter(filt);
   if(liveFind)arr.sort((a,b)=>(b._fm-a._fm)||(b.no-a.no)||a.nm.localeCompare(b.nm,'no'));
+  $('v-live').classList.toggle('finding',!!liveFind);
   $('findBar').innerHTML=liveFind?`<span>Kanaler for <b>${esc(liveFind.label)}</b></span><button class="chip" id="findX">✕ Fjern filter</button>`:'';
   if(liveFind)$('findX').onclick=()=>{liveFind=null;applyFilter()};
   if(!liveFind)arr.sort((a,b)=>(liveTab==='fb'?(b.no-a.no):0)||((a.pv<0?999:a.pv)-(b.pv<0?999:b.pv))||COLL.compare(a.cat,b.cat)||COLL.compare(a.nm,b.nm));
