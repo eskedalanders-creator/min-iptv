@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=167;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=168;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -184,6 +184,9 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 .eps{max-height:42vh;overflow:auto;margin-top:10px;border-top:1px solid var(--line)}
 .ep{display:flex;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
 .ep:hover{background:rgba(255,255,255,.07)}
+.ep .epsn{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted,#999);font-weight:800;cursor:pointer;padding:0}
+.ep .epsn.on{background:var(--ok,#1aa05a);border-color:transparent;color:#fff}
+.ep.epnext{background:rgba(255,255,255,.07);box-shadow:inset 3px 0 0 var(--accent)}
 .ep .n{width:34px;color:var(--accent2);font-weight:700}
 .ep .t{flex:1}
 #toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#000d;border:1px solid var(--accent);padding:10px 16px;border-radius:12px;z-index:200;display:none;max-width:92vw}
@@ -1907,6 +1910,9 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 /* ===================== Historikk / fortsett å se ===================== */
 const saveSeen=()=>{try{localStorage.setItem(K('seen'),JSON.stringify([...seen].slice(-4000)))}catch(_){}};
 const isSeen=k=>{if(seen.has(k))return true;const h=hist.find(x=>x.k===k);return !!(h&&h.dur&&h.pos/h.dur>=.9)};
+function setSeen(k,on){if(on){seen.add(k)}else{seen.delete(k);const h=hist.find(x=>x.k===k);if(h&&h.dur&&h.pos/h.dur>=.9){hist=hist.filter(x=>x.k!==k);saveHist()}}saveSeen();syncSoon();
+  document.querySelectorAll('.pc[data-k="'+CSS.escape(k)+'"] .pimg').forEach(p=>{const b=p.querySelector('.seen');if(on&&!b)p.insertAdjacentHTML('beforeend','<span class="seen">✓ Sett</span>');if(!on&&b)b.remove()})}
+const RESK=()=>K('resume');
 function pushHist(e){
   if(e&&e.k&&e.dur&&e.pos/e.dur>=.9&&!seen.has(e.k)){seen.add(e.k);saveSeen()}
   hist=hist.filter(h=>h.k!==e.k);hist.unshift(e);hist=hist.slice(0,40);saveHist();
@@ -3778,14 +3784,14 @@ function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setIt
 
 /* ---------- Detaljer ---------- */
 const dlg=$('dlgItem');
-function openItem(c){
+function openItem(c,auto){
   if(c.t==='ser'){try{const nw=LSget(NEWK(),{});if(nw[c.key]){delete nw[c.key];LSset(NEWK(),nw);_nwC=null;document.querySelectorAll('.pc[data-k="'+CSS.escape(c.key)+'"] .newep').forEach(x=>x.remove())}}catch(e){}}
   if(c.t==='live'){current=c;showView('live',true);selectLive(c,true);const row=[...document.querySelectorAll('.ch')].find(x=>x._c&&x._c.key===c.key);if(row)row.scrollIntoView({block:'center'});return}
   const fav=isFav(c);
   dlg.innerHTML=`<div id="dtr" hidden></div><div class="det"><div class="pimg"><div class="pfb">${esc(c.name)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
    <div><h2>${esc(c.name)}</h2><div class="meta" id="dmeta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}<span>${esc(c.cat)}</span>${c.sv?`<span>${esc(SERV.find(s=>s.id===c.sv).name)}</span>`:''}</div>
    <div class="plot" id="dplot">${esc(c.pl||'')}</div>
-   <div class="actions" style="justify-content:flex-start">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dTr">🎞 Trailer</button><button id="dFav">${fav?'★ Fjern favoritt':'☆ Favoritt'}</button><button id="dHide" class="danger">🚫 Skjul</button><button id="dClose">Lukk</button></div></div></div>
+   <div class="actions" style="justify-content:flex-start">${c.t==='vod'?`<button class="primary" id="dPlay">▶ Spill av</button>`:''}<button id="dTr">🎞 Trailer</button><button id="dFav">${fav?'★ Fjern favoritt':'☆ Favoritt'}</button><button id="dSeen">${isSeen(c.key)?'↺ Merk som ikke sett':'✓ Merk som sett'}</button><button id="dHide" class="danger">🚫 Skjul</button><button id="dClose">Lukk</button></div></div></div>
    ${c.t==='ser'?`<div id="dser"><div class="muted" style="margin-top:12px">Henter episoder …</div></div>`:''}`;
   dlg.showModal();
   $('dClose').onclick=()=>dlg.close();
@@ -3800,6 +3806,7 @@ function openItem(c){
       openApp('youtube','https://www.youtube.com/results?search_query='+q,'YouTube')}};
   $('dFav').onclick=()=>{toggleFav(c);$('dFav').textContent=isFav(c)?'★ Fjern favoritt':'☆ Favoritt';if(curView==='home')renderHome()};
   $('dHide').onclick=()=>{toggleHide(c);dlg.close();showView(curView,true)};
+  $('dSeen').onclick=()=>{const on=!isSeen(c.key);setSeen(c.key,on);if(c.t==='ser'&&dlg._serAll)dlg._serAll(on);$('dSeen').textContent=on?'↺ Merk som ikke sett':'✓ Merk som sett'};
   if(c.t==='vod'){
     const h=hist.find(x=>x.k===c.key);
     if(h&&h.pos>10)$('dPlay').textContent='▶ Fortsett ('+Math.floor(h.pos/60)+' min)';
@@ -3812,9 +3819,9 @@ function openItem(c){
       if(i.plot||i.description)$('dplot').textContent=cl(i.plot||i.description);
       if(i.movie_image&&!c.logo){const im=dlg.querySelector('.pimg');im.insertAdjacentHTML('beforeend',`<img src="${esc(i.movie_image)}" alt="">`)}
     }).catch(()=>{});
-  }else loadSeries(c);
+  }else loadSeries(c,auto);
 }
-async function loadSeries(c){
+async function loadSeries(c,auto){
   const box=$('dser');
   try{
     const j=await xapi(c.xt,'get_series_info','&series_id='+c.id);
@@ -3828,24 +3835,43 @@ async function loadSeries(c){
     else for(const k of Object.keys(eps))seasons[k]=eps[k];
     const keys=Object.keys(seasons).sort((a,b)=>a-b);
     if(!keys.length){box.innerHTML='<div class="muted" style="margin-top:12px">Ingen episoder funnet.</div>';return}
+    const allEps=keys.flatMap(k=>seasons[k]);
+    const serDone=()=>{const d=allEps.every(e=>isSeen('e:'+e.id));if(d!==seen.has(c.key)){setSeen(c.key,d);const b=$('dSeen');if(b)b.textContent=d?'↺ Merk som ikke sett':'✓ Merk som sett'}};
+    let curSk=keys[0];
     const draw=sk=>{
-      const list=seasons[sk];
-      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id);return `<div class="ep" data-i="${i}"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(cl(e.title)||('Episode '+(i+1)))}${isSeen('e:'+e.id)?` <small style="color:var(--ok)">· ✓ Sett</small>`:h&&h.dur?(h.pos/h.dur>=.9?` <small style="color:var(--ok)">· ✓ Sett</small>`:` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`):''}</span><span>▶</span></div>`}).join('');
-      $('eps').onclick=ev=>{const r=ev.target.closest('.ep');if(!r)return;playEp(list,+r.dataset.i)};
+      curSk=sk;const list=seasons[sk];
+      $('eps').innerHTML=list.map((e,i)=>{const h=hist.find(x=>x.k==='e:'+e.id),sn=isSeen('e:'+e.id);return `<div class="ep" data-i="${i}" tabindex="0"><span class="n">${esc(e.episode_num||i+1)}</span><span class="t">${esc(cl(e.title)||('Episode '+(i+1)))}${sn?` <small style="color:var(--ok)">· ✓ Sett</small>`:h&&h.dur&&h.pos>10?` <small>· ${Math.round(h.pos/h.dur*100)}% sett</small>`:''}</span><button type="button" class="epsn${sn?' on':''}" data-sn="${i}" title="${sn?'Merk som ikke sett':'Merk som sett'}">✓</button><span>▶</span></div>`}).join('');
+      $('eps').onclick=ev=>{const b=ev.target.closest('[data-sn]');if(b){ev.stopPropagation();const e=list[+b.dataset.sn];setSeen('e:'+e.id,!isSeen('e:'+e.id));draw(sk);serDone();return}const r=ev.target.closest('.ep');if(!r)return;playEp(list,+r.dataset.i)};
     };
+    dlg._serAll=on=>{allEps.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});setSeen(c.key,on);draw(curSk)};
     const playEp=(list,i)=>{
       const e=list[i];if(!e)return;dlg.close();
+      try{const rs=LSget(RESK(),{});rs[c.key]={eid:e.id,t:Date.now()};const ks=Object.keys(rs);if(ks.length>300)ks.sort((a,b)=>rs[a].t-rs[b].t).slice(0,ks.length-300).forEach(k=>delete rs[k]);LSset(RESK(),rs)}catch(x){}
       const h=hist.find(x=>x.k==='e:'+e.id);
       openPlayer({k:'e:'+e.id,type:'ep',title:c.name+' – S'+(e.season||'?')+'E'+(e.episode_num||i+1)+' '+cl(e.title),logo:(e.info&&e.info.movie_image)||c.logo,
         url:xtUrl(c.xt,'series',e.id,e.container_extension||'mp4'),pos:h?h.pos:0,dur:h?h.dur:0,ref:c.key,
         next:list[i+1]?()=>playEp(list,i+1):(()=>{const sk=keys.find(k=>seasons[k]===list),ns=keys[keys.indexOf(sk)+1];return ns!==undefined&&seasons[ns]&&seasons[ns][0]?()=>playEp(seasons[ns],0):null})()});
     };
-    box.innerHTML=`<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(keys[0])}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map((k,i)=>`<button type="button" class="sdd-i${i?'':' on'}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><div class="eps" id="eps"></div>`;
+    /* Hvor slapp vi? Siste episode spilt i denne serien → fortsett den, eller neste hvis den er sett ferdig */
+    const pos=e=>{for(const k of keys){const i=seasons[k].indexOf(e);if(i>=0)return {k,i}}return null};
+    let last=null;const rs=(LSget(RESK(),{})||{})[c.key];
+    if(rs)last=allEps.find(e=>String(e.id)===String(rs.eid));
+    if(!last){const hh=hist.find(x=>x.type==='ep'&&x.ref===c.key);if(hh)last=allEps.find(e=>'e:'+e.id===hh.k)}
+    let tgt=null,lbl='';
+    if(last){const p=pos(last),h=hist.find(x=>x.k==='e:'+last.id);
+      if(!isSeen('e:'+last.id)&&!(h&&h.dur&&h.pos/h.dur>=.9)){tgt=p;lbl='▶ Fortsett S'+p.k+'E'+(last.episode_num||p.i+1)+(h&&h.pos>10&&h.dur?' ('+Math.max(1,Math.round((h.dur-h.pos)/60))+' min igjen)':'')}
+      else{const ni=allEps.indexOf(last)+1;const nx=allEps.slice(ni).find(e=>!isSeen('e:'+e.id))||allEps[ni];if(nx){tgt=pos(nx);lbl='▶ Neste: S'+tgt.k+'E'+(nx.episode_num||tgt.i+1)}}}
+    else{const fe=allEps.find(e=>!isSeen('e:'+e.id));if(fe){tgt=pos(fe);lbl='▶ Start S'+tgt.k+'E'+(fe.episode_num||tgt.i+1)}}
+    const sk0=tgt?tgt.k:keys[0];
+    box.innerHTML=`${tgt?`<div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="primary" id="dRes">${esc(lbl)}</button><button id="dSeasonSeen">✓ Merk sesongen som sett</button></div>`:`<div class="actions" style="justify-content:flex-start;margin-top:12px"><button id="dSeasonSeen">✓ Merk sesongen som sett</button></div>`}<div class="sdd" id="sSeason"><button type="button" class="sdd-b" id="sddB">Sesong ${esc(sk0)}<span>▾</span></button><div class="sdd-l" id="sddL" hidden>${keys.map(k=>`<button type="button" class="sdd-i${k===sk0?' on':''}" data-s="${esc(k)}">Sesong ${esc(k)}</button>`).join('')}</div></div><div class="eps" id="eps"></div>`;
+    if(tgt)$('dRes').onclick=()=>playEp(seasons[tgt.k],tgt.i);
+    $('dSeasonSeen').onclick=()=>{const l=seasons[curSk],on=!l.every(e=>isSeen('e:'+e.id));l.forEach(e=>{const k='e:'+e.id;if(on)seen.add(k);else seen.delete(k)});saveSeen();syncSoon();draw(curSk);serDone();$('dSeasonSeen').textContent=on?'↺ Sesongen ikke sett':'✓ Merk sesongen som sett'};
     const sdd=$('sSeason'),sl=$('sddL');
     $('sddB').onclick=e=>{e.stopPropagation();sl.hidden=!sl.hidden};
     sl.onclick=e=>{const b=e.target.closest('.sdd-i');if(!b)return;sl.querySelectorAll('.sdd-i').forEach(x=>x.classList.toggle('on',x===b));$('sddB').firstChild.nodeValue='Sesong '+b.dataset.s;sl.hidden=true;draw(b.dataset.s)};
     dlg.addEventListener('click',e=>{if(!e.target.closest('#sSeason')&&sl)sl.hidden=true});
-    draw(keys[0]);
+    draw(sk0);serDone();
+    if(tgt){setTimeout(()=>{const r=$('eps').querySelector(`[data-i="${tgt.i}"]`);if(r){r.classList.add('epnext');r.scrollIntoView({block:'center'})}const b=$('dRes');if(b)b.focus()},60);if(auto){playEp(seasons[tgt.k],tgt.i);return}}
   }catch(e){box.innerHTML='<div class="muted" style="margin-top:12px">Kunne ikke hente episoder: '+esc(e.message)+'</div>'}
 }
 
@@ -3895,6 +3921,7 @@ document.addEventListener('click',e=>{
   const h=e.target.closest('[data-h]');
   if(h){const x=hist.find(y=>y.k===h.dataset.h);if(!x)return;
     if(x.type==='live'){const c=byKey.get(x.k);if(c)openItem(c);return}
+    if(x.type==='ep'&&x.ref){const c=byKey.get(x.ref);if(c){openItem(c,true);return}}
     if(!x.url){const c=byKey.get(x.ref||x.k);if(c){openItem(c);return}toast('Finner ikke tittelen i denne kilden');return}
     openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,ref:x.ref});return}
   const a=e.target.closest('[data-act]');
