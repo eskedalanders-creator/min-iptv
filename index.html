@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=177;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=178;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1304,6 +1304,22 @@ html.tvm #list .ch .n{white-space:normal!important;display:-webkit-box;-webkit-l
 html.tvm #sidetop{flex-wrap:nowrap!important}
 html.tvm #findBar{flex-wrap:nowrap!important;overflow:hidden}
 html.tvm #findBar>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* TV-modus: vw-enheter blir feil med TV-zoom – bruk faste mål så ingenting går utenfor skjermen */
+html.tvm .bb{margin-left:-28px!important;margin-right:-28px!important}
+html.tvm .shero{margin-left:-28px!important;margin-right:-28px!important;padding-left:28px!important;padding-right:28px!important}
+html.tvm .rnv.l{left:-28px!important;width:28px!important}html.tvm .rnv.r{right:-28px!important;width:28px!important}
+html.tvm .view{overflow-x:hidden}
+/* Valgt plakat: ren hvit ramme rundt selve bildet, tittelen hel */
+body.tv .pc:focus,html.tvm .pc:focus{outline:none!important;box-shadow:none!important;background:none!important;transform:none!important}
+body.tv .pc:focus .pimg,html.tvm .pc:focus .pimg{position:relative}
+body.tv .pc:focus .pimg::after,html.tvm .pc:focus .pimg::after{content:"";position:absolute;inset:0;border:4px solid #fff;border-radius:inherit;z-index:8;pointer-events:none;opacity:1!important;background:none!important;display:block!important}
+body.tv .pc:focus .pt,html.tvm .pc:focus .pt{color:#fff!important;font-weight:700}
+.pc .pt{overflow:hidden;text-overflow:ellipsis}
+/* Toppmenyen: valgt = hvit pille (ingen avkuttet ramme) */
+body.tv #nav button:focus,html.tvm #nav button:focus{outline:none!important;box-shadow:none!important;background:#fff!important;color:#0a0c13!important;transform:none!important}
+body.tv header button:focus{outline:none!important;box-shadow:none!important;background:#fff!important;color:#0a0c13!important}
+/* Film/serie-siden: aldri sideveis forskyvning */
+.dx-dlg{overflow-x:clip!important}
 /* Toast nederst midt, større på TV */
 html.tvm #toast{font-size:18px!important;padding:14px 22px!important;border-radius:14px!important}
 </style>
@@ -2825,7 +2841,7 @@ function cinSeason0(now){
   if(day>=from&&day<=to)return 'paaske';
   if(md>=510&&md<=518)return 'mai17';
   if(md>=619&&md<=624)return 'sankthans';
-  if(md>=1024&&md<=1101)return 'halloween';
+  /* halloween fjernet etter ønske */
   return null}
 const SEA_LBL={jul:'GOD JUL',nyttaar:'GODT NYTTÅR',paaske:'GLAD PÅSKE',mai17:'GOD 17. MAI',halloween:'HALLOWEEN',sankthans:'SANKTHANS'};
 async function cin3d(root){
