@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=179;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=180;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2622,7 +2622,7 @@ const APPS=[
   ['ap-vp','V','Viaplay','Sport og serier','https://viaplay.no'],
   ['ap-hbo','max','HBO Max','HBO og Max','https://www.max.com']
 ];
-const appsHtml=()=>`<h3 class="sech">Apper og strømmetjenester</h3><p class="apphint">Åpner appen hvis den er installert. Ellers får du lenke til nedlasting, eller kan åpne på nett.</p><div class="apps">${APPS.map(([c,l,n,d,u])=>`<a class="app ${c}" data-app="${c}" href="${u}" target="_blank" rel="noopener"><span class="lg">${l}</span><span>${n}<small>${d}</small></span></a>`).join('')}</div><form class="arkiv" id="arkivF"><span>📺 Søk i arkivet:</span><input id="arkivQ" placeholder="Program, serie eller film …"><button data-s="nrk">NRK TV</button><button data-s="tv2">TV 2 Play</button></form>`;
+const appsHtml=()=>`<h3 class="sech">Apper og strømmetjenester</h3><p class="apphint">${DESKTOP&&window.IPTV_WIN&&IPTV_WIN.appView?'NRK TV, YouTube og VGTV åpnes inni Eskedals Univers. Netflix, Disney+, HBO Max, Viaplay og TV 2 Play åpnes i eget fullskjermvindu (krever kopibeskyttelse). Tilbake = tilbake, Hjem = lukk. Logg inn med tastaturet første gang.':'Åpner appen hvis den er installert. Ellers får du lenke til nedlasting, eller kan åpne på nett.'}</p><div class="apps">${APPS.map(([c,l,n,d,u])=>`<a class="app ${c}" data-app="${c}" href="${u}" target="_blank" rel="noopener"><span class="lg">${l}</span><span>${n}<small>${d}</small></span></a>`).join('')}</div><form class="arkiv" id="arkivF"><span>📺 Søk i arkivet:</span><input id="arkivQ" placeholder="Program, serie eller film …"><button data-s="nrk">NRK TV</button><button data-s="tv2">TV 2 Play</button></form>`;
 const STAD='<div class="stad"><div class="wm">BRANN</div><div class="pitch"></div></div>';
 function ticketHtml(n){
   if(!n)return '<div class="ticket"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Ingen kamp funnet</div><div class="td">Prøv igjen senere.'+(window.__fxErr||window.__fxDiag?' <small>('+esc(window.__fxErr||window.__fxDiag)+')</small>':'')+'</div></div><div class="tr"></div></div>';
@@ -4328,8 +4328,10 @@ function appSheet(id,name,url,x){
   sh.querySelector('#asX').onclick=()=>sh.className='';
   sh.querySelector('#asWeb').onclick=()=>{sh.className='';webWin(id,url)};
 }
+const INAPP=new Set(['ap-yt','youtube','ap-nrk','ap-vg']);
 function openApp(id,url,name){
   const x=APPX[id]||{};
+  if(DESKTOP&&INAPP.has(id)&&window.IPTV_WIN&&IPTV_WIN.appView){toast((name||'Appen')+' åpnes her · Tilbake = tilbake · Hjem = lukk',4500);IPTV_WIN.appView(url);return}
   if(NATIVE){if(DESKTOP){toast('Åpner '+(name||'appen')+' i fullskjerm – trykk 🏠 Hjem (F8) for å komme tilbake',6000);window.open(url,'_blank')}else location.href=url;return}
   if(isAnd){
     const u=new URL(url),fb=x.pkg?'https://play.google.com/store/apps/details?id='+x.pkg:url;
