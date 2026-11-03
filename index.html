@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=180;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=181;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1320,6 +1320,10 @@ body.tv #nav button:focus,html.tvm #nav button:focus{outline:none!important;box-
 body.tv header button:focus{outline:none!important;box-shadow:none!important;background:#fff!important;color:#0a0c13!important}
 /* Film/serie-siden: aldri sideveis forskyvning */
 .dx-dlg{overflow-x:clip!important}
+.xlh{margin:14px 0 6px;font-weight:700}
+.xlangs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;max-height:none}
+.xlangs label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xln{display:block;margin:4px 0 10px}
 /* Toast nederst midt, større på TV */
 html.tvm #toast{font-size:18px!important;padding:14px 22px!important;border-radius:14px!important}
 </style>
@@ -4167,8 +4171,17 @@ addEventListener('resize',()=>{if(raf)sizeC()});
 document.addEventListener('visibilitychange',()=>{document.hidden?stopEmbers():startEmbers()});
 
 /* ===================== v4: språk, kamper, kamera ===================== */
+function lgName(k){if(k==='xx')return 'Annen skrift (arabisk, kyrillisk, asiatisk …)';
+  try{const r=new Intl.DisplayNames(['nb','no','en'],{type:'region'}).of(k.toUpperCase());if(r&&r.toUpperCase()!==k.toUpperCase())return r}catch(e){}
+  try{const l=new Intl.DisplayNames(['nb','no','en'],{type:'language'}).of(k);if(l&&l!==k)return l.charAt(0).toUpperCase()+l.slice(1)}catch(e){}
+  return k.toUpperCase()}
+function extraLangsHtml(){
+  const cnt={};for(const a of [DB.live,DB.vod,DB.ser])for(const c of a||[]){const k=c.lg;if(k&&!LANG_DEF.includes(k))cnt[k]=(cnt[k]||0)+1}
+  const ks=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);if(!ks.length)return '';
+  return `<div class="xlh">Flere land og språk i listen din <small class="muted">(${ks.length} – huk av det du vil se)</small></div><div class="xlangs">${ks.map(k=>`<label><input type="checkbox" data-lg="${k}" ${allowedLangs.has(k)?'checked':''}> ${esc(lgName(k))} <small class="muted">${cnt[k]}</small></label>`).join('')}</div>${noAsia?'<small class="muted xln">Asiatisk, indisk, tyrkisk og Midtøsten-innhold skjules så lenge valget under er på.</small>':''}`}
 function langCard(){
   return `<div class="langs">${LANG_DEF.map(k=>`<label><input type="checkbox" data-lg="${k}" ${allowedLangs.has(k)?'checked':''}> ${LNAME[k]}</label>`).join('')}
+  ${extraLangsHtml()}
   <label><input type="checkbox" id="dedupeCb" ${dedupeOn?'checked':''}> Skjul duplikater (filmer, serier og kanaler)</label>
   <label><input type="checkbox" id="asiaCb" ${noAsia?'checked':''}> Skjul asiatisk, indisk, tyrkisk og Midtøsten-innhold (også anime)</label>
   <label><input type="checkbox" id="adultCb" ${showAdult?'checked':''}> Vis porno (skjult som standard, aldri på forsiden). Vanlige filmer med 18-årsgrense vises alltid.</label></div>
