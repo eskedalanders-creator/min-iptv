@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=182;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=183;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2632,7 +2632,7 @@ function ticketHtml(n){
   if(!n)return '<div class="ticket"><div class="tl"><small>Neste Brann-kamp</small><div class="tt">Ingen kamp funnet</div><div class="td">Prøv igjen senere.'+(window.__fxErr||window.__fxDiag?' <small>('+esc(window.__fxErr||window.__fxDiag)+')</small>':'')+'</div></div><div class="tr"></div></div>';
   const live=n.state==='in';
   const cr=t=>`${t.logo?`<img src="${esc(t.logo)}" alt="">`:''}<span>${esc(t.shortDisplayName||t.displayName)}</span>`;
-  return `<div class="ticket go" tabindex="0" data-find="${esc((n.h.shortDisplayName||n.h.displayName)+'|'+(n.a.shortDisplayName||n.a.displayName))}"><div class="tl"><small>${live?'<span class="liveb">LIVE</span> ':''}${esc(n.lg)} · neste Brann-kamp</small><div class="tt">${cr(n.h)}<i>${live?esc(n.hs)+' – '+esc(n.as):'mot'}</i>${cr(n.a)}</div><div class="td">${live?esc(n.clock):fmtDay(n.t)+' · kl. '+fmtTime(n.t)}</div></div><div class="tr"><small>${live?'Pågår nå':'Avspark om'}</small><b ${live?'':`data-cd="${n.t}"`}>${live?'LIVE':cd(n.t)}</b></div></div>`;
+  return `<div class="ticket go" tabindex="0" data-find="${esc((n.h.shortDisplayName||n.h.displayName)+'|'+(n.a.shortDisplayName||n.a.displayName)+'|'+(n.lg||''))}"><div class="tl"><small>${live?'<span class="liveb">LIVE</span> ':''}${esc(n.lg)} · neste Brann-kamp</small><div class="tt">${cr(n.h)}<i>${live?esc(n.hs)+' – '+esc(n.as):'mot'}</i>${cr(n.a)}</div><div class="td">${live?esc(n.clock):fmtDay(n.t)+' · kl. '+fmtTime(n.t)}</div></div><div class="tr"><small>${live?'Pågår nå':'Avspark om'}</small><b ${live?'':`data-cd="${n.t}"`}>${live?'LIVE':cd(n.t)}</b></div></div>`;
 }
 function heroFill(root){
   loadFixtures().then(f=>{
@@ -2640,7 +2640,7 @@ function heroFill(root){
     const hs=root.querySelector('#hsideList');
     if(hs){
       const l=f.list.filter(e=>e.state==='in').concat(f.list.filter(e=>e.state!=='in')).slice(0,5);
-      hs.innerHTML=l.length?l.map(e=>{const b=isBrann(e.h)||isBrann(e.a);return `<div class="hm ${b?'b':''}" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName))}"><span class="tm">${e.state==='in'?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</span><span class="tx"><b>${esc(e.h.shortDisplayName||e.h.displayName)} – ${esc(e.a.shortDisplayName||e.a.displayName)}</b><small>${esc(e.lg)} · ${new Date(e.t).toLocaleDateString('nb-NO',{weekday:'short',day:'numeric',month:'short'})}</small></span></div>`}).join(''):'<small>Ingen kommende kamper funnet.</small>';
+      hs.innerHTML=l.length?l.map(e=>{const b=isBrann(e.h)||isBrann(e.a);return `<div class="hm ${b?'b':''}" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName)+'|'+(e.lg||''))}"><span class="tm">${e.state==='in'?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</span><span class="tx"><b>${esc(e.h.shortDisplayName||e.h.displayName)} – ${esc(e.a.shortDisplayName||e.a.displayName)}</b><small>${esc(e.lg)} · ${new Date(e.t).toLocaleDateString('nb-NO',{weekday:'short',day:'numeric',month:'short'})}</small></span></div>`}).join(''):'<small>Ingen kommende kamper funnet.</small>';
     }
   }).catch(()=>{const hs=root.querySelector('#hsideList');if(hs)hs.innerHTML='<small>Kunne ikke hente kamper.</small>'});
   hTimer=setInterval(()=>{if(curView!=='home'&&curView!=='fotball')return;document.querySelectorAll('[data-cd]').forEach(e=>{const t=+e.dataset.cd;if(t>Date.now())e.textContent=cd(t)})},30000);
@@ -2651,7 +2651,7 @@ const ART={"film": "<svg class=\"art\" viewBox=\"0 0 400 440\" preserveAspectRat
 const matchCard=e=>{const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a),nm=t=>t.shortDisplayName||t.displayName||t.name||'';
   const tm=(t,sc)=>`<div class="mtm">${t.logo?`<img src="${esc(t.logo)}" alt="">`:''}<span>${esc(nm(t))}</span>${live?`<b>${esc(sc)}</b>`:''}</div>`;
   const today=new Date(e.t).toDateString()===new Date().toDateString();
-  return `<div class="mc ${b?'brann':''}" tabindex="0" data-find="${esc(nm(e.h)+'|'+nm(e.a))}"><div class="mlg"><span>${esc(e.lg)}</span><span>${live?'<span class="liveb">LIVE</span> '+esc(e.clock):esc(today?'I dag':fmtDay(e.t))}</span></div><div class="mt">${tm(e.h,e.hs)}${tm(e.a,e.as)}</div><div class="mft"><span>${live?'Pågår nå':'kl. '+fmtTime(e.t)}</span><span class="go">▶ Se kampen</span></div></div>`};
+  return `<div class="mc ${b?'brann':''}" tabindex="0" data-find="${esc(nm(e.h)+'|'+nm(e.a)+'|'+(e.lg||''))}"><div class="mlg"><span>${esc(e.lg)}</span><span>${live?'<span class="liveb">LIVE</span> '+esc(e.clock):esc(today?'I dag':fmtDay(e.t))}</span></div><div class="mt">${tm(e.h,e.hs)}${tm(e.a,e.as)}</div><div class="mft"><span>${live?'Pågår nå':'kl. '+fmtTime(e.t)}</span><span class="go">▶ Se kampen</span></div></div>`};
 function tonightList(f){
   const d0=new Date().toDateString();
   const t=f.list.filter(e=>e.state==='in'||new Date(e.t).toDateString()===d0).sort((a,b)=>(b.state==='in')-(a.state==='in')||a.t-b.t);
@@ -2683,7 +2683,7 @@ const cinAutoOn=()=>{try{return localStorage.getItem('cinAuto')!=='0'}catch(e){r
 function stopCinema(){try{clearInterval(window.__cinCd);window.__c3ctl=null;window.__c3m&&window.__c3m.stopAll()}catch(e){}clearInterval(cinTimer);clearInterval(cinClock);clearTimeout(cinPv);clearTimeout(cinAuto);clearInterval(cinAmbT);cinTimer=cinClock=cinPv=cinAuto=cinAmbT=0;document.querySelectorAll('.cs-v').forEach(v=>{v.innerHTML='';v.classList.remove('on')})}
 const cinLogo=t=>t&&(t.logo||(t.logos&&t.logos[0]&&t.logos[0].href))||'';
 function cinMatchSlide(m,i){
-  const e=m.e,live=e.state==='in',nm=t=>t.displayName||t.name||'',fnd=(e.h.shortDisplayName||nm(e.h))+'|'+(e.a.shortDisplayName||nm(e.a));
+  const e=m.e,live=e.state==='in',nm=t=>t.displayName||t.name||'',fnd=(e.h.shortDisplayName||nm(e.h))+'|'+(e.a.shortDisplayName||nm(e.a))+'|'+(e.lg||'');
   const today=new Date(e.t).toDateString()===new Date().toDateString();
   const lg=(t)=>cinLogo(t)?`<img src="${esc(cinLogo(t))}" alt="">`:`<span class="mt-ph">${esc(nm(t).slice(0,2))}</span>`;
   return `<div class="cs-slide mt${i?'':' on'}" data-m="1"><div class="mt-bg"></div><div class="cs-grad"></div>
@@ -3677,7 +3677,7 @@ function applyFilter(){
     if(g&&c.cat!==g)return false;
     if(rx&&!rx.test(c.lc))return false;
     if(liveProv>=0&&c.pv!==liveProv)return false;
-    if(liveFind){const f=foldS(c.lc);c._fm=liveFind.toks.filter(t=>f.includes(t)).length;if(!c._fm)return false}
+    if(liveFind){const f=foldS(c.lc);c._fm=liveFind.toks.filter(t=>f.includes(t)).length?1:0;if(liveFind.ta&&liveFind.ta.length&&liveFind.tb&&liveFind.tb.length?(liveFind.ta.some(t=>f.includes(t))&&liveFind.tb.some(t=>f.includes(t))):liveFind.toks.filter(t=>f.includes(t)).length>=2)c._fm=10;else if(liveFind.rx&&(c.no||c.lg==='no')&&liveFind.rx.test(c.lc))c._fm=Math.max(c._fm,5)+(/\b1\b|main|premium|\bhd\b/i.test(c.lc)?.5:0);if(!c._fm)return false}
     return true;
   };
   const arr=Q?skRun(DB.live,Q,filt):DB.live.filter(filt);
@@ -4273,7 +4273,7 @@ function fxRow(e,res){
   const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a),sc=live||res;
   const tn=(t,s)=>`<div class="tn">${t.logo?`<img src="${esc(t.logo)}" alt="" loading="lazy">`:''}<span>${esc(t.displayName||t.name)}</span>${sc?`<b style="margin-left:auto">${esc(s)}</b>`:''}</div>`;
   if(res)return `<div class="fx res ${b?'brann':''}"><div class="tm">FT</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}</div></div></div>`;
-  return `<div class="fx ${b?'brann':''}" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName))}" tabindex="0"><div class="tm">${live?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}${live?' · '+esc(e.clock):''}</div></div><span class="lk">▶ Se kampen</span></div>`;
+  return `<div class="fx ${b?'brann':''}" data-find="${esc((e.h.shortDisplayName||e.h.displayName)+'|'+(e.a.shortDisplayName||e.a.displayName)+'|'+(e.lg||''))}" tabindex="0"><div class="tm">${live?'<span class="liveb">LIVE</span>':fmtTime(e.t)}</div><div class="tx">${tn(e.h,e.hs)}${tn(e.a,e.as)}<div class="lgn">${esc(e.lg)}${live?' · '+esc(e.clock):''}</div></div><span class="lk">▶ Se kampen</span></div>`;
 }
 let mTimer=0,mLeague='nor.1',mOnly='all';
 async function renderMatches(force){
@@ -4541,17 +4541,24 @@ if(/Android.*(TV|AFT|BRAVIA|Chromecast|SHIELD)/i.test(navigator.userAgent))docum
 const foldS=x=>String(x).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ø/g,'o').replace(/æ/g,'ae').replace(/ß/g,'ss');
 const STOPW=new Set('sk fk if bk il fc ac cf sc as rb vfl vfb tsg fsv ik sv real club the de la los las del and og united city'.split(' '));
 const teamTok=n=>foldS(n).replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>=4&&!STOPW.has(w));
-function setFind(a,b){
+/* Hvem viser kampen i Norge (rettighetshavere) */
+function noRights(lg,a,b){const t=(lg||'')+' '+a+' '+b;
+  if(/champions|europa|conference|uefa|ucl|uel|uecl/i.test(t))return /viaplay|\bv ?sport|viasport/i;
+  if(/premier league|bundesliga|\bepl\b/i.test(t))return /viaplay|\bv ?sport|viasport/i;
+  if(/eliteserien|obos|norsk cup|nm[- ]?cup|toppserien/i.test(t))return /tv ?2 ?(sport|direkte|play)|tv2 ?sport/i;
+  if(/la ?liga|serie a|ligue|fa cup|carabao|efl/i.test(t))return /viaplay|\bv ?sport|viasport|tv ?2 ?sport/i;
+  return /viaplay|\bv ?sport|viasport|tv ?2 ?sport/i}
+function setFind(a,b,lg){
   let toks=[...new Set([...teamTok(a),...teamTok(b)])];
   if(!toks.length)toks=[foldS(a).split(' ')[0],foldS(b).split(' ')[0]].filter(x=>x&&x.length>2);
-  goLive({tab:'all',find:{label:a+' – '+b,toks}});$('q').value='';
+  goLive({tab:'all',find:{label:a+' – '+b,toks,ta:teamTok(a),tb:teamTok(b),rx:noRights(lg,a,b)}});$('q').value='';
   if(filtered.length){selectLive(filtered[0],true);toast('Spiller '+(filtered[0].nm||filtered[0].name)+(filtered.length>1?' · '+(filtered.length-1)+' andre kanaler i listen':''),3500)}
   else toast('Fant ingen kanal for kampen ennå – prøv igjen nærmere kampstart',4500);
 }
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-back]')){goBack();return}
   const f=e.target.closest('[data-find]');
-  if(f){const [a,b]=f.dataset.find.split('|');setFind(a,b)}
+  if(f){const [a,b,lg]=f.dataset.find.split('|');setFind(a,b,lg)}
   const fl=e.target.closest('[data-fl]');
   if(fl){spOpen=fl.dataset.fl;if(LEAGUES.some(l=>l.slug===spOpen)){fbLg=spOpen;LSset('fbLg',fbLg)}if(spOpen==='tvfb'){spOpen='fotball';goLive({tab:'fb'});return}if(curView==='fotball')renderFotball();return}
   const sg=e.target.closest('[data-seg]');
