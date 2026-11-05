@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=183;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=184;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1324,6 +1324,25 @@ body.tv header button:focus{outline:none!important;box-shadow:none!important;bac
 .xlangs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;max-height:none}
 .xlangs label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .xln{display:block;margin:4px 0 10px}
+/* Brukere og skjermtastatur */
+#dlgProf{width:min(860px,94vw)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin:18px 0 10px}
+.pcard{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px;border-radius:16px;background:rgba(255,255,255,.06);border:2px solid transparent;color:#fff;cursor:pointer}
+.pcard .pav{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:34px;font-weight:800;color:#fff;background:rgba(255,255,255,.12)}
+.pcard b{font-size:17px}.pcard small{color:var(--muted);font-size:12px}
+.pcard.on{border-color:rgba(124,92,255,.8)}.pcard.on small{color:var(--ok,#2ecc71)}
+.pcard:focus{outline:none!important;border-color:#fff!important;background:rgba(255,255,255,.14)!important;transform:none!important}
+.pcard.add .pav{border:2px dashed rgba(255,255,255,.35);background:none}
+.porph{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 8px}.porph small{width:100%;color:var(--muted)}
+#dlgOsk{width:min(900px,96vw);padding:22px;border-radius:18px;background:#10131d}
+.oskt{font-weight:800;font-size:20px;margin-bottom:10px}
+#oskIn{width:100%;font-size:26px;padding:12px 14px;border-radius:12px;margin-bottom:14px}
+.oskr{display:flex;gap:6px;justify-content:center;margin-bottom:6px}
+.oskr button{flex:1;max-width:66px;height:54px;font-size:20px;font-weight:700;border-radius:10px;padding:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff}
+.oskr button.wide{max-width:none;flex:2}.oskr button.space{max-width:none;flex:5}
+.oskr button.primary{background:#fff;color:#0a0c13}
+.oskr button:focus{outline:3px solid #fff!important;outline-offset:1px;background:var(--accent)!important;color:#fff!important;transform:none!important}
+.oskh{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
 /* Toast nederst midt, større på TV */
 html.tvm #toast{font-size:18px!important;padding:14px 22px!important;border-radius:14px!important}
 </style>
@@ -1453,17 +1472,22 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <div id="srcStatus"></div>
 </dialog>
 
-<dialog id="dlgProf">
-  <h2>Brukere</h2>
-  <small>Hver bruker har egne favoritter, skjulte kanaler, «fortsett å se» og sist sette kanal.</small>
-  <div id="profList"></div>
-  <hr>
-  <label>Ny bruker</label>
-  <input id="pName" placeholder="Navn">
+<dialog id="dlgProf" class="tvpick">
+  <h2>Hvem ser?</h2>
+  <small>Hver bruker har egne favoritter, skjulte kanaler, «fortsett å se» og sist sette kanal. Velg en bruker, eller hold OK inne for flere valg.</small>
+  <div id="profList" class="pgrid"></div>
+  <div id="profOrph"></div>
+  <input id="pName" type="hidden">
   <div class="actions">
     <button id="profClose">Lukk</button>
-    <button id="profAdd" class="primary">Legg til bruker</button>
+    <button id="profAdd" class="primary">＋ Ny bruker</button>
   </div>
+</dialog>
+<dialog id="dlgOsk" class="tvpick">
+  <div class="oskt" id="oskT">Skriv</div>
+  <input id="oskIn" autocomplete="off" spellcheck="false">
+  <div id="oskK"></div>
+  <div class="oskh">Bruk pilene og OK – eller skriv på tastaturet. Tilbake = avbryt.</div>
 </dialog>
 
 <dialog id="dlgCam">
@@ -1613,9 +1637,28 @@ const saveFav=()=>{LSset(K('fav'),[...favs]);if(typeof fsSoon==='function')fsSoo
 const saveHid=()=>{LSset(K('hid'),[...hidden]);if(typeof fsSoon==='function')fsSoon()};
 const saveHist=()=>LSset(K('hist'),hist);
 const isFav=c=>favs.has(c.key)||(c.t==='live'&&favs.has(String(c.id)));
+/* ===== Skjermtastatur (for fjernkontroll) ===== */
+function oskAsk(title,init){return new Promise(res=>{const d=$('dlgOsk'),inp=$('oskIn');$('oskT').textContent=title;inp.value=init||'';
+  const rows=['1234567890','qwertyuiopå','asdfghjkløæ','zxcvbnm-.'];
+  $('oskK').innerHTML=rows.map(r=>`<div class="oskr">${[...r].map(ch=>`<button type="button" data-kk="${ch}">${ch.toUpperCase()}</button>`).join('')}</div>`).join('')+`<div class="oskr"><button type="button" data-kk="shift" class="wide">⇧ Stor</button><button type="button" data-kk=" " class="space">Mellomrom</button><button type="button" data-kk="bs" class="wide">⌫ Slett</button></div><div class="oskr"><button type="button" data-kk="cancel" class="wide">Avbryt</button><button type="button" data-kk="ok" class="primary wide">✓ Ferdig</button></div>`;
+  let up=!inp.value,done=false;const fin=v=>{if(done)return;done=true;d.close();res(v)};
+  const put=ch=>{inp.value+=up?ch.toUpperCase():ch;if(up&&ch!==' ')up=false};
+  d.onclick=e=>{const b=e.target.closest('[data-kk]');if(!b)return;const k=b.dataset.kk;
+    if(k==='ok')fin(inp.value.trim()||null);else if(k==='cancel')fin(null);else if(k==='bs')inp.value=inp.value.slice(0,-1);else if(k==='shift')up=!up;else put(k)};
+  d.onkeydown=e=>{if(e.target===inp){if(e.key==='Enter'){e.preventDefault();fin(inp.value.trim()||null)}return}
+    if(e.key.length===1&&!e.ctrlKey&&!e.altKey&&e.key!==' '){e.preventDefault();inp.value+=e.key;up=false}
+    else if(e.key==='Backspace'){e.preventDefault();inp.value=inp.value.slice(0,-1)}};
+  d.onclose=()=>fin(null);
+  d.showModal();setTimeout(()=>{const b=d.querySelector('[data-kk="q"]');if(b)b.focus()},30)})}
 function renderProfiles(){
   $('prof').innerHTML=profiles.map(p=>`<option value="${p.id}" ${p.id===pid?'selected':''}>${esc(p.name)}</option>`).join('');
-  $('profList').innerHTML=profiles.map(p=>`<div class="pl"><span>${p.id===pid?'✅ ':''}${esc(p.name)}</span><button data-ren="${p.id}">Gi nytt navn</button><button class="danger" data-del="${p.id}" ${profiles.length<2?'disabled':''}>Slett</button></div>`).join('');
+  const col=n=>['#7c5cff','#e5486e','#1fa37a','#e08a1e','#2f86d9','#b04fd6'][[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%6];
+  $('profList').innerHTML=profiles.map(p=>`<button type="button" class="pcard${p.id===pid?' on':''}" data-pick="${p.id}"><span class="pav" style="background:${col(p.name)}">${esc((p.name||'?').charAt(0).toUpperCase())}</span><b>${esc(p.name)}</b><small>${p.id===pid?'Aktiv nå':'Bytt til'}</small></button>`).join('')+`<button type="button" class="pcard add" data-addp="1"><span class="pav">＋</span><b>Ny bruker</b><small>Legg til</small></button>`;
+  /* brukere som er borte, men har lagrede data */
+  const ids=new Set(profiles.map(p=>p.id)),orph=new Map();
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);const m=/^(fav|hist|seen|hid):(u\d+|default)$/.exec(k||'');if(m&&!ids.has(m[2])){let n=0;try{n=(JSON.parse(localStorage.getItem(k))||[]).length}catch(e){}orph.set(m[2],(orph.get(m[2])||0)+n)}}
+  const o=[...orph].filter(([,n])=>n>0);
+  $('profOrph').innerHTML=o.length?`<div class="porph"><small>Fant data fra ${o.length} bruker${o.length>1?'e':''} som er borte:</small>${o.map(([id,n])=>`<button type="button" data-restore="${id}">↺ Gjenopprett (${n} favoritter/historikk)</button>`).join('')}</div>`:'';
 }
 function switchProfile(id){
   pid=id;localStorage.setItem('pid',id);
@@ -1625,16 +1668,25 @@ function switchProfile(id){
 }
 $('prof').onchange=e=>switchProfile(e.target.value);
 $('profClose').onclick=()=>$('dlgProf').close();
-$('profAdd').onclick=()=>{
-  const n=$('pName').value.trim();if(!n)return;
-  const id='u'+Date.now();profiles.push({id,name:n});LSset('profiles',profiles);$('pName').value='';switchProfile(id);
-};
+async function addProfile(id){const n=await oskAsk(id?'Navn på brukeren':'Navn på ny bruker','');if(!n)return;
+  id=id||('u'+Date.now());profiles.push({id,name:n});LSset('profiles',profiles);try{if(typeof fsSoon==='function')fsSoon()}catch(e){}switchProfile(id);toast('Bruker «'+n+'» er klar',2200)}
+$('profAdd').onclick=()=>addProfile();
+$('profOrph').onclick=e=>{const b=e.target.closest('[data-restore]');if(b)addProfile(b.dataset.restore)};
+function profMenu(p){ctxMenu(p.name,[{label:p.id===pid?'✓ Aktiv bruker':'▶ Bytt til '+p.name,fn:()=>{if(p.id!==pid){switchProfile(p.id);toast('Bytter til '+p.name,1800)}}},
+  {label:'✎ Gi nytt navn',fn:async()=>{const n=await oskAsk('Nytt navn',p.name);if(n){p.name=n;LSset('profiles',profiles);renderProfiles()}}},
+  ...(profiles.length>1?[{label:'🗑 Slett '+p.name,fn:()=>ctxMenu('Slette «'+p.name+'» med favoritter og historikk?',[{label:'Avbryt',fn:()=>{}},{label:'🗑 Ja, slett',fn:()=>delProfile(p)}])}]:[])])}
+$('profList').addEventListener('contextmenu',e=>{const b=e.target.closest('[data-pick]');if(!b)return;e.preventDefault();const p=profiles.find(x=>x.id===b.dataset.pick);if(p)profMenu(p)});
+{let pT=0,pL=false,pEl=null;$('profList').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const b=e.target.closest('[data-pick]');if(!b)return;e.preventDefault();e.stopPropagation();if(e.repeat||pEl)return;pEl=b;pL=false;pT=setTimeout(()=>{pL=true;const p=profiles.find(x=>x.id===b.dataset.pick);if(p)profMenu(p)},600)});
+ $('profList').addEventListener('keyup',e=>{if(e.key!=='Enter'||!pEl)return;e.preventDefault();e.stopPropagation();clearTimeout(pT);const b=pEl;pEl=null;if(!pL)b.click()})}
+async function delProfile(p){
+    const all=await dbAll();for(const s of all)if(s.profile===p.id)await dbDel(s.id);
+    ['fav','hid','last','src','hist','seen'].forEach(k=>localStorage.removeItem(k+':'+p.id));
+    profiles=profiles.filter(x=>x.id!==p.id);LSset('profiles',profiles);
+    if(p.id===pid)switchProfile(profiles[0].id);else renderProfiles();}
 $('profList').onclick=async e=>{
   const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.ren){
-    const p=profiles.find(x=>x.id===b.dataset.ren);const n=prompt('Nytt navn:',p.name);
-    if(n&&n.trim()){p.name=n.trim();LSset('profiles',profiles);renderProfiles()}
-  }
+  if(b.dataset.addp){addProfile();return}
+  if(b.dataset.pick){const p=profiles.find(x=>x.id===b.dataset.pick);if(!p)return;if(p.id!==pid){switchProfile(p.id);toast('Bytter til '+p.name,1800)}else profMenu(p);return}
   if(b.dataset.del){
     const p=profiles.find(x=>x.id===b.dataset.del);
     if(!confirm('Slette brukeren «'+p.name+'» med favoritter og egne kilder?'))return;
@@ -3465,7 +3517,7 @@ function appBack(){
   const cm=$('ccMenu');if(cm&&cm.className==='on'){cm.className='';return true}
   if(curView==='settings'&&!document.querySelector('dialog[open]')&&window.setClose&&window.setClose())return true;
   if($('ov').classList.contains('on')){closePlayer();return true}
-  const d=document.querySelector('dialog[open]');if(d){d.close();return true}
+  const ds=document.querySelectorAll('dialog[open]'),d=ds[ds.length-1];if(d){d.close();return true}
   if(curView==='fotball'&&spOpen){spOpen=spParent(spOpen);renderFotball();return true}
   if(curView!=='home'){if(navStack.length)goBack();else showView('home',true,true);return true}
   return false;
@@ -4374,7 +4426,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('#arkivF button')
 /* ===== TV / fjernkontroll ===== */
 let tvLast=null;document.addEventListener('focusin',e=>{const t=e.target;if(t&&t.closest&&!t.closest('#vside,#tvMenu,header,#nav,dialog'))tvLast=t});
 const TVSEL='button,a[href],input,select,textarea,[tabindex],.ch,.pc,.cc,.poster,.app,.chip,.ep';
-const tvRoot=()=>{const cx=document.getElementById('ctxD');if(cx&&cx.open)return cx;return document.querySelector('dialog[open]')||(document.getElementById('ov').classList.contains('on')?document.getElementById('ov'):document.body)};
+const tvRoot=()=>{const cx=document.getElementById('ctxD');if(cx&&cx.open)return cx;const ds=document.querySelectorAll('dialog[open]');return ds[ds.length-1]||(document.getElementById('ov').classList.contains('on')?document.getElementById('ov'):document.body)};
 function tvSearchGo(){
   const q=$('tvsQ').value;$('tvsD').close();
   const set=(id)=>{const el=$(id);if(!el)return false;el.value=q;el.dispatchEvent(new Event('input',{bubbles:true}));return true};
@@ -4622,7 +4674,7 @@ async function renderCams(){
     bindG();
     $('camQ').onclick=()=>{LSset('camq',q==='main'?'sub':'main');renderCams()};
     $('camLyd').onclick=e=>{const on=e.currentTarget.textContent.includes('av');v.querySelectorAll('video').forEach(x=>x.muted=!on);e.currentTarget.textContent=on?'🔊 Lyd på':'🔇 Lyd av'};
-    $('camSrv').onclick=()=>{const u=prompt('Adresse til kamera-serveren:',LSget('camsrv','')||srv.url);if(u!==null){LSset('camsrv',u.trim());renderCams()}};
+    $('camSrv').onclick=async()=>{const u=await oskAsk('Adresse til kamera-serveren',LSget('camsrv','')||srv.url);if(u!==null){LSset('camsrv',u.trim());renderCams()}};
     v.querySelectorAll('[data-cf]').forEach(t=>t.onclick=()=>{const i=+t.dataset.cf,was=t.classList.contains('pfs');
       document.querySelectorAll('.cam.pfs').forEach(x=>{x.classList.remove('pfs');if(many){const j=+x.dataset.cf;const bx=$('cv'+j);camPlayers.filter(p=>p._i===j).forEach(p=>{try{p.destroy()}catch(e){}});camPlayers=camPlayers.filter(p=>p._i!==j);bx.innerHTML=`<img class="snap" id="cs${j}" alt="">`}});
       if(!was){t.classList.add('pfs');if(many){camLiveTile($('cv'+i),lu(cl[i]));const p=camPlayers[camPlayers.length-1];if(p)p._i=i}}});
@@ -4636,7 +4688,7 @@ function renderCamsOld(v,srv){
   ${cams.length?`<div class="cams">${cams.map((c,i)=>`<div class="cam"><div class="camv" id="cv${i}"><img class="snap" id="cs${i}" alt=""></div><div class="camb"><b>${esc(c.name||'Kamera')}</b><button class="lk" data-cl="${i}">Live</button><button class="lk" data-ce="${i}">Rediger</button></div></div>`).join('')}</div>`
   :`<div class="card"><p>Ingen kamera lagt til ennå. Trykk «Legg til kamera», og skriv inn IP-adressen til Reolink Home Hub (eller kameraet), brukernavn og passord.</p><p class="muted">Hjemme fungerer dette direkte. Fra bobilen trenger du VPN (f.eks. Tailscale) til hjemmenettverket.</p></div>`}`;
   $('camAdd').onclick=()=>openCam(-1);
-  $('camSrv').onclick=()=>{const u=prompt('Adresse til kamera-serveren (f.eks. http://100.67.209.80:8090):',LSget('camsrv',''));if(u!==null){LSset('camsrv',u.trim());renderCams()}};
+  $('camSrv').onclick=async()=>{const u=await oskAsk('Adresse til kamera-serveren (f.eks. http://100.67.209.80:8090)',LSget('camsrv',''));if(u!==null){LSset('camsrv',u.trim());renderCams()}};
   v.querySelectorAll('[data-ce]').forEach(b=>b.onclick=()=>openCam(+b.dataset.ce));
   v.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>camLive(+b.dataset.cl));
   cams.forEach((c,i)=>{const im=$('cs'+i);const f=()=>{im.src=camSnap(c)};f();camTimers.push(setInterval(f,2500))});
