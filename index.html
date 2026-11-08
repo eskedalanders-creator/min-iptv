@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=214;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=215;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2576,7 +2576,12 @@ async function netReq(method,url,body){
     const r=await pf(url,method==='PUT'?{method:'PUT',headers:{'Content-Type':'application/json'},body}:undefined);const t=await r.text();f.remove();return{ok:r.ok,status:r.status,text:t}}catch(e){errs.push('rent: '+((e&&e.message)||e))}
   throw new Error(errs.join(' | ').slice(0,200))}
 /* v214: Android-appen kan levere svaret allerede tolket (én JSON-lag mindre) – pakk ut til vi har et objekt */
-async function syncGet(c){const r=await netReq('GET',SYNC_DB+'/sync/'+c+'.json');if(!r.ok)throw new Error('HTTP '+r.status);let v=r.text;for(let i=0;i<4&&typeof v==='string';i++){try{v=JSON.parse(v)}catch(e){return{}}}return(v&&typeof v==='object')?v:{}}
+const syncParse=t=>{let v=t;for(let i=0;i<4&&typeof v==='string';i++){try{v=JSON.parse(v)}catch(e){return{}}}return(v&&typeof v==='object')?v:{}};
+async function syncGet(c){const url=SYNC_DB+'/sync/'+c+'.json';let r=null,o={},e1='';
+  try{r=await netReq('GET',url);if(!r.ok)throw new Error('HTTP '+r.status);o=syncParse(r.text)}catch(e){e1=String(e&&e.message||e)}
+  window.__sgDbg='b'+APP_BUILD+' n:'+(r?(typeof r.text)+'/'+String(r.text||'').length+' '+String(r.text||'').slice(0,18):'–')+(e1?' e:'+e1.slice(0,60):'');
+  if(!Object.keys(o).length){try{const f=await fetch(url+'?t='+Date.now(),{cache:'no-store'});const t=await f.text();window.__sgDbg+=' f:'+f.status+'/'+t.length;if(f.ok){const o2=syncParse(t);if(Object.keys(o2).length)return o2}}catch(e){window.__sgDbg+=' fe:'+String(e&&e.message||e).slice(0,50)}}
+  if(e1&&!Object.keys(o).length)throw new Error(e1);return o}
 async function syncPut(c,o){const r=await netReq('PUT',SYNC_DB+'/sync/'+c+'.json',JSON.stringify(JSON.stringify(o)));if(!r.ok)throw new Error('HTTP '+r.status)}
 
 function mergeHist(a,b){const m=new Map();for(const e of a.concat(b||[])){if(!e||!e.k)continue;const o=m.get(e.k);if(!o||(e.ts||0)>(o.ts||0))m.set(e.k,Object.assign({},o&&!e.url&&o.url?{url:o.url}:{},e))}
@@ -4630,7 +4635,7 @@ document.addEventListener('click',e=>{
     else if(v.startsWith('acc:')){localStorage.setItem('acct_pref',v.slice(4));toast('Konto valgt');renderSettings()}
     else if(v==='fsopen'){try{fsDlg()}catch(x){toast(x.message)}}
     else if(v==='fspush'){toast('Laster opp …');fsPush().then(()=>toast('Lastet opp til koden '+fsFmt(localStorage.getItem('sync_phrase')),6000),x=>toast('Opplasting feilet: '+x.message,8000))}
-    else if(v==='fspull'){toast('Henter …');fsFetch(localStorage.getItem('sync_phrase')).then(async r=>{if(!r)return toast('Ingenting lagret på koden '+fsFmt(localStorage.getItem('sync_phrase'))+'. Sjekk at PC-en har nøyaktig samme kode, og trykk «Last opp nå» der først.',10000);await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))},x=>toast('Feil: '+x.message))}
+    else if(v==='fspull'){toast('Henter …');fsFetch(localStorage.getItem('sync_phrase')).then(async r=>{if(!r)return toast('Ingenting lagret på koden '+fsFmt(localStorage.getItem('sync_phrase'))+'. Sjekk at PC-en har nøyaktig samme kode, og trykk «Last opp nå» der først. ['+(window.__sgDbg||'')+']',15000);await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))},x=>toast('Feil: '+x.message))}
     else if(v==='fsoff'){['sync_phrase','sync_id','sync_fts'].forEach(k=>localStorage.removeItem(k));toast('Frakoblet');renderSettings()}
     else if(v==='syncnow'){toast('Synker …');cloudSync().then(()=>toast(syncSta))}
     else if(v==='synctog'){if(syncCode())localStorage.setItem('sync_code','');else localStorage.removeItem('sync_code');toast(syncCode()?'Synk på':'Synk av');if(syncCode())cloudSync();if(curView==='settings')renderSettings()}
