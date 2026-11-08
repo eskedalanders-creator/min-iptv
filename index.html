@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=191;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=192;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1568,6 +1568,55 @@ body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:
 .fbp-photo{filter:saturate(1.1) brightness(.9)}
 .sph-g{background:linear-gradient(90deg,rgba(4,6,14,.88) 0%,rgba(4,6,14,.45) 45%,rgba(4,6,14,.1) 75%),linear-gradient(0deg,rgba(4,6,14,.75),transparent 40%)!important}
 .fbp-hero::after{background:radial-gradient(75% 95% at 50% 45%,rgba(5,10,20,.25),rgba(5,8,16,.86) 78%),linear-gradient(90deg,rgba(200,16,46,.30),transparent 35%,transparent 65%,rgba(40,120,255,.16))!important}
+/* v192: Direkte TV – kanalliste per land */
+#v-tv.tvx{padding:0!important;overflow:hidden}
+.tvx-w{display:grid;grid-template-columns:250px minmax(0,1fr) 360px;height:calc(var(--tvh,100vh) - 74px)}
+.tvx-s{overflow:auto;padding:18px 10px 30px 18px;border-right:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);scrollbar-width:none}
+.tvx-st{font:900 22px/1 system-ui;margin:4px 8px 16px}
+.tvc{display:flex!important;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 12px!important;margin:2px 0;border-radius:12px!important;background:none!important;border:1px solid transparent!important;color:#c9cfe0!important;font-weight:650;font-size:15.5px}
+.tvc .tvcf{width:26px;text-align:center;font-size:19px}.tvc .tvcn{flex:1}.tvc small{color:#7d86a0;font-size:12px}
+.tvc:hover{background:rgba(255,255,255,.06)!important}
+.tvc.on{background:rgba(255,255,255,.1)!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important}
+body.tv .tvc:focus,html.tvm .tvc:focus{background:#fff!important;color:#0b0c18!important;outline:none!important;transform:none!important;box-shadow:none!important}
+body.tv .tvc:focus small,html.tvm .tvc:focus small{color:#555}
+.tvx-sep{height:1px;background:rgba(255,255,255,.08);margin:12px 8px}
+.tvx-m{display:flex;flex-direction:column;min-width:0;min-height:0}
+.tvx-h{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 26px 12px}
+.tvx-h h2{margin:0;font:900 clamp(24px,2vw,34px)/1.1 system-ui}.tvx-h small{color:#8d95a9}
+.tvx-h input{max-width:280px}
+.tvx-l{flex:1;overflow:auto;padding:0 18px 40px 18px;scrollbar-width:thin}
+.tvgh{position:sticky;top:0;z-index:2;padding:14px 10px 8px;font:800 12px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#7f8cb0;background:linear-gradient(180deg,#090a12 75%,rgba(9,10,18,0))}
+.tvr{display:grid;grid-template-columns:62px minmax(0,1fr) 120px;align-items:center;gap:14px;min-height:76px;padding:8px 14px 8px 6px;margin:2px 0;border-radius:12px;cursor:pointer;outline:none;transition:background .15s,transform .15s}
+.tvr:hover{background:rgba(255,255,255,.05)}
+.tvr:focus,.tvr:focus-visible{background:linear-gradient(90deg,rgba(64,190,215,.92),rgba(64,190,215,.70))!important;box-shadow:0 10px 30px -14px rgba(64,190,215,.8)}
+body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!important}
+.tvn{font:800 26px/1 system-ui;color:#6e7894;text-align:right;font-variant-numeric:tabular-nums}
+.tvr:focus .tvn{color:#06343e}
+.tvb{min-width:0}
+.tvt{font:700 clamp(17px,1.3vw,22px)/1.2 system-ui;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tvf{color:#ffc93c;font-size:.8em}.tvq{font:800 10px/1 system-ui;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.12);color:#cfd5e6;vertical-align:middle}
+.tvr .lcp{display:flex;align-items:center;gap:10px;margin-top:5px;min-height:18px;color:#aab3c9;font-size:14px}
+.tvr .lcp .lpn{order:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
+.tvr .lcp .lpb{order:1;flex:none;width:90px;height:6px;border-radius:3px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);overflow:hidden}
+.tvr .lcp .lpb i{display:block;height:100%;background:#4fd0ff}
+.tvr .lcp .lpx{order:3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#79829b;font-size:13px}
+.tvr:focus .lcp,.tvr:focus .lcp .lpx{color:#05323b}.tvr:focus .lcp .lpb{border-color:#05323b;background:rgba(0,0,0,.12)}.tvr:focus .lcp .lpb i{background:#fff}
+.tvl{display:grid;place-items:center;height:56px}
+.tvl img{max-width:110px;max-height:52px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.tvl img+span{display:none}.tvl span{font:800 12px system-ui;color:#8d95a9}
+.tvempty{padding:60px 20px;text-align:center;color:#8d95a9;font-size:17px}
+.tvx-i{border-left:1px solid rgba(255,255,255,.07);padding:26px 24px;overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01))}
+.tvi-l{height:120px;display:grid;place-items:center;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);margin-bottom:16px}
+.tvi-l img{max-width:70%;max-height:84px;object-fit:contain}
+.tvx-i h3{margin:0 0 4px;font:900 24px/1.2 system-ui}.tvx-i>small{color:#8d95a9}
+.tvi-e{margin:18px 0}
+.tvi-now span{font:800 11px/1 system-ui;letter-spacing:.12em;color:#4fd0ff}.tvi-now b{display:block;font-size:19px;margin:6px 0 8px}
+.tvi-now i{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}.tvi-now em{display:block;height:100%;background:#4fd0ff}
+.tvi-now p{color:#b4bccf;font-size:14px;line-height:1.45;margin:10px 0 0}
+.tvi-nx{margin-top:16px;display:flex;flex-direction:column;gap:8px}.tvi-nx div{display:flex;gap:12px;font-size:14px}.tvi-nx span{color:#8d95a9;font-variant-numeric:tabular-nums;flex:none}.tvi-nx b{font-weight:600;color:#dfe3ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tvi-b{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:1300px){.tvx-w{grid-template-columns:220px minmax(0,1fr)}.tvx-i{display:none}}
+@media (max-width:760px){.tvx-w{grid-template-columns:1fr;height:auto}.tvx-s{display:flex;overflow-x:auto;padding:10px;gap:6px;border:0}.tvx-st,.tvx-sep{display:none}.tvc{width:auto;flex:none}.tvc small{display:none}.tvx-l{overflow:visible}.tvr{grid-template-columns:36px minmax(0,1fr) 70px}.tvn{font-size:18px}.tvl img{max-width:66px}.tvx-h{flex-direction:column;align-items:stretch}}
 /* v189: glass-rammer på forsiden */
 #v-home.uvhome{position:relative;overflow:hidden}
 .uv{isolation:isolate}
@@ -3577,7 +3626,7 @@ const CHCAT=[
   ['musikk','Musikk',/music|musikk|\bmtv\b|vh1|nrk p3|mezzo|stingray/i]
 ];
 const chByCat=id=>{const r=CHCAT.find(x=>x[0]===id)[2];return DB.live.filter(c=>fvis(c)&&!c.reg&&r.test(c.lc)).sort((a,b)=>(b.no-a.no)||(noRank(a)-noRank(b))||COLL.compare(a.nm,b.nm))};
-function renderTV(){
+function renderTV0(){
   const el=$('v-tv');
   if(!S){el.innerHTML='<h1>Direkte TV</h1><div class="empty">Legg til en kilde først.</div>';return}
   const L=DB.live.filter(c=>fvis(c));
@@ -5322,6 +5371,73 @@ function fbCd(){
     const v=[Math.floor(d/864e5),Math.floor(d%864e5/36e5),Math.floor(d%36e5/6e4),Math.floor(d%6e4/1e3)];
     el.querySelectorAll('b').forEach((b,i)=>b.textContent=String(v[i]).padStart(2,'0'));if(d<=0){el.classList.add('ko')}};
   up();window.__fbCd=setInterval(up,1000);
+}
+
+/* ===================== v192: Direkte TV – kanalliste per land ===================== */
+const TVC=[['fav','⭐','Favoritter'],['last','🕘','Sist sett'],['no','🇳🇴','Norge'],['se','🇸🇪','Sverige'],['dk','🇩🇰','Danmark'],['uk','🇬🇧','Storbritannia'],['us','🇺🇸','USA'],['ca','🇨🇦','Canada'],['au','🇦🇺','Australia'],['ie','🇮🇪','Irland'],['nz','🇳🇿','New Zealand'],['ev','🏟','Kamper og eventer']];
+const TV_EN=new Set(['uk','us','ca','au','ie','nz']);
+const TV_NOT_EN=/latino|espa[ñn]ol|spanish|\bspa\b|univision|telemundo|unimas|galavision|french|fran[cç]ais|qu[ée]bec|\btva\b|t[ée]l[ée]-?qu|radio-canada|\bici\b|\bnoovo\b|\brds\b|punjabi|hindi|tamil|urdu|arab|korean|chinese|filipino|pinoy|desi|\bsony (sab|max)|zee |star plus|colors tv|ptc |b4u|9x|aaj|abp|ndtv/i;
+const tvIsEv=c=>!!c.ev||/\bvs\.?\s|ended\s*\|/i.test(c.name||'')||/[a-z]\s+v\s+[A-Za-z]/.test(c.name||'')||/^\W*(uefa|ppv)\s*\|/i.test(c.name||'');
+const tvVis=c=>!hidden.has(c.key)&&!c.dup&&!c.adult&&!c.junk&&!isPast(c)&&!(noAsia&&c.asia)&&!c.reg&&c.lg!=='xx'&&!RX_SCRIPT.test(c.name||'');
+const tvCountry=c=>{if(c.no||c.lg==='no')return 'no';const g=c.lg;if(g==='se'||g==='dk')return g;if(TV_EN.has(g))return TV_NOT_EN.test(c.name+' '+c.cat)?'':g;return ''};
+const TV_RANK={
+ no:[/nrk ?1\b/,/nrk ?2/,/nrk ?3|nrk super/,/tv ?2 (direkte|hd)?$|^tv ?2\b(?! ?(sport|nyhet|zebra|livsstil))/,/tv ?norge/,/\btv ?3\b/,/\bmax\b/,/\bvox\b/,/\bfem\b/,/tv ?2 (zebra|livsstil)|zebra/,/tv ?2 nyhet/,/v ?sport|viaplay/,/tv ?2 sport/,/eurosport/],
+ se:[/svt ?1/,/svt ?2/,/\btv ?4\b/,/kanal ?5/,/\btv ?3\b/,/sjuan|tv ?6|kanal ?9|tv ?8/,/tv4 sport|v ?sport|c ?more|viaplay/],
+ dk:[/dr ?1/,/dr ?2/,/\btv ?2\b(?! ?(sport|news|charlie|zulu|fri|echo))/,/\btv ?3\b/,/kanal ?4|kanal ?5/,/tv ?2 (charlie|zulu|fri|echo)/,/tv ?2 (sport|news)|tv3 sport|v ?sport/],
+ uk:[/bbc ?one|bbc ?1\b/,/bbc ?two|bbc ?2\b/,/\bitv ?1\b|^\W*(uk\W+)?itv\b(?! ?\d)/,/channel ?4/,/channel ?5|\b5 ?star|^\W*(uk\W+)?5\b/,/sky (one|max|showcase)/,/sky atlantic/,/bbc ?(three|four|3|4)/,/itv ?[234]/,/\be4\b|more ?4|film ?4/,/\bdave\b|\bgold\b|\balibi\b|\bw\b/,/sky sports? (main|premier|football)/,/sky sports?/,/tnt sports?|bt sport/,/bbc news|sky news|gb news/],
+ us:[/\babc\b/,/\bcbs\b/,/\bnbc\b/,/\bfox\b(?! ?(news|sports?|business))/,/\bpbs\b|\bthe cw\b|\bcw\b/,/\bhbo\b/,/showtime|starz|cinemax|\bepix\b|mgm/,/\bamc\b|\bfx\b|\btnt\b|\btbs\b|usa network/,/\bespn/,/fox sports|\bfs1\b|\bnfl\b|\bnba\b|\bmlb\b|\bnhl\b/,/\bcnn\b|fox news|msnbc|cnbc/,/discovery|history|nat ?geo|a&e/,/hgtv|food network|\btlc\b|bravo|\be!/],
+ ca:[/\bcbc\b/,/\bctv\b/,/global/,/citytv/,/tsn/,/sportsnet/],au:[/\babc\b/,/seven|\b7\b/,/nine|\b9\b/,/ten|\b10\b/,/\bsbs\b/,/fox ?sports|kayo/],ie:[/rt[eé] ?(one|1)/,/rt[eé] ?(2|two)/,/virgin/,/tg4/],nz:[/tvnz ?1/,/tvnz ?2/,/three/,/sky sport/]};
+const TV_GRP=[['gen','Hovedkanaler'],['sport','Sport'],['film','Film og serier'],['nyheter','Nyheter'],['dok','Dokumentar'],['barn','Barn'],['musikk','Musikk']];
+const TVG_RX=[['sport',/sport|espn|eurosport|tnt sports|bt sport|dazn|premier league|golf|\bnfl\b|\bnba\b|\bnhl\b|\bmlb\b|fight|racing|\bf1\b|tennis|fotball|football|soccer|viaplay fotball|\bv ?sport|tsn|sportsnet|kayo|\bfs1\b/],['nyheter',/news|nyhet|nytt\b|\bcnn\b|msnbc|cnbc|bloomberg|al ?jazeera|euronews|sky news|gb news|\bdr ?nyheder/],['barn',/kids|\bbarn|junior|cbeebies|cbbc|\bnick|cartoon|disney (channel|junior|xd)|boomerang|baby ?tv|nrk ?super|\bsvt ?barn|dr ?ramasjang|minimax|\btoon/],['film',/movie|\bfilm|cinema|\bhbo|showtime|starz|cinemax|sky (cinema|atlantic|showcase|max)|\bamc\b|\btcm\b|\baxn\b|paramount|\bc ?more|\bepix\b|\bmgm/],['dok',/discovery|history|nat ?geo|national geographic|animal planet|investigation|documentar|dokument|science|\bid\b/],['musikk',/music|\bmtv\b|\bvh1\b|musikk|kerrang|stingray/]];
+const tvGrp=c=>{const n=(tvName(c)+' '+(c.cat||'')).toLowerCase();const nm=tvName(c).toLowerCase();if(c._r<99&&!/sport|news|nyhet|kids|junior|cbeebies|cbbc|super/.test(nm))return 'gen';for(const [id,rx] of TVG_RX)if(rx.test(id==='gen'?nm:nm)||((id==='sport'||id==='barn')&&rx.test(n)))return id;return 'gen'};
+const tvName=c=>String(c.nm||c.name).replace(/^\W*(gold|vip|uk|us|usa|gb|ca|au|ie|nz|en|no|se|dk|nordic)\s*[:|\-]\s*/i,'').replace(/\s*[ᴴᴰᵁˢᴿᴬᵂ⁴ᴷ⁸]+\s*/g,' ').trim();
+let tvSel=LSget('tvSel','no'),tvqT2=0,tvInfoT=0;
+function tvList(id){
+  const all=DB.live.filter(tvVis);
+  if(id==='fav')return all.filter(isFav);
+  if(id==='last'){const seen=new Set();return hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&!c.dup&&!c.adult&&!isPast(c)&&!seen.has(c.key)&&seen.add(c.key)).slice(0,40)}
+  if(id==='ev')return all.filter(c=>tvIsEv(c)&&!/ended/i.test(c.name||'')&&(tvCountry(c)!==''||!c.lg||TV_EN.has(c.lg))&&!TV_NOT_EN.test(c.name+' '+c.cat)).sort((a,b)=>(a.ev||9e15)-(b.ev||9e15)||COLL.compare(a.nm,b.nm)).slice(0,200);
+  const rk=TV_RANK[id]||[],rank=c=>{const n=tvName(c).toLowerCase();const i=rk.findIndex(r=>r.test(n));return i<0?99:i};
+  const qr=c=>({FHD:0,HD:0,'4K':1,UHD:1,SD:3,RAW:2}[(c.q&&c.q[0])||'']??1);
+  return all.filter(c=>!tvIsEv(c)&&tvCountry(c)===id).map(c=>(c._r=rank(c),c._g=tvGrp(c),c)).sort((a,b)=>(isFav(b)-isFav(a))||(TV_GRP.findIndex(g=>g[0]===a._g)-TV_GRP.findIndex(g=>g[0]===b._g))||(a._r-b._r)||(qr(a)-qr(b))||COLL.compare(tvName(a),tvName(b)));
+}
+function tvRow(c,i){
+  return `<div class="tvr" tabindex="0" data-k="${c.key}"><span class="tvn">${i}</span><div class="tvb"><div class="tvt">${esc(tvName(c))}${isFav(c)?' <span class="tvf">★</span>':''}${c.q&&c.q[0]?` <span class="tvq">${esc(c.q[0])}</span>`:''}</div><div class="lcp" data-epg="${c.key}"></div></div><div class="tvl">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt="" onerror="this.remove()">`:''}<span>${esc(tvName(c).slice(0,10))}</span></div></div>`;
+}
+function tvRowsHtml(id,list){
+  if(!list.length)return `<div class="tvempty">${id==='fav'?'Ingen favorittkanaler ennå. Hold inne OK på en kanal for å legge den til.':id==='last'?'Du har ikke sett noen kanaler ennå.':'Ingen kanaler funnet.'}</div>`;
+  let h='',g='',n=0;const grouped=!['fav','last','ev','q'].includes(id);
+  for(const c of list){n++;if(grouped&&c._g!==g){g=c._g;h+=`<div class="tvgh">${esc((TV_GRP.find(x=>x[0]===g)||[0,'Andre'])[1])}</div>`}h+=tvRow(c,n)}
+  return h;
+}
+function renderTV(){
+  const el=$('v-tv');el.classList.add('tvx');
+  if(!S){el.innerHTML='<h1>Direkte TV</h1><div class="empty">Legg til en kilde først.</div>';return}
+  const cnt={};for(const [id] of TVC)cnt[id]=tvList(id).length;
+  if(!cnt[tvSel])tvSel='no';
+  const side=TVC.filter(([id])=>cnt[id]||id==='fav'||id==='last').map(([id,fl,n])=>`<button class="tvc${id===tvSel?' on':''}" data-tvc="${id}"><span class="tvcf">${fl}</span><span class="tvcn">${n}</span><small>${cnt[id]||''}</small></button>`).join('');
+  el.innerHTML=`<div class="tvx-w"><aside class="tvx-s"><div class="tvx-st">Direkte TV</div>${side}<div class="tvx-sep"></div><button class="tvc" data-go="guide:"><span class="tvcf">📅</span><span class="tvcn">TV-guide</span></button><button class="tvc" data-go="live:tab=all"><span class="tvcf">☰</span><span class="tvcn">Alle kanaler</span></button></aside>
+   <section class="tvx-m"><div class="tvx-h"><div><h2 id="tvxT"></h2><small id="tvxN"></small></div><input id="tvq" type="search" placeholder="Søk etter kanal …" autocomplete="off"></div><div class="tvx-l" id="tvxL"></div></section>
+   <aside class="tvx-i" id="tvxI"></aside></div>`;
+  const show=id=>{tvSel=id;LSset('tvSel',id);el.querySelectorAll('[data-tvc]').forEach(b=>b.classList.toggle('on',b.dataset.tvc===id));const t=TVC.find(x=>x[0]===id)||TVC[2];const l=tvList(id);
+    $('tvxT').textContent=t[1]+' '+t[2];$('tvxN').textContent=l.length?l.length+' kanaler':'';const L=$('tvxL');L.innerHTML=tvRowsHtml(id,l);L.scrollTop=0;epgHydrate(L);const f=L.querySelector('.tvr');if(f)tvInfo(byKey.get(f.dataset.k))};
+  el.querySelectorAll('[data-tvc]').forEach(b=>{b.onclick=()=>show(b.dataset.tvc);b.addEventListener('focus',()=>{if(TVM&&b.dataset.tvc!==tvSel){clearTimeout(b._t);b._t=setTimeout(()=>{if(document.activeElement===b)show(b.dataset.tvc)},350)}})});
+  const L=$('tvxL');
+  const hov=e=>{const r=e.target.closest&&e.target.closest('.tvr');if(!r)return;clearTimeout(tvInfoT);tvInfoT=setTimeout(()=>tvInfo(byKey.get(r.dataset.k)),180)};
+  L.addEventListener('focusin',hov);L.addEventListener('mouseover',hov);
+  $('tvq').oninput=()=>{clearTimeout(tvqT2);tvqT2=setTimeout(()=>{const q=$('tvq').value.trim();if(q.length<2){show(tvSel);return}
+    const res=skRun(DB.live,skq(q),c=>tvVis(c)&&(tvCountry(c)||tvIsEv(c))).slice(0,120);$('tvxT').textContent='🔍 Søk';$('tvxN').textContent=res.length+' treff';L.innerHTML=tvRowsHtml('q',res);epgHydrate(L)},180)};
+  show(tvSel);
+}
+function tvInfo(c){
+  const I=$('tvxI');if(!I||!c)return;const ctry=TVC.find(x=>x[0]===tvCountry(c));
+  I.innerHTML=`<div class="tvi-l">${c.logo?`<img src="${esc(c.logo)}" alt="" onerror="this.remove()">`:''}</div><h3>${esc(tvName(c))}</h3><small>${ctry?ctry[1]+' '+ctry[2]:''}${c.q&&c.q[0]?' · '+esc(c.q[0]):''}</small><div class="tvi-e" id="tviE"><p class="muted">Henter programinfo …</p></div><div class="tvi-b"><button class="primary" data-k="${c.key}">▶ Se nå</button><button class="ghost" id="tviF">${isFav(c)?'★ Favoritt':'☆ Favoritt'}</button></div>`;
+  $('tviF').onclick=()=>{try{toggleFav(c)}catch(e){}$('tviF').textContent=isFav(c)?'★ Favoritt':'☆ Favoritt';const r=document.querySelector(`.tvr[data-k="${CSS.escape(c.key)}"] .tvt`);if(r)r.innerHTML=esc(tvName(c))+(isFav(c)?' <span class="tvf">★</span>':'')};
+  const fill=l=>{const E=$('tviE');if(!E||I.dataset.k!==c.key)return;const t=Date.now(),i=(l||[]).findIndex(x=>x.s<=t&&x.e>t);
+    if(i<0){E.innerHTML='<p class="muted">Ingen programinformasjon for denne kanalen.</p>';return}
+    const n=l[i],pct=Math.round((t-n.s)/(n.e-n.s)*100);
+    E.innerHTML=`<div class="tvi-now"><span>NÅ · ${fmtTime(n.s)}–${fmtTime(n.e)}</span><b>${esc(n.t)}</b><i><em style="width:${pct}%"></em></i>${n.d?`<p>${esc(String(n.d).slice(0,220))}</p>`:''}</div><div class="tvi-nx">${l.slice(i+1,i+5).map(x=>`<div><span>${fmtTime(x.s)}</span><b>${esc(x.t)}</b></div>`).join('')}</div>`};
+  I.dataset.k=c.key;if(epgOff()){fill([]);return}const h=EPG.get(c.key);if(h&&h.list.length)fill(h.list);else epgGet(c).then(fill).catch(()=>fill([]));
 }
 
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
