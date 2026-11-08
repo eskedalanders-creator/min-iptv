@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=187;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=188;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1568,6 +1568,10 @@ body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:
 .fbp-photo{filter:saturate(1.1) brightness(.9)}
 .sph-g{background:linear-gradient(90deg,rgba(4,6,14,.88) 0%,rgba(4,6,14,.45) 45%,rgba(4,6,14,.1) 75%),linear-gradient(0deg,rgba(4,6,14,.75),transparent 40%)!important}
 .fbp-hero::after{background:radial-gradient(75% 95% at 50% 45%,rgba(5,10,20,.25),rgba(5,8,16,.86) 78%),linear-gradient(90deg,rgba(200,16,46,.30),transparent 35%,transparent 65%,rgba(40,120,255,.16))!important}
+/* v188: nye episoder */
+#dlgNew{min-width:min(560px,92vw)}#dlgNew h2{font:800 22px/1.2 system-ui,sans-serif;letter-spacing:0;margin:0}.nwl{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto;margin:12px 0}
+.nwi{display:flex!important;align-items:center;gap:14px;text-align:left;padding:8px 12px!important;border-radius:12px!important}.nwi img{width:46px;height:68px;object-fit:cover;border-radius:6px}.nwi span{display:flex;flex-direction:column;flex:1;min-width:0}.nwi small{color:#9aa3bd}.nwi i{font-style:normal;opacity:.6}
+.nwi:focus,.nwi:hover{background:#fff!important;color:#0b0c18!important}.nwi:focus small,.nwi:hover small{color:#444}
 /* v187: færre knapperader */
 #tvLands{display:none!important}
 .vmain.browse>.vbar,.vmain.browse>#vchips{display:none!important}
@@ -4241,7 +4245,7 @@ function renderSettings(){
 
    <div class="card"><h3>📡 Kilder</h3><p>Legg til, oppdater eller bytt spilleliste (M3U / Xtream).</p><button class="primary" data-act="src">Åpne kilder</button></div>
    <div class="card"><h3>👤 Brukere</h3><p>Hver bruker har egne favoritter, skjulte kanaler og «fortsett å se».</p><button class="primary" data-act="prof">Administrer brukere</button></div>
-   <div class="card"><h3>🎨 Tema</h3><p>Bytt mellom Brann-rødt og kino-gull.</p><button data-act="th:brann" class="${th==='brann'?'primary':''}">🔥 Brann</button> <button data-act="th:kino" class="${th==='kino'?'primary':''}">🎬 Kino</button></div>
+
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
    ${accList().length>1?`<div class="card"><h3>🔀 Konto for avspilling</h3><p>Hver konto tåler én strøm om gangen. «Auto» velger en ledig konto og bytter hvis den valgte er i bruk (også på andre enheter). Favoritter, innstillinger og «Fortsett å se» er felles for alle kontoer.</p><button data-act="acc:auto" class="${accPref()==='auto'?'primary':''}">🔄 Auto</button> ${accList().map(a=>`<button data-act="acc:${a.id}" class="${accPref()===a.id?'primary':''}">${esc(a.name)} ${accBusy(a.id,'x')?'🔴':'🟢'}</button>`).join(' ')}<p><small>🟢 ledig · 🔴 i bruk${accList().some(a=>accBusy(a.id,'x'))?' ('+accList().filter(a=>accBusy(a.id,'x')).map(a=>esc(a.name)+': '+esc(accBusy(a.id,'x'))).join(', ')+')':''}</small></p></div>`:''}
@@ -5158,7 +5162,16 @@ async function uvExpiry(){
 (()=>{const on=(id,f)=>{const b=document.getElementById(id);if(b)b.onclick=f};
   on('bSet',()=>showView('settings'));on('bFav',()=>showView('fav'));
   on('bUser',()=>{renderProfiles();$('dlgProf').showModal();setTimeout(()=>{const b=document.querySelector('#profList .pcard.on')||document.querySelector('#profList .pcard');if(b)b.focus()},60)});
-  on('bNew',()=>{const it=(()=>{try{return cinEpItems()}catch(e){return []}})();if(it.length){go('series')}else{toast('Ingen nye episoder i favorittseriene dine akkurat nå',3000)}});
+  on('bNew',()=>{
+    let it=[];try{it=cinEpItems()}catch(e){}
+    let d=document.getElementById('dlgNew');if(!d){d=document.createElement('dialog');d.id='dlgNew';d.className='tvpick';document.body.appendChild(d)}
+    let nw={};try{nw=LSget(NEWK(),{})}catch(e){}
+    d.innerHTML=`<h2>🔔 Nye episoder</h2>${it.length?`<div class="nwl">${it.map(c=>`<button type="button" class="nwi" data-nk="${esc(c.key)}">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}<span><b>${esc(c.nm||c.name)}</b><small>${esc((nw[c.key]&&nw[c.key].label)||'Ny episode')}</small></span><i>▶</i></button>`).join('')}</div>`:'<p class="muted">Ingen nye episoder i favorittseriene dine akkurat nå. Marker serier med ★ for å få varsel når nye episoder kommer.</p>'}<div class="actions">${it.length?'<button type="button" id="nwClr">Merk alle som sett</button>':''}<button type="button" class="primary" id="nwX">Lukk</button></div>`;
+    d.onclick=e=>{const b=e.target.closest('[data-nk]');if(b){const k=b.dataset.nk,c=byKey.get(k);try{const n=LSget(NEWK(),{});delete n[k];LSset(NEWK(),n)}catch(_){}d.close();upd();if(c)openItem(c);return}
+      if(e.target.id==='nwClr'){try{LSset(NEWK(),{})}catch(_){}d.close();upd();if(curView==='home')renderHome();return}
+      if(e.target.id==='nwX')d.close()};
+    d.showModal();setTimeout(()=>{const f=d.querySelector('.nwi')||d.querySelector('#nwX');if(f)f.focus()},50);
+  });
   const upd=()=>{try{const n=cinEpItems().length,b=$('bNewN');if(b){b.hidden=!n;b.textContent=n>9?'9+':n}}catch(e){}};setTimeout(upd,4000);setInterval(upd,120000);
   try{renderProfiles()}catch(e){}
 })();
