@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=184;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=185;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1346,6 +1346,207 @@ body.tv header button:focus{outline:none!important;box-shadow:none!important;bac
 /* Toast nederst midt, større på TV */
 html.tvm #toast{font-size:18px!important;padding:14px 22px!important;border-radius:14px!important}
 </style>
+<style id="uvcss">
+/* ================= v185 · Univers-design: toppmeny, forside, sport, fotball ================= */
+:root{--uv-ac:#8b6bff;--uv-ac2:#4fd0ff;--uv-glass:rgba(255,255,255,.055);--uv-line:rgba(255,255,255,.13)}
+body::before{background:#060716!important}
+body::after{background:radial-gradient(ellipse 70% 55% at 15% 0%,rgba(110,70,255,.30),transparent 70%),radial-gradient(ellipse 60% 50% at 90% 10%,rgba(40,170,255,.20),transparent 70%),radial-gradient(ellipse 80% 60% at 50% 110%,rgba(170,40,200,.22),transparent 70%)!important}
+/* ---- toppmeny ---- */
+#moreWrap,#prof,#gq{display:none!important}
+header #clock{display:flex!important;flex-direction:column;line-height:1.1;flex:none;padding-left:16px;border-left:1px solid var(--uv-line);color:#fff}
+header #clock b{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+header #clock small{font-size:11.5px;color:#9aa3bd;text-transform:capitalize}
+.hic{display:inline-flex!important;align-items:center;gap:7px;flex:none;height:40px;min-width:40px;justify-content:center;padding:0 10px!important;border-radius:999px!important;background:rgba(255,255,255,.07)!important;border:1px solid transparent!important;color:#e9ecf6!important;font-weight:600;font-size:14px!important;position:relative;animation:none!important;box-shadow:none!important}
+.hic svg{width:20px;height:20px;flex:none}
+.hic:hover{background:rgba(255,255,255,.14)!important}
+#tvSearch.hic{padding:0 14px!important}
+.huser{padding:0 12px 0 4px!important}
+.hav{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:linear-gradient(135deg,var(--uv-ac),var(--uv-ac2));color:#fff}
+#bUserN{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bNewN{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#ff3b5c;color:#fff;font:700 11px/18px system-ui;font-style:normal;text-align:center;padding:0 4px}
+#bRl,#bFs{height:40px;min-width:40px}
+body.tv header .hic:focus,html.tvm header .hic:focus{background:#fff!important;color:#0a0c13!important;outline:none!important}
+html.tvm header #clock{display:flex!important}html.tvm #bUserN{display:none}html.tvm #tvSearch span{display:none}
+@media (max-width:1250px){#tvSearch span,#bUserN{display:none}header #clock small{display:none}}
+@media (max-width:860px){header #clock{display:none!important}.hic{height:36px;min-width:36px}#bNew{display:none!important}}
+/* ---- forsiden ---- */
+#v-home.uvhome{padding:0!important}
+.uv{position:relative;min-height:calc(var(--tvh,100vh) - 74px);height:calc(var(--tvh,100vh) - 74px);display:flex;flex-direction:column;gap:1.6vh;padding:2.2vh 3vw 1.4vh;box-sizing:border-box}
+.uvg{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:2vh 1.4vw}
+.uvt{position:relative;display:flex;flex-direction:column;min-height:0;padding:10px 12px 10px;border-radius:20px;cursor:pointer;outline:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025));border:1px solid var(--uv-line);
+  box-shadow:0 20px 50px -24px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,border-color .28s,background .28s}
+.uvt::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 80% at 50% -20%,var(--tc,rgba(139,107,255,.35)),transparent 60%);opacity:.55;transition:opacity .28s}
+.uvt.uv-ser{--tc:rgba(255,92,140,.38)}.uvt.uv-tv{--tc:rgba(80,170,255,.42)}.uvt.uv-film{--tc:rgba(255,170,60,.36)}.uvt.uv-sport{--tc:rgba(40,210,130,.38)}.uvt.uv-app{--tc:rgba(170,110,255,.42)}.uvt.uv-cam{--tc:rgba(70,220,230,.34)}
+.uvh{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0 9px;font:900 clamp(17px,1.55vw,30px)/1 var(--ff,system-ui);letter-spacing:.16em;text-transform:uppercase;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.uvi{display:inline-grid;width:1.15em;height:1.15em;opacity:.85}.uvi svg{width:100%;height:100%}
+.uvm{position:relative;flex:1;min-height:0;border-radius:14px;overflow:hidden;background:#0a0c1c;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+:where(.uvs,.uvf,.uvap,.uvcap,.uvnext,.uvch),:where(.uvs,.uvf,.uvap,.uvcap,.uvnext,.uvch) *{text-transform:none;letter-spacing:normal}.uvs{position:relative;display:flex;align-items:center;gap:10px;padding:9px 4px 0;font-size:clamp(12px,.92vw,16px);color:#c3c9de;white-space:nowrap;overflow:hidden}
+.uvsub{overflow:hidden;text-overflow:ellipsis;font-weight:500}.uvlive[hidden]{display:none}.uvsub b{color:#fff}
+.uvgo{margin-left:auto;flex:none;padding:5px 12px;border-radius:999px;font-weight:700;font-size:.9em;background:rgba(255,255,255,.1);color:#fff;transition:.2s}
+.uvt:hover,.uvt:focus,.uvt:focus-visible{transform:translateY(-5px) scale(1.012);border-color:rgba(255,255,255,.85);box-shadow:0 0 0 3px #fff,0 30px 70px -20px var(--tc),0 10px 40px -10px rgba(0,0,0,.9)}
+.uvt:hover::before,.uvt:focus::before{opacity:1}
+.uvt:hover .uvgo,.uvt:focus .uvgo{background:#fff;color:#0b0c18}
+body.tv .uvt:focus,html.tvm .uvt:focus{outline:none!important;transform:translateY(-5px) scale(1.012)!important;box-shadow:0 0 0 4px #fff,0 30px 70px -20px var(--tc)!important}
+/* trailerlag */
+.uvv{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity .9s;z-index:3;background:#000}
+.uvv.on{opacity:1}
+.uvsh{position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent 45%),linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%);opacity:0;transition:opacity .6s}
+.uvtag{position:absolute;left:10px;top:9px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;background:rgba(0,0,0,.55);font:800 10.5px/1 system-ui;letter-spacing:.14em;color:#fff;opacity:0;transition:opacity .5s}
+.uvtag i{width:7px;height:7px;border-radius:50%;background:#ff3b5c;box-shadow:0 0 10px #ff3b5c;animation:uvbl 1.4s infinite}
+.uvcap{position:absolute;left:12px;right:12px;bottom:10px;z-index:5;display:flex;flex-direction:column;gap:2px;opacity:0;transform:translateY(6px);transition:.5s}
+.uvcap small{font:700 10.5px/1.2 system-ui;letter-spacing:.12em;text-transform:uppercase;color:#c9cfe4}
+.uvcap b{font-size:clamp(14px,1.1vw,20px);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 10px #000}
+.uvt.play .uvsh,.uvt.play .uvtag,.uvt.play .uvcap{opacity:1;transform:none}
+@keyframes uvbl{50%{opacity:.3}}
+/* plakatvifte */
+.uvbg{position:absolute;inset:-10%;background:center/cover no-repeat;filter:blur(22px) brightness(.45) saturate(1.3);transition:background-image .8s}
+.uvfan{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;perspective:900px}
+.uvfan img{height:84%;aspect-ratio:2/3;object-fit:cover;border-radius:9px;margin:0 -2.2%;box-shadow:0 14px 34px -8px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.12);
+  transform:translateX(calc(var(--i)*4%)) rotateY(calc(var(--i)*-14deg)) scale(calc(1 - (var(--i)*var(--i))*.07));z-index:calc(10 - var(--i)*var(--i));filter:brightness(calc(1 - (var(--i)*var(--i))*.12));transition:opacity .35s,transform .6s}
+.uvfan img.sw{opacity:0}
+.uvt:hover .uvfan img,.uvt:focus .uvfan img{transform:translateX(calc(var(--i)*9%)) rotateY(calc(var(--i)*-10deg)) scale(calc(1.03 - (var(--i)*var(--i))*.06))}
+.uvt.play .uvfan,.uvt.play .uvbg{opacity:0;transition:opacity .9s}
+.uvemp{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.25)}.uvemp svg{width:30%;max-width:90px}
+/* TV */
+.uvtvbg{position:absolute;inset:0;background:radial-gradient(90% 90% at 50% 0%,#17306a,#0a0f24 70%)}
+.uvch{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:7%;padding:9% 7% 8%}
+.uvch span{display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.92);padding:10%;font:800 11px/1.1 system-ui;color:#111;text-align:center;box-shadow:0 8px 20px -8px #000;animation:uvpop .7s calc(var(--d)*.07s) both}
+.uvch img{max-width:100%;max-height:100%;object-fit:contain}
+@keyframes uvpop{from{opacity:0;transform:translateY(8px) scale(.94)}}
+.uvlive{position:absolute;left:10px;bottom:9px;z-index:5;display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.6);font:800 10.5px/1 system-ui;letter-spacing:.12em;color:#fff}
+.uvlive i{width:7px;height:7px;border-radius:50%;background:#ff3b5c;animation:uvbl 1.4s infinite}.uvlive em{font-style:normal}
+/* Sport */
+.uvspbg{position:absolute;inset:0}.uvspbg svg{width:100%;height:100%;display:block;animation:uvkb 30s ease-in-out infinite alternate}
+@keyframes uvkb{to{transform:scale(1.12) translateY(-2%)}}
+.uvnext{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;flex-direction:column;align-items:center;gap:5px;padding:24px 10px 11px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);text-align:center}
+.uvnext:empty{display:none}
+.uvnext small{font:800 10.5px/1 system-ui;letter-spacing:.16em;color:#9ff0c6;display:flex;align-items:center;gap:6px}
+.uvnext div{display:flex;align-items:center;gap:9px;font-size:clamp(13px,1.05vw,19px);color:#fff}.uvnext div img{width:1.7em;height:1.7em;object-fit:contain}
+.uvnext em{font-style:normal;font-weight:800;opacity:.8}.uvnext span{font-size:12px;color:#c8d0e4;text-transform:capitalize}
+.lv{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3b5c;box-shadow:0 0 10px #ff3b5c;animation:uvbl 1.2s infinite;margin-right:2px}
+.uvt.play .uvnext{opacity:0}
+/* Apper */
+.uvap{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:6%;padding:8% 6%;background:radial-gradient(100% 100% at 50% 0%,#2a1858,#0c0a1e 75%)}
+.uvap span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:12px;background:var(--f);box-shadow:0 10px 24px -10px #000,inset 0 0 0 1px rgba(255,255,255,.1)}
+.uvap b{font:900 clamp(14px,1.4vw,26px)/1 system-ui;color:var(--c);letter-spacing:-.02em}
+.uvap small{font-size:clamp(8px,.62vw,11px);color:rgba(255,255,255,.75);white-space:nowrap}
+.uvap span:nth-child(4) small,.uvap span:nth-child(5) small{color:#555}
+/* Kamera */
+.uvcam{position:absolute;inset:0;background:radial-gradient(90% 90% at 50% 0%,#0d3a46,#06121a 75%)}
+.uvcam img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s;z-index:1}.uvcam img.on{opacity:1}
+/* hurtigknapper og bunnlinje */
+.uvq{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw}
+.uvb{display:flex!important;align-items:center;gap:12px;height:clamp(46px,6vh,62px);padding:0 20px!important;border-radius:14px!important;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03))!important;border:1px solid var(--uv-line)!important;color:#fff!important;font:800 clamp(13px,1vw,17px)/1 system-ui!important;letter-spacing:.08em;text-transform:uppercase;transition:.22s}
+.uvb span{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.1)}.uvb span svg{width:20px;height:20px}
+.uvb:hover,.uvb:focus{background:rgba(255,255,255,.16)!important;border-color:#fff!important;transform:translateY(-2px)}
+body.tv .uvb:focus,html.tvm .uvb:focus{outline:none!important;background:#fff!important;color:#0b0c18!important;transform:none!important;box-shadow:none!important}
+body.tv .uvb:focus span,html.tvm .uvb:focus span{background:rgba(0,0,0,.08)}
+.uvf{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:#9aa3bd;padding:0 4px}
+.uvf b{color:#e6e9f4;font-weight:700}.uvwarn{color:#ffb74a;font-weight:700}.uvdot{margin:0 8px;opacity:.5}
+.uvwel{margin:auto;text-align:center;max-width:640px}
+@media (max-width:860px){
+ .uv{height:auto;min-height:0;padding:14px 12px 90px}
+ .uvg{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:minmax(150px,26vh);gap:12px}
+ .uvq{grid-template-columns:1fr;gap:8px}.uvf{flex-direction:column;align-items:flex-start;gap:4px}
+ .uvh{font-size:15px;letter-spacing:.12em}.uvgo{display:none}
+}
+/* ---- Sport: trailer-hero ---- */
+.sph{position:relative;margin:18px 0 8px;height:clamp(300px,46vh,520px);border-radius:22px;overflow:hidden;border:1px solid var(--uv-line);background:#05140f;box-shadow:0 30px 80px -30px #000}
+.sph-bg{position:absolute;inset:0}.sph-bg svg{width:100%;height:100%;display:block;animation:uvkb 30s ease-in-out infinite alternate}
+.sph-v{z-index:1}
+.sph-g{position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(4,6,14,.92) 0%,rgba(4,6,14,.55) 45%,transparent 75%),linear-gradient(0deg,rgba(4,6,14,.8),transparent 40%);pointer-events:none}
+.sph-in{position:absolute;z-index:3;left:4%;bottom:9%;max-width:min(620px,60%);display:flex;flex-direction:column;gap:12px}
+.sph-in h1{margin:0;font:900 clamp(40px,5vw,84px)/.95 var(--ff,system-ui);letter-spacing:-.02em}
+.sph-eye{display:flex;align-items:center;gap:8px;font:800 12px/1 system-ui;letter-spacing:.16em;text-transform:uppercase;color:#a6f3cd}
+.sph-eye i{width:8px;height:8px;border-radius:50%;background:#ff3b5c;opacity:0}.sph.play .sph-eye i{opacity:1;animation:uvbl 1.4s infinite}
+.sph-next{display:flex;flex-direction:column;gap:3px;padding:12px 16px;border-radius:14px;background:rgba(0,0,0,.45);border:1px solid var(--uv-line);backdrop-filter:blur(8px)}
+.sph-next:empty{display:none}.sph-next span{font:700 11px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9aa3bd}.sph-next b{font-size:clamp(17px,1.5vw,24px)}.sph-next small{color:#cfd5e6}
+.lvb{background:#ff3b5c;color:#fff;padding:2px 7px;border-radius:5px;letter-spacing:.1em}
+.sph-btn{display:flex;gap:10px;flex-wrap:wrap}
+.sph-t{margin:26px 0 14px!important;font-size:clamp(20px,1.6vw,28px)!important}
+@media (max-width:860px){.sph{height:360px}.sph-in{max-width:none;right:4%}}
+/* ---- Fotball: kampsenter ---- */
+.fbp{padding-top:16px}
+.fbp-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.fbp-top h1{display:flex;align-items:center;gap:12px;margin:0!important;font-size:clamp(28px,2.4vw,40px)!important;font-weight:900!important}
+.fbp-ic{display:inline-grid;width:1em;height:1em;color:#5be3a0}.fbp-ic svg{width:100%;height:100%}
+.fbp-sp{flex:1}
+.fbp-livebtn{display:flex!important;align-items:center;gap:8px;border-radius:999px!important;background:rgba(255,59,92,.16)!important;border:1px solid rgba(255,59,92,.5)!important;color:#fff!important;font-weight:700}
+.fbp-livebtn i{width:8px;height:8px;border-radius:50%;background:#ff3b5c;animation:uvbl 1.2s infinite}
+.fbp-hero{position:relative;border-radius:24px;overflow:hidden;min-height:clamp(300px,40vh,440px);border:1px solid var(--uv-line);box-shadow:0 30px 80px -30px #000;background:#061a12}
+.fbp-bg{position:absolute;inset:0}.fbp-bg svg{width:100%;height:100%;display:block;filter:saturate(1.1) brightness(.75);animation:uvkb 40s ease-in-out infinite alternate}
+.fbp-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 40%,rgba(5,10,20,.35),rgba(5,8,16,.88) 75%),linear-gradient(90deg,rgba(200,16,46,.28),transparent 35%,transparent 65%,rgba(40,120,255,.18));pointer-events:none}
+.fbp-hero.live{box-shadow:0 0 0 2px rgba(255,59,92,.7),0 30px 80px -30px #000}
+.fbp-heroin{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2vh,22px);padding:clamp(20px,3.4vh,40px) 4%}
+.fbp-comp{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;font:700 13px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;color:#d5dbea}
+.fbp-comp>span{padding:7px 12px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid var(--uv-line)}.fbp-lg{color:#9ff0c6}
+.fbp-livep{display:flex;align-items:center;gap:7px;background:#ff3b5c!important;border-color:#ff3b5c!important;color:#fff}.fbp-livep i{width:7px;height:7px;border-radius:50%;background:#fff;animation:uvbl 1.2s infinite}
+.fbp-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(14px,4vw,70px);width:100%;max-width:1000px}
+.fbp-team{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.fbp-team b{font:900 clamp(18px,2vw,32px)/1.1 var(--ff,system-ui)}.fbp-team small{color:#9aa3bd;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.fbp-team.br b{color:#ff5a6e}
+.fbp-cr{width:clamp(70px,8vw,128px);height:clamp(70px,8vw,128px);object-fit:contain;filter:drop-shadow(0 12px 24px rgba(0,0,0,.7))}
+.fbp-ph{display:inline-grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);font:800 12px system-ui;color:#fff}
+span.fbp-cr{font-size:clamp(18px,2vw,28px)}
+.fbp-mid{display:flex;flex-direction:column;align-items:center;gap:4px}
+.fbp-mid small{font:700 12px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9aa3bd}
+.fbp-ko{font:900 clamp(40px,5vw,78px)/1 var(--ff,system-ui);font-variant-numeric:tabular-nums}
+.fbp-score{display:flex;gap:16px;align-items:center;font:900 clamp(44px,5.5vw,86px)/1 var(--ff,system-ui)}.fbp-score i{font-style:normal;opacity:.5}
+.fbp-cd{display:flex;gap:10px}
+.fbp-cd div{display:flex;flex-direction:column;align-items:center;min-width:clamp(58px,5vw,82px);padding:10px 6px;border-radius:14px;background:rgba(0,0,0,.5);border:1px solid var(--uv-line);backdrop-filter:blur(6px)}
+.fbp-cd b{font:800 clamp(22px,2.2vw,36px)/1 system-ui;font-variant-numeric:tabular-nums}.fbp-cd small{font-size:11px;color:#9aa3bd;margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
+.fbp-cd.ko{display:none}
+.fbp-act{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.fbp-none{display:flex;flex-direction:column;align-items:center;gap:6px;padding:60px 0;text-align:center}.fbp-none b{font-size:22px}
+.fbp-sec{margin:24px 0 6px}
+.fbp-sh{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}.fbp-sh h3{margin:0;font-size:clamp(18px,1.4vw,24px);font-weight:800;display:flex;align-items:center;gap:10px}.fbp-sh small{color:#8d95a9;margin-left:auto}
+.fbp-dot{width:10px;height:10px;border-radius:50%;background:#e4002b;box-shadow:0 0 12px #e4002b}
+.fbp-strip{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.fbp-sc{flex:none;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:6px 12px;align-items:center;width:clamp(230px,18vw,290px);padding:12px;border-radius:16px;cursor:pointer;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--uv-line);transition:.2s;outline:none}
+.fbp-sc:hover,.fbp-sc:focus{border-color:#fff;transform:translateY(-3px);box-shadow:0 0 0 2px #fff}
+body.tv .fbp-sc:focus,html.tvm .fbp-sc:focus{transform:translateY(-3px)!important;outline:none!important;box-shadow:0 0 0 3px #fff!important}
+.fbp-dt{grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:58px;border-radius:12px;background:#c8102e;color:#fff}
+.fbp-dt b{font:900 22px/1 system-ui}.fbp-dt small{font-size:11px;text-transform:uppercase;color:#ffd8de;letter-spacing:.08em}
+.fbp-sct{display:flex;align-items:center;gap:8px;min-width:0}.fbp-sct span{display:flex;flex-direction:column;min-width:0}.fbp-sct b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fbp-sct small{color:#8d95a9;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fbp-sm{width:30px;height:30px;object-fit:contain;flex:none}span.fbp-sm{width:30px;height:30px;font-size:9px}
+.fbp-sctm{font-size:12.5px;color:#cfd5e6;font-variant-numeric:tabular-nums;text-transform:capitalize}
+.fbp-tabs{display:flex;gap:8px;overflow-x:auto;padding:16px 2px 12px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#07081a 70%,transparent)}
+.fbp-tab{flex:none;display:flex!important;align-items:center;gap:8px;border-radius:999px!important;padding:7px 14px 7px 7px!important;background:rgba(255,255,255,.06)!important;border:1px solid var(--uv-line)!important;font-weight:700;color:#cdd3e4!important;white-space:nowrap}
+.fbp-tab i{font:900 10px/1 system-ui;font-style:normal;padding:6px 6px;border-radius:999px;background:var(--c);color:#fff;min-width:28px;text-align:center}
+.fbp-tab.on{background:#fff!important;color:#0a0c18!important;border-color:#fff!important}
+body.tv .fbp-tab:focus,html.tvm .fbp-tab:focus{outline:3px solid #fff!important;outline-offset:2px}
+.fbp-cols{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
+.fbp-card{padding:16px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--uv-line)}
+.fbp-fx{max-height:640px;overflow:auto;scrollbar-width:thin;padding-right:4px}
+.fbp-day{position:sticky;top:0;z-index:1;padding:10px 4px 6px;font:800 12px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;color:#8ea0c8;background:#0e1022}
+.fbp-row{display:grid;grid-template-columns:62px minmax(0,1fr) 54px minmax(0,1fr) 28px;align-items:center;gap:8px;padding:10px 8px;border-radius:12px;cursor:pointer;outline:none;transition:.15s;border:1px solid transparent}
+.fbp-row:hover,.fbp-row:focus{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:none!important;background:#fff!important;color:#0b0c18!important}
+.fbp-row.br{background:rgba(200,16,46,.14);border-color:rgba(200,16,46,.35)}
+.fbp-tm{font-weight:800;font-variant-numeric:tabular-nums;color:#cfd5e6;display:flex;align-items:center;gap:4px}.fbp-row.live .fbp-tm{color:#ff6b80}
+.fbp-h,.fbp-a{display:flex;align-items:center;gap:8px;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fbp-h{justify-content:flex-end;text-align:right}
+.fbp-xs{width:24px;height:24px;object-fit:contain;flex:none}span.fbp-xs{font-size:8px}
+.fbp-x{text-align:center;font-weight:800;color:#8d95a9}.fbp-row.live .fbp-x{color:#fff}
+.fbp-go{opacity:.35;text-align:center}.fbp-row:hover .fbp-go,.fbp-row:focus .fbp-go{opacity:1}
+.fbp-more{width:100%;margin-top:10px}
+.fbp-tw{max-height:640px;overflow:auto;scrollbar-width:thin}
+.fbp-tbl{width:100%;border-collapse:separate;border-spacing:0 3px;font-variant-numeric:tabular-nums}
+.fbp-tbl th{position:sticky;top:0;z-index:1;background:#0e1022;font:800 11px/1 system-ui;letter-spacing:.1em;color:#8ea0c8;text-transform:uppercase;padding:9px 6px;text-align:center}
+.fbp-tbl td{padding:8px 6px;text-align:center;background:rgba(255,255,255,.035);color:#d5dbea}
+.fbp-tbl td:first-child{border-radius:10px 0 0 10px;box-shadow:inset 4px 0 0 var(--z)}.fbp-tbl td:last-child{border-radius:0 10px 10px 0}
+.fbp-tbl td i{font-style:normal;font-weight:800}
+.fbp-tbl .l{text-align:left}.fbp-tn{display:flex;align-items:center;gap:9px;font-weight:700;color:#fff}.fbp-tn img{width:22px;height:22px;object-fit:contain}
+.fbp-tbl td b{color:#fff;font-size:1.05em}
+.fbp-tbl tr.me td{background:rgba(200,16,46,.28);color:#fff}.fbp-tbl tr.me .fbp-tn span{color:#ff8394}
+.fbp-leg{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:12px;color:#9aa3bd}.fbp-leg span{display:flex;align-items:center;gap:6px}.fbp-leg i{width:12px;height:12px;border-radius:3px}.fbp-leg i.me{background:rgba(200,16,46,.6)}
+.fbp-emp{padding:30px 10px;text-align:center;color:#8d95a9}
+#fbpCh{margin-top:22px}
+@media (max-width:1000px){.fbp-cols{grid-template-columns:1fr}.fbp-fx,.fbp-tw{max-height:none}}
+@media (max-width:600px){.fbp-vs{gap:10px}.fbp-cd div{min-width:52px}.fbp-row{grid-template-columns:48px minmax(0,1fr) 34px minmax(0,1fr) 0}.fbp-go{display:none}.fbp-tbl th:nth-child(4),.fbp-tbl td:nth-child(4),.fbp-tbl th:nth-child(5),.fbp-tbl td:nth-child(5),.fbp-tbl th:nth-child(6),.fbp-tbl td:nth-child(6){display:none}}
+html.lite .uvt,html.lite .sph-next,html.lite .fbp-cd div{backdrop-filter:none!important}
+</style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
 <script>(function(){try{var d=document.documentElement,L=localStorage.getItem('lite');var on=L==='1'||(L!=='0'&&!!window.IPTV_DESKTOP);if(on)d.classList.add('lite');window.LITE=on}catch(e){}})()</script>
@@ -1354,26 +1555,28 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
 <canvas id="embers"></canvas>
 <header>
   <div class="brand" id="brand"><svg class="logo" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lgb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1f6e"/><stop offset="1" stop-color="#0a0b18"/></linearGradient><linearGradient id="lga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b3a6ff"/><stop offset="1" stop-color="#4fd0ff"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#lgb)"/><g transform="rotate(-24 256 262)"><ellipse cx="256" cy="262" rx="200" ry="64" fill="none" stroke="url(#lga)" stroke-width="12" opacity=".55"/></g><g fill="#fff"><rect x="150" y="132" width="62" height="248" rx="18"/><rect x="150" y="132" width="212" height="56" rx="18"/><rect x="150" y="224" width="170" height="56" rx="18"/><rect x="150" y="324" width="212" height="56" rx="18"/></g><g transform="rotate(-24 256 262)"><path d="M56 262A200 64 0 0 0 456 262" fill="none" stroke="url(#lga)" stroke-width="15" stroke-linecap="round"/></g><circle cx="439" cy="181" r="26" fill="#bdeeff"/></svg><b>ESKEDALS <span>UNIVERS</span></b></div>
+  <span id="clock"></span>
   <nav id="nav">
     <button data-v="home">Hjem</button>
-    <button data-v="movies">Filmer</button>
     <button data-v="series">Serier</button>
-    <button data-v="live">Direkte TV</button>
+    <button data-v="live">TV</button>
+    <button data-v="movies">Filmer</button>
     <button data-v="fotball">Sport</button>
-    <button data-v="apps" class="sec">Apper</button>
-    <button data-v="cams" class="sec">IP-kamera</button>
-    <button data-v="fav" class="sec">Favoritter</button>
-    <button data-v="settings" class="sec">Innstillinger</button>
+    <button data-v="apps">Apper</button>
+    <button data-v="cams">IP-kamera</button>
   </nav>
   <span id="moreWrap"><button id="moreBtn">Mer ▾</button><div id="moreMenu"></div></span>
   <span class="sp"></span>
-  <button id="tvSearch" class="bpill">🔍 Søk</button>
+  <button id="tvSearch" class="bpill hic" title="Søk (F4)" aria-label="Søk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Søk</span></button>
   <input id="gq" type="search" placeholder="Søk …  ( / )" autocomplete="off">
   <button class="bpill" id="bBrann"><img class="skb" onerror="this.replaceWith(document.createTextNode('🔥'))" src="https://a.espncdn.com/i/teamlogos/soccer/500/620.png" alt=""> Brann</button>
   <select id="prof" title="Bruker"></select>
+  <button class="hic" id="bNew" title="Nye episoder" aria-label="Nye episoder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><i id="bNewN" hidden></i></button>
+  <button class="hic" id="bFav" title="Favoritter" aria-label="Favoritter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg></button>
+  <button class="hic" id="bSet" title="Innstillinger" aria-label="Innstillinger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  <button class="hic huser" id="bUser" title="Bytt bruker" aria-label="Bruker"><span class="hav" id="bUserA">?</span><span id="bUserN"></span></button>
   <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bRl" title="Last appen på nytt (henter ny versjon)" aria-label="Last på nytt" onclick="location.reload()">⟳</button>
   <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bFs" title="Fullskjerm (F11)" aria-label="Fullskjerm">⛶</button>
-  <span id="clock"></span>
 </header>
 
 <div id="views">
@@ -1651,6 +1854,7 @@ function oskAsk(title,init){return new Promise(res=>{const d=$('dlgOsk'),inp=$('
   d.onclose=()=>fin(null);
   d.showModal();setTimeout(()=>{const b=d.querySelector('[data-kk="q"]');if(b)b.focus()},30)})}
 function renderProfiles(){
+  try{const me=profiles.find(p=>p.id===pid)||profiles[0];$('bUserN').textContent=me?me.name:'';$('bUserA').textContent=me?(me.name||'?').charAt(0).toUpperCase():'?';const f=document.getElementById('uvUser');if(f)f.textContent=me?me.name:''}catch(e){}
   $('prof').innerHTML=profiles.map(p=>`<option value="${p.id}" ${p.id===pid?'selected':''}>${esc(p.name)}</option>`).join('');
   const col=n=>['#7c5cff','#e5486e','#1fa37a','#e08a1e','#2f86d9','#b04fd6'][[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%6];
   $('profList').innerHTML=profiles.map(p=>`<button type="button" class="pcard${p.id===pid?' on':''}" data-pick="${p.id}"><span class="pav" style="background:${col(p.name)}">${esc((p.name||'?').charAt(0).toUpperCase())}</span><b>${esc(p.name)}</b><small>${p.id===pid?'Aktiv nå':'Bytt til'}</small></button>`).join('')+`<button type="button" class="pcard add" data-addp="1"><span class="pav">＋</span><b>Ny bruker</b><small>Legg til</small></button>`;
@@ -2712,22 +2916,7 @@ function tonightList(f){
 function profStrip(){if(!profiles||profiles.length<2)return '';
   return `<div class="pstrip" role="group" aria-label="Velg bruker"><span class="pst-l">👤 Hvem ser?</span>${profiles.map(p=>`<button class="pst${p.id===pid?' on':''}" data-prof="${p.id}">${esc(p.name)}</button>`).join('')}</div>`}
 (()=>{const hv=document.getElementById('v-home');if(!hv)return;hv.addEventListener('click',e=>{const b=e.target.closest('[data-prof]');if(!b)return;const id=b.getAttribute('data-prof');if(id&&id!==pid){switchProfile(id)}})})();
-function renderHome(){
-  const el=$('v-home');
-  if(!S){el.innerHTML=`<h1>Velkommen til <em>Eskedals Univers</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button> <button data-act="fsopen">🔄 Hent alt med synk-kode</button>`;return}
-  const first0=cinEpItems();const first=first0.length?first0:[{t:'welcome',key:'w'}];
-  el.innerHTML=profStrip()+cinemaHtml(first)+(newEpRail()?`<div class="hrails nobb">${newEpRail()}</div>`:'');
-  startCinema(first);
-  cinLoad().then(items=>{
-    if(curView!=='home'||!$('cin'))return;
-    let all=items;
-    if(!all.length){const vod=DB.vod.filter(fvis),ser=DB.ser.filter(fvis);all=vod.concat(ser).filter(c=>c.logo&&c.ad&&c.ad>Date.now()/1000-21*86400).sort(byNew).slice(0,4)}
-    if(!all.length)all=first0.length?first0:[{t:'welcome',key:'w'}];
-    if(all.length===1&&all[0].t==='welcome'){return}
-    const old=$('cin'),tmp=document.createElement('div');tmp.innerHTML=cinemaHtml(all,true);
-    old.replaceWith(tmp.firstElementChild);startCinema(all);
-  }).catch(()=>{});
-}
+function renderHome(){uvHome()}
 /* ===================== Kinosal ===================== */
 const WXI=c=>c===0?'☀️':c<=2?'🌤️':c===3?'☁️':c<=48?'🌫️':c<=57?'🌦️':c<=67?'🌧️':c<=77?'🌨️':c<=82?'🌦️':c<=86?'🌨️':'⛈️';
 let cinTimer=0,cinClock=0,cinIdx=0,cinPv=0,cinAuto=0,cinAmbT=0;const cinInfoC=window.__cinI={},cinAmb={},cinBad={};
@@ -3229,8 +3418,10 @@ const spName=id=>{const x=SPORTS.find(z=>z.id===id);if(x)return x.n;if(id==='bra
 function renderFotball(){
   const el=$('v-fotball');
   if(!S){el.innerHTML='<h1>Sport</h1><div class="empty">Legg til en kilde først.</div>';return}
+  try{uvStop()}catch(e){}
+  if(spOpen==='fotball'||spOpen==='brann')return fbPro(el);
   if(spOpen)return renderSportDetail(el);
-  el.innerHTML=`<section class="shero shero2">${STAD}<h1>Sport</h1><p class="sub">Velg sport.</p></section>${spHub()}`;
+  el.innerHTML=sphHtml()+`<h2 class="sph-t">Velg sport</h2>${spHub()}`;sphStart();
 }
 const SPSTAND={hockey:'hockey/nhl',motor:'racing/f1'};
 const SPFEED={mma:[['UFC','mma/ufc']],hockey:[['NHL','hockey/nhl']],motor:[['Formel 1','racing/f1']],tennis:[['ATP','tennis/atp'],['WTA','tennis/wta']],golf:[['PGA Tour','golf/pga']]};
@@ -3864,7 +4055,7 @@ function renderVodShell(kind){
 }
 const ytId=v=>{v=String(v||'').trim();if(!v)return '';const m=/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/.exec(v);if(m)return m[1];return /^[\w-]{11}$/.test(v)?v:''};
 let bbTimer=0,bbIdx=0,bbTr=0;const trCache={};
-function stopSlider(){try{stopCinema()}catch(e){}clearInterval(bbTimer);clearTimeout(bbTr);bbTimer=0;const el=document.getElementById('bbx');if(el)el.querySelectorAll('.bbv').forEach(x=>{x.innerHTML='';x.classList.remove('on')})}
+function stopSlider(){try{stopCinema()}catch(e){}try{uvStop()}catch(e){}clearInterval(bbTimer);clearTimeout(bbTr);bbTimer=0;const el=document.getElementById('bbx');if(el)el.querySelectorAll('.bbv').forEach(x=>{x.innerHTML='';x.classList.remove('on')})}
 function sliderHtml(items,kind){
   if(!items.length)return '';
   return `<section class="bb" id="bbx">${items.map((c,i)=>{const sv=SERV.find(x=>x.id===c.sv);return `<div class="bbs ${i?'':'on'}" data-k="${c.key}"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbv"></div><div class="bbin"><span class="eyebrow">${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(c.nm||c.name)}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost bbtr" hidden>🎞 Trailer</button><button class="ghost bbsnd" hidden>🔊 Lyd</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></div>`}).join('')}<div class="bbd">${items.map((_,i)=>`<i class="${i?'':'on'}" data-d="${i}"></i>`).join('')}</div></section>`;
@@ -3878,17 +4069,17 @@ function startSlider(){
     const v=sl.querySelector('.bbv');
     v.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=${mute?1:0}&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${id}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
     v.classList.add('on');sl.querySelector('.bbsnd').hidden=false;sl.querySelector('.bbimg').style.opacity='.2';
-    bbTr=setTimeout(()=>{v.innerHTML='';v.classList.remove('on');sl.querySelector('.bbimg').style.opacity='';tick()},50000);
+    bbTr=setTimeout(()=>{show(bbIdx+1);tick()},mute?45000:150000);
   };
   const prep=async sl=>{
-    const c=byKey.get(sl.dataset.k);if(TVM||!c||!c.xt)return;
+    const c=byKey.get(sl.dataset.k);if(!c||!c.xt)return;
     let id=trCache[c.key];
     if(id===undefined){try{const j=await xapi(c.xt,c.t==='vod'?'get_vod_info':'get_series_info',(c.t==='vod'?'&vod_id=':'&series_id=')+c.id);const i=(j&&j.info)||{};id=ytId(i.youtube_trailer||i.trailer||'')}catch(e){id=''}trCache[c.key]=id}
     if(!id||!sl.classList.contains('on'))return;
     sl.querySelector('.bbtr').hidden=false;
     sl.querySelector('.bbtr').onclick=()=>playTr(sl,id,true);
     sl.querySelector('.bbsnd').onclick=()=>playTr(sl,id,false);
-    clearTimeout(bbTr);bbTr=setTimeout(()=>{if(sl.classList.contains('on'))playTr(sl,id,true)},2200);
+    clearTimeout(bbTr);bbTr=setTimeout(()=>{if(sl.classList.contains('on'))playTr(sl,id,true)},1200);
   };
   function show(i){
     clearTimeout(bbTr);bbIdx=(i+slides.length)%slides.length;
@@ -3906,7 +4097,7 @@ function bbHtml(c,kind){
 const top10Rail=(items,title)=>items.length?`<section class="rail"><div class="rh"><h3>${rtl(title||'Topp 10 akkurat nå')}</h3></div><div class="rs">${items.map((c,i)=>`<div class="pc t10 ${i>8?'w2':''}" data-k="${c.key}" tabindex="0"><span class="num">${i+1}</span><div class="pimg"><div class="pfb">${esc(c.nm||c.name)}</div><img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""></div></div>`).join('')}</div>${NAVB}</section>`:'';
 function vodSlider(kind){
   const arr=DB[kind].filter(fvis);
-  const sl=arr.filter(c=>c.logo&&c.rt>=6.5).sort(byNew).slice(0,6);
+  const sl=arr.filter(c=>c.logo&&c.rt>=6.5&&!c.kid).sort(byNew).slice(0,10);
   const f=sl.length?null:arr.filter(c=>c.logo).sort(byNew)[0];
   return sliderHtml(sl.length?sl:(f?[f]:[]),kind);
 }
@@ -4201,7 +4392,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&$('ov').classList.contains('on')){closePlayer();return}
   if(e.key==='Enter'&&document.activeElement.dataset&&(document.activeElement.dataset.k||document.activeElement.dataset.go||document.activeElement.dataset.h||document.activeElement.dataset.find)){document.activeElement.click();return}
   if(/INPUT|SELECT|TEXTAREA/.test(tag))return;
-  if(e.key==='/'){e.preventDefault();$('gq').focus();return}
+  if(e.key==='/'){e.preventDefault();$('tvSearch').click();return}
   if(curView==='live'&&!TVM){
     if(e.key==='ArrowUp'||e.key==='PageUp'){zap(-1);e.preventDefault()}
     if(e.key==='ArrowDown'||e.key==='PageDown'){zap(1);e.preventDefault()}
@@ -4525,7 +4716,7 @@ function tvMove(dir){
   }
   if(root===document.body&&curView==='home'&&!cur.closest('header')&&cur.closest('.cin')&&(dir==='ArrowUp'||dir==='ArrowDown')){
     if(dir==='ArrowUp'){const n=document.querySelector('#nav button.on');if(n){n.focus({preventScroll:true});return}}
-    if(dir==='ArrowDown'){const pc=document.querySelector('#v-home .pc');if(pc){pc.focus({preventScroll:true});pc.scrollIntoView({block:'nearest'})}return}}
+    if(dir==='ArrowDown'){const pc=document.querySelector('#v-home .uvt')||document.querySelector('#v-home .pc');if(pc){pc.focus({preventScroll:true});pc.scrollIntoView({block:'nearest'})}return}}
   if(root===document.body&&(dir==='ArrowDown'||dir==='ArrowUp')){
     const inHdr=e=>!!(e&&e.closest&&e.closest('header'));const view=document.querySelector('.view.on');
     if(dir==='ArrowDown'&&inHdr(cur)&&view&&curView==='home'){const pb=[...view.querySelectorAll('button.primary')].find(x=>{const r=x.getBoundingClientRect();return r.width>2&&(!x.checkVisibility||x.checkVisibility({visibilityProperty:true,opacityProperty:true}))});if(pb){pb.focus({preventScroll:true});return}}
@@ -4725,7 +4916,7 @@ $('cTest').onclick=()=>{const c=readCam();const im=$('cPrev');$('cStat').textCon
     if(W){setTimeout(()=>{try{const want=localStorage.getItem('kiosk')!=='0';if(W.isFs()!==want)W.fs(want);upd()}catch(_){}},800)}
     ['keydown','mousedown','touchstart'].forEach(t=>document.addEventListener(t,go,true));try{go()}catch(_){}}
   document.addEventListener('fullscreenchange',upd);upd()})();
-const clk=()=>{$('clock').textContent=new Date().toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();setInterval(clk,15000);
+const clk=()=>{const d=new Date();$('clock').innerHTML='<b>'+d.toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})+'</b><small>'+d.toLocaleDateString('nb-NO',{weekday:'short',day:'numeric',month:'short'}).replace(/\./g,'')+'</small>';const u=document.getElementById('uvClock');if(u)u.textContent=d.toLocaleTimeString('nb-NO',{hour:'2-digit',minute:'2-digit'})};clk();setInterval(clk,10000);
 setTheme(localStorage.getItem('theme')||'brann');
 if(!NATIVE&&'serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 renderProfiles();
@@ -4742,6 +4933,318 @@ async function ytFind(q){
   ];
   for(const f of tries){try{const id=await f();if(id&&/^[\w-]{11}$/.test(id))return id}catch(e){}}
   return null}
+/* ===================== v185: Ny forside (Univers) · trailere · fotball ===================== */
+const UV={tm:[],ctl:null,cyc:0,pi:{movies:0,series:0,sport:0},bad:{},ytBad:0,cur:null,sph:null,sphI:0,sphMute:true};
+const uvT=(f,ms)=>{const t=setTimeout(f,ms);UV.tm.push(t);return t},uvI=(f,ms)=>{const t=setInterval(f,ms);UV.tm.push(t);return t};
+function uvStop(){
+  UV.tm.forEach(t=>{clearTimeout(t);clearInterval(t)});UV.tm=[];
+  if(UV.ctl){try{UV.ctl.kill()}catch(e){}UV.ctl=null}
+  if(UV.sph){try{UV.sph.kill()}catch(e){}UV.sph=null}
+  try{accRelease('uv')}catch(e){}
+  UV.cur=null;document.querySelectorAll('.uvt.play').forEach(t=>t.classList.remove('play'));
+}
+/* dekk hele boksen med en 16:9-video (beskjærer svarte kanter og YouTube-tittel) */
+function uvCover(el,box){const w=box.clientWidth||320,h=box.clientHeight||180;let W=w,H=w*9/16;if(H<h){H=h;W=h*16/9}W*=1.18;H*=1.18;el.style.cssText=`position:absolute;left:50%;top:50%;width:${W|0}px;height:${H|0}px;transform:translate(-50%,-50%);border:0;pointer-events:none`}
+/* YouTube-trailer i en boks. Finner ut når den starter, slutter eller feiler. */
+function uvYT(box,id,o){
+  o=o||{};box.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media" tabindex="-1" title=""></iframe>`;
+  const fr=box.firstChild;uvCover(fr,box);let done=0,started=0,t1=0,t2=0;
+  const off=()=>{done=1;removeEventListener('message',onm);clearTimeout(t1);clearTimeout(t2)};
+  const fin=ok=>{if(done)return;off();const f=ok?o.onEnd:o.onFail;if(f)f()};
+  const send=(f,a)=>{try{fr.contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
+  const onm=ev=>{if(ev.source!==fr.contentWindow)return;let d=ev.data;try{if(typeof d==='string')d=JSON.parse(d)}catch(e){return}
+    if(!d)return;if(d.event==='onError'){fin(false);return}
+    const st=d.info&&d.info.playerState!==undefined?d.info.playerState:(d.event==='onStateChange'?d.info:undefined);
+    if(st===1&&!started){started=1;box.classList.add('on');if(!o.mute&&o.mute!==undefined)send('unMute');if(o.onStart)o.onStart()}
+    if(st===0)fin(true)};
+  addEventListener('message',onm);
+  const hi=()=>{try{fr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*')}catch(e){}};
+  fr.onload=()=>{hi();[500,1400,3000].forEach(t=>setTimeout(()=>{if(!done)hi()},t))};
+  t1=setTimeout(()=>{if(!started)fin(false)},o.wait||11000);
+  t2=setTimeout(()=>fin(true),o.max||48000);
+  return {send,kill:()=>{off();box.innerHTML='';box.classList.remove('on')},mute:m=>send(m?'mute':'unMute')};
+}
+/* reserve: vis et utsnitt av selve filmen/episoden (stum) når YouTube ikke virker */
+function uvStream(box,url,o){
+  const u2=accRewrite(url,'uv');if(!u2){o.onFail&&o.onFail();return null}
+  box.innerHTML='<video muted playsinline></video>';const v=box.firstChild;uvCover(v,box);v.style.objectFit='cover';let done=0;
+  const fin=ok=>{if(done)return;done=1;try{v.pause();v.removeAttribute('src');v.load()}catch(e){}try{accRelease('uv')}catch(e){}const f=ok?o.onEnd:o.onFail;if(f)f()};
+  v.onloadedmetadata=()=>{try{if(isFinite(v.duration)&&v.duration>300)v.currentTime=v.duration*(.15+Math.random()*.3)}catch(e){}v.play().catch(()=>{})};
+  v.onplaying=()=>{box.classList.add('on');o.onStart&&o.onStart()};v.onerror=()=>fin(false);v.onended=()=>fin(true);
+  v.src=px(u2);const t1=setTimeout(()=>{if(!box.classList.contains('on'))fin(false)},12000),t2=setTimeout(()=>fin(true),o.max||30000);
+  return {kill:()=>{clearTimeout(t1);clearTimeout(t2);done=1;try{v.pause();v.removeAttribute('src');v.load()}catch(e){}box.innerHTML='';box.classList.remove('on');try{accRelease('uv')}catch(e){}},mute:m=>{v.muted=m}};
+}
+/* ---- trailer-lager ---- */
+const uvTr=LSget('uvTr',{});let uvTrS=0;
+const uvTrSave=()=>{clearTimeout(uvTrS);uvTrS=setTimeout(()=>{const k=Object.keys(uvTr);if(k.length>600)k.slice(0,k.length-600).forEach(x=>delete uvTr[x]);LSset('uvTr',uvTr)},1500)};
+async function uvTrailer(c){
+  if(uvTr[c.key]!==undefined&&uvTr[c.key]!=='?')return uvTr[c.key];
+  const r=await cinInfo(c).catch(()=>({}));let id=(r&&r.yt)||'';
+  if(!id&&(NATIVE||proxyOn)){try{id=await ytFind(String(c.nm||c.name).replace(/^[A-Z]{2}\s*[-|:]\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').trim()+' '+(c.t==='ser'?'series':'')+' official trailer')||''}catch(e){}}
+  uvTr[c.key]=id;uvTrSave();return id;
+}
+const uvSeed=()=>{const d=new Date();return d.getFullYear()*1000+d.getMonth()*40+d.getDate()+(d.getHours()>>2)};
+const uvShuf=(a,s)=>{a=a.slice();let x=s||1;for(let i=a.length-1;i>0;i--){x=(x*9301+49297)%233280;const j=Math.floor(x/233280*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function uvPool(kind){
+  const now=Date.now()/1000,l=DB[kind].filter(fvis).filter(c=>c.logo&&!c.xtra&&!c.kid&&c.xt);
+  const fresh=l.filter(c=>c.ad>now-75*86400&&(c.rt>=6||!c.rt)).sort(byNew).slice(0,30);
+  const top=l.filter(c=>c.rt>=7).sort(byNew).slice(0,120).sort((a,b)=>b.rt-a.rt).slice(0,30);
+  const seen=new Set(),out=[];for(const c of uvShuf(fresh,uvSeed()).concat(uvShuf(top,uvSeed()+7)))if(!seen.has(c.key)){seen.add(c.key);out.push(c)}
+  return out.length?out:l.sort(byNew).slice(0,20);
+}
+const UV_SPQ=()=>{const m=new Date().getMonth(),w=m>=10||m<=2;
+  const q=[['SK Brann høydepunkter','Brann'],['Eliteserien høydepunkter','Eliteserien'],['UEFA Champions League highlights','Champions League'],['UEFA Europa League highlights','Europa League'],['Premier League highlights','Premier League']];
+  if(w){q.splice(2,0,['langrenn verdenscup høydepunkter','Langrenn']);q.push(['NHL highlights','Ishockey'])}else q.push(['Formula 1 race highlights','Formel 1']);return q};
+async function uvSport(){
+  const c=LSget('uvSp',null);if(c&&c.ids&&c.ids.length&&Date.now()-c.t<10*36e5)return c.ids;
+  const qs=UV_SPQ();const r=await Promise.all(qs.map(([q])=>ytFind(q).catch(()=>null)));
+  const ids=r.map((id,i)=>id?{id,lb:qs[i][1]}:null).filter(Boolean);
+  /* sportsfilmer/-serier fra kilden med trailer */
+  if(ids.length<3){const sv=DB.vod.concat(DB.ser).filter(fvis).filter(x=>x.logo&&/sport|fotball|football|soccer|f1|formula|ski|ufc|boxing/i.test((x.cat||'')+' '+(x.name||''))).sort(byNew).slice(0,8);
+    for(const x of sv){const id=await uvTrailer(x).catch(()=>'');if(id)ids.push({id,lb:x.nm||x.name});if(ids.length>=5)break}}
+  if(ids.length)LSset('uvSp',{t:Date.now(),ids});
+  return ids.length?ids:((c&&c.ids)||[]);
+}
+/* ---- forsiden ---- */
+const UV_APPS=[['N','Netflix','#e50914','#000'],['2','TV 2 Play','#ff2e3a','#2a0306'],['D+','Disney+','#2c6bff','#05103a'],['VG','VGTV','#e3131b','#fff'],['▶','YouTube','#ff0033','#fff'],['NRK','NRK TV','#00b9f2','#061c27'],['V','Viaplay','#ff2f5b','#1b0a2e'],['max','HBO Max','#5a2dff','#0b0626']];
+const UVI={
+ ser:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M7 2l5 4 5-4"/></svg>',
+ tv:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"/></svg>',
+ film:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M7 3v18M17 3v18M2 8h5M2 13h5M2 18h5M17 8h5M17 13h5M17 18h5"/></svg>',
+ sport:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 7l4.5 3.3-1.7 5.2H9.2l-1.7-5.2z"/><path d="M12 7V2M16.5 10.3l4.6-1.6M14.8 15.5l2.9 4M9.2 15.5l-2.9 4M7.5 10.3L2.9 8.7"/></svg>',
+ apps:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>',
+ cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>',
+ guide:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16M12 13h6M12 16h4"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg>',
+ play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z" fill="currentColor"/></svg>',
+ fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2c.8 4 5.5 6.2 5.5 12.2a5.5 5.5 0 0 1-11 0c0-3 2-4.6 3.2-7 1.1 2 1.6 2.8 2.3 3.1.8-2.3 0-5.4 0-8.3z"/></svg>'
+};
+function uvTile(go,cls,title,ic,media,sub){
+  return `<div class="uvt ${cls}" tabindex="0" data-go="${go}" data-uvk="${cls}"><div class="uvh"><span class="uvi">${ic}</span>${title}</div><div class="uvm">${media}<div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i>TRAILER</span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Åpne ›</span></div></div>`;
+}
+function uvFan(kind){
+  const p=uvPool(kind).slice(0,5);if(!p.length)return `<div class="uvemp">${kind==='vod'?UVI.film:UVI.ser}</div>`;
+  return `<div class="uvbg" style="background-image:url('${esc(p[0].logo)}')"></div><div class="uvfan">${p.map((c,i)=>`<img src="${esc(c.logo)}" alt="" loading="lazy" decoding="async" style="--i:${i-Math.floor(p.length/2)}" onerror="this.remove()">`).join('')}</div>`;
+}
+function uvTVMedia(){
+  const L=DB.live.filter(c=>fvis(c)&&c.logo&&!c.reg&&!c.dup);
+  const last=hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&c.logo&&fvis(c));
+  const fav=L.filter(isFav),no=L.filter(c=>c.no).sort((a,b)=>noRank(a)-noRank(b));
+  const seen=new Set(),pick=[];for(const c of last.concat(fav,no,L)){if(seen.has(c.key))continue;seen.add(c.key);pick.push(c);if(pick.length>=8)break}
+  return `<div class="uvtvbg"></div><div class="uvch">${pick.map((c,i)=>`<span style="--d:${i}"><img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.parentNode.textContent='${esc(String(c.nm||c.name).slice(0,12)).replace(/'/g,'')}'"></span>`).join('')}</div><span class="uvlive"><i></i>DIREKTE</span>`;
+}
+function uvSportMedia(){return `<div class="uvspbg">${SCENE.fotball||''}</div><div class="uvnext" id="uvNext"></div>`}
+function uvAppsMedia(){return `<div class="uvap">${UV_APPS.map(([l,n,c,f])=>`<span style="--c:${c};--f:${f}"><b>${l}</b><small>${n}</small></span>`).join('')}</div>`}
+function uvCamMedia(){return `<div class="uvcam"><img id="uvCamI" alt=""><div class="uvemp">${UVI.cam}</div></div><span class="uvlive" id="uvCamL" hidden><i></i><em>LIVE</em></span>`}
+function uvHome(){
+  uvStop();
+  const el=$('v-home');el.classList.add('uvhome');
+  if(!S){el.innerHTML=`<div class="uv"><div class="uvwel"><h1>Velkommen til <em>Eskedals Univers</em></h1><p class="sub">Legg inn kilden din for å komme i gang.</p><button class="primary" data-act="src">📡 Legg til kilde</button> <button data-act="fsopen">🔄 Hent alt med synk-kode</button></div></div>`;return}
+  const nf=n=>n.toLocaleString('nb-NO'),now=Date.now()/1000;
+  const nV=DB.vod.filter(fvis).length,nS=DB.ser.filter(fvis).length,nL=DB.live.filter(c=>fvis(c)&&!c.dup).length;
+  const wkV=DB.vod.filter(c=>fvis(c)&&c.ad>now-7*86400).length,ep=(()=>{try{return cinEpItems().length}catch(e){return 0}})();
+  const me=profiles.find(p=>p.id===pid)||profiles[0];
+  el.innerHTML=`<div class="uv"><div class="uvg">
+   ${uvTile('series','uv-ser','Serier',UVI.ser,uvFan('ser'),`${nf(nS)} serier${ep?` · <b>${ep} nye episoder</b>`:''}`)}
+   ${uvTile('tv','uv-tv','TV',UVI.tv,uvTVMedia(),`${nf(nL)} kanaler · direkte nå`)}
+   ${uvTile('movies','uv-film','Filmer',UVI.film,uvFan('vod'),`${nf(nV)} filmer${wkV?` · <b>${wkV} nye denne uka</b>`:''}`)}
+   ${uvTile('fotball','uv-sport','Sport',UVI.sport,uvSportMedia(),'<span id="uvSpSub">Kamper, tabeller og kanaler</span>')}
+   ${uvTile('apps','uv-app','Apper',UVI.apps,uvAppsMedia(),'Netflix, TV 2 Play, Disney+ og mer')}
+   ${uvTile('cams','uv-cam','IP-kamera',UVI.cam,uvCamMedia(),'<span id="uvCamS">Live fra hjemme</span>')}
+  </div>
+  <div class="uvq">
+   <button class="uvb" data-go="guide"><span>${UVI.guide}</span>TV-guide</button>
+   <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
+   <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
+  </div>
+  <div class="uvf"><span id="uvExp"></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
+  try{clk()}catch(e){}
+  uvFill(el);
+}
+function uvFill(el){
+  /* plakatvifte: bytt motiv rolig */
+  ['ser','film'].forEach((k,j)=>{const t=el.querySelector('.uvt.uv-'+k),pool=uvPool(k==='ser'?'ser':'vod');if(!t||pool.length<6)return;let off=0;
+    uvI(()=>{if(t.classList.contains('play'))return;off=(off+5)%Math.max(5,pool.length-5);const ims=t.querySelectorAll('.uvfan img');ims.forEach((im,i)=>{const c=pool[(off+i)%pool.length];if(c){im.classList.add('sw');setTimeout(()=>{im.src=c.logo;im.classList.remove('sw')},350)}});const bg=t.querySelector('.uvbg');if(bg&&pool[off])bg.style.backgroundImage=`url('${pool[off].logo.replace(/'/g,'%27')}')`},11000+j*1700)});
+  /* sport: neste Brann-kamp */
+  loadFixtures().then(f=>{const n=f.brann[0];const b=$('uvNext'),s=$('uvSpSub');if(!n||!b)return;const nm=t=>t.shortDisplayName||t.displayName||'';const live=n.state==='in';
+    const lg=t=>cinLogo(t)?`<img src="${esc(cinLogo(t))}" alt="">`:'';
+    b.innerHTML=`<small>${live?'<i class="lv"></i>DIREKTE NÅ':'NESTE BRANN-KAMP'}</small><div>${lg(n.h)}<b>${esc(nm(n.h))}</b><em>${live?esc(n.hs)+' – '+esc(n.as):'–'}</em><b>${esc(nm(n.a))}</b>${lg(n.a)}</div><span>${live?esc(n.clock||'Pågår'):esc(fmtDay(n.t))+' · '+fmtTime(n.t)}</span>`;
+    if(s)s.innerHTML=live?'<b>Brann spiller nå</b> · se kampen':'Brann om <b>'+cd(n.t)+'</b>';
+  }).catch(()=>{});
+  /* kamera: stillbilde som oppdateres */
+  camSrvFind().then(srv=>{if(curView!=='home'||!srv||!srv.st)return;const lk=srv.st.locked||{};const cl=(srv.st.cams||[]).filter(c=>(c.group||'Hjemme')!=='Jobb'&&!lk[c.group||'Hjemme']);const s=$('uvCamS');
+    if(!cl.length){if(s)s.textContent=Object.keys(lk).length?'🔒 Låst – åpne for å se':'Ingen kamera funnet';return}
+    if(s)s.innerHTML=`<b>${cl.length} kamera</b> · live fra hjemme`;let i=0;
+    const im=$('uvCamI'),lb=$('uvCamL');const ref=()=>{const c=cl[i%cl.length];const n=new Image();n.onload=()=>{if(!im)return;im.src=n.src;im.classList.add('on');if(lb){lb.hidden=false;lb.querySelector('em').textContent='LIVE · '+c.name}};n.src=srv.url+'/snap/'+encodeURIComponent(c.name)+'?t='+Date.now()+'&k='+encodeURIComponent(camKeys[c.group||'Hjemme']||'')};
+    ref();uvI(()=>{i++;ref()},7000)}).catch(()=>{});
+  /* abonnement utløper */
+  uvExpiry();
+  /* trailere: én om gangen, Filmer → Serier → Sport */
+  const tiles={movies:el.querySelector('.uvt.uv-film'),series:el.querySelector('.uvt.uv-ser'),sport:el.querySelector('.uvt.uv-sport')};
+  const order=['movies','series','sport'];
+  const next=()=>{if(curView!=='home')return;const k=order[UV.cyc++%3];uvPlay(tiles,k,next,0)};
+  el.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('.uvt');if(!t)return;const k=Object.keys(tiles).find(x=>tiles[x]===t);if(k&&UV.cur!==k){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}});
+  if(!TVM)Object.entries(tiles).forEach(([k,t])=>t&&t.addEventListener('mouseenter',()=>{clearTimeout(t._h);t._h=setTimeout(()=>{if(UV.cur!==k&&t.matches(':hover')){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}},500)}));
+  uvT(next,1800);
+}
+async function uvPlay(tiles,k,next,depth){
+  if(depth>3)return uvT(next,15000);
+  if(UV.ctl){try{UV.ctl.kill()}catch(e){}UV.ctl=null;try{accRelease('uv')}catch(e){}}
+  document.querySelectorAll('.uvt.play').forEach(t=>t.classList.remove('play'));
+  const t=tiles[k];if(!t||curView!=='home')return;UV.cur=k;
+  const box=t.querySelector('.uvv'),cap=t.querySelector('.uvcap');let it=null,id='',lb='',url='';
+  if(k==='sport'){
+    const ids=await uvSport().catch(()=>[]);if(UV.cur!==k)return;
+    if(!ids.length){UV.cur=null;return uvPlay(tiles,'movies',next,depth+1)}
+    const x=ids[UV.pi.sport++%ids.length];id=x.id;lb=x.lb;
+  }else{
+    const pool=uvPool(k==='movies'?'vod':'ser');if(!pool.length){UV.cur=null;return next()}
+    for(let n=0;n<6&&!id;n++){const c=pool[UV.pi[k]++%pool.length];if(UV.bad[c.key])continue;it=c;id=UV.ytBad>2?'':await uvTrailer(c).catch(()=>'');if(UV.cur!==k)return;
+      if(!id&&UV.ytBad>2&&!TVM){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
+    if(!it||(!id&&!url)){UV.cur=null;return uvT(()=>next(),400)}
+    lb=it.nm||it.name;
+  }
+  if(curView!=='home'||UV.cur!==k)return;
+  cap.innerHTML=`<small>${k==='sport'?'Sport':k==='movies'?'Film':'Serie'} · trailer</small><b>${esc(lb)}</b>`;
+  const o={max:k==='sport'?40000:45000,onStart:()=>{t.classList.add('play');if(id)UV.ytBad=0},
+    onEnd:()=>{if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(next,600)}},
+    onFail:()=>{if(id)UV.ytBad++;if(it)UV.bad[it.key]=1;if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>uvPlay(tiles,k,next,depth+1),300)}}};
+  UV.ctl=id?uvYT(box,id,o):uvStream(box,url,o);
+}
+async function uvExpiry(){
+  try{
+    let c=LSget('uvExp',null);const xt=S&&S.xt;if(!xt)return;
+    if(!c||c.u!==xt.user||Date.now()-c.t>12*36e5){const j=await xapi(xt,'');const ui=(j&&j.user_info)||{};c={t:Date.now(),u:xt.user,exp:+ui.exp_date||0,st:ui.status||''};LSset('uvExp',c)}
+    const e=$('uvExp');if(!e)return;
+    if(!c.exp){e.textContent=c.st?'Abonnement: '+c.st:'';return}
+    const d=new Date(c.exp*1000),left=Math.ceil((d-Date.now())/864e5);
+    e.innerHTML=`Abonnement utløper: <b>${d.toLocaleDateString('nb-NO',{day:'numeric',month:'long',year:'numeric'})}</b>${left<=30?` <span class="uvwarn">· ${left} dager igjen</span>`:''}`;
+  }catch(e){}
+}
+/* header-knapper */
+(()=>{const on=(id,f)=>{const b=document.getElementById(id);if(b)b.onclick=f};
+  on('bSet',()=>showView('settings'));on('bFav',()=>showView('fav'));
+  on('bUser',()=>{renderProfiles();$('dlgProf').showModal();setTimeout(()=>{const b=document.querySelector('#profList .pcard.on')||document.querySelector('#profList .pcard');if(b)b.focus()},60)});
+  on('bNew',()=>{const it=(()=>{try{return cinEpItems()}catch(e){return []}})();if(it.length){go('series')}else{toast('Ingen nye episoder i favorittseriene dine akkurat nå',3000)}});
+  const upd=()=>{try{const n=cinEpItems().length,b=$('bNewN');if(b){b.hidden=!n;b.textContent=n>9?'9+':n}}catch(e){}};setTimeout(upd,4000);setInterval(upd,120000);
+  try{renderProfiles()}catch(e){}
+})();
+
+/* ===================== Sport: trailer-hero ===================== */
+function sphHtml(){
+  return `<section class="sph" id="sph"><div class="sph-bg">${SCENE.fotball||''}</div><div class="uvv sph-v" id="sphV"></div><div class="sph-g"></div>
+   <div class="sph-in"><span class="sph-eye"><i></i><span id="sphEye">Sport · høydepunkter</span></span><h1>Sport</h1><div id="sphNext" class="sph-next"></div>
+   <div class="sph-btn"><button class="primary" data-fl="fotball">⚽ Fotball – kamper og tabeller</button><button class="ghost" id="sphSnd" hidden>🔊 Lyd på</button><button class="ghost" id="sphNx" hidden>⏭ Neste klipp</button></div></div></section>`;
+}
+function sphStart(){
+  const box=$('sphV');if(!box)return;
+  loadFixtures().then(f=>{const n=f.brann[0],e=$('sphNext');if(!n||!e)return;const nm=t=>t.displayName||t.name||'';const live=n.state==='in';
+    e.innerHTML=`<span>${live?'<b class="lvb">LIVE</b>':'Neste Brann-kamp'}</span><b>${esc(nm(n.h))} – ${esc(nm(n.a))}</b><small>${esc(n.lg)} · ${live?esc(n.hs)+' – '+esc(n.as):esc(fmtDay(n.t))+' kl. '+fmtTime(n.t)+' · om '+cd(n.t)}</small>`}).catch(()=>{});
+  const play=async()=>{
+    if(!$('sphV')||spOpen)return;const ids=await uvSport().catch(()=>[]);if(!ids.length||!$('sphV')||spOpen)return;
+    const x=ids[UV.sphI++%ids.length];$('sphEye').textContent='Sport · '+x.lb;
+    if(UV.sph){try{UV.sph.kill()}catch(e){}}
+    UV.sph=uvYT($('sphV'),x.id,{max:UV.sphMute?42000:600000,mute:UV.sphMute,onStart:()=>{$('sph')&&$('sph').classList.add('play');const s=$('sphSnd'),n=$('sphNx');if(s)s.hidden=false;if(n)n.hidden=false},onEnd:()=>uvT(play,500),onFail:()=>uvT(play,500)});
+  };
+  const s=$('sphSnd'),n=$('sphNx');
+  if(s)s.onclick=()=>{UV.sphMute=!UV.sphMute;if(UV.sph)UV.sph.mute(UV.sphMute);s.textContent=UV.sphMute?'🔊 Lyd på':'🔇 Lyd av'};
+  if(n)n.onclick=()=>play();
+  uvT(play,700);
+}
+
+/* ===================== Fotball – ny kampside ===================== */
+let fbpLg=LSget('fbpLg','nor.1'),fbpN=24;
+const FB_ZONES={
+  'nor.1':[[1,1,'#2f7bff','Champions League-kvalifisering'],[2,3,'#22b07d','Europacup-kvalifisering'],[14,14,'#f0a020','Kvalifisering'],[15,16,'#e5484d','Nedrykk']],
+  'nor.2':[[1,2,'#22b07d','Opprykk'],[3,6,'#2f7bff','Opprykkskvalifisering'],[14,14,'#f0a020','Kvalifisering'],[15,16,'#e5484d','Nedrykk']],
+  'uefa':[[1,8,'#22b07d','Videre til åttedelsfinale'],[9,24,'#2f7bff','Utslagsrunde (playoff)'],[25,36,'#e5484d','Ute']],
+  'eng.1':[[1,4,'#2f7bff','Champions League'],[5,5,'#f0a020','Europa League'],[18,20,'#e5484d','Nedrykk']],
+  'esp.1':[[1,4,'#2f7bff','Champions League'],[5,6,'#f0a020','Europa League'],[18,20,'#e5484d','Nedrykk']],
+  'ger.1':[[1,4,'#2f7bff','Champions League'],[5,6,'#f0a020','Europa League'],[16,16,'#f0a020','Kvalifisering'],[17,18,'#e5484d','Nedrykk']],
+  'ita.1':[[1,4,'#2f7bff','Champions League'],[5,6,'#f0a020','Europa League'],[18,20,'#e5484d','Nedrykk']]
+};
+const fbZones=slug=>FB_ZONES[slug]||(slug.startsWith('uefa')?FB_ZONES.uefa:[]);
+const fbNm=t=>t.shortDisplayName||t.displayName||t.name||'';
+const fbLogo=t=>cinLogo(t)||'';
+const fbCrest=(t,cls)=>fbLogo(t)?`<img class="${cls||''}" src="${esc(fbLogo(t))}" alt="" loading="lazy">`:`<span class="fbp-ph ${cls||''}">${esc(fbNm(t).slice(0,3).toUpperCase())}</span>`;
+const fbFind=e=>esc(fbNm(e.h)+'|'+fbNm(e.a)+'|'+(e.lg||''));
+async function fbTable(slug){
+  if(NIFS_ID[slug]){try{const d=await nifsData(slug);return d.table.map(t=>({pos:t.place,name:t.name,logo:t.logo&&t.logo.url||'',p:t.played,w:t.won,d:t.draw,l:t.lost,gd:t.goalDifference,pts:t.points,me:/brann/i.test(t.name)}))}catch(e){}}
+  const j=await jget(ESPNS+slug+'/standings');const g=(j.children&&j.children.length?j.children:[j])[0];const ents=(g.standings&&g.standings.entries)||[];
+  const st=(e,n)=>{const s=(e.stats||[]).find(x=>x.name===n);return s?(s.displayValue!=null?s.displayValue:s.value):''};
+  return ents.map(e=>({pos:+st(e,'rank')||0,name:e.team.displayName||e.team.name,short:e.team.shortDisplayName||'',logo:cinLogo(e.team),p:st(e,'gamesPlayed'),w:st(e,'wins'),d:st(e,'ties')||st(e,'draws'),l:st(e,'losses'),gd:st(e,'pointDifferential'),pts:st(e,'points'),me:isBrann(e.team)})).sort((a,b)=>a.pos-b.pos).map((r,i)=>(r.pos=r.pos||i+1,r));
+}
+function fbHero(n){
+  if(!n)return `<div class="fbp-heroin"><div class="fbp-none"><b>Ingen kommende Brann-kamp funnet</b><small>Sesongpause? Se terminlisten og tabellene under.</small></div></div>`;
+  const live=n.state==='in',today=new Date(n.t).toDateString()===new Date().toDateString();
+  const side=(t,home)=>`<div class="fbp-team${isBrann(t)?' br':''}">${fbCrest(t,'fbp-cr')}<b>${esc(t.displayName||t.name)}</b><small>${home?'Hjemmelag':'Bortelag'}</small></div>`;
+  return `<div class="fbp-heroin"><div class="fbp-comp"><span class="fbp-lg">${esc(n.lg||'')}</span>${live?'<span class="fbp-livep"><i></i>DIREKTE</span>':`<span>${today?'I dag':esc(fmtDay(n.t))}</span>`}</div>
+   <div class="fbp-vs">${side(n.h,1)}<div class="fbp-mid">${live?`<strong class="fbp-score">${esc(n.hs)}<i>–</i>${esc(n.as)}</strong><small>${esc(n.clock||'Pågår')}</small>`:`<small>Avspark</small><strong class="fbp-ko">${fmtTime(n.t)}</strong>`}</div>${side(n.a,0)}</div>
+   ${live?'':`<div class="fbp-cd" data-t="${n.t}">${['dager','timer','min','sek'].map(x=>`<div><b>--</b><small>${x}</small></div>`).join('')}</div>`}
+   <div class="fbp-act"><button class="primary" data-find="${fbFind(n)}">▶ ${live?'Se kampen nå':'Finn kanal'}</button><button class="ghost" data-go="live:chip=brann">🔥 Brann-kanaler</button></div></div>`;
+}
+function fbStrip(list){
+  if(!list.length)return '<p class="muted">Ingen flere kamper i terminlisten akkurat nå.</p>';
+  return list.map(e=>{const home=isBrann(e.h),o=home?e.a:e.h,d=new Date(e.t);
+    return `<div class="fbp-sc" tabindex="0" data-find="${fbFind(e)}"><div class="fbp-dt"><b>${d.getDate()}</b><small>${d.toLocaleDateString('nb-NO',{month:'short'}).replace('.','')}</small></div><div class="fbp-sct">${fbCrest(o,'fbp-sm')}<span><b>${esc(fbNm(o))}</b><small>${home?'Hjemme':'Borte'} · ${esc(e.lg||'')}</small></span></div><div class="fbp-sctm">${d.toLocaleDateString('nb-NO',{weekday:'short'}).replace('.','')} ${fmtTime(e.t)}</div></div>`}).join('');
+}
+function fbFxHtml(list){
+  if(!list.length)return '<div class="fbp-emp">Ingen kommende kamper funnet for denne turneringen (pause i sesongen?). Bruk kanalene under.</div>';
+  let day='',h='';const td=new Date().toDateString(),tm=new Date(Date.now()+864e5).toDateString();
+  for(const e of list.slice(0,fbpN)){const ds=new Date(e.t).toDateString();if(ds!==day){day=ds;h+=`<div class="fbp-day">${ds===td?'I dag':ds===tm?'I morgen':esc(fmtDay(e.t))}</div>`}
+    const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a);
+    h+=`<div class="fbp-row${b?' br':''}${live?' live':''}" tabindex="0" data-find="${fbFind(e)}"><span class="fbp-tm">${live?'<i class="lv"></i>'+esc(e.clock||'LIVE'):fmtTime(e.t)}</span><span class="fbp-h">${esc(fbNm(e.h))}${fbCrest(e.h,'fbp-xs')}</span><span class="fbp-x">${live?esc(e.hs)+' – '+esc(e.as):'–'}</span><span class="fbp-a">${fbCrest(e.a,'fbp-xs')}${esc(fbNm(e.a))}</span><span class="fbp-go">▶</span></div>`}
+  if(list.length>fbpN)h+=`<button class="ghost fbp-more" id="fbpMore">Vis flere kamper (${list.length-fbpN})</button>`;
+  return h;
+}
+function fbTabHtml(rows,slug){
+  if(!rows||!rows.length)return '<div class="fbp-emp">Ingen tabell tilgjengelig for denne turneringen ennå.</div>';
+  const z=fbZones(slug),zc=p=>{const x=z.find(([a,b])=>p>=a&&p<=b);return x?x[2]:'transparent'};
+  return `<table class="fbp-tbl"><thead><tr><th>#</th><th class="l">Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/–</th><th>P</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.me?'me':''}" style="--z:${zc(r.pos)}"><td><i>${r.pos}</i></td><td class="l"><span class="fbp-tn">${r.logo?`<img src="${esc(r.logo)}" alt="" loading="lazy">`:'<span class="fbp-ph fbp-xs"></span>'}<span>${esc(r.name)}</span></span></td><td>${esc(r.p)}</td><td>${esc(r.w)}</td><td>${esc(r.d)}</td><td>${esc(r.l)}</td><td>${esc(r.gd)}</td><td><b>${esc(r.pts)}</b></td></tr>`).join('')}</tbody></table>`;
+}
+function fbPro(el){
+  window.scrollTo(0,0);
+  const tabs=LEAGUES.map(l=>{const b=LGB[l.slug]||['⚽','#444'];return `<button class="fbp-tab${l.slug===fbpLg?' on':''}" data-fbl="${l.slug}"><i style="--c:${b[1]}">${b[0]}</i>${esc(l.name)}</button>`}).join('');
+  el.innerHTML=`<div class="fbp">
+   <div class="fbp-top"><button class="ghost sback" data-spback="1">← Sport</button><h1><span class="fbp-ic">${IC.fotball}</span>Fotball</h1><span id="fbpLive"></span><span class="fbp-sp"></span><button class="ghost" data-go="live:tab=fb">📺 Alle fotballkanaler</button></div>
+   <section class="fbp-hero" id="fbpHero"><div class="fbp-bg">${SCENE.fotball||''}</div><div class="fbp-heroin"><div class="fbp-none"><b>Henter neste kamp …</b></div></div></section>
+   <section class="fbp-sec"><div class="fbp-sh"><h3><span class="fbp-dot"></span>Brann · terminliste</h3></div><div class="fbp-strip" id="fbpBr"><p class="muted">Henter …</p></div></section>
+   <div class="fbp-tabs" id="fbpTabs">${tabs}</div>
+   <div class="fbp-cols">
+    <section class="fbp-card"><div class="fbp-sh"><h3>Kommende kamper</h3><small id="fbpFxN"></small></div><div id="fbpFx" class="fbp-fx"><p class="muted">Henter kamper …</p></div></section>
+    <section class="fbp-card"><div class="fbp-sh"><h3 id="fbpTabT">Tabell</h3><small>Oppdateres automatisk</small></div><div id="fbpTab" class="fbp-tw"><p class="muted">Henter tabell …</p></div><div class="fbp-leg" id="fbpLeg"></div></section>
+   </div>
+   <div id="fbpCh"></div></div>`;
+  loadFixtures().then(f=>{
+    if(curView!=='fotball'||!$('fbpHero'))return;
+    const n=f.brann[0];const h=$('fbpHero');h.querySelector('.fbp-heroin').outerHTML=fbHero(n);h.classList.toggle('live',!!(n&&n.state==='in'));
+    $('fbpBr').innerHTML=fbStrip(f.brann.slice(1,9));
+    const lv=f.list.filter(e=>e.state==='in').length,L=$('fbpLive');if(L)L.innerHTML=lv?`<button class="fbp-livebtn" data-go="matches"><i></i>${lv} ${lv===1?'kamp':'kamper'} direkte nå</button>`:'';
+    fbCd();
+  }).catch(()=>{const h=$('fbpHero');if(h)h.querySelector('.fbp-heroin').outerHTML=fbHero(null)});
+  $('fbpTabs').onclick=e=>{const b=e.target.closest('[data-fbl]');if(!b)return;fbpLg=b.dataset.fbl;LSset('fbpLg',fbpLg);$('fbpTabs').querySelectorAll('.fbp-tab').forEach(x=>x.classList.toggle('on',x===b));fbLeague()};
+  fbLeague();
+}
+function fbLeague(){
+  const L=LEAGUES.find(l=>l.slug===fbpLg)||LEAGUES[0],slug=L.slug;fbpN=24;
+  $('fbpTabT').textContent=L.name+' – tabell';$('fbpFx').innerHTML='<p class="muted">Henter kamper …</p>';$('fbpTab').innerHTML='<p class="muted">Henter tabell …</p>';$('fbpFxN').textContent='';
+  const z=fbZones(slug);$('fbpLeg').innerHTML=z.map(([,,c,t])=>`<span><i style="background:${c}"></i>${esc(t)}</span>`).join('')+(slug==='nor.1'?'<span><i class="me"></i>Brann</span>':'');
+  loadLeagueFx(L).then(list=>{if(fbpLg!==slug||!$('fbpFx'))return;const now=Date.now()-3*36e5;const l=list.filter(e=>e.state==='in'||(e.state!=='post'&&e.t>now)).sort((a,b)=>(b.state==='in')-(a.state==='in')||a.t-b.t);
+    const draw=()=>{$('fbpFx').innerHTML=fbFxHtml(l);$('fbpFxN').textContent=l.length?l.length+' kamper':'';const m=$('fbpMore');if(m)m.onclick=()=>{fbpN+=24;draw()}};draw()})
+   .catch(()=>{const e=$('fbpFx');if(e)e.innerHTML='<div class="fbp-emp">Kunne ikke hente kamper akkurat nå.</div>'});
+  fbTable(slug).then(rows=>{if(fbpLg!==slug||!$('fbpTab'))return;$('fbpTab').innerHTML=fbTabHtml(rows,slug);const me=$('fbpTab').querySelector('tr.me');if(me&&me.offsetTop>300)$('fbpTab').scrollTop=me.offsetTop-160})
+   .catch(()=>{const e=$('fbpTab');if(e)e.innerHTML='<div class="fbp-emp">Kunne ikke hente tabell.</div>'});
+  const rx=LRX[slug]||/football|fotball/i,chs=DB.live.filter(c=>fvis(c)&&rx.test(c.lc)).slice(0,40);
+  $('fbpCh').innerHTML=chs.length?rail('📺 Kanaler · '+esc(L.name),chs,ccard,'live:tab=fb'):'';try{epgHydrate($('fbpCh'))}catch(e){}
+}
+function fbCd(){
+  clearInterval(window.__fbCd);
+  const up=()=>{const el=document.querySelector('.fbp-cd');if(!el){clearInterval(window.__fbCd);return}let d=Math.max(0,+el.dataset.t-Date.now());
+    const v=[Math.floor(d/864e5),Math.floor(d%864e5/36e5),Math.floor(d%36e5/6e4),Math.floor(d%6e4/1e3)];
+    el.querySelectorAll('b').forEach((b,i)=>b.textContent=String(v[i]).padStart(2,'0'));if(d<=0){el.classList.add('ko')}};
+  up();window.__fbCd=setInterval(up,1000);
+}
+
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
 const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
 try{localStorage.setItem('boot_try','0')}catch(e){}
