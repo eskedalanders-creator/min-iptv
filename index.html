@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=210;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=211;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1706,6 +1706,10 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 #v-live #tabs,#v-live #chips,#v-live #provs{display:none!important}
 /* v189: glass-rammer på forsiden */
 #v-home.uvhome{position:relative;overflow-x:hidden}
+/* v211: aldri sideveis-skyv på forsiden */
+html,body{overflow-x:clip}
+#v-home.uvhome,html.tvm .view{overflow-x:hidden;overflow-x:clip}
+#v-home.uvhome>*{max-width:100%}
 .uv{isolation:isolate}
 .uv::before{content:"";position:absolute;inset:-10%;z-index:-2;pointer-events:none;
   background:
@@ -5008,7 +5012,7 @@ function tvMove(dir){
     if(best&&off){best.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'})}}
   if(root===document.body&&dir==='ArrowUp'&&!best&&!hdrCur){const v=document.querySelector('.view.on');if(v)v.scrollTop=0;const n=hdrT();if(n){n.focus({preventScroll:true});return}}
   if(root===document.body&&dir==='ArrowUp'&&best&&best.closest('header')&&!cur.closest('header')){const v=document.querySelector('.view.on');if(v&&v.scrollTop>4)v.scrollTop=0;const n=hdrT();if(n){n.focus({preventScroll:true});return}}
-  if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:'center',behavior:TVM?'auto':'smooth'})}
+  if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:best.closest('#v-home')?'nearest':'center',behavior:TVM?'auto':'smooth'});noSide()}
 }
 document.addEventListener('keydown',e=>{
   const k=e.key;if(!/^Arrow(Up|Down|Left|Right)$/.test(k)&&k!=='Enter')return;
@@ -5616,6 +5620,11 @@ function tvInfo(c){
   I.dataset.k=c.key;if(epgOff()){fill([]);return}const h=EPG.get(c.key);if(h&&h.list.length)fill(h.list);else epgGet(c).then(fill).catch(()=>fill([]));
 }
 
+/* v211: nullstill sideveis rulling på forsiden (gamle WebView uten overflow:clip) */
+function noSide(){try{const h=document.getElementById('v-home');if(h&&h.scrollLeft)h.scrollLeft=0;if(document.documentElement.scrollLeft)document.documentElement.scrollLeft=0;if(document.body.scrollLeft)document.body.scrollLeft=0}catch(e){}}
+window.noSide=noSide;
+document.addEventListener('scroll',e=>{const t=e.target;if(t&&t.id==='v-home'&&t.scrollLeft)t.scrollLeft=0;else if((t===document||t===document.documentElement)&&document.documentElement.scrollLeft)document.documentElement.scrollLeft=0},true);
+document.addEventListener('focusin',()=>setTimeout(noSide,0),true);
 /* v199: julenissens slede (gyllen lysfigur) over toppfeltet, 1. nov – 31. des */
 (function(){
   const d=new Date(),m=d.getMonth();if(m<10)return;
