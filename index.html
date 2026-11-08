@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=220;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=221;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1757,6 +1757,25 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .rcrow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px}.rcrow button{height:56px;font-size:17px;border-radius:16px!important;touch-action:manipulation}
 .rctx{display:flex;gap:8px}.rctx input{flex:1;height:50px;padding:0 14px;border-radius:14px;font-size:17px}
 .rcnote{text-align:center;font-size:13px}
+/* v221: radio + storytel */
+.uvq{grid-template-columns:repeat(5,1fr)!important}
+@media (max-width:760px){.uvq{grid-template-columns:1fr 1fr!important}}
+.uvb-rd span{background:#ff8a3d!important;color:#000}.uvb-rd span svg,.uvb-sp span svg{width:60%;height:60%}
+.rdmini{display:flex;align-items:center;gap:4px;max-width:300px;margin-right:8px}.rdmini[hidden]{display:none}
+.rdmini button{background:rgba(255,138,61,.14);border:1px solid rgba(255,138,61,.4);color:#fff;border-radius:999px;height:40px;cursor:pointer}
+.rdmini .spm-t{display:flex;align-items:center;gap:8px;padding:0 12px 0 4px;min-width:0;max-width:230px;text-align:left}
+.rdmini .spm-t>span:last-child{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.rdmini b,.rdmini small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px}.rdmini small{opacity:.65;font-size:11px}
+.rdmini .spm-b{width:40px;padding:0}.rdmini button:focus{outline:none;background:#fff;color:#0b0c18}
+.rdm-l{width:32px;height:32px;border-radius:50%;background:#fff center/contain no-repeat;flex:none;display:grid;place-items:center}
+.rd-e,.rdc-l.rd-e{background:#2a1a10!important;color:#ff8a3d}.rd-e svg{width:60%;height:60%;color:#ff8a3d!important}
+#v-radio{padding:24px clamp(16px,3vw,48px) 60px}
+.rdh svg{color:#ff8a3d!important}
+.rdnow{background:linear-gradient(135deg,rgba(255,138,61,.18),rgba(255,255,255,.04) 50%)!important}
+.rdn-l{width:clamp(110px,12vw,170px);aspect-ratio:1;border-radius:18px;background:#fff center/contain no-repeat;flex:none;display:grid;place-items:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.rdc-l{background-color:#fff!important;background-size:70%!important;background-repeat:no-repeat!important;background-position:center!important}
+.ap-st{background:linear-gradient(135deg,#7a2400,#ff5c28)}.ap-st .lg{color:#ff5c28}
+@media (max-width:760px){.rdmini .spm-t{max-width:130px}}
 /* v211: aldri sideveis-skyv på forsiden */
 html,body{overflow-x:clip}
 #v-home.uvhome,html.tvm .view{overflow-x:hidden;overflow-x:clip}
@@ -1823,6 +1842,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <span id="moreWrap"><button id="moreBtn">Mer ▾</button><div id="moreMenu"></div></span>
   <span class="sp"></span>
   <span id="spMini" hidden></span>
+  <span id="rdMini" class="rdmini" hidden></span>
   <button id="tvSearch" class="bpill hic" title="Søk (F4)" aria-label="Søk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Søk</span></button>
   <input id="gq" type="search" placeholder="Søk …  ( / )" autocomplete="off">
   <button class="bpill" id="bBrann"><img class="skb" onerror="this.replaceWith(document.createTextNode('🔥'))" src="https://a.espncdn.com/i/teamlogos/soccer/500/620.png" alt=""> Brann</button>
@@ -1888,6 +1908,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <section class="view" id="v-settings"></section>
   <section class="view" id="v-spotify"></section>
   <section class="view" id="v-remote"></section>
+  <section class="view" id="v-radio"></section>
 </div>
 
 <div id="ov">
@@ -3129,7 +3150,7 @@ const byNew=(a,b)=>(b.ad||0)-(a.ad||0);
 
 /* ===================== Visninger ===================== */
 let curView='home';
-const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify','remote'];
+const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify','remote','radio'];
 let navStack=[];
 function showView(v,force,np){
   if(!force&&v===curView&&$('v-'+v).classList.contains('on'))return;
@@ -3160,6 +3181,7 @@ function showView(v,force,np){
   if(v==='settings')renderSettings();
   if(v==='spotify')renderSpotify();
   if(v==='remote')renderRemote();
+  if(v==='radio')renderRadio();
   $('v-'+v).scrollTop=0;
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
@@ -3183,7 +3205,8 @@ const APPS=[
   ['ap-yt','▶','YouTube','Videoer og live','https://www.youtube.com'],
   ['ap-nrk','NRK','NRK TV','Gratis fra NRK','https://tv.nrk.no'],
   ['ap-vp','V','Viaplay','Sport og serier','https://viaplay.no'],
-  ['ap-hbo','max','HBO Max','HBO og Max','https://www.max.com']
+  ['ap-hbo','max','HBO Max','HBO og Max','https://www.max.com'],
+  ['ap-st','S','Storytel','Lydbøker og e-bøker','https://www.storytel.com/no']
 ];
 const appsHtml=()=>`<h3 class="sech">Apper og strømmetjenester</h3><p class="apphint">${DESKTOP&&window.IPTV_WIN&&IPTV_WIN.appView?'NRK TV, YouTube og VGTV åpnes inni Eskedals Univers. Netflix, Disney+, HBO Max, Viaplay og TV 2 Play åpnes i eget fullskjermvindu (krever kopibeskyttelse). Tilbake = tilbake, Hjem = lukk. Logg inn med tastaturet første gang.':'Åpner appen hvis den er installert. Ellers får du lenke til nedlasting, eller kan åpne på nett.'}</p><div class="apps">${APPS.map(([c,l,n,d,u])=>`<a class="app ${c}" data-app="${c}" href="${u}" target="_blank" rel="noopener"><span class="lg">${l}</span><span>${n}<small>${d}</small></span></a>`).join('')}</div><form class="arkiv" id="arkivF"><span>📺 Søk i arkivet:</span><input id="arkivQ" placeholder="Program, serie eller film …"><button data-s="nrk">NRK TV</button><button data-s="tv2">TV 2 Play</button></form>`;
 const STAD='<div class="stad"><div class="wm">BRANN</div><div class="pitch"></div></div>';
@@ -4887,7 +4910,8 @@ const APPX={
  'ap-vg':{pkg:'no.vg.vgtv',ios:'https://apps.apple.com/no/search?term=VG%20TV',gp:'VG TV'},
  'ap-nrk':{pkg:'no.nrk.tv',ios:'https://apps.apple.com/no/search?term=NRK%20TV',gp:'NRK TV'},
  'ap-vp':{pkg:'com.viaplay.android',ios:'https://apps.apple.com/no/search?term=Viaplay',gp:'Viaplay'},
- 'ap-hbo':{pkg:'com.wbd.stream',ios:'https://apps.apple.com/no/search?term=HBO%20Max',gp:'HBO Max'}
+ 'ap-hbo':{pkg:'com.wbd.stream',ios:'https://apps.apple.com/no/search?term=HBO%20Max',gp:'HBO Max'},
+ 'ap-st':{pkg:'grit.storytel.app',ios:'https://apps.apple.com/no/app/storytel/id348177651',gp:'Storytel'}
 };
 const isAnd=/android/i.test(navigator.userAgent),isIos=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function webWin(id,url){
@@ -5376,6 +5400,7 @@ function uvHome(){
   </div>
   <div class="uvq">
    <button class="uvb uvb-sp" data-go="spotify"><span>${SPI}</span>Spotify</button>
+   <button class="uvb uvb-rd" data-go="radio"><span>${RDI}</span>Radio</button>
    <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
    <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
    <button class="uvb" data-go="apps"><span>${UVI.apps}</span>Apper</button>
@@ -5878,6 +5903,53 @@ async function renderRemote(){const el=$('v-remote');if(!el)return;const id=loca
     box.innerHTML=L.map(x=>`<button class="rcchip${x.id===cur?' on':''}" data-rd="${esc(x.id)}">${/Windows|PC/.test(x.n)?'🖥️':'📺'} ${esc(x.n)} <small>${ago(x.t)}</small></button>`).join('');
     box.onclick=e=>{const b=e.target.closest('[data-rd]');if(!b)return;localStorage.setItem('rc_dev',b.dataset.rd);box.querySelectorAll('.rcchip').forEach(x=>x.classList.toggle('on',x===b))}}catch(e){const box=$('rcDevs');if(box)box.innerHTML='<span class="muted">Kunne ikke hente skjermer: '+esc(e.message)+'</span>'}}
 setTimeout(rcRecvStart,3500);
+
+/* v221: Radio (norske nettradio-kanaler fra radio-browser.info) */
+const RDI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="13" rx="2"/><path d="M6 8l11-5"/><circle cx="15" cy="14.5" r="3"/><path d="M6 12.5h4M6 16.5h4"/></svg>';
+const RD_HOSTS=['de1','fi1','nl1','at1','de2'];
+let rdList=null,rdCur=null,rdAud=null,rdHls=null,rdStat='';
+const rdFav=()=>{try{return JSON.parse(localStorage.getItem('radio_fav')||'[]')}catch(e){return[]}};
+async function rdApi(path){let last;for(const h of RD_HOSTS){try{const r=await fetch('https://'+h+'.api.radio-browser.info/json/'+path,{cache:'no-store'});if(r.ok)return await r.json();last=new Error('HTTP '+r.status)}catch(e){last=e}}throw last||new Error('Radiolisten er utilgjengelig')}
+const rdOk=s=>s&&s.url_resolved&&(location.protocol!=='https:'||/^https:/i.test(s.url_resolved));
+const rdNrk=s=>/^nrk\b/i.test(s.name||'');
+async function rdLoad(){if(rdList)return rdList;
+  const a=await rdApi('stations/bycountrycodeexact/NO?hidebroken=true&order=votes&reverse=true&limit=300');
+  const seen=new Set();rdList=a.filter(rdOk).filter(s=>{const k=(s.name||'').toLowerCase().replace(/[^a-z0-9æøå]/g,'');if(!k||seen.has(k))return false;seen.add(k);return true});
+  try{localStorage.setItem('radio_cache',JSON.stringify({t:Date.now(),l:rdList.slice(0,200)}))}catch(e){}
+  return rdList}
+function rdStop(){try{if(rdHls){rdHls.destroy();rdHls=null}if(rdAud){rdAud.pause();rdAud.removeAttribute('src');rdAud.load()}}catch(e){}rdCur=null;rdStat='';rdMini();rdNowDraw()}
+function rdPlay(s){if(!s)return;rdStop();rdCur=s;rdStat='Kobler til …';
+  if(!rdAud){rdAud=new Audio();rdAud.preload='none';rdAud.addEventListener('playing',()=>{rdStat='';rdMini();rdNowDraw()});rdAud.addEventListener('waiting',()=>{rdStat='Laster …';rdNowDraw()});rdAud.addEventListener('error',()=>{if(rdCur){rdStat='Kanalen svarer ikke – prøv en annen';rdNowDraw()}})}
+  const u=s.url_resolved;
+  if((s.hls||/\.m3u8(\?|$)/i.test(u))&&!rdAud.canPlayType('application/vnd.apple.mpegurl')&&window.Hls&&Hls.isSupported()){rdHls=new Hls();rdHls.loadSource(u);rdHls.attachMedia(rdAud)}else rdAud.src=u;
+  rdAud.play().catch(e=>{if(!rdCur||rdCur!==s)return;rdStat=e&&e.name==='NotAllowedError'?'Trykk på kanalen en gang til for å starte':'Kanalen svarer ikke akkurat nå – prøv en annen';rdNowDraw()});
+  try{if('mediaSession' in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:s.name,artist:'Radio',artwork:s.favicon?[{src:s.favicon}]:[]})}catch(e){}
+  try{localStorage.setItem('radio_last',JSON.stringify({stationuuid:s.stationuuid,name:s.name,url_resolved:s.url_resolved,favicon:s.favicon,hls:s.hls}))}catch(e){}
+  rdMini();rdNowDraw()}
+document.addEventListener('play',e=>{if(e.target&&e.target.tagName==='VIDEO'&&rdCur)rdStop()},true);
+const rdLogo=(s,c)=>s.favicon?`<span class="${c}" style="background-image:url('${esc(s.favicon)}')"></span>`:`<span class="${c} rd-e">${RDI}</span>`;
+function rdMini(){const m=$('rdMini');if(!m)return;if(!rdCur){m.hidden=true;return}m.hidden=false;
+  m.innerHTML=`<button class="spm-t" data-go="radio">${rdLogo(rdCur,'rdm-l')}<span><b>${esc(rdCur.name)}</b><small>Radio · direkte</small></span></button><button class="spm-b" data-rdstop="1" title="Stopp">■</button>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rdstop]');if(b){e.preventDefault();e.stopPropagation();rdStop()}},true);
+function rdNowDraw(){const el=$('rdNow');if(!el)return;const s=rdCur;
+  el.innerHTML=s?`${rdLogo(s,'rdn-l')}<div class="spn-i"><span class="spn-k" style="color:#ff8a3d">${rdStat?esc(rdStat):'● DIREKTE'}</span><b>${esc(s.name)}</b><small>${esc((s.tags||'').split(',').slice(0,4).join(' · '))}</small><div class="spn-c"><button class="primary" data-rdstop="1">■ Stopp</button><button data-rdfav="${esc(s.stationuuid)}">${rdFav().includes(s.stationuuid)?'★ Favoritt':'☆ Legg til favoritt'}</button></div></div>`
+   :`<span class="rdn-l rd-e">${RDI}</span><div class="spn-i"><span class="spn-k" style="color:#ff8a3d">RADIO</span><b>Velg en kanal under</b><small>NRK, P4, Radio Norge og mange flere – direkte over nettet.</small></div>`}
+const rdCard=s=>`<button class="spc rdc" data-rd="${esc(s.stationuuid)}">${rdLogo(s,'spc-a rdc-l')}<b>${esc(s.name)}</b><small>${esc((s.tags||'').split(',').filter(Boolean).slice(0,2).join(' · ')||'Norge')}</small></button>`;
+async function renderRadio(){const el=$('v-radio');if(!el)return;
+  el.innerHTML=`<div class="spw"><div class="sptop"><h2 class="rdh">${RDI} Radio</h2><span class="sp"></span></div><div class="spnow rdnow" id="rdNow"></div>
+   <div class="spsrch"><input id="rdQ" placeholder="Søk etter kanal (f.eks. P4, Bergen, jazz) …" autocomplete="off"></div><div id="rdBody"><p class="muted">Henter kanaler …</p></div></div>`;
+  rdNowDraw();let L;
+  try{L=await rdLoad()}catch(e){try{L=rdList=JSON.parse(localStorage.getItem('radio_cache')||'{}').l||null}catch(x){}if(!L){$('rdBody').innerHTML='<p class="muted">Fikk ikke hentet radiokanaler: '+esc(e.message)+'</p>';return}}
+  const draw=q=>{const B=$('rdBody');if(!B)return;const f=rdFav();q=(q||'').trim().toLowerCase();
+    const hit=s=>!q||(s.name+' '+(s.tags||'')+' '+(s.state||'')).toLowerCase().includes(q);
+    const fav=L.filter(s=>f.includes(s.stationuuid)&&hit(s)),nrk=L.filter(s=>rdNrk(s)&&hit(s)),rest=L.filter(s=>!rdNrk(s)&&hit(s));
+    B.innerHTML=(fav.length?`<h3 class="sech">★ Dine favoritter</h3><div class="spg">${fav.map(rdCard).join('')}</div>`:'')
+     +(nrk.length?`<h3 class="sech">NRK</h3><div class="spg">${nrk.map(rdCard).join('')}</div>`:'')
+     +(rest.length?`<h3 class="sech">${q?'Treff':'Mest lyttet i Norge'}</h3><div class="spg">${rest.slice(0,q?120:80).map(rdCard).join('')}</div>`:'')
+     ||'<p class="muted">Ingen kanaler funnet.</p>'};
+  draw('');let qt=0;$('rdQ').oninput=e=>{clearTimeout(qt);qt=setTimeout(()=>draw(e.target.value),200)};
+  el.onclick=e=>{const fb=e.target.closest('[data-rdfav]');if(fb){const id=fb.dataset.rdfav,f=rdFav(),i=f.indexOf(id);if(i<0)f.push(id);else f.splice(i,1);localStorage.setItem('radio_fav',JSON.stringify(f));try{fsSoon&&fsSoon()}catch(x){}rdNowDraw();draw($('rdQ').value);return}
+    const c=e.target.closest('[data-rd]');if(!c)return;const s=L.find(x=>x.stationuuid===c.dataset.rd);if(s)rdPlay(s)}}
 
 /* v211: nullstill sideveis rulling på forsiden (gamle WebView uten overflow:clip) */
 function noSide(){try{const h=document.getElementById('v-home');if(h&&h.scrollLeft)h.scrollLeft=0;if(document.documentElement.scrollLeft)document.documentElement.scrollLeft=0;if(document.body.scrollLeft)document.body.scrollLeft=0}catch(e){}}
