@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spotify – Eskedals Univers</title>
+<style>body{background:#0b0c18;color:#fff;font:18px/1.5 system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0;padding:16px;box-sizing:border-box;text-align:center}b{color:#1ed760;font-size:24px}</style></head>
+<body><div id="m">Kobler til Spotify …</div>
+<script>
+(async function(){var q=new URLSearchParams(location.search),c=q.get('code'),s=q.get('state'),e=q.get('error'),m=document.getElementById('m');
+if(e||!c||!s){m.textContent='Innloggingen ble avbrutt ('+(e||'mangler kode')+'). Prøv igjen fra appen.';return}
+try{localStorage.setItem('sp_code_'+s,c)}catch(x){}
+if(window.opener){try{window.opener.postMessage({sp:1,state:s,code:c},'*')}catch(x){}}
+try{var r=await fetch('https://eskedals-univers-default-rtdb.europe-west1.firebasedatabase.app/sync/spc_'+s+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(JSON.stringify({code:c,t:Date.now()}))});
+m.innerHTML=r.ok?'<b>✔ Spotify er koblet til</b><br><br>Gå tilbake til Eskedals Univers – den fortsetter av seg selv.<br>Du kan lukke denne siden.':'Kunne ikke lagre innloggingen (HTTP '+r.status+'). Prøv igjen.'}catch(x){m.textContent='Nettverksfeil: '+x.message}
+if(window.opener)setTimeout(function(){window.close()},2000);
+})();
+</script></body></html>
