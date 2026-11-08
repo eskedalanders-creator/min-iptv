@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=208;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=209;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1679,7 +1679,9 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
  .hhome span{display:none}.hhome{padding:0 8px!important}
  .hav{width:26px;height:26px;font-size:12px}
  #xmasSleigh{width:170px;height:44px;top:6px}
+ #v-home.uvhome{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
  .uv{height:auto!important;min-height:0!important;padding:12px 10px 90px!important;gap:12px!important}
+ .uv::before,.uv::after{position:fixed!important}
  .uvg{grid-template-columns:1fr!important;grid-template-rows:none!important;grid-auto-rows:auto!important;gap:12px!important}
  .uvt{padding:8px 10px 10px!important}
  .uvt .uvm{height:200px;flex:none}
@@ -1701,7 +1703,7 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 #v-live #tools .row{display:none!important}
 #v-live #tabs,#v-live #chips,#v-live #provs{display:none!important}
 /* v189: glass-rammer på forsiden */
-#v-home.uvhome{position:relative;overflow:hidden}
+#v-home.uvhome{position:relative;overflow-x:hidden}
 .uv{isolation:isolate}
 .uv::before{content:"";position:absolute;inset:-10%;z-index:-2;pointer-events:none;
   background:
@@ -2347,18 +2349,19 @@ async function fetchAll(x,onP){
       const cats=await xapi(x,catAct);
       let list;
       try{
-        if((localStorage.getItem('forcecat')==='1'&&listAct!=='get_live_streams')||(NATIVE&&!DESKTOP&&Array.isArray(cats)&&cats.length>1))throw new RangeError('per kategori');
+        if(localStorage.getItem('forcecat')==='1'&&listAct!=='get_live_streams')throw new RangeError('per kategori');
         list=await xapi(x,listAct);
       }catch(e1){
-        if(!Array.isArray(cats)||!cats.length)throw e1;
+        if(!Array.isArray(cats)||!cats.length||/HTTP (403|429)/.test(String(e1&&e1.message)))throw e1;
         /* store svar (f.eks. Capacitor/TV): hent én kategori om gangen */
         const seen=new Set();list=[];const cq=cats.slice();let done=0;
         const idk=listAct==='get_series'?'series_id':'stream_id';
         const wk=async()=>{while(cq.length){const c=cq.shift();onP&&onP((doneT.length?'✔ '+doneT.join(' · ')+'\n':'')+'Henter '+label+' '+(++done)+'/'+cats.length+' …');
-          let part1;try{part1=await xapi(x,listAct,'&category_id='+encodeURIComponent(c.category_id))}catch(e2){warn.push(label+' '+cl(c.category_name)+': '+e2.message);continue}
+          let part1;try{part1=await xapi(x,listAct,'&category_id='+encodeURIComponent(c.category_id))}catch(e2){if(/HTTP (403|429)/.test(String(e2.message))){cq.length=0;throw e2}warn.push(label+' '+cl(c.category_name)+': '+e2.message);continue}
+          await new Promise(r=>setTimeout(r,120));
           if(!Array.isArray(part1))continue;
           for(let i=0;i<part1.length;i++){const it=part1[i],k=it[idk];if(seen.has(k))continue;seen.add(k);list.push(it)}}};
-        await Promise.all([wk(),wk(),wk(),wk()]);
+        await Promise.all([wk(),wk()]);
         if(!list.length)throw e1;
       }
       if(!Array.isArray(list))throw new Error('uventet svar');
@@ -2379,7 +2382,9 @@ async function fetchAll(x,onP){
   return {data:{live,vod:vod||[],ser:ser||[]},warn};
 }
 let refBusy=0;
-async function refreshSource(s,quiet){if(refBusy&&quiet)return false;refBusy++;try{return await refreshSource0(s,quiet)}finally{refBusy--}}
+const srcBlocked=()=>(+localStorage.getItem('srcBlock')||0)>Date.now();
+const cleanErr=m=>String(m||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').replace(/\(Xtream:.*$/,'').trim().slice(0,140);
+async function refreshSource(s,quiet){if(refBusy&&quiet)return false;if(quiet&&srcBlocked())return false;refBusy++;try{return await refreshSource0(s,quiet)}finally{refBusy--}}
 async function refreshSource0(s,quiet){
   try{
     const onP=t=>quiet?toast('Oppdaterer kilden: '+t):ssta(t,true);
@@ -2393,7 +2398,7 @@ async function refreshSource0(s,quiet){
     toast(quiet?'Kilden er oppdatert ✔':'',quiet?3500:0);
     if(!quiet)ssta('Oppdatert. '+warn.join(' · '),true);
     return true;
-  }catch(e){toast('');const dg=' ['+(typeof step==='string'?step:'?')+'] '+String(e&&e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/\(.*[\/\\]/,'(').replace(/^at /,'')).join(' | ');if(!quiet)ssta('Oppdatering feilet: '+e.message+dg);else toast('Kunne ikke oppdatere kilden: '+e.message+dg,20000);return false}
+  }catch(e){toast('');if(/HTTP (403|429)/.test(String(e&&e.message))){localStorage.setItem('srcBlock',String(Date.now()+30*60000));epgHold=Date.now()+30*60000;if(quiet){toast('Leverandøren avviste tilkoblingen akkurat nå (for mange forespørsler). Bruker lagret kanalliste – prøver igjen om 30 min.',6000);return false}}const dg=' ['+(typeof step==='string'?step:'?')+'] '+String(e&&e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/\(.*[\/\\]/,'(').replace(/^at /,'')).join(' | ');if(!quiet)ssta('Oppdatering feilet: '+e.message+dg);else toast('Kunne ikke oppdatere kilden: '+cleanErr(e.message)+''+dg,20000);return false}
 }
 $('srcAdd').onclick=async()=>{
   const name=$('sName').value.trim()||'Kilde';
@@ -2679,7 +2684,7 @@ function fsMergeUsers(text){
     const delR=P(ls.profiles_del)||[],delL=LSget('profiles_del',[]),del=[...new Set([...delR,...delL])];
     const rp=P(ls.profiles)||[],map=new Map();let ch=false;
     for(const p of profiles)map.set(p.id,p);
-    for(const p of rp){const l=map.get(p.id);if(!l){map.set(p.id,p);ch=true}else if((p.ts||0)>(l.ts||0)&&p.name!==l.name){l.name=p.name;l.ts=p.ts;ch=true}}
+    for(const p of rp){if(!p||!p.id)continue;const l=map.get(p.id);if(!l){map.set(p.id,p);ch=true}else if(p.name!==l.name&&(((p.ts||0)>(l.ts||0))||(!l.ts&&(l.name==='Meg'||!p.ts&&p.name!=='Meg')))){l.name=p.name;l.ts=p.ts||l.ts;ch=true}}
     let np=[...map.values()].filter(p=>!del.includes(p.id));if(!np.length)np=profiles;if(np.length!==profiles.length)ch=true;
     for(const k in ls){const m=/^(fav|hid|seen):(.+)$/.exec(k);if(!m||del.includes(m[2]))continue;const r=P(ls[k]);if(!Array.isArray(r))continue;const l=LSget(k,[]);const u=[...new Set([...l,...r])];if(u.length!==l.length){LSset(k,u);ch=true;if(m[2]===pid){if(m[1]==='fav')favs=new Set(u);if(m[1]==='hid')hidden=new Set(u)}}}
     LSset('profiles_del',del);
@@ -3011,7 +3016,7 @@ function epgPump(){
     xapi(c.xt,'get_short_epg','&stream_id='+c.id+'&limit=30').then(j=>{
       const ts=(x,k)=>{const v=+x[k+'_timestamp'];if(v)return v*1000;const d=Date.parse(String(x[k]||'').replace(' ','T'));return isNaN(d)?0:d};
       return ((j&&j.epg_listings)||[]).map(x=>({t:b64d(x.title||''),d:b64d(x.description||''),s:ts(x,'start'),e:ts(x,'end')||ts(x,'stop')})).filter(x=>x.t&&x.e>x.s).sort((a,b)=>a.s-b.s);
-    }).catch(()=>null).then(l=>{
+    }).catch(e=>{if(/HTTP (403|429)/.test(String(e&&e.message)))epgHold=Date.now()+15*60000;return null}).then(l=>{
       if(l&&l.length)epgOk++;else epgFail++;
       l=l||[];EPG.set(c.key,{t:Date.now(),list:l});EPGP.delete(c.key);epgBusy--;res(l);epgPump();
     });
@@ -5662,7 +5667,7 @@ epgGet=function(c){
     let l=[];const nid=nrkId(c);
     if(nid){try{l=await nrkEpg(nid)}catch(e){}}
     if(!l.length&&c.xt){l=await epgGetX(c);
-      if(!l.length){const n=normLive(c);const alts=(c.alts&&c.alts.length?c.alts:DB.live.filter(x=>x!==c&&x.xt&&normLive(x)===n)).slice(0,4);
+      if(!l.length){const n=normLive(c);const alts=(Date.now()<epgHold||epgFail>epgOk*3+6)?[]:(c.alts&&c.alts.length?c.alts:DB.live.filter(x=>x!==c&&x.xt&&normLive(x)===n)).slice(0,1);
         for(const a of alts){l=await epgGetX(a);if(l.length)break}}}
     EPG.set(c.key,{t:Date.now(),list:l});EPGW.set(c.key,{t:Date.now(),list:l});return l})();
   EPGW.set(c.key,{p});return p;
@@ -5713,6 +5718,25 @@ renderGuide=function(){
   }));
 };
 
+/* ===== v209: Android Auto (lyd) – kanalliste til den innebygde Android-appen ===== */
+let autoSyncT=0;
+function autoSync(){clearTimeout(autoSyncT);autoSyncT=setTimeout(autoSyncNow,4000)}
+function autoSyncNow(){
+  try{
+    const P=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.AutoBridge;if(!P||!DB.live.length||typeof tvList!=='function')return;
+    const hls=c=>{const m=String(c.url||'').match(/^(https?:\/\/[^\/]+)\/live\/([^\/]+)\/([^\/]+)\/(\d+)(?:\.(ts|m3u8))?/i);return m?m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8':c.url};
+    const it=c=>({id:c.key,title:tvName(c),sub:(TVC.find(x=>x[0]===tvCountry(c))||[0,0,''])[2],url:hls(c),art:c.logo||''});
+    const uniq=l=>{const s=new Set();return l.filter(c=>c&&c.url&&!s.has(normLive(c))&&s.add(normLive(c)))};
+    const fav=uniq(DB.live.filter(c=>tvVis(c)&&isFav(c))).slice(0,60);
+    const last=uniq(hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&!tvIsEv(c))).slice(0,20);
+    const brann=uniq(DB.live.filter(c=>tvVis(c)&&/brann/i.test(c.name||'')&&!/ended/i.test(c.name||''))).slice(0,20);
+    const no=tvList('no'),sport=uniq(['no','se','dk','uk','us'].flatMap(id=>tvList(id).filter(c=>c._g==='sport'))).slice(0,80);
+    const groups=[['fav','⭐ Favoritter',fav],['last','🕘 Sist sett',last],['brann','🔥 Brann',brann],['sport','⚽ Sport',sport],['no','🇳🇴 Norge',uniq(no).slice(0,80)],['nyheter','📰 Nyheter',uniq(['no','uk','us'].flatMap(id=>tvList(id).filter(c=>c._g==='nyheter'))).slice(0,40)],['uk','🇬🇧 Storbritannia',uniq(tvList('uk')).slice(0,60)],['us','🇺🇸 USA',uniq(tvList('us')).slice(0,60)]]
+      .map(([id,title,l])=>({id,title,items:l.map(it)})).filter(g=>g.items.length);
+    P.setChannels({json:JSON.stringify({t:Date.now(),groups})}).catch(()=>{});
+  }catch(e){}
+}
+setTimeout(autoSync,8000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')autoSyncNow()});
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
 const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
 try{localStorage.setItem('boot_try','0')}catch(e){}
