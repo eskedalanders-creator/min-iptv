@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=192;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=193;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1574,7 +1574,7 @@ body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:
 .tvx-s{overflow:auto;padding:18px 10px 30px 18px;border-right:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);scrollbar-width:none}
 .tvx-st{font:900 22px/1 system-ui;margin:4px 8px 16px}
 .tvc{display:flex!important;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 12px!important;margin:2px 0;border-radius:12px!important;background:none!important;border:1px solid transparent!important;color:#c9cfe0!important;font-weight:650;font-size:15.5px}
-.tvc .tvcf{width:26px;text-align:center;font-size:19px}.tvc .tvcn{flex:1}.tvc small{color:#7d86a0;font-size:12px}
+.tvc .tvcf{width:26px;text-align:center;font-size:19px;display:grid;place-items:center}.tvflag{width:24px;height:16px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}.tvc .tvcn{flex:1}.tvc small{color:#7d86a0;font-size:12px}
 .tvc:hover{background:rgba(255,255,255,.06)!important}
 .tvc.on{background:rgba(255,255,255,.1)!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important}
 body.tv .tvc:focus,html.tvm .tvc:focus{background:#fff!important;color:#0b0c18!important;outline:none!important;transform:none!important;box-shadow:none!important}
@@ -1898,7 +1898,8 @@ function evTime(c){
 }
 const isPast=c=>c.ev&&c.ev+(c.evd||0)<Date.now();
 let dedupeOn=LSget('dedupe',true);
-const langOk=c=>!c.lg||allowedLangs.has(c.lg)||((c.lg==='uk'||c.lg==='us')&&(allowedLangs.has('uk')||allowedLangs.has('us')));
+const LIVE_EN_X=new Set(['ca','au','ie','nz']);
+const langOk=c=>!c.lg||allowedLangs.has(c.lg)||((c.lg==='uk'||c.lg==='us'||(c.t==='live'&&LIVE_EN_X.has(c.lg)&&!/french|fran[cç]ais|qu[ée]bec|\btva\b|punjabi|hindi|arab/i.test((c.name||'')+' '+(c.cat||''))))&&(allowedLangs.has('uk')||allowedLangs.has('us')));
 const RXL={se:/sverige|swedish|svensk/i,dk:/danmark|danish|dansk/i,us:/\busa\b|united states/i,uk:/\buk\b|british|britain|england/i};
 function langOf(c){
   if(RX_SCRIPT.test(c.name||''))return 'xx';
@@ -1932,12 +1933,12 @@ function dedupe(){
   }
   dedupeLive();
 }
-const normLive=c=>String(c.nm||c.name).toLowerCase().replace(/[^a-z0-9æøåäöü]+/g,'');
+const normLive=c=>{let n=String(c.nm||c.name).toLowerCase().replace(/^\W*(gold|vip|uk|us|usa|gb|ca|au|ie|nz|en|no|se|dk|nordic)\s*[:|\-]\s*/,'').replace(/[ᴴᴰᵁˢᴿᴬᵂ⁴ᴷ⁸ᵛᶠᵖ]/g,' ').replace(/\b(hd|fhd|uhd|4k|sd|raw|ultra|hevc|h265|backup|alt|vip|\d{2} ?fps?)\b/g,' ').replace(/[^a-z0-9æøåäöü]+/g,'');return n.replace(/^tv2direkte$/,'tv2')};
 function dedupeLive(){
   const groups=new Map();
   for(const c of DB.live){c.dup=0;c.alts=null;if(!dedupeOn)continue;const b=normLive(c);if(b.length<2)continue;const k=b+'|'+(c.lg||'');const g=groups.get(k);if(g)g.push(c);else groups.set(k,[c])}
   const QR={HD:0,FHD:0,'4K':1,UHD:1,SD:2,VIP:2,RAW:3};
-  const qr=c=>QR[(c.q&&c.q[0])||'']??1;
+  const qr=c=>{const n=c.name||'',q=(c.q&&c.q[0])||'';return /ᵛ/.test(n)?0:(q==='HD'||q==='FHD'||/\b(f?hd)\b/i.test(n))?1:/\d{2} ?fps?\b/i.test(n)?2:(q==='RAW'||/\braw\b/i.test(n))?5:(/ultra|uhd|\b4k\b/i.test(n)||q==='4K'||q==='UHD')?4:3};
   for(const g of groups.values()){if(g.length<2)continue;g.sort((a,b)=>qr(a)-qr(b));g[0].alts=g.slice(1);for(let i=1;i<g.length;i++)g[i].dup=1}
 }
 const noRank=c=>/\bnrk/i.test(c.name)?0:/tv ?2/i.test(c.name)?1:/tv ?norge|tvnorge/i.test(c.name)?2:/viaplay|v ?sport/i.test(c.name)?3:4;
@@ -2405,6 +2406,7 @@ function makePlayer(video,msgEl){
       const p=px(src);
       if(kind==='hls'&&window.Hls&&Hls.isSupported()){
         hls=new Hls({maxBufferLength:30,maxMaxBufferLength:60,backBufferLength:20,abrEwmaDefaultEstimate:6e6,startFragPrefetch:true,manifestLoadingMaxRetry:3,levelLoadingMaxRetry:4,fragLoadingMaxRetry:5,liveSyncDurationCount:3,liveMaxLatencyDurationCount:10});hls.loadSource(p);hls.attachMedia(video);
+        hls.on(Hls.Events.AUDIO_TRACKS_UPDATED,()=>setTimeout(bestAud,400));
         hls.on(Hls.Events.ERROR,(_,d)=>{if(!d.fatal)return;if(d.type===Hls.ErrorTypes.MEDIA_ERROR)hls.recoverMediaError();else fail('('+d.details+')')});
       }else if(kind==='hls'||kind==='nhls')video.src=p;
       else if(canTs){
@@ -2415,11 +2417,19 @@ function makePlayer(video,msgEl){
       video.onerror=()=>{if(me===alive)show('Kunne ikke spille av filen. Nettleseren støtter kanskje ikke formatet (prøv Edge/Chrome), eller leverandøren svarer ikke. Bruk «Kopier lenke» og åpne i VLC.')};
       video.src=px(url);
     }
+    video.addEventListener('loadedmetadata',()=>setTimeout(bestAud,1200),{once:true});
     const pr=video.play();if(pr&&pr.catch)pr.catch(()=>{});
   }
   const aud=()=>{if(hls&&hls.audioTracks&&hls.audioTracks.length>1)return{src:'hls',list:hls.audioTracks.map((t,i)=>({i,n:t.name||t.lang||'Spor '+(i+1),on:hls.audioTrack===i}))};
     const at=video.audioTracks;if(at&&at.length>1)return{src:'el',list:[...at].map((t,i)=>({i,n:t.label||t.language||'Spor '+(i+1),on:t.enabled}))};return null};
   const setAud=i=>{if(hls&&hls.audioTracks&&hls.audioTracks.length>1)hls.audioTrack=i;else if(video.audioTracks)[...video.audioTracks].forEach((t,k)=>t.enabled=k===i)};
+  const audSc=n=>{n=String(n||'').toLowerCase();let s=0;if(/atmos/.test(n))s+=100;if(/truehd/.test(n))s+=90;if(/dts[- ]?(hd|x|ma)/.test(n))s+=80;if(/e-?ac-?3|eac3|ec-3|ddp|dd\+|digital plus/.test(n))s+=70;else if(/\bdts\b/.test(n))s+=60;else if(/ac-?3|dolby|\bdd\b/.test(n))s+=50;if(/7\.1|\b8 ?ch/.test(n))s+=25;else if(/5\.1|\b6 ?ch|surround/.test(n))s+=20;if(/stereo|2\.0|\b2 ?ch/.test(n))s-=5;if(/comment|kommentar|descri|lydtekst|synstolk|\bad\b/.test(n))s-=200;return s};
+  const bestAud=()=>{try{if(LSget('bestAudio',true)===false)return;let L=null,ci=-1;
+    if(hls&&hls.audioTracks&&hls.audioTracks.length>1){L=hls.audioTracks.map((t,i)=>({i,lang:String(t.lang||'').slice(0,2).toLowerCase(),n:[t.name,t.lang,t.audioCodec,t.channels?t.channels+'ch':''].join(' ')}));ci=hls.audioTrack}
+    else if(video.audioTracks&&video.audioTracks.length>1){const at=[...video.audioTracks];L=at.map((t,i)=>({i,lang:String(t.language||'').slice(0,2).toLowerCase(),n:[t.label,t.language].join(' ')}));ci=at.findIndex(t=>t.enabled)}
+    if(!L)return;const cur0=L[ci]||L[0],cl=cur0.lang;let best=null,bs=-1e9;
+    for(const x of L){if(cl&&x.lang&&x.lang!==cl)continue;const v=audSc(x.n);if(v>bs){bs=v;best=x}}
+    if(best&&best.i!==ci&&bs>audSc(cur0.n)){setAud(best.i);try{toast('🔊 Beste lydspor valgt',2200)}catch(e){}}}catch(e){}};
   const lev=()=>hls&&hls.levels&&hls.levels.length>1?{cur:hls.currentLevel,auto:hls.autoLevelEnabled,list:hls.levels.map((l,i)=>({i,n:(l.height?l.height+'p':Math.round(l.bitrate/1000)+' kbit')+(l.bitrate?' · '+(l.bitrate/1e6).toFixed(1)+' Mbit':'')}))}:null;
   const setLev=i=>{if(hls)hls.currentLevel=i};
   const stats=()=>{
@@ -4006,8 +4016,8 @@ function goLive({tab,chip:ch,find}){liveTab=tab||'all';liveChip=ch||null;liveFin
 /* ---------- Live ---------- */
 let liveFind=null,liveProv=-1,gCount=new Map(),lastG=null;
 let liveTab='no',liveChip=null,showHidden=false,filtered=[],shown=0,current=null;
-const TABS=[['fav','★ Favoritter'],['no','🇳🇴 Norge'],['se','🇸🇪 Sverige'],['dk','🇩🇰 Danmark'],['uk','🇬🇧 England'],['us','🇺🇸 USA'],['fb','⚽ Fotball'],['all','Alle']];
-const inTab=(c,t)=>t==='all'||(t==='fav'&&isFav(c))||(t==='no'&&(c.no||c.lg==='no'))||(t==='fb'&&c.fb)||((t==='se'||t==='dk'||t==='uk'||t==='us')&&c.lg===t);
+const TABS=[['fav','★ Favoritter'],['no','🇳🇴 Norge'],['se','🇸🇪 Sverige'],['dk','🇩🇰 Danmark'],['uk','🇬🇧 Storbritannia'],['us','🇺🇸 USA'],['ca','🇨🇦 Canada'],['au','🇦🇺 Australia'],['ie','🇮🇪 Irland'],['nz','🇳🇿 New Zealand'],['fb','⚽ Fotball'],['all','Alle']];
+const inTab=(c,t)=>t==='all'||(t==='fav'&&isFav(c))||(t==='no'&&(c.no||c.lg==='no'))||(t==='fb'&&c.fb)||((t==='se'||t==='dk'||t==='uk'||t==='us'||t==='ca'||t==='au'||t==='ie'||t==='nz')&&c.lg===t);
 function buildLiveUI(){
   const counts={};for(const [t] of TABS)counts[t]=0;
   for(const c of DB.live){if(!visible(c))continue;for(const [t] of TABS)if(inTab(c,t))counts[t]++}
@@ -4177,7 +4187,7 @@ let bbTimer=0,bbIdx=0,bbTr=0;const trCache={};
 function stopSlider(){try{stopCinema()}catch(e){}try{uvStop()}catch(e){}clearInterval(bbTimer);clearTimeout(bbTr);bbTimer=0;const el=document.getElementById('bbx');if(el)el.querySelectorAll('.bbv').forEach(x=>{x.innerHTML='';x.classList.remove('on')})}
 function sliderHtml(items,kind){
   if(!items.length)return '';
-  return `<section class="bb" id="bbx">${items.map((c,i)=>{const sv=SERV.find(x=>x.id===c.sv);return `<div class="bbs ${i?'':'on'}" data-k="${c.key}"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbv"></div><div class="bbin"><span class="eyebrow">${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(c.nm||c.name)}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost bbtr" hidden>🎞 Trailer</button><button class="ghost bbsnd" hidden>🔊 Lyd</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></div>`}).join('')}<div class="bbd">${items.map((_,i)=>`<i class="${i?'':'on'}" data-d="${i}"></i>`).join('')}</div></section>`;
+  return `<section class="bb" id="bbx">${items.map((c,i)=>{const sv=SERV.find(x=>x.id===c.sv);return `<div class="bbs ${i?'':'on'}" data-k="${c.key}"><div class="bbimg" style="background-image:url('${esc(c.logo)}')"></div><div class="bbv"></div><div class="bbin"><span class="eyebrow">${c.t==='ser'?'Serie':'Film'}</span><h2>${esc(String(c.nm||c.name).replace(/^[A-Z0-9+]{2,8}(?:-[A-Z0-9+]{1,6})*\s*-\s*/,'').replace(/\s*\([A-Z]{2}\)\s*$/,'').replace(/\s*\((19|20)\d\d\)\s*$/,'').trim())}</h2><div class="meta">${c.rt?`<span>★ ${c.rt.toFixed(1)}</span>`:''}${sv?`<span style="color:${sv.c}">● ${sv.name}</span>`:''}</div><div class="bbtn"><button class="primary" data-k="${c.key}">▶ Spill av</button><button class="ghost" data-k="${c.key}">ℹ Mer info</button><button class="ghost bbtr" hidden>🎞 Trailer</button><button class="ghost bbsnd" hidden>🔊 Lyd</button></div></div><img class="bbp" src="${esc(c.logo)}" alt=""></div>`}).join('')}<div class="bbd">${items.map((_,i)=>`<i class="${i?'':'on'}" data-d="${i}"></i>`).join('')}</div></section>`;
 }
 function startSlider(){
   stopSlider();const root=document.getElementById('bbx');if(!root)return;
@@ -4185,15 +4195,17 @@ function startSlider(){
   const tick=()=>{clearInterval(bbTimer);if(!TVM)bbTimer=setInterval(()=>show(bbIdx+1),8000)};
   const playTr=(sl,id,mute)=>{
     clearInterval(bbTimer);clearTimeout(bbTr);
-    const v=sl.querySelector('.bbv');
-    v.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=${mute?1:0}&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${id}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-    v.classList.add('on');sl.querySelector('.bbsnd').hidden=false;sl.querySelector('.bbimg').style.opacity='.2';
-    bbTr=setTimeout(()=>{show(bbIdx+1);tick()},mute?45000:150000);
+    const v=sl.querySelector('.bbv'),img=sl.querySelector('.bbimg'),live=()=>document.body.contains(sl);
+    if(v._ctl){try{v._ctl.kill()}catch(e){}}
+    v._ctl=uvYT(v,id,{mute,max:mute?45000:150000,
+      onStart:()=>{sl.querySelector('.bbsnd').hidden=false;img.style.opacity='.2'},
+      onEnd:()=>{if(!live())return;img.style.opacity='';v.classList.remove('on');show(bbIdx+1);tick()},
+      onFail:()=>{if(!live())return;const k=sl.dataset.k;trCache[k]='';try{uvTr[k]='';uvTrSave()}catch(e){}v.innerHTML='';v.classList.remove('on');img.style.opacity='';sl.querySelector('.bbtr').hidden=true;sl.querySelector('.bbsnd').hidden=true;if(sl.classList.contains('on')){show(bbIdx+1);tick()}}});
   };
   const prep=async sl=>{
     const c=byKey.get(sl.dataset.k);if(!c||!c.xt)return;
     let id=trCache[c.key];
-    if(id===undefined){try{const j=await xapi(c.xt,c.t==='vod'?'get_vod_info':'get_series_info',(c.t==='vod'?'&vod_id=':'&series_id=')+c.id);const i=(j&&j.info)||{};id=ytId(i.youtube_trailer||i.trailer||'')}catch(e){id=''}trCache[c.key]=id}
+    if(id===undefined&&typeof uvTr!=='undefined'&&uvTr[c.key]==='')id='';if(id===undefined){try{const j=await xapi(c.xt,c.t==='vod'?'get_vod_info':'get_series_info',(c.t==='vod'?'&vod_id=':'&series_id=')+c.id);const i=(j&&j.info)||{};id=ytId(i.youtube_trailer||i.trailer||'')}catch(e){id=''}trCache[c.key]=id}
     if(!id||!sl.classList.contains('on'))return;
     sl.querySelector('.bbtr').hidden=false;
     sl.querySelector('.bbtr').onclick=()=>playTr(sl,id,true);
@@ -4328,6 +4340,7 @@ function renderSettings(){
    <div class="card"><h3>📡 Kilder</h3><p>Legg til, oppdater eller bytt spilleliste (M3U / Xtream).</p><button class="primary" data-act="src">Åpne kilder</button></div>
    <div class="card"><h3>👤 Brukere</h3><p>Hver bruker har egne favoritter, skjulte kanaler og «fortsett å se».</p><button class="primary" data-act="prof">Administrer brukere</button></div>
 
+   <div class="card"><h3>🔊 Beste lyd</h3><p>Velger automatisk det beste lydsporet når en film, serie eller kanal har flere (Dolby Atmos, TrueHD, Dolby Digital Plus, 5.1 – i samme språk). Nå: <b>${LSget('bestAudio',true)!==false?'på':'av'}</b>.</p><button data-act="ba" class="${LSget('bestAudio',true)!==false?'primary':''}">${LSget('bestAudio',true)!==false?'Slå av':'Slå på'}</button><p class="muted" style="margin-top:10px">Ekte Dolby Atmos til lydplanke/forsterker krever at lyden sendes rett gjennom (passthrough). Det gjør ikke den innebygde spilleren – den lager ${DESKTOP?'flerkanalslyd (5.1/7.1)':'flerkanals- eller stereolyd'}. For Atmos: bruk «🎞 VLC»-knappen i spilleren, og slå på «HDMI-passthrough (E-AC3/TrueHD)» i VLC under Lyd → Utgang.</p></div>
    <div class="card"><h3>🌍 Land og språk</h3><p>Kanaler, filmer og serier fra land du ikke har valgt, skjules.</p>${langCard()}</div>
    <div class="card"><h3>🚫 Skjulte</h3><p>${hidden.size} skjulte kanaler, filmer og serier.</p><button data-act="unhide" ${hidden.size?'':'disabled'}>Vis alle igjen</button></div>
    ${accList().length>1?`<div class="card"><h3>🔀 Konto for avspilling</h3><p>Hver konto tåler én strøm om gangen. «Auto» velger en ledig konto og bytter hvis den valgte er i bruk (også på andre enheter). Favoritter, innstillinger og «Fortsett å se» er felles for alle kontoer.</p><button data-act="acc:auto" class="${accPref()==='auto'?'primary':''}">🔄 Auto</button> ${accList().map(a=>`<button data-act="acc:${a.id}" class="${accPref()===a.id?'primary':''}">${esc(a.name)} ${accBusy(a.id,'x')?'🔴':'🟢'}</button>`).join(' ')}<p><small>🟢 ledig · 🔴 i bruk${accList().some(a=>accBusy(a.id,'x'))?' ('+accList().filter(a=>accBusy(a.id,'x')).map(a=>esc(a.name)+': '+esc(accBusy(a.id,'x'))).join(', ')+')':''}</small></p></div>`:''}
@@ -4506,6 +4519,7 @@ document.addEventListener('click',e=>{
     else if(v.startsWith('bk:')){backup(v.slice(3))}
     else if(v.startsWith('tv:')){const m=v.slice(3);if(m==='auto')localStorage.removeItem('tvmode');else localStorage.setItem('tvmode',m);location.reload()}
     else if(v.startsWith('th:')){setTheme(v.slice(3));renderSettings()}
+    else if(v==='ba'){LSset('bestAudio',LSget('bestAudio',true)===false);renderSettings()}
     else if(v==='unhide'){hidden.clear();saveHid();renderSettings();buildLiveUI()}
     else if(v==='clearhist'){hist=[];saveHist();renderSettings()}}
 });
@@ -5415,16 +5429,18 @@ function renderTV(){
   if(!S){el.innerHTML='<h1>Direkte TV</h1><div class="empty">Legg til en kilde først.</div>';return}
   const cnt={};for(const [id] of TVC)cnt[id]=tvList(id).length;
   if(!cnt[tvSel])tvSel='no';
-  const side=TVC.filter(([id])=>cnt[id]||id==='fav'||id==='last').map(([id,fl,n])=>`<button class="tvc${id===tvSel?' on':''}" data-tvc="${id}"><span class="tvcf">${fl}</span><span class="tvcn">${n}</span><small>${cnt[id]||''}</small></button>`).join('');
+  const FLG={no:'no',se:'se',dk:'dk',uk:'gb',us:'us',ca:'ca',au:'au',ie:'ie',nz:'nz'};
+  const side=TVC.filter(([id])=>cnt[id]||id==='fav'||id==='last').map(([id,fl,n])=>`<button class="tvc${id===tvSel?' on':''}" data-tvc="${id}"><span class="tvcf">${FLG[id]?`<img class="tvflag" src="https://flagcdn.com/w40/${FLG[id]}.png" alt="" onerror="this.replaceWith(document.createTextNode('${fl}'))">`:fl}</span><span class="tvcn">${n}</span><small>${cnt[id]||''}</small></button>`).join('');
   el.innerHTML=`<div class="tvx-w"><aside class="tvx-s"><div class="tvx-st">Direkte TV</div>${side}<div class="tvx-sep"></div><button class="tvc" data-go="guide:"><span class="tvcf">📅</span><span class="tvcn">TV-guide</span></button><button class="tvc" data-go="live:tab=all"><span class="tvcf">☰</span><span class="tvcn">Alle kanaler</span></button></aside>
    <section class="tvx-m"><div class="tvx-h"><div><h2 id="tvxT"></h2><small id="tvxN"></small></div><input id="tvq" type="search" placeholder="Søk etter kanal …" autocomplete="off"></div><div class="tvx-l" id="tvxL"></div></section>
    <aside class="tvx-i" id="tvxI"></aside></div>`;
   const show=id=>{tvSel=id;LSset('tvSel',id);el.querySelectorAll('[data-tvc]').forEach(b=>b.classList.toggle('on',b.dataset.tvc===id));const t=TVC.find(x=>x[0]===id)||TVC[2];const l=tvList(id);
-    $('tvxT').textContent=t[1]+' '+t[2];$('tvxN').textContent=l.length?l.length+' kanaler':'';const L=$('tvxL');L.innerHTML=tvRowsHtml(id,l);L.scrollTop=0;epgHydrate(L);const f=L.querySelector('.tvr');if(f)tvInfo(byKey.get(f.dataset.k))};
+    $('tvxT').textContent=t[2];$('tvxN').textContent=l.length?l.length+' kanaler':'';const L=$('tvxL');L.innerHTML=tvRowsHtml(id,l);L.scrollTop=0;epgHydrate(L);const f=L.querySelector('.tvr');if(f)tvInfo(byKey.get(f.dataset.k))};
   el.querySelectorAll('[data-tvc]').forEach(b=>{b.onclick=()=>show(b.dataset.tvc);b.addEventListener('focus',()=>{if(TVM&&b.dataset.tvc!==tvSel){clearTimeout(b._t);b._t=setTimeout(()=>{if(document.activeElement===b)show(b.dataset.tvc)},350)}})});
   const L=$('tvxL');
   const hov=e=>{const r=e.target.closest&&e.target.closest('.tvr');if(!r)return;clearTimeout(tvInfoT);tvInfoT=setTimeout(()=>tvInfo(byKey.get(r.dataset.k)),180)};
   L.addEventListener('focusin',hov);L.addEventListener('mouseover',hov);
+  L.addEventListener('click',e=>{if(!e.target.closest('.tvr'))return;const t=TABS.some(x=>x[0]===tvSel)?tvSel:'all';try{liveTab=t;liveChip=null;liveProv=-1;$('q').value='';buildLiveUI()}catch(_){}},true);
   $('tvq').oninput=()=>{clearTimeout(tvqT2);tvqT2=setTimeout(()=>{const q=$('tvq').value.trim();if(q.length<2){show(tvSel);return}
     const res=skRun(DB.live,skq(q),c=>tvVis(c)&&(tvCountry(c)||tvIsEv(c))).slice(0,120);$('tvxT').textContent='🔍 Søk';$('tvxN').textContent=res.length+' treff';L.innerHTML=tvRowsHtml('q',res);epgHydrate(L)},180)};
   show(tvSel);
