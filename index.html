@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=221;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=222;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5911,10 +5911,13 @@ let rdList=null,rdCur=null,rdAud=null,rdHls=null,rdStat='';
 const rdFav=()=>{try{return JSON.parse(localStorage.getItem('radio_fav')||'[]')}catch(e){return[]}};
 async function rdApi(path){let last;for(const h of RD_HOSTS){try{const r=await fetch('https://'+h+'.api.radio-browser.info/json/'+path,{cache:'no-store'});if(r.ok)return await r.json();last=new Error('HTTP '+r.status)}catch(e){last=e}}throw last||new Error('Radiolisten er utilgjengelig')}
 const rdOk=s=>s&&s.url_resolved&&(location.protocol!=='https:'||/^https:/i.test(s.url_resolved));
-const rdNrk=s=>/^nrk\b/i.test(s.name||'');
+const rdNrk=s=>/\bnrk\b/i.test(s.name||'');
+const rdClean=n=>String(n||'').replace(/^\d+-/,'').replace(/\s*\((?:[^)]*(?:aac|mp3|kbps|\d+k|hq|høy|high|hi)[^)]*)\)/ig,'').replace(/\s+(aac_h|aac)$/i,'').replace(/\bp(\d+)/g,'P$1').replace(/\bMP3$/,'mP3').replace(/^nrk\b/i,'NRK').replace(/\bNyhter\b/,'Nyheter').replace(/Radio_Super/,'Super').replace(/\s+/g,' ').trim();
+const RD_NRK=['p1 hordaland','p1+','p2','p3','mp3','nyheter','sport','klassisk','jazz','folkemusikk','p3 musikk','super'];
+const rdRank=s=>{const n=s.name.toLowerCase().replace(/^nrk\s*/,'');const i=RD_NRK.indexOf(n);return i<0?(/^p1/.test(n)?50:60):i};
 async function rdLoad(){if(rdList)return rdList;
   const a=await rdApi('stations/bycountrycodeexact/NO?hidebroken=true&order=votes&reverse=true&limit=300');
-  const seen=new Set();rdList=a.filter(rdOk).filter(s=>{const k=(s.name||'').toLowerCase().replace(/[^a-z0-9æøå]/g,'');if(!k||seen.has(k))return false;seen.add(k);return true});
+  const seen=new Set();rdList=a.filter(rdOk).filter(s=>!/[^\u0000-\u024F\s\p{P}\p{S}]/u.test(s.name||'')).map(s=>Object.assign({},s,{name:rdClean(s.name)})).filter(s=>{const k=(s.name||'').toLowerCase().replace(/[^a-z0-9æøå+]/g,'');if(!k||seen.has(k))return false;seen.add(k);return true});
   try{localStorage.setItem('radio_cache',JSON.stringify({t:Date.now(),l:rdList.slice(0,200)}))}catch(e){}
   return rdList}
 function rdStop(){try{if(rdHls){rdHls.destroy();rdHls=null}if(rdAud){rdAud.pause();rdAud.removeAttribute('src');rdAud.load()}}catch(e){}rdCur=null;rdStat='';rdMini();rdNowDraw()}
@@ -5942,7 +5945,7 @@ async function renderRadio(){const el=$('v-radio');if(!el)return;
   try{L=await rdLoad()}catch(e){try{L=rdList=JSON.parse(localStorage.getItem('radio_cache')||'{}').l||null}catch(x){}if(!L){$('rdBody').innerHTML='<p class="muted">Fikk ikke hentet radiokanaler: '+esc(e.message)+'</p>';return}}
   const draw=q=>{const B=$('rdBody');if(!B)return;const f=rdFav();q=(q||'').trim().toLowerCase();
     const hit=s=>!q||(s.name+' '+(s.tags||'')+' '+(s.state||'')).toLowerCase().includes(q);
-    const fav=L.filter(s=>f.includes(s.stationuuid)&&hit(s)),nrk=L.filter(s=>rdNrk(s)&&hit(s)),rest=L.filter(s=>!rdNrk(s)&&hit(s));
+    const fav=L.filter(s=>f.includes(s.stationuuid)&&hit(s)),nrk=L.filter(s=>rdNrk(s)&&hit(s)).sort((a,b)=>rdRank(a)-rdRank(b)),rest=L.filter(s=>!rdNrk(s)&&hit(s));
     B.innerHTML=(fav.length?`<h3 class="sech">★ Dine favoritter</h3><div class="spg">${fav.map(rdCard).join('')}</div>`:'')
      +(nrk.length?`<h3 class="sech">NRK</h3><div class="spg">${nrk.map(rdCard).join('')}</div>`:'')
      +(rest.length?`<h3 class="sech">${q?'Treff':'Mest lyttet i Norge'}</h3><div class="spg">${rest.slice(0,q?120:80).map(rdCard).join('')}</div>`:'')
