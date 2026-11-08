@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=206;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=208;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1670,6 +1670,32 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .uvspx::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 24px rgba(10,14,30,.10)}
 .uvt.play .uvspx{opacity:0;transition:opacity .9s}
 .uv-sport .uvm::after{display:none!important}.uv-sport .uvm{background:#fff!important}
+/* v207: telefon */
+@media (max-width:640px){
+ header{height:auto!important;min-height:56px;padding:6px 10px!important;gap:6px!important;flex-wrap:nowrap!important}
+ header .brand b{font-size:13px!important;letter-spacing:.06em!important}header .brand .logo{width:28px!important;height:28px!important}
+ #bRl,#bFs,#bNew,#bFav{display:none!important}
+ .hic{height:34px!important;min-width:34px!important;padding:0 8px!important}.hic svg{width:18px;height:18px}
+ .hhome span{display:none}.hhome{padding:0 8px!important}
+ .hav{width:26px;height:26px;font-size:12px}
+ #xmasSleigh{width:170px;height:44px;top:6px}
+ .uv{height:auto!important;min-height:0!important;padding:12px 10px 90px!important;gap:12px!important}
+ .uvg{grid-template-columns:1fr!important;grid-template-rows:none!important;grid-auto-rows:auto!important;gap:12px!important}
+ .uvt{padding:8px 10px 10px!important}
+ .uvt .uvm{height:200px;flex:none}
+ .uvh{font-size:18px!important;padding-bottom:7px}
+ .uvs{font-size:13px}.uvgo{display:inline-block!important;padding:4px 10px}
+ .uvq{grid-template-columns:1fr 1fr!important;gap:8px!important}
+ .uvb{height:50px!important;font-size:12.5px!important;padding:0 12px!important}
+ .uvf{flex-direction:row!important;justify-content:flex-end}
+ .uvmt-t img,.uvmt-ph{width:56px;height:56px}.uvmt-m strong{font-size:30px}
+ .uvap b{font-size:22px!important}
+ .gd2-info{grid-template-columns:110px minmax(0,1fr)!important;min-height:0;gap:12px;padding:10px}.gd2-tx h2{font-size:17px}.gd2-tx p{font-size:13px;max-height:3em}
+ .gd2-top{margin:10px 0 6px}.gd2-sets{flex:0 0 100%!important;order:3;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0}.gd2-sets .chip{flex:none}
+ .gd2 .gch{flex-basis:120px!important;width:120px!important}.gd2 .gch img{display:none}
+ .tvx-h h2{font-size:24px}.tvr{min-height:62px}.tvt{font-size:16px}
+ .fbp-top h1{font-size:26px!important}
+}
 /* v195: én kanalliste under avspilling */
 #tvMenu{display:none!important}
 #v-live #tools .row{display:none!important}
@@ -5242,9 +5268,10 @@ function uvFan(kind){
 function uvTVMedia(){
   const L=DB.live.filter(c=>fvis(c)&&c.logo&&!c.reg&&!c.dup&&!tvIsEv(c)&&(typeof tvVis!=='function'||tvVis(c)));
   const last=hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&c.logo&&fvis(c)&&!c.dup&&!tvIsEv(c));
-  const seenN=new Set();
+  const seenN=new Set(),fb=c=>{const m=/^(.*?\D)\s*#?\s*\d{1,3}$/.exec(tvName(c));return m?m[1].trim().toLowerCase():''},fc={};for(const c of L){const k=fb(c);if(k)fc[k]=(fc[k]||0)+1}
+  const fam=c=>{const k=fb(c);return k&&fc[k]>=6};
   const fav=L.filter(isFav),no=L.filter(c=>c.no).sort((a,b)=>noRank(a)-noRank(b));
-  const seen=new Set(),pick=[];for(const c of last.concat(fav,no,L)){if(seen.has(c.key))continue;seen.add(c.key);const nn=normLive(c);if(seenN.has(nn)||/\|/.test(c.name||''))continue;seenN.add(nn);pick.push(c);if(pick.length>=8)break}
+  const seen=new Set(),pick=[];for(const c of last.concat(fav,no,L)){if(seen.has(c.key))continue;seen.add(c.key);const nn=normLive(c);if(seenN.has(nn)||/\|/.test(c.name||'')||fam(c))continue;seenN.add(nn);pick.push(c);if(pick.length>=8)break}
   return `<div class="uvtvbg"></div><div class="uvch">${pick.map((c,i)=>`<span style="--d:${i}"><img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.parentNode.textContent='${esc(String(c.nm||c.name).slice(0,12)).replace(/'/g,'')}'"></span>`).join('')}</div><span class="uvlive"><i></i>DIREKTE</span>`;
 }
 function uvSportMedia(){return `<div class="uvspx"><div class="uvspx-bg"></div><div class="uvspx-img" style="background-image:url('${UVFIG}sport.webp')"></div></div>`}
