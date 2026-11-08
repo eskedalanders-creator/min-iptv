@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=194;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=195;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1619,6 +1619,10 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .tvi-b{display:flex;gap:10px;flex-wrap:wrap}
 @media (max-width:1300px){.tvx-w{grid-template-columns:220px minmax(0,1fr)}.tvx-i{display:none}}
 @media (max-width:760px){.tvx-w{grid-template-columns:1fr;height:auto}.tvx-s{display:flex;overflow-x:auto;padding:10px;gap:6px;border:0}.tvx-st,.tvx-sep{display:none}.tvc{width:auto;flex:none}.tvc small{display:none}.tvx-l{overflow:visible}.tvr{grid-template-columns:36px minmax(0,1fr) 70px}.tvn{font-size:18px}.tvl img{max-width:66px}.tvx-h{flex-direction:column;align-items:stretch}}
+/* v195: én kanalliste under avspilling */
+#tvMenu{display:none!important}
+#v-live #tools .row{display:none!important}
+#v-live #tabs,#v-live #chips,#v-live #provs{display:none!important}
 /* v189: glass-rammer på forsiden */
 #v-home.uvhome{position:relative;overflow:hidden}
 .uv{isolation:isolate}
@@ -4052,22 +4056,26 @@ function applyFilter(){
     if(liveFind){const f=foldS(c.lc);c._fm=liveFind.toks.filter(t=>f.includes(t)).length?1:0;if(liveFind.ta&&liveFind.ta.length&&liveFind.tb&&liveFind.tb.length?(liveFind.ta.some(t=>f.includes(t))&&liveFind.tb.some(t=>f.includes(t))):liveFind.toks.filter(t=>f.includes(t)).length>=2)c._fm=10;else if(liveFind.rx&&(c.no||c.lg==='no')&&liveFind.rx.test(c.lc))c._fm=Math.max(c._fm,5)+(/\b1\b|main|premium|\bhd\b/i.test(c.lc)?.5:0);if(!c._fm)return false}
     return true;
   };
-  const arr=Q?skRun(DB.live,Q,filt):DB.live.filter(filt);
+  const tvMode=!Q&&!g&&!rx&&liveProv<0&&!liveFind&&!showHidden&&typeof tvList==='function'&&['no','se','dk','uk','us','ca','au','ie','nz'].includes(liveTab);
+  liveTvMode=tvMode;
+  const arr=tvMode?tvList(liveTab).slice():(Q?skRun(DB.live,Q,filt):DB.live.filter(filt));
   if(liveFind)arr.sort((a,b)=>(b._fm-a._fm)||(b.no-a.no)||a.nm.localeCompare(b.nm,'no'));
   $('v-live').classList.toggle('finding',!!liveFind);
   $('findBar').innerHTML=liveFind?`<span>Kanaler for <b>${esc(liveFind.label)}</b></span><button class="chip" id="findX">✕ Fjern filter</button>`:'';
   if(liveFind)$('findX').onclick=()=>{liveFind=null;applyFilter()};
-  if(!liveFind)arr.sort((a,b)=>(liveTab==='fb'?(b.no-a.no):0)||((a.pv<0?999:a.pv)-(b.pv<0?999:b.pv))||COLL.compare(a.cat,b.cat)||COLL.compare(a.nm,b.nm));
-  gCount=new Map();for(const c of arr){const g=groupLabel(c);gCount.set(g,(gCount.get(g)||0)+1)}lastG=null;
+  if(!liveFind&&!tvMode)arr.sort((a,b)=>(liveTab==='fb'?(b.no-a.no):0)||((a.pv<0?999:a.pv)-(b.pv<0?999:b.pv))||COLL.compare(a.cat,b.cat)||COLL.compare(a.nm,b.nm));
+  gCount=new Map();for(const c of arr){const g=gLab(c);gCount.set(g,(gCount.get(g)||0)+1)}lastG=null;
   filtered=arr;shown=0;$('list').innerHTML='';
   if(!filtered.length){$('list').innerHTML='<div class="empty">'+(DB.live.length?(showHidden?'Ingen skjulte kanaler.':liveTab==='fav'?'Ingen favoritter ennå – trykk ★ på en kanal.':liveFind?'Fant ingen kanaler for denne kampen ennå. Prøv igjen nærmere kampstart.':'Ingen treff.'):'Legg til en kilde under Innstillinger.')+'</div>';return}
   moreLive();
 }
+let liveTvMode=false;
+const gLab=c=>liveTvMode?((typeof TV_GRP!=='undefined'&&(TV_GRP.find(x=>x[0]===c._g)||[0,'Kanaler'])[1])||'Kanaler'):groupLabel(c);
 function moreLive(){
   const list=$('list');const old=$('more');if(old)old.remove();
   const frag=document.createDocumentFragment();
   for(const c of filtered.slice(shown,shown+PAGE)){
-    if(!liveFind){const g=groupLabel(c);if(g!==lastG){lastG=g;const h=document.createElement('div');h.className='gh';h.innerHTML=esc(g)+' <small>'+(gCount.get(g)||0)+'</small>';frag.appendChild(h)}}
+    if(!liveFind){const g=gLab(c);if(g!==lastG){lastG=g;const h=document.createElement('div');h.className='gh';h.innerHTML=esc(g)+' <small>'+(gCount.get(g)||0)+'</small>';frag.appendChild(h)}}
     const d=document.createElement('div');d.className='ch'+(current&&current.key===c.key?' active':'');d._c=c;
     d.innerHTML=`<div class="cl">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt=""${lfix(c)}>`:''}<div class="ph">${esc((c.nm||c.name).replace(/[^A-Za-z0-9ÆØÅæøå ]/g,'').trim().slice(0,3).toUpperCase()||'TV')}</div>${c.q&&c.q[0]?`<span class="qb">${c.q[0]}</span>`:''}</div>`+
       `<div class="cb"><div class="n">${esc(c.nm||c.name)}</div><div class="g">${esc(c.cat)}</div><div class="lcp" data-epg="${c.key}"></div></div><button class="ic star ${isFav(c)?'on':''}" title="Favoritt">★</button><button class="ic hide" title="${showHidden?'Vis igjen':'Skjul kanal'}">${showHidden?'↩':'🚫'}</button>`;
@@ -4840,7 +4848,7 @@ function tvMove(dir){
     if(cur.classList.contains('ch')&&cur.closest('#list')&&playing){const l=chs(),i=l.indexOf(cur);
       if(dir==='ArrowDown'){fo(l[i+1]||cur);return}
       if(dir==='ArrowUp'){i>0?fo(l[i-1]):fo(document.querySelector('#sidetop button'));return}
-      if(dir==='ArrowLeft'){fo(actM());return}
+      if(dir==='ArrowLeft'){const m=actM();if(m&&m.offsetParent)fo(m);return}
       if(dir==='ArrowRight'){if(current)$('vwrap').classList.add('pfs');return}}
     if(cur.closest('#tvMenu')){const l=tm(),i=l.indexOf(cur);
       if(dir==='ArrowDown'){fo(l[i+1]||cur);return}
