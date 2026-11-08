@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=219;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=220;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1743,6 +1743,20 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .spdb{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
 .spdv{display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px!important;border-radius:12px!important}.spdv.on{border-color:#1ed760!important}
 @media (max-width:760px){.spnow{flex-direction:column;align-items:flex-start;gap:14px}.spg{grid-template-columns:repeat(2,1fr)}}
+/* v220: fjernkontroll */
+.uvb-rc{display:none!important}
+@media (max-width:760px){.uvb-rc{display:flex!important}}
+#v-remote{padding:20px 16px 60px}
+.rcw{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:16px;align-items:stretch}.rcw h2{margin:0;text-align:center}
+.rcdev{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.rcchip{padding:10px 14px!important;border-radius:999px!important;font-size:14px}.rcchip small{opacity:.6;margin-left:4px}.rcchip.on{background:#fff!important;color:#0b0c18!important}
+.rcpad{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px;width:min(320px,86vw);aspect-ratio:1;margin:8px auto}
+.rcpad button{font-size:28px;border-radius:22px!important;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.rcu{grid-column:2;grid-row:1}.rcl{grid-column:1;grid-row:2}.rco{grid-column:2;grid-row:2;background:#fff!important;color:#0b0c18!important;font-weight:800;border-radius:50%!important}.rcr{grid-column:3;grid-row:2}.rcd{grid-column:2;grid-row:3}
+.rcpad button.dn,.rcrow button.dn{transform:scale(.94);background:rgba(255,255,255,.3)!important}
+.rcrow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px}.rcrow button{height:56px;font-size:17px;border-radius:16px!important;touch-action:manipulation}
+.rctx{display:flex;gap:8px}.rctx input{flex:1;height:50px;padding:0 14px;border-radius:14px;font-size:17px}
+.rcnote{text-align:center;font-size:13px}
 /* v211: aldri sideveis-skyv på forsiden */
 html,body{overflow-x:clip}
 #v-home.uvhome,html.tvm .view{overflow-x:hidden;overflow-x:clip}
@@ -1873,6 +1887,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <section class="view" id="v-cams"></section>
   <section class="view" id="v-settings"></section>
   <section class="view" id="v-spotify"></section>
+  <section class="view" id="v-remote"></section>
 </div>
 
 <div id="ov">
@@ -3114,7 +3129,7 @@ const byNew=(a,b)=>(b.ad||0)-(a.ad||0);
 
 /* ===================== Visninger ===================== */
 let curView='home';
-const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify'];
+const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify','remote'];
 let navStack=[];
 function showView(v,force,np){
   if(!force&&v===curView&&$('v-'+v).classList.contains('on'))return;
@@ -3144,6 +3159,7 @@ function showView(v,force,np){
   if(v==='cams')renderCams();
   if(v==='settings')renderSettings();
   if(v==='spotify')renderSpotify();
+  if(v==='remote')renderRemote();
   $('v-'+v).scrollTop=0;
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
@@ -3151,7 +3167,7 @@ $('brand').onclick=()=>showView('home');
 $('bHome').onclick=()=>showView('home');
 const hdrT=()=>{const b=document.getElementById('bHome');return (b&&!b.hidden)?b:document.getElementById('tvSearch')};
 (function(){const w=$('moreWrap'),m=$('moreMenu');
-m.innerHTML=[['apps','Apper'],['cams','IP-kamera'],['fav','Favoritter'],['settings','Innstillinger']].map(([v,t])=>`<button data-mv="${v}">${t}</button>`).join('');
+m.innerHTML=[['apps','Apper'],['cams','IP-kamera'],['fav','Favoritter'],['remote','Fjernkontroll'],['settings','Innstillinger']].map(([v,t])=>`<button data-mv="${v}">${t}</button>`).join('');
 $('moreBtn').onclick=e=>{e.stopPropagation();w.classList.toggle('open')};
 m.onclick=e=>{const b=e.target.closest('button');if(b){w.classList.remove('open');showView(b.dataset.mv)}};
 document.addEventListener('click',()=>w.classList.remove('open'));})();
@@ -5363,6 +5379,7 @@ function uvHome(){
    <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
    <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
    <button class="uvb" data-go="apps"><span>${UVI.apps}</span>Apper</button>
+   <button class="uvb uvb-rc" data-go="remote"><span>📱</span>Fjernkontroll for TV/PC</button>
   </div>
   <div class="uvf"><span></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
   try{clk()}catch(e){}
@@ -5808,6 +5825,59 @@ function renderSpotify(){const el=$('v-spotify');if(!el)return;
   spSdkInit()}
 setTimeout(()=>{if(spOn()){spSdkInit();spPoll()}},5000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&spOn())spPoll(true)});
+
+/* v220: mobilen som fjernkontroll – kommandoer går via skyen (strømmes til TV/PC) */
+const rcName=()=>localStorage.getItem('dev_name')||(DESKTOP?'PC (Windows-appen)':TVM?'TV-boks':NATIVE?'Android-enhet':'PC – nettleser');
+const rcIsRecv=()=>DESKTOP||TVM||(!NATIVE&&innerWidth>=1100);
+let rcES=null,rcLast=0,rcFirst=true;
+function rcRecvStart(){const id=localStorage.getItem('sync_id');if(!id||!rcIsRecv()||rcES||!window.EventSource)return;
+  const beat=async()=>{try{const c=id+'r',d=await syncGet(c),o=d.d||{};for(const k in o)if(!o[k]||Date.now()-o[k].t>7*864e5)delete o[k];o[dlDev]={n:rcName(),t:Date.now()};await syncPut(c,{d:o})}catch(e){}};
+  beat();setInterval(()=>{if(document.visibilityState==='visible')beat()},120000);
+  try{rcES=new EventSource(SYNC_DB+'/sync/'+id+'rc'+dlDev+'.json');
+    const on=ev=>{try{const m=JSON.parse(ev.data);const o=syncParse(m&&m.data);if(!o||!o.n)return;
+        if(rcFirst){rcFirst=false;if(Date.now()-(o.t||0)>4000){rcLast=o.n;return}}
+        if(o.n===rcLast)return;rcLast=o.n;if(Date.now()-(o.t||0)>20000)return;rcDo(o)}catch(e){}};
+    rcES.addEventListener('put',on);rcES.addEventListener('patch',on)}catch(e){}}
+function rcKey(k){const a=document.activeElement,t=(a&&a!==document.body)?a:document.body;let clicked=false;const cl=()=>{clicked=true};
+  document.addEventListener('click',cl,true);const ev=new KeyboardEvent('keydown',{key:k,code:k,bubbles:true,cancelable:true});
+  try{t.dispatchEvent(ev)}finally{document.removeEventListener('click',cl,true)}
+  try{t.dispatchEvent(new KeyboardEvent('keyup',{key:k,code:k,bubbles:true}))}catch(e){}return{ev,clicked}}
+function rcText(v){const el=document.activeElement;if(!el||!/INPUT|TEXTAREA/.test(el.tagName))return false;el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));return true}
+function rcDo(o){const k=o.k;
+  if(k==='text'){if(!rcText(o.v||'')){rcKey('F4');setTimeout(()=>{if(!rcText(o.v||'')){const s=document.querySelector('input[type=search],#q,.view.on input');if(s){s.focus();rcText(o.v||'')}}},450)}return}
+  if(k==='back'){if(NATIVE&&!DESKTOP&&typeof appBack==='function'){appBack();return}rcKey('Escape');return}
+  if(k==='home'){if(window.appHome)window.appHome();else rcKey('F8');return}
+  if(k==='pp'){rcKey('MediaPlayPause');return}
+  if(k==='Enter'){const r=rcKey('Enter'),a=document.activeElement;if(!r.clicked&&!r.ev.defaultPrevented&&a&&a!==document.body&&!/INPUT|TEXTAREA|SELECT/.test(a.tagName))a.click();return}
+  if(/^(Arrow(Up|Down|Left|Right)|ChannelUp|ChannelDown)$/.test(k))rcKey(k)}
+/* sender (telefonen) */
+let rcQ=Promise.resolve(),rcRep=0;
+function rcSend(k,v){const id=localStorage.getItem('sync_id'),dev=localStorage.getItem('rc_dev');if(!id||!dev)return toast('Velg hvilken skjerm du vil styre',3000);
+  try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}
+  const o={n:Date.now().toString(36)+Math.random().toString(36).slice(2,6),k,v,t:Date.now()};
+  rcQ=rcQ.then(()=>syncPut(id+'rc'+dev,o)).catch(e=>{toast('Fikk ikke sendt: '+e.message,4000)})}
+async function renderRemote(){const el=$('v-remote');if(!el)return;const id=localStorage.getItem('sync_id');
+  if(!id){el.innerHTML='<div class="rcw"><h2>📱 Fjernkontroll</h2><p>Koble denne enheten til Full synk med samme kode som stue-PC-en først (Innstillinger → 🔑 Full synk).</p></div>';return}
+  el.innerHTML=`<div class="rcw"><h2>📱 Fjernkontroll</h2><div class="rcdev" id="rcDevs"><span class="muted">Finner skjermer …</span></div>
+   <div class="rcpad"><button data-rk="ArrowUp" class="rcu">▲</button><button data-rk="ArrowLeft" class="rcl">◀</button><button data-rk="Enter" class="rco">OK</button><button data-rk="ArrowRight" class="rcr">▶</button><button data-rk="ArrowDown" class="rcd">▼</button></div>
+   <div class="rcrow"><button data-rk="back">↩ Tilbake</button><button data-rk="home">⌂ Hjem</button><button data-rk="pp">⏯</button></div>
+   <div class="rcrow"><button data-rk="ChannelDown">Kanal −</button><button data-rk="ChannelUp">Kanal +</button></div>
+   <div class="rctx"><input id="rcTxt" placeholder="Skriv søk her …" autocomplete="off" enterkeyhint="send"><button id="rcTxB" class="primary">Send</button></div>
+   <p class="muted rcnote">Styrer skjermen via nettet – virker hjemme og borte. Hold inne pilene for å bla fort.</p></div>`;
+  const stopRep=()=>{clearInterval(rcRep);clearTimeout(rcRep);rcRep=0};
+  el.querySelectorAll('[data-rk]').forEach(b=>{const k=b.dataset.rk,rep=/^Arrow/.test(k);
+    b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('dn');rcSend(k);if(rep){stopRep();rcRep=setTimeout(()=>{rcRep=setInterval(()=>rcSend(k),160)},450)}});
+    ['pointerup','pointerleave','pointercancel'].forEach(x=>b.addEventListener(x,()=>{b.classList.remove('dn');stopRep()}));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();rcSend(k)}})});
+  const tx=()=>{const v=$('rcTxt').value;rcSend('text',v);toast('Sendt: «'+v+'»',2000)};$('rcTxB').onclick=tx;$('rcTxt').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();tx()}};
+  try{const d=await syncGet(id+'r'),o=d.d||{};const L=Object.keys(o).filter(k=>k!==dlDev).map(k=>({id:k,n:o[k].n,t:o[k].t})).sort((a,b)=>b.t-a.t);
+    const box=$('rcDevs');if(!box)return;
+    if(!L.length){box.innerHTML='<span class="muted">Fant ingen skjermer. Start appen på stue-PC-en (samme synk-kode), vent et halvt minutt og åpne denne siden igjen.</span>';return}
+    let cur=localStorage.getItem('rc_dev');if(!L.find(x=>x.id===cur)){cur=L[0].id;localStorage.setItem('rc_dev',cur)}
+    const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<3?'på nå':m<60?m+' min siden':Math.round(m/60)<48?Math.round(m/60)+' t siden':Math.round(m/1440)+' d siden'};
+    box.innerHTML=L.map(x=>`<button class="rcchip${x.id===cur?' on':''}" data-rd="${esc(x.id)}">${/Windows|PC/.test(x.n)?'🖥️':'📺'} ${esc(x.n)} <small>${ago(x.t)}</small></button>`).join('');
+    box.onclick=e=>{const b=e.target.closest('[data-rd]');if(!b)return;localStorage.setItem('rc_dev',b.dataset.rd);box.querySelectorAll('.rcchip').forEach(x=>x.classList.toggle('on',x===b))}}catch(e){const box=$('rcDevs');if(box)box.innerHTML='<span class="muted">Kunne ikke hente skjermer: '+esc(e.message)+'</span>'}}
+setTimeout(rcRecvStart,3500);
 
 /* v211: nullstill sideveis rulling på forsiden (gamle WebView uten overflow:clip) */
 function noSide(){try{const h=document.getElementById('v-home');if(h&&h.scrollLeft)h.scrollLeft=0;if(document.documentElement.scrollLeft)document.documentElement.scrollLeft=0;if(document.body.scrollLeft)document.body.scrollLeft=0}catch(e){}}
