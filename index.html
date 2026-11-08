@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=209;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=210;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -200,7 +200,7 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 .dx-dlg #dser{position:relative;z-index:1;padding:4px 32px 26px}
 .dx-dlg .eps{max-height:46vh}
 /* Runde 2: film/serie som egen side over hele skjermen */
-.dx-dlg{width:auto!important;max-width:none!important;height:auto;max-height:none!important;margin:0!important;inset:0;border-radius:0!important;border:0!important;box-shadow:none!important}
+.dx-dlg{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;margin:0!important;inset:0;border-radius:0!important;border:0!important;box-shadow:none!important}
 .dx-dlg::backdrop{background:#000}
 .dx-bg{width:100%;height:80vh;transform:none;filter:none!important;opacity:.55;image-rendering:auto}
 .dx-fade{height:82vh;background:linear-gradient(180deg,rgba(10,12,19,.15) 0%,rgba(10,12,19,.7) 55%,#0a0c13 100%)}
@@ -208,7 +208,9 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 .dx .pimg{width:auto}
 .dx h2{font-size:clamp(28px,3.2vw,52px)}
 .dx .plot{-webkit-line-clamp:3;font-size:clamp(14px,1.15vw,19px);max-width:70ch}
-.dx-close{top:3.5vh;right:3vw;width:54px;height:54px;font-size:22px}
+.dx-close{top:3vh!important;left:3vw!important;right:auto!important;width:auto!important;height:46px!important;padding:0 20px 0 16px!important;border-radius:999px!important;font:700 17px/1 system-ui,sans-serif!important;display:flex!important;align-items:center;gap:6px;background:rgba(10,12,20,.65)!important;border:1px solid rgba(255,255,255,.3)!important;color:#fff!important;transform:none!important}
+.dx-close:hover,.dx-close:focus{background:#fff!important;color:#0a0c13!important}
+.det.dx{padding-top:calc(7vh + 40px)}
 .dx-dlg #dser{padding:0 5vw 5vh}
 .dx-dlg #dser>#dRes{display:none}
 .stabs{display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px 4px 6px;scrollbar-width:none}
@@ -1319,7 +1321,7 @@ body.tv .pc:focus .pt,html.tvm .pc:focus .pt{color:#fff!important;font-weight:70
 body.tv #nav button:focus,html.tvm #nav button:focus{outline:none!important;box-shadow:none!important;background:#fff!important;color:#0a0c13!important;transform:none!important}
 body.tv header button:focus{outline:none!important;box-shadow:none!important;background:#fff!important;color:#0a0c13!important}
 /* Film/serie-siden: aldri sideveis forskyvning */
-.dx-dlg{overflow-x:clip!important}
+.dx-dlg{overflow-x:hidden!important;overflow-x:clip!important;overflow-y:auto!important}
 .xlh{margin:14px 0 6px;font-weight:700}
 .xlangs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;max-height:none}
 .xlangs label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -4470,7 +4472,7 @@ function openItem(c,auto){
   const fav=isFav(c);
   const dTitle=String(c.nm||c.name).replace(/^[A-Z]{2,3}\s*[-|:]\s*/,'').replace(/\s*[\(\[](?:[A-Z]{2,3}|\d{4}|MULTI[^)\]]*)[\)\]]/gi,'').trim()||c.name;
   dlg.classList.add('dx-dlg');
-  dlg.innerHTML=`${c.logo?`<canvas class="dx-bg" id="dxBg" width="24" height="16"></canvas>`:''}<div class="dx-fade"></div><button class="dx-close" id="dClose" title="Lukk (Tilbake)">✕</button>
+  dlg.innerHTML=`${c.logo?`<canvas class="dx-bg" id="dxBg" width="24" height="16"></canvas>`:''}<div class="dx-fade"></div><button class="dx-close" id="dClose" title="Tilbake">‹ Tilbake</button>
    <div class="det dx"><div class="pimg"><div class="pfb">${esc(dTitle)}</div>${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}</div>
    <div class="dx-info"><div class="dx-kick">${c.t==='ser'?'Serie':'Film'}${c.sv&&SERV.find(s=>s.id===c.sv)?' · '+esc(SERV.find(s=>s.id===c.sv).name):''}</div><h2>${esc(dTitle)}</h2><div class="meta" id="dmeta">${c.rt?`<span class="rt1">★ ${c.rt.toFixed(1)}</span>`:''}<span>${esc(c.cat)}</span></div>
    <div class="plot" id="dplot">${esc(c.pl||'')}</div>
