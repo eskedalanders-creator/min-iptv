@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=196;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=197;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1622,6 +1622,10 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .stile.xl .sbg .sph-photo{animation:uvstad 34s ease-in-out infinite alternate}.stile.xl .sbg .sbg-fb{display:none}
 .stile.xl .sbg::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,6,14,.85),rgba(4,6,14,.15) 55%,rgba(4,6,14,.05))}
 .stile.xl .sbg{position:absolute;inset:0;overflow:hidden}
+.uvap{gap:5% 4%!important;padding:6% 5%!important}
+.uvap b{font-size:clamp(22px,2.4vw,46px)!important}
+.uvap small{font-size:clamp(11px,.85vw,15px)!important;font-weight:600}
+.uvap span{gap:6px!important;border-radius:14px!important}
 /* v195: én kanalliste under avspilling */
 #tvMenu{display:none!important}
 #v-live #tools .row{display:none!important}
@@ -1996,11 +2000,11 @@ function switchProfile(id){
 $('prof').onchange=e=>switchProfile(e.target.value);
 $('profClose').onclick=()=>$('dlgProf').close();
 async function addProfile(id){const n=await oskAsk(id?'Navn på brukeren':'Navn på ny bruker','');if(!n)return;
-  id=id||('u'+Date.now());profiles.push({id,name:n});LSset('profiles',profiles);try{if(typeof fsSoon==='function')fsSoon()}catch(e){}switchProfile(id);toast('Bruker «'+n+'» er klar',2200)}
+  id=id||('u'+Date.now());profiles.push({id,name:n});LSset('profiles',profiles);try{if(typeof fsSoon==='function')fsSoon(3000)}catch(e){}switchProfile(id);toast('Bruker «'+n+'» er klar',2200)}
 $('profAdd').onclick=()=>addProfile();
 $('profOrph').onclick=e=>{const b=e.target.closest('[data-restore]');if(b)addProfile(b.dataset.restore)};
 function profMenu(p){ctxMenu(p.name,[{label:p.id===pid?'✓ Aktiv bruker':'▶ Bytt til '+p.name,fn:()=>{if(p.id!==pid){switchProfile(p.id);toast('Bytter til '+p.name,1800)}}},
-  {label:'✎ Gi nytt navn',fn:async()=>{const n=await oskAsk('Nytt navn',p.name);if(n){p.name=n;LSset('profiles',profiles);renderProfiles()}}},
+  {label:'✎ Gi nytt navn',fn:async()=>{const n=await oskAsk('Nytt navn',p.name);if(n){p.name=n;p.ts=Date.now();LSset('profiles',profiles);renderProfiles();try{fsSoon(3000)}catch(e){}}}},
   ...(profiles.length>1?[{label:'🗑 Slett '+p.name,fn:()=>ctxMenu('Slette «'+p.name+'» med favoritter og historikk?',[{label:'Avbryt',fn:()=>{}},{label:'🗑 Ja, slett',fn:()=>delProfile(p)}])}]:[])])}
 $('profList').addEventListener('contextmenu',e=>{const b=e.target.closest('[data-pick]');if(!b)return;e.preventDefault();const p=profiles.find(x=>x.id===b.dataset.pick);if(p)profMenu(p)});
 {let pT=0,pL=false,pEl=null;$('profList').addEventListener('keydown',e=>{if(e.key!=='Enter')return;const b=e.target.closest('[data-pick]');if(!b)return;e.preventDefault();e.stopPropagation();if(e.repeat||pEl)return;pEl=b;pL=false;pT=setTimeout(()=>{pL=true;const p=profiles.find(x=>x.id===b.dataset.pick);if(p)profMenu(p)},600)});
@@ -2008,7 +2012,7 @@ $('profList').addEventListener('contextmenu',e=>{const b=e.target.closest('[data
 async function delProfile(p){
     const all=await dbAll();for(const s of all)if(s.profile===p.id)await dbDel(s.id);
     ['fav','hid','last','src','hist','seen'].forEach(k=>localStorage.removeItem(k+':'+p.id));
-    profiles=profiles.filter(x=>x.id!==p.id);LSset('profiles',profiles);
+    profiles=profiles.filter(x=>x.id!==p.id);LSset('profiles',profiles);try{const d=LSget('profiles_del',[]);if(!d.includes(p.id)){d.push(p.id);LSset('profiles_del',d)}fsSoon(3000)}catch(e){}
     if(p.id===pid)switchProfile(profiles[0].id);else renderProfiles();}
 $('profList').onclick=async e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -2019,7 +2023,7 @@ $('profList').onclick=async e=>{
     if(!confirm('Slette brukeren «'+p.name+'» med favoritter og egne kilder?'))return;
     const all=await dbAll();for(const s of all)if(s.profile===p.id)await dbDel(s.id);
     ['fav','hid','last','src','hist'].forEach(k=>localStorage.removeItem(k+':'+p.id));
-    profiles=profiles.filter(x=>x.id!==p.id);LSset('profiles',profiles);
+    profiles=profiles.filter(x=>x.id!==p.id);LSset('profiles',profiles);try{const d=LSget('profiles_del',[]);if(!d.includes(p.id)){d.push(p.id);LSset('profiles_del',d)}fsSoon(3000)}catch(e){}
     if(p.id===pid)switchProfile(profiles[0].id);else renderProfiles();
   }
 };
@@ -2600,7 +2604,20 @@ async function accBeat(){const sid=localStorage.getItem('sync_id');if(!sid)retur
   for(const k in accUse)o[k]={d:dlDev,t:Date.now()};
   await syncPut(c,{a:o});accRemote=o}catch(e){}}
 setInterval(()=>{if(Object.keys(accUse).length)accBeat();else if(document.visibilityState==='visible')accRefresh()},30000);
-setTimeout(async()=>{try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(r&&r.ts>(+localStorage.getItem('sync_fts')||0)){
+function fsMergeUsers(text){
+  try{const j=JSON.parse(text),ls=(j&&j.ls)||{};const P=x=>{try{return JSON.parse(x)}catch(e){return null}};
+    const delR=P(ls.profiles_del)||[],delL=LSget('profiles_del',[]),del=[...new Set([...delR,...delL])];
+    const rp=P(ls.profiles)||[],map=new Map();let ch=false;
+    for(const p of profiles)map.set(p.id,p);
+    for(const p of rp){const l=map.get(p.id);if(!l){map.set(p.id,p);ch=true}else if((p.ts||0)>(l.ts||0)&&p.name!==l.name){l.name=p.name;l.ts=p.ts;ch=true}}
+    let np=[...map.values()].filter(p=>!del.includes(p.id));if(!np.length)np=profiles;if(np.length!==profiles.length)ch=true;
+    for(const k in ls){const m=/^(fav|hid|seen):(.+)$/.exec(k);if(!m||del.includes(m[2]))continue;const r=P(ls[k]);if(!Array.isArray(r))continue;const l=LSget(k,[]);const u=[...new Set([...l,...r])];if(u.length!==l.length){LSset(k,u);ch=true;if(m[2]===pid){if(m[1]==='fav')favs=new Set(u);if(m[1]==='hid')hidden=new Set(u)}}}
+    LSset('profiles_del',del);
+    if(ch){profiles=np;LSset('profiles',profiles);if(!profiles.find(p=>p.id===pid)){switchProfile(profiles[0].id)}try{renderProfiles()}catch(e){}if(curView==='home')try{renderHome()}catch(e){}}
+    return ch}catch(e){return false}}
+async function fsUsersPull(){try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(!r||!(await dbAll()).length)return;const ch=fsMergeUsers(r.text);if(ch)fsSoon(4000)}catch(e){}}
+setInterval(fsUsersPull,10*60000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){clearTimeout(window.__fup);window.__fup=setTimeout(fsUsersPull,2500)}});
+setTimeout(async()=>{try{const ph=localStorage.getItem('sync_phrase');if(!ph)return;const r=await fsFetch(ph);if(r){if((await dbAll()).length&&fsMergeUsers(r.text))fsSoon(4000)}if(r&&r.ts>(+localStorage.getItem('sync_fts')||0)){
   const fresh=!(await dbAll()).length;if(fresh){await restoreData(r.text);localStorage.setItem('sync_fts',String(r.ts))}else toast('Nyere oppsett finnes i skyen – Innstillinger → Synk → Hent fra skyen',7000)}}catch(e){}},4000);
 
 
@@ -5271,7 +5288,7 @@ async function uvExpiry(){
 /* header-knapper */
 (()=>{const on=(id,f)=>{const b=document.getElementById(id);if(b)b.onclick=f};
   on('bSet',()=>showView('settings'));on('bFav',()=>showView('fav'));
-  on('bUser',()=>{renderProfiles();$('dlgProf').showModal();setTimeout(()=>{const b=document.querySelector('#profList .pcard.on')||document.querySelector('#profList .pcard');if(b)b.focus()},60)});
+  on('bUser',()=>{try{fsUsersPull()}catch(e){}renderProfiles();$('dlgProf').showModal();setTimeout(()=>{const b=document.querySelector('#profList .pcard.on')||document.querySelector('#profList .pcard');if(b)b.focus()},60)});
   on('bNew',()=>{
     let it=[];try{it=cinEpItems()}catch(e){}
     let d=document.getElementById('dlgNew');if(!d){d=document.createElement('dialog');d.id='dlgNew';d.className='tvpick';document.body.appendChild(d)}
