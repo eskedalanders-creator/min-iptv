@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=185;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=186;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1287,7 +1287,7 @@ body.tv #nav button:focus{outline:3px solid var(--pro-ring)!important;outline-of
 .view>h1:first-child,.view>h2:first-child{font-size:clamp(26px,2.2vw,38px)!important;font-weight:800!important;letter-spacing:-.01em;margin:22px 0 18px!important;line-height:1.15}
 #v-apps>h2+h3.sech{display:none}
 /* Film/serie-forsiden: billboard viser bit av første rad */
-#vbb,#vbb .bb{height:calc(var(--tvh,100vh)*.62)!important;min-height:0!important;max-height:calc(var(--tvh,100vh)*.62)}
+#vbb:empty{height:0!important;max-height:0!important}#vbb,#vbb .bb{height:calc(var(--tvh,100vh)*.62)!important;min-height:0!important;max-height:calc(var(--tvh,100vh)*.62)}
 #vbb .bb .bbs{top:0!important;bottom:0!important;height:auto!important}
 /* Rader og kort */
 .rail .rh h3,.rh h3{font-size:clamp(18px,1.4vw,24px)!important;font-weight:800!important}
@@ -1545,6 +1545,29 @@ body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:
 #fbpCh{margin-top:22px}
 @media (max-width:1000px){.fbp-cols{grid-template-columns:1fr}.fbp-fx,.fbp-tw{max-height:none}}
 @media (max-width:600px){.fbp-vs{gap:10px}.fbp-cd div{min-width:52px}.fbp-row{grid-template-columns:48px minmax(0,1fr) 34px minmax(0,1fr) 0}.fbp-go{display:none}.fbp-tbl th:nth-child(4),.fbp-tbl td:nth-child(4),.fbp-tbl th:nth-child(5),.fbp-tbl td:nth-child(5),.fbp-tbl th:nth-child(6),.fbp-tbl td:nth-child(6){display:none}}
+
+/* v186: hjem-knapp, stadion, kamera */
+#nav{display:none!important}
+.hhome{padding:0 14px 0 8px!important;background:rgba(255,255,255,.12)!important;font-weight:700!important}
+.hhome[hidden]{display:none!important}
+.hhome svg{width:18px;height:18px}
+.uvstad{position:absolute;inset:-4%;background:center 62%/cover no-repeat;filter:saturate(1.15) contrast(1.05);animation:uvstad 26s ease-in-out infinite alternate}
+@keyframes uvstad{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.16) translate(-2%,-3%)}}
+.uvflood{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen}
+.uvflood i{position:absolute;top:38%;width:46%;height:42%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,250,230,.38),transparent);animation:uvfl 4.5s ease-in-out infinite}
+.uvflood i:nth-child(1){left:8%}.uvflood i:nth-child(2){left:30%;animation-delay:-1.5s;top:30%}.uvflood i:nth-child(3){left:52%;animation-delay:-3s}
+@keyframes uvfl{0%,100%{opacity:.35}50%{opacity:1}}
+.uv-sport .uvm::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(6,8,20,.35),transparent 30%,transparent 55%,rgba(6,8,20,.6)),linear-gradient(90deg,rgba(200,16,46,.22),transparent 40%)}
+.uvstl{position:absolute;right:10px;top:9px;z-index:3;padding:4px 10px;border-radius:999px;background:rgba(200,16,46,.85);font:800 10.5px/1 system-ui;letter-spacing:.16em;color:#fff;box-shadow:0 4px 16px rgba(200,16,46,.5)}
+.uvt.play .uvstl{opacity:0}
+.uvnext{z-index:4}
+.uvcam{position:absolute;inset:0;background:center 30%/cover no-repeat;animation:uvstad 30s ease-in-out infinite alternate}
+.uv-cam .uvm::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(4,10,20,.55),transparent 45%)}
+.uvlive{z-index:5}
+.sph-photo,.fbp-photo{background:center 60%/cover no-repeat;animation:uvstad 40s ease-in-out infinite alternate}
+.fbp-photo{filter:saturate(1.1) brightness(.9)}
+.sph-g{background:linear-gradient(90deg,rgba(4,6,14,.88) 0%,rgba(4,6,14,.45) 45%,rgba(4,6,14,.1) 75%),linear-gradient(0deg,rgba(4,6,14,.75),transparent 40%)!important}
+.fbp-hero::after{background:radial-gradient(75% 95% at 50% 45%,rgba(5,10,20,.25),rgba(5,8,16,.86) 78%),linear-gradient(90deg,rgba(200,16,46,.30),transparent 35%,transparent 65%,rgba(40,120,255,.16))!important}
 html.lite .uvt,html.lite .sph-next,html.lite .fbp-cd div{backdrop-filter:none!important}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
@@ -1556,6 +1579,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
 <header>
   <div class="brand" id="brand"><svg class="logo" viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lgb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1f6e"/><stop offset="1" stop-color="#0a0b18"/></linearGradient><linearGradient id="lga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b3a6ff"/><stop offset="1" stop-color="#4fd0ff"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#lgb)"/><g transform="rotate(-24 256 262)"><ellipse cx="256" cy="262" rx="200" ry="64" fill="none" stroke="url(#lga)" stroke-width="12" opacity=".55"/></g><g fill="#fff"><rect x="150" y="132" width="62" height="248" rx="18"/><rect x="150" y="132" width="212" height="56" rx="18"/><rect x="150" y="224" width="170" height="56" rx="18"/><rect x="150" y="324" width="212" height="56" rx="18"/></g><g transform="rotate(-24 256 262)"><path d="M56 262A200 64 0 0 0 456 262" fill="none" stroke="url(#lga)" stroke-width="15" stroke-linecap="round"/></g><circle cx="439" cy="181" r="26" fill="#bdeeff"/></svg><b>ESKEDALS <span>UNIVERS</span></b></div>
   <span id="clock"></span>
+  <button class="hic hhome" id="bHome" hidden title="Til forsiden (Tilbake-knappen på fjernkontrollen går ett steg tilbake)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg><span>Hjem</span></button>
   <nav id="nav">
     <button data-v="home">Hjem</button>
     <button data-v="series">Serier</button>
@@ -1754,8 +1778,8 @@ if(TVM){document.documentElement.classList.add('tvm');
 const PAGE=TVM?36:300, GPAGE=TVM?18:72;
 /* ---- språk/land ---- */
 const LMAP={sv:'se',swe:'se',da:'dk',dnk:'dk',dan:'dk',nor:'no',nb:'no',nob:'no',usa:'us',gb:'uk',gbr:'uk',en:'uk',eng:'uk'};
-const CC_OTHER=new Set('de fr it es pt nl be pl tr ar al ro ru ua gr cz sk hu bg rs hr ba si mk in pk af ir iq sa ae eg ma dz tn br mx ca au nz jp kr cn th vn il fi is ee lv lt ch at ie cy mt me xk ge am az by kz uz ph id my sg hk tw lb sy jo ly sd so ng za ke gh sn ci cm et pe cl co ve ec uy py bo cu do pr ex yu'.split(' '));
-const LNAME={no:'Norge',se:'Sverige',dk:'Danmark',us:'USA',uk:'Storbritannia/engelsk'};
+const CC_OTHER=new Set('la de fr it es pt nl be pl tr ar al ro ru ua gr cz sk hu bg rs hr ba si mk in pk af ir iq sa ae eg ma dz tn br mx ca au nz jp kr cn th vn il fi is ee lv lt ch at ie cy mt me xk ge am az by kz uz ph id my sg hk tw lb sy jo ly sd so ng za ke gh sn ci cm et pe cl co ve ec uy py bo cu do pr ex yu'.split(' '));
+const LNAME={no:'Norge',se:'Sverige',dk:'Danmark',us:'USA (engelsk)',uk:'Engelsk (UK/EN)'};
 const LANG_DEF=['no','se','dk','us','uk'];
 let allowedLangs=new Set(LSget('langs',LANG_DEF));
 let showAdult=LSget('adult',false);
@@ -1785,7 +1809,7 @@ function evTime(c){
 }
 const isPast=c=>c.ev&&c.ev+(c.evd||0)<Date.now();
 let dedupeOn=LSget('dedupe',true);
-const langOk=c=>!c.lg||allowedLangs.has(c.lg);
+const langOk=c=>!c.lg||allowedLangs.has(c.lg)||((c.lg==='uk'||c.lg==='us')&&(allowedLangs.has('uk')||allowedLangs.has('us')));
 const RXL={se:/sverige|swedish|svensk/i,dk:/danmark|danish|dansk/i,us:/\busa\b|united states/i,uk:/\buk\b|british|britain|england/i};
 function langOf(c){
   if(RX_SCRIPT.test(c.name||''))return 'xx';
@@ -1999,6 +2023,7 @@ function vodClass(c){
   c.xtra=(RXC_EXTRA.test(cat)||RXN_EXTRA.test(nm))?1:0;
   c.asia=((cc&&RXA_CC.test(cc))||RXA_CAT.test(cat))?1:0;
   c.svp='';for(const t of tk){if(SVPFX[t]){c.svp=SVPFX[t];break}}
+  c.en=(c.lg==='uk'||c.lg==='us'||(cc&&/^(US|GB|UK|CA|AU|IE|NZ)$/.test(cc)&&!foreign)||(!c.lg&&!cc&&!c.no&&!c.nord&&!c.asia&&!RX_SCRIPT.test(nm)&&!/^\s*(SOC|LA|AS|CR|OSN)\b/.test(nm)))?1:0;
 }
 function fin(c){
   c.key=c.t[0]+':'+c.id;
@@ -2847,6 +2872,7 @@ function showView(v,force,np){
   for(const x of VIEWS)$('v-'+x).classList.toggle('on',x===v);
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='tv'&&b.dataset.v==='live')||(v==='guide'&&b.dataset.v==='live')||(v==='matches'&&b.dataset.v==='fotball')));
   {const mb=$('moreBtn');if(mb)mb.classList.toggle('on',['apps','cams','fav','settings'].includes(v))}
+  {const hb=document.getElementById('bHome');if(hb)hb.hidden=v==='home'}
   if(v==='home')renderHome();
   if(v==='tv')renderTV();
   if(v==='guide')renderGuide();
@@ -2863,6 +2889,8 @@ function showView(v,force,np){
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
 $('brand').onclick=()=>showView('home');
+$('bHome').onclick=()=>showView('home');
+const hdrT=()=>{const b=document.getElementById('bHome');return (b&&!b.hidden)?b:document.getElementById('tvSearch')};
 (function(){const w=$('moreWrap'),m=$('moreMenu');
 m.innerHTML=[['apps','Apper'],['cams','IP-kamera'],['fav','Favoritter'],['settings','Innstillinger']].map(([v,t])=>`<button data-mv="${v}">${t}</button>`).join('');
 $('moreBtn').onclick=e=>{e.stopPropagation();w.classList.toggle('open')};
@@ -3405,7 +3433,7 @@ const LGB={'nor.1':['ELI','#0d7a45'],'nor.2':['OBOS','#a3202f'],'uefa.champions'
 const SPTILE=(id,ic,bg,name,sub,badge)=>`<div class="stile" tabindex="0" data-fl="${id}" style="background:${bg}"><span class="sti">${badge||IC[ic]||''}</span><b>${esc(name)}</b><small>${esc(sub)}</small></div>`;
 function spHub(){
   const L=DB.live.filter(fvis);
-  return `<div class="sgrid big">${SPORTS.map(x=>{const n=L.filter(c=>x.rx.test(c.lc)).length;if(x.id!=='fotball'&&!n&&!(x.vod&&[...DB.ser,...DB.vod].some(c=>x.rx.test(((c.name||'')+' '+(c.cat||'')).toLowerCase()))))return '';return `<div class="stile xl" tabindex="0" data-fl="${x.id}" style="background:${x.bg}"><div class="sbg">${SCENE[x.id]||''}</div><span class="sti">${IC[x.ic]}</span><div class="stx"><b>${x.n}</b><small>${x.sub}${n?' · '+n+' kanaler':''}</small></div></div>`}).join('')}</div>`;
+  return `<div class="sgrid big">${SPORTS.map(x=>{const n=L.filter(c=>x.rx.test(c.lc)).length;if(x.id!=='fotball'&&!n&&!(x.vod&&[...DB.ser,...DB.vod].some(c=>x.rx.test(((c.name||'')+' '+(c.cat||'')).toLowerCase()))))return '';return `<div class="stile xl" tabindex="0" data-fl="${x.id}" style="background:${x.bg}"><div class="sbg">${x.id==='fotball'?`<div class="sph-photo" style="position:absolute;inset:0;background-image:url('${UVFIG}brann-stadion.jpg')"></div>`:(SCENE[x.id]||'')}</div><span class="sti">${IC[x.ic]}</span><div class="stx"><b>${x.n}</b><small>${x.sub}${n?' · '+n+' kanaler':''}</small></div></div>`}).join('')}</div>`;
 }
 function fotballTiles(){
   const L=DB.live.filter(fvis);const cnt=rx=>L.filter(c=>rx.test(c.lc)).length;
@@ -3695,7 +3723,7 @@ function go(sp){
   const [v,o]=parseSpec(sp);
   if(v==='norsk')return renderNorsk();
   if(v==='live')return goLive({tab:o.tab||'all',chip:o.chip||null});
-  if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',no:!!o.no,kids:!!o.kids,all:!!o.all,xmas:!!o.xmas,njul:!!o.njul,nt:!!o.nt,sort:'new'};}
+  if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',en:!!o.en,no:!!o.no,kids:!!o.kids,all:!!o.all,xmas:!!o.xmas,njul:!!o.njul,nt:!!o.nt,sort:'new'};}
   showView(v,true);
 }
 function appBack(){
@@ -4031,9 +4059,10 @@ function renderVodShell(kind){
     <select id="vcat"><option value="">Alle kategorier (${cats.length})</option>${cats.map(c=>`<option ${vf.cat===c?'selected':''}>${esc(c)}</option>`).join('')}</select>
     <select id="vsort"><option value="new" ${vf.sort==='new'?'selected':''}>Nylig lagt til</option><option value="az" ${vf.sort==='az'?'selected':''}>A–Å</option><option value="rt" ${vf.sort==='rt'?'selected':''}>Høyest rating</option></select></div>
   <div class="bar" id="vchips">
-    <button class="chip ${!vf.svc&&!vf.no&&!vf.kids&&!vf.xmas&&!vf.njul&&!vf.nt&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
+    <button class="chip ${!vf.svc&&!vf.no&&!vf.en&&!vf.kids&&!vf.xmas&&!vf.njul&&!vf.nt&&!vf.all?'on':''}" data-f="all">✨ Utforsk</button>
     <button class="chip ${vf.all?'on':''}" data-f="grid">☰ Alle titler</button>
     <button class="chip ${vf.no?'on':''}" data-f="no">🇳🇴 Norsk</button>
+    <button class="chip ${vf.en?'on':''}" data-f="en">🇺🇸 Engelsk / USA</button>
     <button class="chip ${vf.nt?'on':''}" data-f="nt">💬 Nordisk tekst</button>
     <button class="chip ${vf.kids?'on':''}" data-f="kids">🧸 Barn</button>
     <button class="chip ${vf.njul?'on':''}" data-f="njul">🎅 Norsk jul</button>
@@ -4046,9 +4075,9 @@ function renderVodShell(kind){
   $('vcat').onchange=e=>{vf.cat=e.target.value;updateGrid();vsideBuild(cats)};
   $('vsort').onchange=e=>{vf.sort=e.target.value;updateGrid();vsideBuild(cats)};
   $('vchips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const f=b.dataset.f;
-    if(f==='all'){vf.svc='';vf.no=false;vf.kids=false;vf.xmas=false;vf.njul=false;vf.nt=false;vf.all=false;vf.q='';vf.cat=''}
+    if(f==='all'){vf.svc='';vf.en=false;vf.no=false;vf.kids=false;vf.xmas=false;vf.njul=false;vf.nt=false;vf.all=false;vf.q='';vf.cat=''}
     else if(f==='grid'){vf.all=!vf.all}
-    else if(f==='no')vf.no=!vf.no;else if(f==='kids')vf.kids=!vf.kids;else if(f==='xmas'){vf.xmas=!vf.xmas;if(vf.xmas)vf.njul=false}else if(f==='njul'){vf.njul=!vf.njul;if(vf.njul)vf.xmas=false}else if(f==='nt')vf.nt=!vf.nt;
+    else if(f==='no')vf.no=!vf.no;else if(f==='en')vf.en=!vf.en;else if(f==='kids')vf.kids=!vf.kids;else if(f==='xmas'){vf.xmas=!vf.xmas;if(vf.xmas)vf.njul=false}else if(f==='njul'){vf.njul=!vf.njul;if(vf.njul)vf.xmas=false}else if(f==='nt')vf.nt=!vf.nt;
     else{const s=f.split(':')[1];vf.svc=vf.svc===s?'':s}
     vf.cat='';renderVodShell(vkind)};
   updateGrid();
@@ -4112,7 +4141,9 @@ function vodRails(kind){
   const svc=SERV.map(sv=>rail(`<span style="color:${sv.c}">●</span> ${sv.name}`,arr.filter(c=>c.sv===sv.id).sort(byNew).slice(0,24),pcard,pg+':svc='+sv.id)).join('');
   return top10Rail(top)+
     rail('🆕 Nylig lagt til',newest.slice(0,24),pcard,pg+':all=1')+
+    rail('🇺🇸 Nytt på engelsk',newest.filter(c=>c.en&&c.logo).slice(0,30),pcard,pg+':en=1')+
     rail('🇳🇴 Norsk',newest.filter(c=>c.no).slice(0,24),pcard,pg+':no=1')+
+    rail('🇺🇸 Best likt på engelsk',arr.filter(c=>c.en&&c.logo&&c.rt>=7).sort(byNew).slice(0,200).sort((a,b)=>b.rt-a.rt).slice(0,30),pcard,pg+':en=1')+
     (julTid?julR:'')+
     rail('🧸 For barna',newest.filter(c=>c.kid).slice(0,24),pcard,pg+':kids=1')+
     rail('💬 Med nordisk tekst',newest.filter(c=>c.nt&&!c.no&&c.logo).slice(0,24),pcard,pg+':nt=1')+
@@ -4121,12 +4152,12 @@ function vodRails(kind){
 }
 function updateGrid(){
   const q=vf.q.trim().toLowerCase();
-  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.kids||c.kid)&&(!vf.xmas||(c.xm&&!c.njul))&&(!vf.njul||c.njul)&&(!vf.nt||c.nt);
+  const vpred=c=>visible(c)&&(!vf.svc||c.sv===vf.svc)&&(!vf.cat||c.cat===vf.cat)&&(!vf.no||c.no)&&(!vf.en||c.en)&&(!vf.kids||c.kid)&&(!vf.xmas||(c.xm&&!c.njul))&&(!vf.njul||c.njul)&&(!vf.nt||c.nt);
   vlist=q?skRun(DB[vkind],skq(q),vpred):DB[vkind].filter(vpred);
   if(vf.sort==='az')vlist.sort((a,b)=>a.name.localeCompare(b.name,'no'));
   else if(vf.sort==='rt')vlist.sort((a,b)=>b.rt-a.rt);
   else vlist.sort(byNew);
-  const browse=!(vf.svc||vf.no||vf.kids||vf.xmas||vf.njul||vf.nt||vf.cat||q||vf.all);
+  const browse=!(vf.svc||vf.en||vf.no||vf.kids||vf.xmas||vf.njul||vf.nt||vf.cat||q||vf.all);
   stopSlider();
   $('vbb').innerHTML=browse?vodSlider(vkind):'';
   $('vrails').innerHTML=browse?vodRails(vkind):'';
@@ -4692,11 +4723,11 @@ document.addEventListener('keydown',e=>{if(e.key==='ContextMenu'||e.keyCode===82
 function tvMove(dir){
   const root=tvRoot(),cur=document.activeElement&&root.contains(document.activeElement)&&document.activeElement!==document.body?document.activeElement:null;
   const vis=[...root.querySelectorAll(TVSEL)].filter(el=>{if(el.disabled||el.hidden||el.closest('[hidden]'))return false;{const rr=el.getBoundingClientRect();if(rr.width<2&&rr.height<2)return false;if(el.checkVisibility&&!el.checkVisibility({visibilityProperty:true,opacityProperty:true}))return false}if(TVM&&root===document.body&&el.classList.contains('ic')&&el.closest('.ch'))return false;if(TVM&&root===document.body&&(el.tagName==='SELECT'||(el.tagName==='INPUT'&&!/checkbox|file|button|radio/.test(el.type))))return false;if(TVM&&(dir==='ArrowUp'||dir==='ArrowDown')&&el.classList.contains('chip')&&el!==cur){const pr=el.parentElement,st=pr&&(pr.querySelector('.chip.on')||pr.querySelector('.chip'));if(el!==st)return false}const r=el.getBoundingClientRect();if(r.width<8||r.height<8)return false;const cs=getComputedStyle(el);return cs.visibility!=='hidden'&&cs.display!=='none'});
-  if(!cur){const f=(root===document.body&&document.querySelector('#nav button.on'))||vis.find(el=>el.getBoundingClientRect().top>=0)||vis[0];if(f){if(!f.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(f.tagName))f.tabIndex=0;f.focus();}return}
+  if(!cur){const f=(root===document.body&&hdrT())||vis.find(el=>el.getBoundingClientRect().top>=0)||vis[0];if(f){if(!f.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(f.tagName))f.tabIndex=0;f.focus();}return}
   if(root===document.body&&curView==='live'&&!document.querySelector('#vwrap.pfs')){
     const chs=()=>[...document.querySelectorAll('#list .ch')],tm=()=>[...document.querySelectorAll('#tvMenu .tmi')];
     const fo=e=>{if(!e)return true;if(!e.hasAttribute('tabindex')&&!/BUTTON|A/.test(e.tagName))e.tabIndex=0;e.focus({preventScroll:true});e.scrollIntoView({block:'nearest'});return true};
-    const actCh=()=>document.querySelector('#list .ch.active')||chs()[0],actM=()=>document.querySelector('#tvMenu .tmi.on')||tm()[0],nav=()=>document.querySelector('#nav button.on');
+    const actCh=()=>document.querySelector('#list .ch.active')||chs()[0],actM=()=>document.querySelector('#tvMenu .tmi.on')||tm()[0],nav=()=>hdrT();
     const playing=$('v-live').classList.contains('playing');
     if(cur.closest('header')&&dir==='ArrowDown'){fo(actCh()||actM());return}
     if(cur.classList.contains('ch')&&cur.closest('#list')&&playing){const l=chs(),i=l.indexOf(cur);
@@ -4715,7 +4746,7 @@ function tvMove(dir){
       if(dir==='ArrowLeft'&&cur===cur.parentElement.querySelector('button')){fo(actM());return}}
   }
   if(root===document.body&&curView==='home'&&!cur.closest('header')&&cur.closest('.cin')&&(dir==='ArrowUp'||dir==='ArrowDown')){
-    if(dir==='ArrowUp'){const n=document.querySelector('#nav button.on');if(n){n.focus({preventScroll:true});return}}
+    if(dir==='ArrowUp'){const n=hdrT();if(n){n.focus({preventScroll:true});return}}
     if(dir==='ArrowDown'){const pc=document.querySelector('#v-home .uvt')||document.querySelector('#v-home .pc');if(pc){pc.focus({preventScroll:true});pc.scrollIntoView({block:'nearest'})}return}}
   if(root===document.body&&(dir==='ArrowDown'||dir==='ArrowUp')){
     const inHdr=e=>!!(e&&e.closest&&e.closest('header'));const view=document.querySelector('.view.on');
@@ -4762,8 +4793,8 @@ function tvMove(dir){
     const canS=dir==='ArrowDown'?sc.scrollTop+H<sc.scrollHeight-4:sc.scrollTop>4;
     if(!best&&canS&&dir==='ArrowDown'){sc.scrollBy({top:Math.round(H*0.28),behavior:'auto'});return}
     if(best&&off){best.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'})}}
-  if(root===document.body&&dir==='ArrowUp'&&!best&&!hdrCur){const v=document.querySelector('.view.on');if(v)v.scrollTop=0;const n=document.querySelector('#nav button.on')||document.querySelector('#nav button');if(n){n.focus({preventScroll:true});return}}
-  if(root===document.body&&dir==='ArrowUp'&&best&&best.closest('header')&&!cur.closest('header')){const v=document.querySelector('.view.on');if(v&&v.scrollTop>4)v.scrollTop=0;const n=document.querySelector('#nav button.on')||document.querySelector('#nav button');if(n){n.focus({preventScroll:true});return}}
+  if(root===document.body&&dir==='ArrowUp'&&!best&&!hdrCur){const v=document.querySelector('.view.on');if(v)v.scrollTop=0;const n=hdrT();if(n){n.focus({preventScroll:true});return}}
+  if(root===document.body&&dir==='ArrowUp'&&best&&best.closest('header')&&!cur.closest('header')){const v=document.querySelector('.view.on');if(v&&v.scrollTop>4)v.scrollTop=0;const n=hdrT();if(n){n.focus({preventScroll:true});return}}
   if(best){if(!best.hasAttribute('tabindex')&&!/BUTTON|A|INPUT|SELECT/.test(best.tagName))best.tabIndex=0;best.focus({preventScroll:true});best.scrollIntoView({block:'center',inline:'center',behavior:TVM?'auto':'smooth'})}
 }
 document.addEventListener('keydown',e=>{
@@ -4776,8 +4807,8 @@ document.addEventListener('keydown',e=>{
     if(!TVM&&t&&t.tagName==='SELECT')return;
     if(t&&t.tagName==='VIDEO'&&/Left|Right/.test(k))return;
     document.body.classList.add('tv');e.preventDefault();tvMove(k);
-    setTimeout(()=>{const a=document.activeElement;if((!a||a===document.body)&&!document.querySelector('dialog[open]')&&!document.querySelector('.pfs')){const v=document.querySelector('.view.on');const t=(v&&[...v.querySelectorAll('button.primary,.pc,.ch')].find(x=>{const r=x.getBoundingClientRect();return r.width>2&&r.top>=0&&r.top<innerHeight&&(!x.checkVisibility||x.checkVisibility({visibilityProperty:true,opacityProperty:true}))}))||document.querySelector('#nav button.on');if(t){if(!t.hasAttribute('tabindex')&&!/BUTTON|A/.test(t.tagName))t.tabIndex=0;t.focus({preventScroll:true})}}},120);
-    setTimeout(()=>{const a=document.activeElement;if((!a||a===document.body)&&!document.querySelector('dialog[open]')&&!document.querySelector('.pfs')){const n=document.querySelector('.view.on button.primary')||document.querySelector('#nav button.on');if(n)n.focus({preventScroll:true})}},450);
+    setTimeout(()=>{const a=document.activeElement;if((!a||a===document.body)&&!document.querySelector('dialog[open]')&&!document.querySelector('.pfs')){const v=document.querySelector('.view.on');const t=(v&&[...v.querySelectorAll('button.primary,.pc,.ch')].find(x=>{const r=x.getBoundingClientRect();return r.width>2&&r.top>=0&&r.top<innerHeight&&(!x.checkVisibility||x.checkVisibility({visibilityProperty:true,opacityProperty:true}))}))||hdrT();if(t){if(!t.hasAttribute('tabindex')&&!/BUTTON|A/.test(t.tagName))t.tabIndex=0;t.focus({preventScroll:true})}}},120);
+    setTimeout(()=>{const a=document.activeElement;if((!a||a===document.body)&&!document.querySelector('dialog[open]')&&!document.querySelector('.pfs')){const n=document.querySelector('.view.on button.primary')||hdrT();if(n)n.focus({preventScroll:true})}},450);
   }else if(k==='Enter'&&document.body.classList.contains('tv')&&t&&!/BUTTON|A|INPUT|SELECT|TEXTAREA|VIDEO/.test(t.tagName)){e.preventDefault();t.click()}
 });
 if(/Android.*(TV|AFT|BRAVIA|Chromecast|SHIELD)/i.test(navigator.userAgent))document.body.classList.add('tv');
@@ -4934,6 +4965,7 @@ async function ytFind(q){
   for(const f of tries){try{const id=await f();if(id&&/^[\w-]{11}$/.test(id))return id}catch(e){}}
   return null}
 /* ===================== v185: Ny forside (Univers) · trailere · fotball ===================== */
+const UVFIG='https://eskedalanders-creator.github.io/min-iptv/figurer/';
 const UV={tm:[],ctl:null,cyc:0,pi:{movies:0,series:0,sport:0},bad:{},ytBad:0,cur:null,sph:null,sphI:0,sphMute:true};
 const uvT=(f,ms)=>{const t=setTimeout(f,ms);UV.tm.push(t);return t},uvI=(f,ms)=>{const t=setInterval(f,ms);UV.tm.push(t);return t};
 function uvStop(){
@@ -5033,9 +5065,9 @@ function uvTVMedia(){
   const seen=new Set(),pick=[];for(const c of last.concat(fav,no,L)){if(seen.has(c.key))continue;seen.add(c.key);pick.push(c);if(pick.length>=8)break}
   return `<div class="uvtvbg"></div><div class="uvch">${pick.map((c,i)=>`<span style="--d:${i}"><img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.parentNode.textContent='${esc(String(c.nm||c.name).slice(0,12)).replace(/'/g,'')}'"></span>`).join('')}</div><span class="uvlive"><i></i>DIREKTE</span>`;
 }
-function uvSportMedia(){return `<div class="uvspbg">${SCENE.fotball||''}</div><div class="uvnext" id="uvNext"></div>`}
+function uvSportMedia(){return `<div class="uvstad" style="background-image:url('${UVFIG}brann-stadion.jpg')"></div><div class="uvflood"><i></i><i></i><i></i></div><span class="uvstl">BRANN STADION</span><div class="uvnext" id="uvNext"></div>`}
 function uvAppsMedia(){return `<div class="uvap">${UV_APPS.map(([l,n,c,f])=>`<span style="--c:${c};--f:${f}"><b>${l}</b><small>${n}</small></span>`).join('')}</div>`}
-function uvCamMedia(){return `<div class="uvcam"><img id="uvCamI" alt=""><div class="uvemp">${UVI.cam}</div></div><span class="uvlive" id="uvCamL" hidden><i></i><em>LIVE</em></span>`}
+function uvCamMedia(){return `<div class="uvcam" style="background-image:url('${UVFIG}kamera.jpg')"></div><span class="uvlive" id="uvCamL" hidden><i></i><em>KLAR</em></span>`}
 function uvHome(){
   uvStop();
   const el=$('v-home');el.classList.add('uvhome');
@@ -5074,9 +5106,7 @@ function uvFill(el){
   /* kamera: stillbilde som oppdateres */
   camSrvFind().then(srv=>{if(curView!=='home'||!srv||!srv.st)return;const lk=srv.st.locked||{};const cl=(srv.st.cams||[]).filter(c=>(c.group||'Hjemme')!=='Jobb'&&!lk[c.group||'Hjemme']);const s=$('uvCamS');
     if(!cl.length){if(s)s.textContent=Object.keys(lk).length?'🔒 Låst – åpne for å se':'Ingen kamera funnet';return}
-    if(s)s.innerHTML=`<b>${cl.length} kamera</b> · live fra hjemme`;let i=0;
-    const im=$('uvCamI'),lb=$('uvCamL');const ref=()=>{const c=cl[i%cl.length];const n=new Image();n.onload=()=>{if(!im)return;im.src=n.src;im.classList.add('on');if(lb){lb.hidden=false;lb.querySelector('em').textContent='LIVE · '+c.name}};n.src=srv.url+'/snap/'+encodeURIComponent(c.name)+'?t='+Date.now()+'&k='+encodeURIComponent(camKeys[c.group||'Hjemme']||'')};
-    ref();uvI(()=>{i++;ref()},7000)}).catch(()=>{});
+    if(s)s.innerHTML=`<b>${cl.length} kamera</b> · trykk for live`;const lb=$('uvCamL');if(lb)lb.hidden=false}).catch(()=>{});
   /* abonnement utløper */
   uvExpiry();
   /* trailere: én om gangen, Filmer → Serier → Sport */
@@ -5132,7 +5162,7 @@ async function uvExpiry(){
 
 /* ===================== Sport: trailer-hero ===================== */
 function sphHtml(){
-  return `<section class="sph" id="sph"><div class="sph-bg">${SCENE.fotball||''}</div><div class="uvv sph-v" id="sphV"></div><div class="sph-g"></div>
+  return `<section class="sph" id="sph"><div class="sph-bg sph-photo" style="background-image:url('${UVFIG}brann-stadion.jpg')"></div><div class="uvv sph-v" id="sphV"></div><div class="sph-g"></div>
    <div class="sph-in"><span class="sph-eye"><i></i><span id="sphEye">Sport · høydepunkter</span></span><h1>Sport</h1><div id="sphNext" class="sph-next"></div>
    <div class="sph-btn"><button class="primary" data-fl="fotball">⚽ Fotball – kamper og tabeller</button><button class="ghost" id="sphSnd" hidden>🔊 Lyd på</button><button class="ghost" id="sphNx" hidden>⏭ Neste klipp</button></div></div></section>`;
 }
@@ -5207,7 +5237,7 @@ function fbPro(el){
   const tabs=LEAGUES.map(l=>{const b=LGB[l.slug]||['⚽','#444'];return `<button class="fbp-tab${l.slug===fbpLg?' on':''}" data-fbl="${l.slug}"><i style="--c:${b[1]}">${b[0]}</i>${esc(l.name)}</button>`}).join('');
   el.innerHTML=`<div class="fbp">
    <div class="fbp-top"><button class="ghost sback" data-spback="1">← Sport</button><h1><span class="fbp-ic">${IC.fotball}</span>Fotball</h1><span id="fbpLive"></span><span class="fbp-sp"></span><button class="ghost" data-go="live:tab=fb">📺 Alle fotballkanaler</button></div>
-   <section class="fbp-hero" id="fbpHero"><div class="fbp-bg">${SCENE.fotball||''}</div><div class="fbp-heroin"><div class="fbp-none"><b>Henter neste kamp …</b></div></div></section>
+   <section class="fbp-hero" id="fbpHero"><div class="fbp-bg fbp-photo" style="background-image:url('${UVFIG}brann-stadion.jpg')"></div><div class="fbp-heroin"><div class="fbp-none"><b>Henter neste kamp …</b></div></div></section>
    <section class="fbp-sec"><div class="fbp-sh"><h3><span class="fbp-dot"></span>Brann · terminliste</h3></div><div class="fbp-strip" id="fbpBr"><p class="muted">Henter …</p></div></section>
    <div class="fbp-tabs" id="fbpTabs">${tabs}</div>
    <div class="fbp-cols">
