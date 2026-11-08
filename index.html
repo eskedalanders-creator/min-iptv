@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=199;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=200;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1626,6 +1626,21 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .uvap b{font-size:clamp(22px,2.4vw,46px)!important}
 .uvap small{font-size:clamp(11px,.85vw,15px)!important;font-weight:600}
 .uvap span{gap:6px!important;border-radius:14px!important}
+/* v200: programguide */
+.gd2-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 10px}.gd2-top h1{margin:0!important;font-size:clamp(26px,2.2vw,38px)!important}
+.gd2-sets{display:flex;gap:6px;flex-wrap:wrap;flex:1}.gd2-sets .chip{display:inline-flex;align-items:center;gap:6px}
+.gd2-info{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;min-height:150px;padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.gd2-ph{border-radius:12px;background:#151826 center/cover no-repeat;aspect-ratio:16/9;display:grid;place-items:center}.gd2-ph img{max-width:60%;max-height:60%;object-fit:contain}
+.gd2-tx small{color:#9aa3bd;font-size:13px}.gd2-tx h2{margin:4px 0 8px;font-size:clamp(20px,1.6vw,28px)}.gd2-tx p{margin:0 0 10px;color:#c3c9db;line-height:1.45;max-height:4.4em;overflow:hidden}
+.gd2-live{color:#ff5a6e}.gd2-bar{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:10px;max-width:420px}.gd2-bar em{display:block;height:100%;background:#4fd0ff}
+.gd2{max-height:calc(var(--tvh,100vh) - 420px)!important}
+.gd2 .gch{flex-basis:210px!important;width:210px!important}.gd2 .gch span{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gd2 .gch img{width:44px;height:26px;object-fit:contain}
+.gd2 .gh0{font-size:12px;color:#9aa3bd;text-transform:capitalize}
+.gd2 .gp{background:#1b2030;border:1px solid rgba(255,255,255,.06)}.gd2 .gp.now{background:linear-gradient(180deg,#244766,#1b3550);border-color:rgba(79,208,255,.45)}.gd2 .gp.past{opacity:.45}
+.gd2 .gp:focus,.gd2 .gp:hover{background:#fff!important;color:#0b0c18!important;outline:none!important;transform:none!important;z-index:4}.gd2 .gp:focus small,.gd2 .gp:hover small{color:#444!important}
+.gnone{position:absolute;left:12px;top:18px;color:#5d6580;font-size:13px}
+.gload{position:absolute;left:12px;top:22px;width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.12),rgba(255,255,255,.04));background-size:200% 100%;animation:gl 1.2s linear infinite}@keyframes gl{to{background-position:-200% 0}}
+@media(max-width:760px){.gd2-info{grid-template-columns:1fr}.gd2{max-height:none!important}}
 /* v195: én kanalliste under avspilling */
 #tvMenu{display:none!important}
 #v-live #tools .row{display:none!important}
@@ -2927,18 +2942,18 @@ document.addEventListener('click',e=>{const pf=document.querySelector('.pfs');if
 const EPG=new Map(),EPGP=new Map(),epgQ=[];let epgBusy=0,epgOk=0,epgFail=0;
 const b64d=t=>{try{return decodeURIComponent(escape(atob(t)))}catch(e){try{return atob(t)}catch(_){return String(t||'')}}};
 const epgOff=()=>epgFail>=10&&epgOk===0;
-function epgGet(c){
+let epgGet=function(c){
   if(!c||!c.xt||epgOff())return Promise.resolve([]);
   const h=EPG.get(c.key);if(h&&Date.now()-h.t<180000)return Promise.resolve(h.list);
   if(EPGP.has(c.key))return EPGP.get(c.key);
   const p=new Promise(res=>{epgQ.push({c,res})});EPGP.set(c.key,p);epgPump();return p;
-}
+};
 let epgHold=0;
 function epgPump(){
   if(Date.now()<epgHold){if(epgQ.length)setTimeout(epgPump,Math.max(300,epgHold-Date.now()+50));return}
   while(epgBusy<2&&epgQ.length){
     const {c,res}=epgQ.shift();epgBusy++;
-    xapi(c.xt,'get_short_epg','&stream_id='+c.id+'&limit=14').then(j=>{
+    xapi(c.xt,'get_short_epg','&stream_id='+c.id+'&limit=30').then(j=>{
       const ts=(x,k)=>{const v=+x[k+'_timestamp'];if(v)return v*1000;const d=Date.parse(String(x[k]||'').replace(' ','T'));return isNaN(d)?0:d};
       return ((j&&j.epg_listings)||[]).map(x=>({t:b64d(x.title||''),d:b64d(x.description||''),s:ts(x,'start'),e:ts(x,'end')||ts(x,'stop')})).filter(x=>x.t&&x.e>x.s).sort((a,b)=>a.s-b.s);
     }).catch(()=>null).then(l=>{
@@ -3697,13 +3712,13 @@ function tvSearch(){
 /* ===================== TV-guide ===================== */
 let gdSet='fav';
 const GPX=6,GSPAN=4*60;
-function guideChannels(set){
+let guideChannels=function(set){
   const all=DB.live.filter(c=>fvis(c)&&!c.reg&&c.xt);
   if(set==='fav')return all.filter(isFav).slice(0,40);
   if(set==='sport')return chByCat('sport').filter(c=>c.xt).slice(0,40);
   return all.filter(c=>c.no).sort((a,b)=>noRank(a)-noRank(b)||COLL.compare(a.nm,b.nm)).slice(0,40);
-}
-function renderGuide(){
+};
+let renderGuide=function(){
   const el=$('v-guide');
   if(!S){el.innerHTML='<h1>TV-guide</h1><div class="empty">Legg til en kilde først.</div>';return}
   if(gdSet==='fav'&&!DB.live.some(c=>isFav(c)&&c.xt))gdSet='no';
@@ -3727,7 +3742,7 @@ function renderGuide(){
       return `<button class="gp ${now?'now':''}" data-k="${c.key}" title="${esc(x.t)}" style="left:${(a-start)/60000*GPX}px;width:${Math.max(24,(b-a)/60000*GPX-3)}px"><b>${esc(x.t)}</b><small>${fmtTime(x.s)}</small></button>`}).join('');
     if(done===chs.length&&!got&&$('gdNote'))$('gdNote').textContent='Leverandøren din sender ikke programguide for disse kanalene.';
   }));
-}
+};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-gd]');if(b){gdSet=b.dataset.gd;renderGuide()}});
 
 
@@ -5536,6 +5551,84 @@ function tvInfo(c){
   document.head.appendChild(st);
   setInterval(()=>{if(new Date().getMonth()<10){const e=document.getElementById('xmasSleigh');if(e)e.remove()}},3600e3);
 })();
+/* ===================== v200: bedre programguide ===================== */
+/* NRK: offisiell programguide (psapi.nrk.no) med beskrivelse, kategori og bilde */
+const NRKC={nrk1:'nrk1',nrk1hd:'nrk1',nrk2:'nrk2',nrk3:'nrk3',nrk3super:'nrk3',nrksuper:'nrksuper',nrksupernrk3:'nrk3'};
+const nrkCache={};
+const nrkId=c=>{if(!/nrk/i.test(c.name||''))return '';const n=normLive(c);if(NRKC[n])return NRKC[n];if(/^nrk1/.test(n)&&!/(rogaland|vest|nord|midt|sor|øst|ost|trøndelag|innlandet|vestfold|møre|agder|troms|finnmark|nordland|oslo|viken|telemark|buskerud|østfold|hordaland|sogn)/.test(n))return 'nrk1';return ''};
+async function nrkEpg(id){
+  const c=nrkCache[id];if(c&&Date.now()-c.t<30*60000)return c.list;
+  const day=o=>{const d=new Date(Date.now()+o*864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+  const pd=v=>{const m=/Date\((\d+)/.exec(v||'');return m?+m[1]:0};
+  const dur=v=>{const m=/PT(?:(\d+)H)?(?:(\d+)M)?(?:([\d.]+)S)?/.exec(v||'');return m?((+m[1]||0)*3600+(+m[2]||0)*60+(+m[3]||0))*1000:0};
+  const out=[];
+  for(const o of [-1,0,1]){try{const j=await jget('https://psapi.nrk.no/epg/'+id+'?date='+day(o));for(const e of ((j&&j[0]&&j[0].entries)||[])){const s=pd(e.plannedStart)||pd(e.actualStart),l=dur(e.duration);if(!s||!l||!e.title)continue;
+    const im=(e.image&&e.image.webImages||[]).find(x=>x.pixelWidth>=300)||((e.image&&e.image.webImages)||[])[0];
+    out.push({t:e.title,d:e.description||'',s,e:s+l,img:im?im.imageUrl:'',cat:(e.category&&e.category.displayValue)||'',age:(e.legalAge&&e.legalAge.displayAge)||''})}}catch(e){}}
+  const seen=new Set(),list=out.sort((a,b)=>a.s-b.s).filter(x=>{const k=x.s+x.t;if(seen.has(k))return false;seen.add(k);return true});
+  for(let i=0;i<list.length-1;i++)if(list[i].e>list[i+1].s)list[i].e=list[i+1].s;
+  nrkCache[id]={t:Date.now(),list};return list;
+}
+/* Leverandøren: prøv også andre kopier av samme kanal når én mangler programinfo */
+const epgGetX=epgGet;const EPGW=new Map();
+epgGet=function(c){
+  if(!c)return Promise.resolve([]);
+  const h=EPGW.get(c.key);if(h&&h.p)return h.p;if(h&&Date.now()-h.t<5*60000)return Promise.resolve(h.list);
+  const p=(async()=>{
+    let l=[];const nid=nrkId(c);
+    if(nid){try{l=await nrkEpg(nid)}catch(e){}}
+    if(!l.length&&c.xt){l=await epgGetX(c);
+      if(!l.length){const n=normLive(c);const alts=(c.alts&&c.alts.length?c.alts:DB.live.filter(x=>x!==c&&x.xt&&normLive(x)===n)).slice(0,4);
+        for(const a of alts){l=await epgGetX(a);if(l.length)break}}}
+    EPG.set(c.key,{t:Date.now(),list:l});EPGW.set(c.key,{t:Date.now(),list:l});return l})();
+  EPGW.set(c.key,{p});return p;
+};
+const epgOff0=epgOff;
+/* ---- Guide ---- */
+const GD_SETS=[['fav','⭐','Favoritter'],['no','🇳🇴','Norge'],['sport','⚽','Sport'],['se','🇸🇪','Sverige'],['dk','🇩🇰','Danmark'],['uk','🇬🇧','Storbritannia'],['us','🇺🇸','USA']];
+let gdHideEmpty=LSget('gdHide',true),gdInfoT=0;
+guideChannels=function(set){
+  const all=DB.live.filter(tvVis);
+  if(set==='fav')return all.filter(isFav).slice(0,60);
+  if(set==='sport'){const L=[];for(const id of ['no','se','dk','uk','us'])for(const c of tvList(id))if(c._g==='sport')L.push(c);return L.slice(0,60)}
+  return tvList(set).slice(0,60);
+};
+renderGuide=function(){
+  const el=$('v-guide');
+  if(!S){el.innerHTML='<h1>TV-guide</h1><div class="empty">Legg til en kilde først.</div>';return}
+  if(gdSet==='fav'&&!DB.live.some(c=>isFav(c)&&tvVis(c)))gdSet='no';
+  const chs=guideChannels(gdSet);
+  const SPAN=6*60,PX=7,start=Math.floor((Date.now()-30*60000)/1800000)*1800000,end=start+SPAN*60000;
+  const hours=[];for(let t=start;t<end;t+=1800000)hours.push(t);
+  const FLG={no:'no',se:'se',dk:'dk',uk:'gb',us:'us'};
+  el.innerHTML=`<div class="gd2-top"><h1>TV-guide</h1><div class="gd2-sets">${GD_SETS.map(([k,f,n])=>`<button class="chip ${gdSet===k?'on':''}" data-gd="${k}">${FLG[k]?`<img class="tvflag" src="https://flagcdn.com/w40/${FLG[k]}.png" alt="">`:f} ${n}</button>`).join('')}</div><button class="chip" id="gdHide">${gdHideEmpty?'Viser bare kanaler med program':'Viser alle kanaler'}</button></div>
+  <div class="gd2-info" id="gdInfo"><div class="gd2-ph"></div><div class="gd2-tx"><small class="muted">Velg et program for å se mer</small></div></div>
+  <div id="gdNote" class="muted" style="margin:4px 0 8px"></div>
+  <div class="gscroll gd2"><div class="gin" style="width:${210+SPAN*PX}px">
+    <div class="ghead"><div class="gch gh0">${new Date().toLocaleDateString('nb-NO',{weekday:'long',day:'numeric',month:'long'})}</div><div class="gtl">${hours.map(t=>`<span style="left:${(t-start)/60000*PX}px">${fmtTime(t)}</span>`).join('')}</div></div>
+    ${chs.map(c=>`<div class="grow" data-gr="${c.key}"><div class="gch" data-k="${c.key}" tabindex="0">${c.logo?`<img loading="lazy" decoding="async" src="${esc(c.logo)}" alt="" onerror="this.remove()">`:''}<span>${esc(tvName(c))}</span></div><div class="gtl gprog" data-gk="${c.key}"><i class="gload"></i></div></div>`).join('')}
+    <div class="gnow" style="left:${210+(Date.now()-start)/60000*PX}px"></div>
+  </div></div>`;
+  $('gdHide').onclick=()=>{gdHideEmpty=!gdHideEmpty;LSset('gdHide',gdHideEmpty);renderGuide()};
+  if(!chs.length){$('gdNote').textContent=gdSet==='fav'?'Ingen favorittkanaler ennå – trykk ★ på en kanal.':'Fant ingen kanaler.';return}
+  const sc=el.querySelector('.gscroll');sc.scrollLeft=Math.max(0,(Date.now()-start)/60000*PX-120);
+  const prog={};let got=0,done=0;
+  const info=(c,x)=>{const I=$('gdInfo');if(!I||!x)return;const now=x.s<=Date.now()&&x.e>Date.now(),pct=now?Math.round((Date.now()-x.s)/(x.e-x.s)*100):0;
+    I.innerHTML=`<div class="gd2-ph" ${x.img?`style="background-image:url('${esc(x.img)}')"`:''}>${x.img?'':(c.logo?`<img src="${esc(c.logo)}" alt="">`:'')}</div><div class="gd2-tx"><small>${esc(tvName(c))} · ${fmtTime(x.s)}–${fmtTime(x.e)}${x.cat?' · '+esc(x.cat):''}${x.age?' · '+esc(x.age):''}${now?' · <b class="gd2-live">NÅ</b>':''}</small><h2>${esc(x.t)}</h2>${now?`<i class="gd2-bar"><em style="width:${pct}%"></em></i>`:''}<p>${esc(x.d||'Ingen beskrivelse.')}</p>${now?`<button class="primary" data-k="${c.key}">▶ Se nå</button>`:''}</div>`};
+  el.addEventListener('focusin',e=>{const b=e.target.closest('.gp');if(!b)return;clearTimeout(gdInfoT);gdInfoT=setTimeout(()=>{const c=byKey.get(b.dataset.k),x=(prog[b.dataset.k]||[])[+b.dataset.i];info(c,x)},120)});
+  el.addEventListener('mouseover',e=>{const b=e.target.closest('.gp');if(!b)return;clearTimeout(gdInfoT);gdInfoT=setTimeout(()=>{const c=byKey.get(b.dataset.k),x=(prog[b.dataset.k]||[])[+b.dataset.i];info(c,x)},150)});
+  let firstNow=null;
+  chs.forEach(c=>epgGet(c).then(l=>{
+    done++;const row=el.querySelector(`[data-gk="${CSS.escape(c.key)}"]`);if(!row)return;
+    const items=l.filter(x=>x.e>start&&x.s<end);prog[c.key]=items;
+    if(items.length)got++;else if(gdHideEmpty){const r=row.parentElement;r.remove()}
+    row.innerHTML=items.map((x,i)=>{const a=Math.max(x.s,start),b=Math.min(x.e,end),now=x.s<=Date.now()&&x.e>Date.now(),past=x.e<=Date.now();
+      return `<button class="gp ${now?'now':''}${past?' past':''}" data-k="${c.key}" data-i="${i}" title="${esc(x.t)}" style="left:${(a-start)/60000*PX}px;width:${Math.max(26,(b-a)/60000*PX-3)}px"><b>${esc(x.t)}</b><small>${fmtTime(x.s)}${x.cat?' · '+esc(x.cat):''}</small></button>`}).join('')||'<span class="gnone">Ingen programinfo</span>';
+    if(!firstNow){const k=items.findIndex(x=>x.s<=Date.now()&&x.e>Date.now());if(k>=0){firstNow=1;info(c,items[k])}}
+    const N=$('gdNote');if(N)N.textContent=done<chs.length?`Henter programinfo … ${done} / ${chs.length}`:(got?`${got} kanaler med programinfo`+(gdHideEmpty&&got<chs.length?` · ${chs.length-got} uten er skjult`:''):'Leverandøren har ikke programinfo for disse kanalene.');
+  }));
+};
+
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
 const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
 try{localStorage.setItem('boot_try','0')}catch(e){}
