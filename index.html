@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=217;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=218;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1817,7 +1817,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <button class="hic" id="bFav" title="Favoritter" aria-label="Favoritter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg></button>
   <button class="hic" id="bSet" title="Innstillinger" aria-label="Innstillinger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   <button class="hic huser" id="bUser" title="Bytt bruker" aria-label="Bruker"><span class="hav" id="bUserA">?</span><span id="bUserN"></span></button>
-  <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bRl" title="Last appen på nytt (henter ny versjon)" aria-label="Last på nytt" onclick="location.reload()">⟳</button>
+  <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bRl" title="Last appen på nytt (henter ny versjon)" aria-label="Last på nytt" onclick="(window.appUpdNow||function(){location.reload()})()">⟳</button>
   <button class="bpill" style="animation:none;background:rgba(255,255,255,.08);color:inherit;border-color:rgba(255,255,255,.25);font-size:18px;padding:4px 12px" id="bFs" title="Fullskjerm (F11)" aria-label="Fullskjerm">⛶</button>
 </header>
 
@@ -5940,13 +5940,14 @@ setTimeout(autoSync,8000);document.addEventListener('visibilitychange',()=>{if(d
 /* ===== Automatisk appoppdatering (Android/Windows-appene) ===== */
 const UPDATE_BASE='https://eskedalanders-creator.github.io/min-iptv/';
 try{localStorage.setItem('boot_try','0')}catch(e){}
-async function checkAppUpdate(){
+async function checkAppUpdate(manual){
   if(!NATIVE)return;
   try{
-    const r=await netReq('GET',UPDATE_BASE+'index.html?t='+Date.now());if(!r.ok)return;
+    const r=await netReq('GET',UPDATE_BASE+'index.html?t='+Date.now());if(!r.ok){if(manual)toast('Fikk ikke kontakt med oppdateringsserveren (HTTP '+r.status+')',5000);return}
     let h=r.text;const m=h.match(/var APP_BUILD=(\d+)/);if(!m)return;
     const rv=+m[1],cur=Math.max(APP_BUILD,+localStorage.getItem('remote_ver')||0);
-    if(rv<=cur||h.length<50000)return;
+    if(rv<=cur||h.length<50000){if(manual){if(rv<=APP_BUILD)toast('Du har nyeste versjon (v'+APP_BUILD+')',3500);else location.reload()}return}
+    if(manual){h=h.split('https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5.0.8/400.css').join('lib/bebas.css').split('https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js').join('lib/hls.min.js').split('https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js').join('lib/mpegts.js');localStorage.setItem('remote_html',h);localStorage.setItem('remote_ver',String(rv));toast('Oppdaterer til v'+rv+' …',2500);setTimeout(()=>location.reload(),800);return}
     h=h.split('https://cdn.jsdelivr.net/npm/@fontsource/bebas-neue@5.0.8/400.css').join('lib/bebas.css').split('https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js').join('lib/hls.min.js').split('https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js').join('lib/mpegts.js');
     localStorage.setItem('remote_html',h);localStorage.setItem('remote_ver',String(rv));
     const busy=()=>{try{return $('ov').classList.contains('on')||($('v-live').classList.contains('playing')&&current)}catch(e){return false}};
@@ -5955,6 +5956,10 @@ async function checkAppUpdate(){
   }catch(e){}
 }
 setTimeout(checkAppUpdate,4000);
+/* v218: ⟳ ser etter ny versjon med en gang; ellers sjekk hvert 20. minutt og når appen kommer i forgrunnen */
+window.appUpdNow=()=>{if(!NATIVE){try{navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>r&&r.update())}catch(e){}location.reload();return}toast('Ser etter ny versjon …',2500);checkAppUpdate(true)};
+setInterval(()=>{if(document.visibilityState==='visible')checkAppUpdate()},20*60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-(window.__lastUpdChk||0)>5*60000){window.__lastUpdChk=Date.now();checkAppUpdate()}});
 detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpdate(false),9000);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
 })();
 </script>
