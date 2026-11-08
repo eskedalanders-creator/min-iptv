@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=186;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=187;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1568,6 +1568,10 @@ body.tv .fbp-row:focus,html.tvm .fbp-row:focus{outline:none!important;transform:
 .fbp-photo{filter:saturate(1.1) brightness(.9)}
 .sph-g{background:linear-gradient(90deg,rgba(4,6,14,.88) 0%,rgba(4,6,14,.45) 45%,rgba(4,6,14,.1) 75%),linear-gradient(0deg,rgba(4,6,14,.75),transparent 40%)!important}
 .fbp-hero::after{background:radial-gradient(75% 95% at 50% 45%,rgba(5,10,20,.25),rgba(5,8,16,.86) 78%),linear-gradient(90deg,rgba(200,16,46,.30),transparent 35%,transparent 65%,rgba(40,120,255,.16))!important}
+/* v187: færre knapperader */
+#tvLands{display:none!important}
+.vmain.browse>.vbar,.vmain.browse>#vchips{display:none!important}
+.vmain:not(.browse)>#vchips::before{content:'Filter:';align-self:center;color:#8d95a9;font-size:13px;margin-right:4px}
 html.lite .uvt,html.lite .sph-next,html.lite .fbp-cd div{backdrop-filter:none!important}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
@@ -4158,6 +4162,7 @@ function updateGrid(){
   else if(vf.sort==='rt')vlist.sort((a,b)=>b.rt-a.rt);
   else vlist.sort(byNew);
   const browse=!(vf.svc||vf.en||vf.no||vf.kids||vf.xmas||vf.njul||vf.nt||vf.cat||q||vf.all);
+  {const vm=document.querySelector('#'+(vkind==='vod'?'v-movies':'v-series')+' .vmain');if(vm)vm.classList.toggle('browse',browse)}
   stopSlider();
   $('vbb').innerHTML=browse?vodSlider(vkind):'';
   $('vrails').innerHTML=browse?vodRails(vkind):'';
@@ -5089,7 +5094,7 @@ function uvHome(){
    <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
    <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
   </div>
-  <div class="uvf"><span id="uvExp"></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
+  <div class="uvf"><span></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
   try{clk()}catch(e){}
   uvFill(el);
 }
@@ -5107,8 +5112,6 @@ function uvFill(el){
   camSrvFind().then(srv=>{if(curView!=='home'||!srv||!srv.st)return;const lk=srv.st.locked||{};const cl=(srv.st.cams||[]).filter(c=>(c.group||'Hjemme')!=='Jobb'&&!lk[c.group||'Hjemme']);const s=$('uvCamS');
     if(!cl.length){if(s)s.textContent=Object.keys(lk).length?'🔒 Låst – åpne for å se':'Ingen kamera funnet';return}
     if(s)s.innerHTML=`<b>${cl.length} kamera</b> · trykk for live`;const lb=$('uvCamL');if(lb)lb.hidden=false}).catch(()=>{});
-  /* abonnement utløper */
-  uvExpiry();
   /* trailere: én om gangen, Filmer → Serier → Sport */
   const tiles={movies:el.querySelector('.uvt.uv-film'),series:el.querySelector('.uvt.uv-ser'),sport:el.querySelector('.uvt.uv-sport')};
   const order=['movies','series','sport'];
