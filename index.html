@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=211;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=212;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2325,7 +2325,7 @@ async function fetchText(url,onP){
 }
 async function xapi(x,action,extra){
   let hs;try{hs=altsFor(x)}catch(e){hs=[x.host]}
-  let last;const errs=[];for(const h of hs){try{return await xapi1(x,action,extra,h)}catch(e){last=e;errs.push(String((e&&e.message)||e).slice(0,110));if(e&&/^HTTP 4/.test(e.message||''))break}}
+  let last;const errs=[];for(const h of hs){try{return await xapi1(x,action,extra,h)}catch(e){last=e;errs.push(String((e&&e.message)||e).slice(0,110));if(e&&/^HTTP 4/.test(e.message||'')&&!/^HTTP (403|429)/.test(e.message||''))break}}
   if(errs.length>1){const e2=new Error(errs.join(' | '));throw e2}
   throw last}
 async function xapi1(x,action,extra,host){
@@ -2391,12 +2391,19 @@ let refBusy=0;
 const srcBlocked=()=>(+localStorage.getItem('srcBlock')||0)>Date.now();
 const cleanErr=m=>String(m||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').replace(/\(Xtream:.*$/,'').trim().slice(0,140);
 async function refreshSource(s,quiet){if(refBusy&&quiet)return false;if(quiet&&srcBlocked())return false;refBusy++;try{return await refreshSource0(s,quiet)}finally{refBusy--}}
+/* v212: blir kontoen avvist (403), hent listen via en annen konto med samme innhold */
+async function fetchAllAcc(s,onP){
+  try{return await fetchAll(s.xt,onP)}catch(e){
+    if(!/HTTP (403|429)/.test(String(e&&e.message)))throw e;
+    const others=accList().filter(a=>a!==s&&a.xt.user!==s.xt.user);
+    for(const a of others){try{onP&&onP('«'+(s.name||'Kontoen')+'» ble avvist – prøver «'+(a.name||'annen konto')+'» …');const r=await fetchAll(a.xt,onP);r.warn=(r.warn||[]).concat(['Hentet via «'+(a.name||'annen konto')+'» fordi «'+(s.name||'hovedkontoen')+'» ble avvist (403)']);toast('«'+(s.name||'Hovedkontoen')+'» ble avvist – kanallisten er hentet via «'+(a.name||'annen konto')+'»',6000);return r}catch(e2){}}
+    throw e}}
 async function refreshSource0(s,quiet){
   try{
     const onP=t=>quiet?toast('Oppdaterer kilden: '+t):ssta(t,true);
     let text=null,data=null,warn=[],step='start';
     step='henter';
-    if(s.xt){try{const r=await fetchAll(s.xt,onP);data=r.data;warn=r.warn}catch(e){if(!s.url)throw e;warn.push('Xtream feilet ('+String(e.message).slice(0,160)+'), prøver M3U');s.__xe=String(e.message).slice(0,160)}}
+    if(s.xt){try{const r=await fetchAllAcc(s,onP);data=r.data;warn=r.warn}catch(e){if(!s.url)throw e;warn.push('Xtream feilet ('+String(e.message).slice(0,160)+'), prøver M3U');s.__xe=String(e.message).slice(0,160)}}
     if(!data&&s.url){try{text=await fetchText(s.url,n=>onP('Henter M3U … '+(n/1048576).toFixed(1)+' MB'))}catch(e){if(s.__xe)e.message+=' (Xtream: '+s.__xe+')';throw e}}
     if(data){s.data=data;delete s.text}else if(text){s.text=text;delete s.data}
     s.updated=Date.now();step='lagrer';
@@ -2404,7 +2411,7 @@ async function refreshSource0(s,quiet){
     toast(quiet?'Kilden er oppdatert ✔':'',quiet?3500:0);
     if(!quiet)ssta('Oppdatert. '+warn.join(' · '),true);
     return true;
-  }catch(e){toast('');if(/HTTP (403|429)/.test(String(e&&e.message))){localStorage.setItem('srcBlock',String(Date.now()+30*60000));epgHold=Date.now()+30*60000;if(quiet){toast('Leverandøren avviste tilkoblingen akkurat nå (for mange forespørsler). Bruker lagret kanalliste – prøver igjen om 30 min.',6000);return false}}const dg=' ['+(typeof step==='string'?step:'?')+'] '+String(e&&e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/\(.*[\/\\]/,'(').replace(/^at /,'')).join(' | ');if(!quiet)ssta('Oppdatering feilet: '+e.message+dg);else toast('Kunne ikke oppdatere kilden: '+cleanErr(e.message)+''+dg,20000);return false}
+  }catch(e){toast('');if(/HTTP (403|429)/.test(String(e&&e.message))){localStorage.setItem('srcBlock',String(Date.now()+30*60000));epgHold=Date.now()+30*60000;if(quiet){toast('Leverandøren avviste tilkoblingen akkurat nå (for mange forespørsler). Bruker lagret kanalliste – prøver igjen om 30 min.',6000);return false}}const dg=' ['+(typeof step==='string'?step:'?')+'] '+String(e&&e.stack||'').split('\n').slice(1,5).map(l=>l.trim().replace(/\(.*[\/\\]/,'(').replace(/^at /,'')).join(' | ');if(!quiet){if(/HTTP 403/.test(String(e&&e.message)))ssta('Leverandøren avviser tilkoblingen (403 Forbidden) – både kanaler, filmer og serier, og fra alle kontoer/adresser appen kjenner. Dette er en sperre hos leverandøren, ikke en feil i appen. Vanlige årsaker: for mange forespørsler/enheter samtidig (sperren slipper som regel etter 30–60 min), abonnementet er utløpt, eller IP-adressen er sperret (prøv mobildata, eller start ruteren på nytt). Den lagrede kanallisten brukes i mellomtiden.',true);else ssta('Oppdatering feilet: '+cleanErr(e.message)+dg)}else toast('Kunne ikke oppdatere kilden: '+cleanErr(e.message)+''+dg,20000);return false}
 }
 $('srcAdd').onclick=async()=>{
   const name=$('sName').value.trim()||'Kilde';
