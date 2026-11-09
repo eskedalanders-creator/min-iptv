@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=222;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=223;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5778,15 +5778,25 @@ function spSdkInit(){if(NATIVE||!spOn()||spSdk.player||spSdk.loading)return;spSd
   const s=document.createElement('script');s.src='https://sdk.scdn.co/spotify-player.js';s.onerror=()=>{spSdk.err='kunne ikke laste';spSdk.loading=false};document.head.appendChild(s)}
 /* enheter og avspilling */
 async function spDevices(){try{const j=await spApi('/me/player/devices');spState.devs=(j&&j.devices)||[]}catch(e){spState.devs=spState.devs||[]}return spState.devs}
-async function spTarget(){const pl=spState.pl;if(pl&&pl.device&&pl.device.id)return pl.device.id;
-  const devs=await spDevices();const pref=localStorage.getItem('sp_dev');
-  const d=devs.find(x=>x.id===pref)||(spSdk.dev&&{id:spSdk.dev})||devs.find(x=>x.is_active)||devs.find(x=>/computer/i.test(x.type))||devs[0];return d?d.id:null}
-async function spPlay(body){try{const id=await spTarget();
-    if(!id){toast('Fant ingen Spotify-enhet. Åpne Spotify på PC-en, telefonen eller en høyttaler – så dukker den opp her.',8000);return}
-    await spApi('/me/player/play?device_id='+encodeURIComponent(id),{method:'PUT',body});setTimeout(()=>spPoll(true),700)}
+/* v223: spill alltid på DENNE enheten – valget huskes per enhet (synkes ikke) */
+const spIsPhone=()=>NATIVE&&!DESKTOP&&!TVM;
+async function spTarget(){const devs=await spDevices();const pref=localStorage.getItem('sp_dev'),pn=localStorage.getItem('sp_devname');
+  if(pref&&(pref===spSdk.dev||devs.find(x=>x.id===pref)))return{id:pref};
+  const byName=pn&&devs.find(x=>x.name===pn);if(byName){localStorage.setItem('sp_dev',byName.id);return{id:byName.id}}
+  if(pn&&pn!=='Eskedals Univers (denne)')return{missing:pn};
+  if(spSdk.dev)return{id:spSdk.dev};
+  if(spIsPhone()){const ph=devs.filter(x=>/smartphone|tablet/i.test(x.type));if(ph.length===1){spRemember(ph[0].id,ph[0].name);return{id:ph[0].id}}}
+  return{ask:true}}
+function spRemember(id,name){try{localStorage.setItem('sp_dev',id);localStorage.setItem('sp_devname',name||'')}catch(e){}}
+async function spPlay(body){try{const t=await spTarget();
+    if(t.ask){toast('Velg hvor musikken skal spille på denne skjermen – appen husker valget',5000);spDevPick(()=>spPlay(body));return}
+    if(t.missing){toast('Spotify er ikke åpen på «'+t.missing+'». Åpne Spotify der – eller velg en annen enhet.',7000);spDevPick(()=>spPlay(body));return}
+    await spApi('/me/player/play?device_id='+encodeURIComponent(t.id),{method:'PUT',body});
+    if(t.id===spSdk.dev||!spIsPhone()){try{rdCur&&rdStop()}catch(e){}}
+    setTimeout(()=>spPoll(true),700)}
   catch(e){toast(e.reason==='PREMIUM_REQUIRED'||/premium/i.test(e.message)?'Spotify Premium kreves for å styre avspilling':'Spotify: '+e.message,6000)}}
 async function spCmd(c){try{const pl=spState.pl;
-    if(c==='toggle')await spApi('/me/player/'+(pl&&pl.is_playing?'pause':'play'),{method:'PUT'});
+    if(c==='toggle'){if(pl&&pl.is_playing)await spApi('/me/player/pause',{method:'PUT'});else{const t=await spTarget();if(t.ask||t.missing){spPlay(undefined);return}if(pl&&pl.device&&pl.device.id!==t.id)await spApi('/me/player',{method:'PUT',body:{device_ids:[t.id],play:true}});else await spApi('/me/player/play?device_id='+encodeURIComponent(t.id),{method:'PUT'})}}
     else if(c==='next')await spApi('/me/player/next',{method:'POST'});
     else if(c==='prev')await spApi('/me/player/previous',{method:'POST'});
     if(pl&&c==='toggle'){pl.is_playing=!pl.is_playing;spMini();spNowDraw()}
@@ -5801,18 +5811,18 @@ function spMini(){const m=$('spMini');if(!m)return;const pl=spState.pl;
   if(!spOn()||!pl||!pl.item){m.hidden=true;return}
   m.hidden=false;m.innerHTML=`<button class="spm-t" data-go="spotify">${spArt(pl.item,64)?`<img src="${esc(spArt(pl.item,64))}" alt="">`:SPI}<span><b>${esc(pl.item.name)}</b><small>${spArtists(pl.item)}</small></span></button><button class="spm-b" data-spc="toggle" title="Spill/pause">${pl.is_playing?'❚❚':'▶'}</button><button class="spm-b" data-spc="next" title="Neste">⏭</button>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-spc]');if(b){e.preventDefault();e.stopPropagation();spCmd(b.dataset.spc)}},true);
-function spDevLbl(){const el=$('spDev');if(!el)return;const pl=spState.pl;el.textContent='🔊 '+((pl&&pl.device&&pl.device.name)||(spSdk.dev?'Eskedals Univers':'Velg enhet'))+' ▾'}
+function spDevLbl(){const el=$('spDev');if(!el)return;const pl=spState.pl,mine=localStorage.getItem('sp_devname'),act=pl&&pl.device&&pl.device.name;el.textContent='🔊 '+(mine||(spSdk.dev?'Eskedals Univers':'Velg enhet her'))+' ▾';el.title=act&&act!==mine?'Spiller nå på '+act:''}
 function spNowDraw(){const el=$('spNow');if(!el)return;const pl=spState.pl,it=pl&&pl.item;
   el.innerHTML=it?`<div class="spn-art" style="background-image:url('${esc(spArt(it,300))}')"></div><div class="spn-i"><span class="spn-k">${pl.is_playing?'NÅ SPILLES':'PAUSET'}</span><b>${esc(it.name)}</b><small>${spArtists(it)}${it.album?' · '+esc(it.album.name):''}</small>
     <i class="spn-bar"><em style="width:${it.duration_ms?Math.min(100,Math.round((pl.progress_ms||0)/it.duration_ms*100)):0}%"></em></i>
     <div class="spn-c"><button data-spc="prev" title="Forrige">⏮</button><button class="primary" data-spc="toggle">${pl.is_playing?'❚❚ Pause':'▶ Spill'}</button><button data-spc="next" title="Neste">⏭</button><button id="spDev" data-spdev="1"></button></div></div>`
    :`<div class="spn-art spn-e">${SPI}</div><div class="spn-i"><span class="spn-k">INGENTING SPILLES</span><b>Velg en spilleliste eller sang under</b><small>${NATIVE&&DESKTOP?'Musikken spilles i Spotify-appen på PC-en eller på en høyttaler.':NATIVE?'Musikken spilles i Spotify-appen eller på en høyttaler.':'Musikken spilles her i nettleseren, eller på en annen Spotify-enhet.'}</small><div class="spn-c"><button id="spDev" data-spdev="1"></button></div></div>`;
   spDevLbl()}
-async function spDevPick(){const devs=await spDevices();let d=$('dlgSpDev');if(!d){d=document.createElement('dialog');d.id='dlgSpDev';d.className='spdlg';document.body.appendChild(d)}
+async function spDevPick(after){const devs=await spDevices();let d=$('dlgSpDev');if(!d){d=document.createElement('dialog');d.id='dlgSpDev';d.className='spdlg';document.body.appendChild(d)}
   const L=devs.slice();if(spSdk.dev&&!L.find(x=>x.id===spSdk.dev))L.unshift({id:spSdk.dev,name:'Eskedals Univers (denne)',type:'Computer'});
-  d.innerHTML=`<h3>🔊 Spill på</h3>${L.length?L.map(x=>`<button class="spdv${x.is_active?' on':''}" data-id="${esc(x.id)}">${/phone|smartphone/i.test(x.type)?'📱':/speaker|avr|stb/i.test(x.type)?'🔊':/tv|cast/i.test(x.type)?'📺':'💻'} ${esc(x.name)}${x.is_active?' · aktiv':''}</button>`).join(''):'<p>Ingen enheter funnet. Åpne Spotify på PC-en, telefonen eller en høyttaler, og prøv igjen.</p>'}<div class="spdb"><button id="spDvX">Lukk</button></div>`;
+  d.innerHTML=`<h3>🔊 Spill på denne skjermen</h3><p class="muted" style="margin:0 0 6px">Velg Spotify-enheten som står her. Valget huskes bare på denne enheten.</p>${L.length?L.map(x=>`<button class="spdv${x.id===localStorage.getItem('sp_dev')?' on':''}" data-id="${esc(x.id)}" data-nm="${esc(x.name)}">${/phone|smartphone/i.test(x.type)?'📱':/speaker|avr|stb/i.test(x.type)?'🔊':/tv|cast/i.test(x.type)?'📺':'💻'} ${esc(x.name)}${x.is_active?' · aktiv':''}</button>`).join(''):'<p>Ingen enheter funnet. Åpne Spotify på PC-en, telefonen eller en høyttaler, og prøv igjen.</p>'}<div class="spdb"><button id="spDvX">Lukk</button></div>`;
   d.showModal();$('spDvX').onclick=()=>d.close();
-  d.querySelectorAll('.spdv').forEach(b=>b.onclick=async()=>{localStorage.setItem('sp_dev',b.dataset.id);d.close();try{await spApi('/me/player',{method:'PUT',body:{device_ids:[b.dataset.id],play:!!(spState.pl&&spState.pl.is_playing)}});toast('Bytter til '+b.textContent.trim(),3000);setTimeout(()=>spPoll(true),900)}catch(e){toast('Spotify: '+e.message,5000)}});
+  d.querySelectorAll('.spdv').forEach(b=>b.onclick=async()=>{spRemember(b.dataset.id,b.dataset.nm);d.close();if(after){after();return}try{await spApi('/me/player',{method:'PUT',body:{device_ids:[b.dataset.id],play:!!(spState.pl&&spState.pl.is_playing)}});toast('Bytter til '+b.textContent.trim(),3000);setTimeout(()=>spPoll(true),900)}catch(e){toast('Spotify: '+e.message,5000)}});
   const f=d.querySelector('.spdv');if(f)f.focus()}
 /* siden */
 const spCard=(o)=>`<button class="spc" data-spk="${esc(o.k)}" ${o.u?`data-spu="${esc(o.u)}"`:''}${o.ctx?` data-ctx="${esc(o.ctx)}"`:''}><span class="spc-a"${o.img?` style="background-image:url('${esc(o.img)}')"`:''}>${o.img?'':o.ic||SPI}</span><b>${esc(o.t)}</b><small>${esc(o.s||'')}</small></button>`;
