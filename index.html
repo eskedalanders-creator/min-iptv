@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=227;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=228;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2955,6 +2955,9 @@ function srtEnd(raw){let mx=0;const re=/-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m
 /* ===== Maskinoversettelse engelsk → norsk (når det ikke finnes norsk tekst) ===== */
 const mtOn=()=>{try{return localStorage.getItem('submt')!=='0'}catch(_){return true}};
 async function srtTranslate(raw,prog){
+  const ck='mt'+String(raw).length+'_'+String(raw).replace(/\W/g,'').slice(0,60);const cached=subCacheGet(ck);if(cached)return cached;
+  const res=await srtTranslate0(raw,prog);if(res)subCachePut(ck,res);return res}
+async function srtTranslate0(raw,prog){
   const bl=String(raw).replace(/^﻿/,'').replace(/\r/g,'').split(/\n\s*\n/).map(b=>{const L=b.split('\n');const ti=L.findIndex(x=>/-->/.test(x));if(ti<0)return null;
     return {t:L[ti],x:L.slice(ti+1).join(' ').replace(/<[^>]+>/g,'').replace(/\{[^}]*\}/g,'').replace(/\s+/g,' ').trim()}}).filter(b=>b&&b.x);
   if(!bl.length)return null;
@@ -2970,19 +2973,42 @@ async function srtTranslate(raw,prog){
   if(!ok)return null;
   return bl.map((b,i)=>(i+1)+'\n'+b.t+'\n'+(b.n||b.x).replace(/(.{38,}?)\s(?=\S{2,}.{12,}$)/,'$1\n')+'\n').join('\n');
 }
+/* ---- Undertekst-buffer (sparer nedlastingskvote) og reserve-API (opensubtitles.org) ---- */
+function subCacheGet(k){try{return localStorage.getItem('subc_'+k)}catch(_){return null}}
+function subCachePut(k,v){try{let l=JSON.parse(localStorage.getItem('subc_list')||'[]');l=l.filter(x=>x!==k);l.push(k);while(l.length>30){try{localStorage.removeItem('subc_'+l.shift())}catch(_){}}
+  localStorage.setItem('subc_'+k,v);localStorage.setItem('subc_list',JSON.stringify(l))}catch(_){try{const l=JSON.parse(localStorage.getItem('subc_list')||'[]');for(const x of l.splice(0,10))localStorage.removeItem('subc_'+x);localStorage.setItem('subc_list',JSON.stringify(l))}catch(__){}}}
+function subParseTitle(ctx){const tt=(ctx.title||'').trim(),m=tt.match(/^(.*?)\s*[–-]\s*S(\d+)\s*E(\d+)/i);
+  const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*(?:[|:]|-\s)\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/[?!]/g,'').replace(/\s+/g,' ').trim();
+  return {name,s:m?+m[2]:0,e:m?+m[3]:0,yr:(tt.match(/\(((?:19|20)\d\d)\)/)||[])[1]}}
+async function legGet(u){const C=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
+  if(C){const r=await C.get({url:u,headers:{'X-User-Agent':'TemporaryUserAgent','User-Agent':'TemporaryUserAgent'},responseType:'text',readTimeout:20000,connectTimeout:12000});return typeof r.data==='string'?JSON.parse(r.data):r.data}
+  const r=await fetch(u,{headers:{'X-User-Agent':'TemporaryUserAgent'}});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+async function legSearch(ctx,lang){const t=subParseTitle(ctx);if(!t.name)return null;const sl=lang==='no'?'nor':'eng';
+  const q=encodeURIComponent(t.name.toLowerCase()).replace(/%20/g,'%20');
+  const u='https://rest.opensubtitles.org/search/'+(t.s?'episode-'+t.e+'/':'')+'query-'+q+(t.s?'/season-'+t.s:'')+'/sublanguageid-'+sl;
+  const j=await legGet(u);if(!Array.isArray(j))return null;
+  const ok=j.filter(x=>x.SubFormat==='srt'&&osMatch({title:String(x.MovieName||'').replace(/^"([^"]+)".*$/,'$1'),movie_name:x.MovieName,parent_title:x.SeriesIMDBParent?String(x.MovieName||'').replace(/^"([^"]+)".*$/,'$1'):''},t.name)&&(!t.s||(+x.SeriesSeason===t.s&&+x.SeriesEpisode===t.e)));
+  ok.sort((a,b)=>(+b.SubDownloadsCnt||0)-(+a.SubDownloadsCnt||0));dlog('sub','reserve '+sl+' '+ok.length+'/'+j.length);
+  return ok.slice(0,5).map(x=>({attributes:{files:[{file_id:'L'+x.IDSubtitleFile}],feature_details:{title:x.MovieName}},_leg:x}))}
+async function legText(x){const C=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorHttp;
+  let buf;if(C){const r=await C.get({url:x.SubDownloadLink,responseType:'arraybuffer',headers:{'User-Agent':'TemporaryUserAgent'}});buf=Uint8Array.from(atob(r.data),c=>c.charCodeAt(0)).buffer}
+  else{const r=await fetch(x.SubDownloadLink,{headers:{'X-User-Agent':'TemporaryUserAgent'}});if(!r.ok)throw new Error('HTTP '+r.status);buf=await r.arrayBuffer()}
+  let u8=new Uint8Array(buf);if(u8[0]===0x1f&&u8[1]===0x8b){const ds=new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip')));u8=new Uint8Array(await ds.arrayBuffer())}
+  let enc=String(x.SubEncoding||'utf-8').toLowerCase();try{return new TextDecoder(enc).decode(u8)}catch(_){return new TextDecoder('windows-1252').decode(u8)}}
+let subStat='';
 async function autoSub(manual,next,opt){
   const ctx=ovCtx;if(!ctx)return;
-  const sta=t=>{const e=document.getElementById('osSta');if(e)e.textContent=t};
+  const sta=t=>{subStat=t;const e=document.getElementById('osSta');if(e)e.textContent=t};
   try{
     let hit,lang;
     if(next&&ctx._cands&&ctx._cands.length){ctx._ci=(ctx._ci+1)%ctx._cands.length;hit=ctx._cands[ctx._ci];lang=ctx._clang}
     else{
     sta('Søker …');toast(manual?'Søker etter norsk undertekst …':'🔎 Søker etter undertekst …',2000);
     const tt=(ctx.title||'').trim(),m=tt.match(/^(.*?)\s*[–-]\s*S(\d+)\s*E(\d+)/i);
-    const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*(?:[|:]|-\s)\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/\s+/g,' ').trim();
+    const name=(m?m[1]:tt).replace(/^[A-Za-z]{2,3}\s*(?:[|:]|-\s)\s*/,'').replace(/\(.*?\)|\[.*?\]/g,'').replace(/\b(4k|uhd|fhd|hd|1080p|720p|hdr|multi)\b/ig,'').replace(/[?!]/g,'').replace(/\s+/g,' ').trim();
     const yr=(tt.match(/\(((?:19|20)\d\d)\)/)||[])[1];
     const nm=encodeURIComponent(name.toLowerCase());
-    sta('Beregner filsignatur …');const mh=await movieHash(ctx.url);dlog('sub','moviehash '+mh);
+    const mh=null;
     const find=async langs=>{
       const base='/subtitles?languages='+langs+'&ai_translated=include&machine_translated=include'+(mh?'&moviehash='+mh:'');
       const qs=[];
@@ -2998,27 +3024,23 @@ async function autoSub(manual,next,opt){
             all.sort((x,y)=>sc(y)-sc(x));return all}}catch(e){dlog('sub','søk-feil '+((e&&e.message)||e));if(/401|403|406|429/.test(String(e&&e.message)))throw e}
       }
       return null};
-    lang='no';let c=await find('no,nb');
+    const find2=async(l,ll)=>{let r=null;try{r=await find(l)}catch(e){dlog('sub','søk feilet – bruker reserve')}if(!r){const L=await legSearch(ctx,ll).catch(()=>null);if(L&&L.length)r=L}return r};
+    lang='no';let c=await find2('no,nb','no');
     if(!c){
       if(opt&&opt.noOnly){dlog('sub','ingen norsk på OpenSubtitles');return null}
       if(!(opt&&opt.raw)&&[...$('ovv').textTracks].some(t=>t.mode==='showing'))return;
       sta('Fant ikke norsk – prøver engelsk …');
-      lang='en';c=await find('en');
+      lang='en';c=await find2('en','en');
       if(!c){sta('Fant ingen undertekst (søkte: '+name+(m?' S'+m[2]+'E'+m[3]:'')+').');if(manual)toast('Fant ingen undertekst.',3000);return}
     }
     ctx._cands=c.slice(0,8);ctx._ci=0;ctx._clang=lang;hit=c[0];
     }
     if(!osTok&&localStorage.getItem('os_user')){const l=await osReq('POST','/login',{username:localStorage.getItem('os_user'),password:localStorage.getItem('os_pass')||''});osTok=l.token}
-    const dl=async h=>{sta('Laster ned …');const d=await osReq('POST','/download',{file_id:h.attributes.files[0].file_id,sub_format:'srt'},osTok);return {d,raw:await osText(d.link)}};
+    const dl=async h=>{const fid=h.attributes.files[0].file_id;const c=subCacheGet('os'+fid);if(c)return {d:{},raw:c};
+      if(h._leg){sta('Laster ned …');const raw=await legText(h._leg);subCachePut('os'+fid,raw);return {d:{},raw}}
+      sta('Laster ned …');try{const d=await osReq('POST','/download',{file_id:fid,sub_format:'srt'},osTok);const raw=await osText(d.link);subCachePut('os'+fid,raw);return {d,raw}}
+      catch(e){dlog('sub','nedlasting feilet ('+((e&&e.message)||e)+') – prøver reserve');const L=await legSearch(ctx,lang);if(L&&L[0]){const raw=await legText(L[0]._leg);subCachePut('os'+fid,raw);return {d:{},raw}}throw e}};
     let {d,raw}=await dl(hit);
-    if(!next&&ctx._cands&&!hit.attributes.moviehash_match){
-      const v=$('ovv'),dur=(v.duration&&isFinite(v.duration))?v.duration:(ctx.dur||0);
-      for(let k=1;dur>600&&k<4&&ctx._cands.length>k;k++){
-        const e=srtEnd(raw);if(e>dur*.75&&e<dur*1.03)break;
-        sta('Passer ikke varigheten – prøver fil '+(k+1)+' …');
-        ctx._ci=k;const x=await dl(ctx._cands[k]);raw=x.raw;d=x.d;
-      }
-    }
     if(opt&&opt.raw){if(lang==='en'&&opt.mt&&mtOn()){const t=await srtTranslate(raw);if(t)return {raw:t,lang:'no',mt:1}}return {raw,lang}}
     if(ovCtx!==ctx)return;
     extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}subScale=1;applyExtSub();asStart(ctx);
@@ -3040,7 +3062,7 @@ function ccMenu(setup){
    ${tr.map((t,i)=>`<button data-t="${i}" class="${t===cur?'on':''}">${esc(t.label||t.language||'Spor '+(i+1))}${isNoTrack(t)?' 🇳🇴':''}</button>`).join('')||'<small>Ingen undertekster følger med strømmen.</small>'}
    <button data-t="file">📄 Last inn .srt / .vtt fra fil …</button>
    <div class="ccoff">Forsinkelse <button data-o="-5">−5s</button><button data-o="-1">−1s</button><button data-o="-0.5">−0,5s</button><button data-o="0.5">+0,5s</button><button data-o="1">+1s</button><button data-o="5">+5s</button><small>${subOff.toFixed(1)}s</small></div>
-   ${vlcOk()?`<button data-t="vlc">🎞 Spill i VLC – innebygd norsk tekst (anbefalt)</button><button data-t="vlcauto">${vlcAuto()?'✅':'⬜'} Bruk alltid VLC for filmer og serier</button>`:''}<button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><button data-t="mt">${mtOn()?'✅':'⬜'} Oversett engelsk til norsk når norsk mangler</button><small id="osSta" style="display:block;opacity:.8"></small>
+   ${vlcOk()?`<button data-t="vlc">🎞 Spill i VLC – innebygd norsk tekst (anbefalt)</button><button data-t="vlcauto">${vlcAuto()?'✅':'⬜'} Bruk alltid VLC for filmer og serier</button>`:''}<button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><button data-t="mt">${mtOn()?'✅':'⬜'} Oversett engelsk til norsk når norsk mangler</button><small id="osSta" style="display:block;opacity:.9">${esc(subStat||'')}</small>
    <button data-t="osset">⚙ Konto for flere nedlastinger (valgfritt)</button>
    ${setup===true||!localStorage.getItem('os_key')&&setup==='x'?'':''}
    <div id="osForm" style="display:${setup===true?'block':'none'};padding:6px 0"><small>Fungerer uten dette (5 per døgn). Logg inn med din OpenSubtitles-konto for å bruke kontoens kvote.</small>
@@ -3062,8 +3084,8 @@ function avMenu(){
    <button data-t="close">Lukk</button>`;
   m.className='on';
 }
-$('ovAV').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else avMenu()};
-$('ovCC').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else ccMenu()};
+$('ovAV').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else{avMenu();setTimeout(()=>ccFocus(),40)}};
+$('ovCC').onclick=()=>{const m=$('ccMenu');if(m.className==='on')m.className='';else{ccMenu();setTimeout(()=>ccFocus(),40)}};
 $('ccMenu').onclick=e=>{
   const b=e.target.closest('button'),v=$('ovv');
   if(e.target.id==='ccAuto'){localStorage.setItem('nosub',e.target.checked?'1':'0');return}
@@ -3114,15 +3136,35 @@ $('ovFs').onclick=()=>fsToggle($('ov'));
   const show=()=>{ov.classList.remove('ovhide');clearTimeout(t);t=setTimeout(hide,3500)};
   ['mousemove','mousedown','touchstart','keydown','wheel'].forEach(ev=>document.addEventListener(ev,()=>{if(ov.classList.contains('on'))show()},true));
   let was=false;new MutationObserver(()=>{const on=ov.classList.contains('on');if(on===was)return;was=on;if(on)show();else{ov.classList.remove('ovhide');clearTimeout(t)}}).observe(ov,{attributes:true,attributeFilter:['class']})})();
-let pfsT;const pfsBar=pf=>{pf.classList.add('bar');clearTimeout(pfsT);pfsT=setTimeout(()=>pf.classList.remove('bar'),6000)};
+let pfsT;const pfsBar=pf=>{pf.classList.add('bar');clearTimeout(pfsT);const off=()=>{const cm=$('ccMenu');if(cm&&cm.className==='on'){pfsT=setTimeout(off,3000);return}if(pf.contains(document.activeElement)&&document.activeElement.closest('.ovbar'))try{document.activeElement.blur()}catch(_){}pf.classList.remove('bar')};pfsT=setTimeout(off,6000)};
+/* Undertekst-/lydmenyen i spilleren: egen navigasjon med fjernkontrollen */
+const ccItems=()=>[...$('ccMenu').querySelectorAll('button,a,input')].filter(x=>x.offsetParent!==null);
+function ccFocus(sel){const m=$('ccMenu');if(m.className!=='on')return;const it=ccItems();const t=(sel&&m.querySelector(sel))||m.querySelector('button.on')||it[0];if(t)try{t.focus({preventScroll:false})}catch(_){}}
+function ccKey(e){const m=$('ccMenu');if(m.className!=='on')return false;const it=ccItems(),a=document.activeElement,i=it.indexOf(a);
+  const k=e.key;
+  if(k==='Escape'||k==='Backspace'||k==='GoBack'||k==='BrowserBack'){m.className='';const b=$('ovCC');if(b)b.focus();return true}
+  if(i<0){if(/^Arrow|Enter/.test(k)){ccFocus();return true}return false}
+  if(k==='ArrowDown'||k==='ArrowUp'){const r=a.getBoundingClientRect(),dn=k==='ArrowDown';let best=null,bd=1e9;
+    for(const x of it){if(x===a)continue;const q=x.getBoundingClientRect();const dy=dn?q.top-r.bottom:r.top-q.bottom;if(dy<-2)continue;const d=dy*3+Math.abs((q.left+q.right)/2-(r.left+r.right)/2)*.5;if(d<bd){bd=d;best=x}}
+    if(best)best.focus();return true}
+  if(k==='ArrowLeft'||k==='ArrowRight'){const r=a.getBoundingClientRect();const row=it.filter(x=>{const q=x.getBoundingClientRect();return Math.abs((q.top+q.bottom)/2-(r.top+r.bottom)/2)<12}).sort((x,y)=>x.getBoundingClientRect().left-y.getBoundingClientRect().left);const j=row.indexOf(a)+(k==='ArrowLeft'?-1:1);if(row[j])row[j].focus();return true}
+  if(k==='Enter'||k===' '){if(a.tagName==='INPUT'&&a.type==='checkbox'){a.click()}else a.click();setTimeout(()=>{if(m.className==='on'&&!m.contains(document.activeElement))ccFocus(a.dataset&&a.dataset.t?'[data-t="'+a.dataset.t+'"]':(a.dataset&&a.dataset.o?'[data-o="'+a.dataset.o+'"]':null))},60);return true}
+  return false}
+function ovPlayPause(){const v=$('ovv');if(!v)return;if(v.paused){const p=v.play();if(p&&p.catch)p.catch(()=>{});toast('▶ Spiller',800)}else{v.pause();toast('⏸ Pause',800)}}
 document.addEventListener('keydown',e=>{const pf=document.querySelector('.pfs');if(!pf)return;if(document.querySelector('dialog[open]'))return;if(pf.id==='vwrap'&&curView==='live'&&current)return;
   const isOv=pf.id==='ov',v=$('ovv'),bar=pf.classList.contains('bar');
+  if(isOv&&ccKey(e)){e.preventDefault();e.stopImmediatePropagation();pfsBar(pf);return}
+  if(isOv&&(e.key==='MediaPlayPause'||e.key==='F7')){e.preventDefault();e.stopImmediatePropagation();ovPlayPause();return}
   if(e.key==='Escape'||e.key==='Backspace'){e.preventDefault();e.stopImmediatePropagation();if(isOv)closePlayer();else pf.classList.remove('pfs','bar');return}
   if(!isOv)return;
-  if(bar){pfsBar(pf);return}
+  if(bar){const a=document.activeElement,inBar=a&&a.closest&&a.closest('#ov .ovbar');
+    if(!inBar){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopImmediatePropagation();ovPlayPause();return}
+      if(/^Arrow/.test(e.key)){e.preventDefault();e.stopImmediatePropagation();const b=$('ovCC')||pf.querySelector('.ovbar button');if(b)b.focus();pfsBar(pf);return}}
+    else if(e.key==='ArrowDown'){e.preventDefault();e.stopImmediatePropagation();try{a.blur()}catch(_){}clearTimeout(pfsT);pf.classList.remove('bar');return}
+    pfsBar(pf);return}
   if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();e.stopImmediatePropagation();const d=e.key==='ArrowLeft'?-10:30;try{v.currentTime=Math.max(0,v.currentTime+d)}catch(_){}toast((d<0?'⏪ ':'⏩ ')+Math.abs(d)+' s',900);return}
-  if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopImmediatePropagation();v.paused?v.play():v.pause();return}
-  if(/^Arrow/.test(e.key)){e.preventDefault();e.stopImmediatePropagation();pfsBar(pf)}
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopImmediatePropagation();ovPlayPause();return}
+  if(/^Arrow/.test(e.key)){e.preventDefault();e.stopImmediatePropagation();pfsBar(pf);const b=$('ovCC')||pf.querySelector('.ovbar button');if(b)setTimeout(()=>b.focus(),30)}
 },true);
 document.addEventListener('click',e=>{const pf=document.querySelector('.pfs');if(pf&&pf.id==='ov'&&!e.target.closest('.ovbar'))pfsBar(pf)});
 
