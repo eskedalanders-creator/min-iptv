@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=228;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=229;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2805,6 +2805,7 @@ function openPlayer(ctx){
   $('ov').classList.remove('bar');$('ov').classList.add('on');stopEmbers();if(TVM||(NATIVE&&!DESKTOP))$('ov').classList.add('pfs');
   const v=$('ovv');
   const startAt=ctx.pos>10&&(!ctx.dur||ctx.pos<ctx.dur-30)?ctx.pos:0;
+  if(mpvOk()&&ctx.type!=='live'){playMpv(ctx,startAt);return}
   if(vlcAuto()&&vlcOk()&&ctx.type!=='live'){playVlc(ctx,startAt);return}
   vodPlayer.play(ctx.url,false);
   extSub=null;subOff=0;subScale=1;v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());$('ccMenu').className='';
@@ -2998,7 +2999,7 @@ async function legText(x){const C=NATIVE&&!DESKTOP&&window.Capacitor&&Capacitor.
 let subStat='';
 async function autoSub(manual,next,opt){
   const ctx=ovCtx;if(!ctx)return;
-  const sta=t=>{subStat=t;const e=document.getElementById('osSta');if(e)e.textContent=t};
+  const sta=t=>{subStat=t;const e=document.getElementById('osSta');if(e)e.textContent=t;if(opt&&opt.prog&&t)try{opt.prog(t)}catch(_){}};
   try{
     let hit,lang;
     if(next&&ctx._cands&&ctx._cands.length){ctx._ci=(ctx._ci+1)%ctx._cands.length;hit=ctx._cands[ctx._ci];lang=ctx._clang}
@@ -3041,7 +3042,7 @@ async function autoSub(manual,next,opt){
       sta('Laster ned …');try{const d=await osReq('POST','/download',{file_id:fid,sub_format:'srt'},osTok);const raw=await osText(d.link);subCachePut('os'+fid,raw);return {d,raw}}
       catch(e){dlog('sub','nedlasting feilet ('+((e&&e.message)||e)+') – prøver reserve');const L=await legSearch(ctx,lang);if(L&&L[0]){const raw=await legText(L[0]._leg);subCachePut('os'+fid,raw);return {d:{},raw}}throw e}};
     let {d,raw}=await dl(hit);
-    if(opt&&opt.raw){if(lang==='en'&&opt.mt&&mtOn()){const t=await srtTranslate(raw);if(t)return {raw:t,lang:'no',mt:1}}return {raw,lang}}
+    if(opt&&opt.raw){if(lang==='en'&&opt.mt&&mtOn()){sta('Oversetter til norsk …');const t=await srtTranslate(raw,(a,b)=>sta('Oversetter til norsk … '+Math.round(a/b*100)+' %'));if(t)return {raw:t,lang:'no',mt:1}}return {raw,lang}}
     if(ovCtx!==ctx)return;
     extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}subScale=1;applyExtSub();asStart(ctx);
     const n=ctx._cands.length;
@@ -4122,6 +4123,40 @@ if(NATIVE&&!DESKTOP){
 }
 window.appBack=appBack;
 
+
+/* ===== mpv (Windows-appen): profesjonell avspilling av filmer og serier ===== */
+let mpvHasW=null;
+const mpvOk=()=>{const W=window.IPTV_WIN;if(!W||!W.mpvHas)return false;if(mpvHasW===null)try{mpvHasW=!!W.mpvHas()}catch(_){mpvHasW=false}return mpvHasW&&localStorage.getItem('mpvOff')!=='1'};
+async function playMpv(ctx,pos){
+  const W=window.IPTV_WIN;if(!ctx)return;try{vodPlayer.stop()}catch(_){}
+  const m=$('ovmsg');if(m){m.style.display='';m.textContent='▶ Spilles i fullskjerm. OK = pause · ◀ ▶ = spol · Tilbake = avslutt'}
+  window.__mpvCtx=ctx;
+  try{await W.mpvPlay({url:ctx.url,title:ctx.title||'',pos:pos||0})}
+  catch(e){window.__mpvCtx=null;dlog('play','mpv start feilet '+((e&&e.message)||e));if(m)m.textContent='';mpvHasW=false;openPlayer(ctx);return}
+  const osd=(t,ms)=>{try{W.mpvOsd(t,ms||3000)}catch(_){}};
+  if(ctx._subRaw){const r=ctx._subRaw;setTimeout(async()=>{if(window.__mpvCtx!==ctx)return;await W.mpvAddSub(r.raw,r.t)},1500);return}
+  const it=byKey.get(ctx.ref||ctx.k);if(!subOn()||(it&&it.lg==='no'))return;
+  setTimeout(async()=>{try{
+    if(window.__mpvCtx!==ctx)return;
+    const tr=await W.mpvTracks();dlog('sub','mpv-spor '+JSON.stringify(tr));
+    if(tr.some(t=>/^(no|nb|nn|nor|nob|nno)$/i.test(t.lang)||/norsk|norw|bokm/i.test(t.title))){osd('🇳🇴 Norsk tekst fra filen');return}
+    osd('🔎 Henter norsk tekst …',4000);
+    const r=await autoSub(false,false,{raw:true,mt:1,prog:t=>{if(window.__mpvCtx===ctx)osd(t,4000)}});
+    if(window.__mpvCtx!==ctx)return;
+    if(r&&r.raw){const t=r.mt?'Norsk (oversatt)':r.lang==='en'?'Engelsk':'Norsk';ctx._subRaw={raw:r.raw,t};const res=await W.mpvAddSub(r.raw,t);dlog('sub','mpv addsub '+JSON.stringify(res));
+      osd(res&&res.ok?(r.lang==='en'?'🇬🇧 Engelsk tekst':r.mt?'🇳🇴 Norsk tekst (oversatt fra engelsk)':'🇳🇴 Norsk tekst')+' lagt inn':'Klarte ikke å legge inn teksten',3500)}
+    else if(tr.length)osd('Ingen norsk tekst funnet – viser tekst fra filen',3500);
+    else osd('Fant ingen undertekst til denne tittelen',3500);
+  }catch(e){dlog('sub','mpv-tekst feilet '+((e&&e.message)||e));osd('Undertekst: '+((e&&e.message)||e),3500)}},2500);
+}
+window.addEventListener('mpvend',e=>{const ctx=window.__mpvCtx;window.__mpvCtx=null;if(!ctx)return;const d=e.detail||{};dlog('play','mpv slutt '+JSON.stringify(d));
+  const len=d.len||ctx.dur||0,pos=d.pos||0;
+  if(pos>5)try{pushHist({k:ctx.k,type:ctx.type,name:ctx.title,logo:ctx.logo,url:ctx.url,pos:Math.floor(len&&pos>len-60?len:pos),dur:Math.floor(len),ts:Date.now(),ref:ctx.ref})}catch(_){}
+  const done=len>0&&pos>len-90;
+  if(!d.user&&!done&&pos>5&&(ctx._mrs=(ctx._mrs||0)+1)<=5){toast('Mistet forbindelsen – fortsetter …',2500);setTimeout(()=>playMpv(ctx,Math.max(0,pos-3)),800);return}
+  if(!d.user&&pos<=5&&!done){toast('Kunne ikke spille av – prøver appens egen spiller',3500);mpvHasW=false;setTimeout(()=>{openPlayer(ctx);mpvHasW=null},300);return}
+  if(done&&!d.user&&ctx.next){toast('▶ Neste episode …',2500);try{ctx.next()}catch(_){}return}
+  if(ovCtx===ctx){try{closePlayer()}catch(_){ovCtx=null;$('ov').classList.remove('on','pfs','bar')}}});
 /* ===== VLC: innebygde undertekster (norsk tekst fra leverandørens filer) ===== */
 const vlcP=()=>window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.IptvCast&&Capacitor.Plugins.IptvCast.openVlc?Capacitor.Plugins.IptvCast:null;
 let vlcHasW=null;
