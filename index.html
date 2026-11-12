@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=226;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=227;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -165,7 +165,7 @@ body.tv #vwrap.pfs,body.tv #vwrap.pfs:focus,body.tv #vwrap.pfs :focus,body.tv vi
 #vwrap.pfs{position:fixed!important}
 .ovbar{display:flex;gap:8px;align-items:center;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.2))}
 .ovbar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-#ovw{position:relative;flex:1;min-height:0}
+#ovw{position:relative;flex:1;min-height:0;align-self:stretch!important;width:100%}
 #ovw video{position:absolute;inset:0}
 /* dialogs */
 dialog{background:#0c0e16;color:var(--text);border:1px solid var(--accent);border-radius:18px;padding:18px;width:min(760px,95vw);max-height:92vh;box-shadow:0 0 60px -10px var(--glow)}
@@ -2592,7 +2592,12 @@ function makePlayer(video,msgEl){
         mts.attachMediaElement(video);mts.load();mts.on(mpegts.Events.ERROR,(t,d)=>fail('('+d+')'));
       }else video.src=p;
     }else{
-      video.onerror=()=>{if(me===alive)show('Kunne ikke spille av filen. Nettleseren støtter kanskje ikke formatet (prøv Edge/Chrome), eller leverandøren svarer ikke. Bruk «Kopier lenke» og åpne i VLC.')};
+      /* Film/serie: ved brudd fortsetter vi automatisk fra samme sted (opptil 6 ganger) i stedet for å stoppe */
+      let vt=0,vr=0;const tu=()=>{if(me!==alive)return;if(video.currentTime>1)vt=video.currentTime;if(!video.paused&&video.readyState>2&&/^(Kunne ikke|Mistet)/.test(msgEl.textContent||''))show('')};
+      video.addEventListener('timeupdate',tu);
+      video.onerror=()=>{if(me!==alive)return;const ec=video.error?video.error.code:0;try{dlog('play','vod-feil kode='+ec+' t='+Math.round(vt)+' forsøk='+vr)}catch(x){}
+        if(vr<6&&(vt>0||ec!==4)){vr++;const at=vt;show('Mistet forbindelsen – fortsetter …');setTimeout(()=>{if(me!==alive)return;video.src=px(url);video.addEventListener('loadedmetadata',()=>{if(at>2)try{video.currentTime=at}catch(x){}},{once:true});const pr=video.play();if(pr&&pr.catch)pr.catch(()=>{})},vr===1?600:2500);return}
+        show('Kunne ikke spille av filen. Leverandøren svarer ikke, eller formatet støttes ikke. Prøv igjen om litt, eller velg en annen kilde.')};
       video.src=px(url);
     }
     video.addEventListener('loadedmetadata',()=>setTimeout(bestAud,1200),{once:true});
@@ -2893,7 +2898,7 @@ function asSolve(ctx){
 function applyExtSub(){
   const v=$('ovv');v.querySelectorAll('track[data-ext]').forEach(x=>x.remove());
   if(!extSub)return;
-  const tr=document.createElement('track');const lbl=extSub.lang==='en'?'Engelsk (fil)':'Norsk (fil)';tr.kind='subtitles';tr.label=lbl;tr.srclang=extSub.lang==='en'?'en':'no';tr.dataset.ext='1';
+  const tr=document.createElement('track');const lbl=extSub.lang==='en'?'Engelsk (fil)':extSub.mt?'Norsk (oversatt)':'Norsk (fil)';tr.kind='subtitles';tr.label=lbl;tr.srclang=extSub.lang==='en'?'en':'no';tr.dataset.ext='1';
   tr.src=URL.createObjectURL(new Blob([extSub.vtt?extSub.raw:srt2vtt(extSub.raw,subOff)],{type:'text/vtt'}));
   v.appendChild(tr);tr.default=true;
   setTimeout(()=>{for(const t of v.textTracks)t.mode=(t.label===lbl)?'showing':'disabled'},150);
@@ -2947,6 +2952,24 @@ const osNorm=t=>String(t||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\
 function osMatch(f,name){if(!f)return false;const w=osNorm(name).split(' ').filter(x=>x.length>1&&!/^(the|a|an|og|and|en|ett|et)$/.test(x));if(!w.length)return false;
   return [f.title,f.movie_name,f.parent_title,f.original_title].some(t=>{const tw=' '+osNorm(t).replace(/^\d{4} /,'')+' ';return w.every(x=>tw.includes(' '+x+' '))})}
 function srtEnd(raw){let mx=0;const re=/-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;while((m=re.exec(raw)))mx=Math.max(mx,(+m[1])*3600+(+m[2])*60+(+m[3]));return mx}
+/* ===== Maskinoversettelse engelsk → norsk (når det ikke finnes norsk tekst) ===== */
+const mtOn=()=>{try{return localStorage.getItem('submt')!=='0'}catch(_){return true}};
+async function srtTranslate(raw,prog){
+  const bl=String(raw).replace(/^﻿/,'').replace(/\r/g,'').split(/\n\s*\n/).map(b=>{const L=b.split('\n');const ti=L.findIndex(x=>/-->/.test(x));if(ti<0)return null;
+    return {t:L[ti],x:L.slice(ti+1).join(' ').replace(/<[^>]+>/g,'').replace(/\{[^}]*\}/g,'').replace(/\s+/g,' ').trim()}}).filter(b=>b&&b.x);
+  if(!bl.length)return null;
+  const batches=[];let cur=[],len=0;
+  for(const b of bl){const l=encodeURIComponent(b.x).length+3;if(cur.length&&len+l>5000){batches.push(cur);cur=[];len=0}cur.push(b);len+=l}if(cur.length)batches.push(cur);
+  let done=0,ok=0;
+  const one=async bt=>{try{
+    const u='https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=no&dt=t&q='+encodeURIComponent(bt.map(b=>b.x).join('\n'));
+    const j=JSON.parse(await osText(u));const out=(j[0]||[]).map(x=>x[0]||'').join('').split('\n').map(x=>x.trim());
+    if(out.length===bt.length){bt.forEach((b,i)=>{if(out[i])b.n=out[i]});ok++}else dlog('sub','mt antall '+out.length+'/'+bt.length);
+  }catch(e){dlog('sub','mt feil '+((e&&e.message)||e))}done++;if(prog)prog(done,batches.length)};
+  const q=batches.slice();await Promise.all([0,1,2].map(async()=>{while(q.length)await one(q.shift())}));
+  if(!ok)return null;
+  return bl.map((b,i)=>(i+1)+'\n'+b.t+'\n'+(b.n||b.x).replace(/(.{38,}?)\s(?=\S{2,}.{12,}$)/,'$1\n')+'\n').join('\n');
+}
 async function autoSub(manual,next,opt){
   const ctx=ovCtx;if(!ctx)return;
   const sta=t=>{const e=document.getElementById('osSta');if(e)e.textContent=t};
@@ -2996,12 +3019,15 @@ async function autoSub(manual,next,opt){
         ctx._ci=k;const x=await dl(ctx._cands[k]);raw=x.raw;d=x.d;
       }
     }
-    if(opt&&opt.raw)return {raw,lang};
+    if(opt&&opt.raw){if(lang==='en'&&opt.mt&&mtOn()){const t=await srtTranslate(raw);if(t)return {raw:t,lang:'no',mt:1}}return {raw,lang}}
     if(ovCtx!==ctx)return;
     extSub={raw,vtt:false,lang};try{subOff=+localStorage.getItem('suboff_'+(ovCtx&&(ovCtx.ref||ovCtx.k||ovCtx.title)))||0}catch(_){subOff=0}subScale=1;applyExtSub();asStart(ctx);
     const n=ctx._cands.length;
     sta((lang==='en'?'✔ Engelsk lagt inn':'✔ Lagt inn')+(ctx._cands[ctx._ci]&&ctx._cands[ctx._ci].attributes.moviehash_match?' (eksakt treff på filen)':'')+' (fil '+(ctx._ci+1)+' av '+n+')'+(d.remaining!=null?' – '+d.remaining+' igjen i dag':''));
     toast((lang==='en'?'🇬🇧 Engelsk':'🇳🇴 Norsk')+' undertekst '+(ctx._ci+1)+'/'+n+' lagt inn',3500);
+    if(lang==='en'&&mtOn()){const er=raw;sta('Oversetter til norsk …');
+      const t=await srtTranslate(er,(a,b)=>sta('Oversetter til norsk … '+Math.round(a/b*100)+' %'));
+      if(t&&ovCtx===ctx&&extSub&&extSub.raw===er){extSub={raw:t,vtt:false,lang:'no',mt:1};applyExtSub();sta('✔ Norsk (maskinoversatt fra engelsk)');toast('🇳🇴 Norsk undertekst (oversatt) lagt inn',3000)}}
   }catch(e){osTok=null;const msg=String(e&&e.message||e);sta('Feil: '+msg);dlog('sub','OS-feil: '+msg);toast('Undertekst: '+(/401|403/.test(msg)?'feil nøkkel eller innlogging':/406|429/.test(msg)?'dagens grense er nådd':msg),4000)}
 }
 function ccMenu(setup){
@@ -3014,7 +3040,7 @@ function ccMenu(setup){
    ${tr.map((t,i)=>`<button data-t="${i}" class="${t===cur?'on':''}">${esc(t.label||t.language||'Spor '+(i+1))}${isNoTrack(t)?' 🇳🇴':''}</button>`).join('')||'<small>Ingen undertekster følger med strømmen.</small>'}
    <button data-t="file">📄 Last inn .srt / .vtt fra fil …</button>
    <div class="ccoff">Forsinkelse <button data-o="-5">−5s</button><button data-o="-1">−1s</button><button data-o="-0.5">−0,5s</button><button data-o="0.5">+0,5s</button><button data-o="1">+1s</button><button data-o="5">+5s</button><small>${subOff.toFixed(1)}s</small></div>
-   ${vlcOk()?`<button data-t="vlc">🎞 Spill i VLC – innebygd norsk tekst (anbefalt)</button><button data-t="vlcauto">${vlcAuto()?'✅':'⬜'} Bruk alltid VLC for filmer og serier</button>`:''}<button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><small id="osSta" style="display:block;opacity:.8"></small>
+   ${vlcOk()?`<button data-t="vlc">🎞 Spill i VLC – innebygd norsk tekst (anbefalt)</button><button data-t="vlcauto">${vlcAuto()?'✅':'⬜'} Bruk alltid VLC for filmer og serier</button>`:''}<button data-t="osauto">🇳🇴 Hent norsk undertekst automatisk</button><button data-t="osnext">⏭ Prøv neste undertekstfil (feil timing)</button><button data-t="mt">${mtOn()?'✅':'⬜'} Oversett engelsk til norsk når norsk mangler</button><small id="osSta" style="display:block;opacity:.8"></small>
    <button data-t="osset">⚙ Konto for flere nedlastinger (valgfritt)</button>
    ${setup===true||!localStorage.getItem('os_key')&&setup==='x'?'':''}
    <div id="osForm" style="display:${setup===true?'block':'none'};padding:6px 0"><small>Fungerer uten dette (5 per døgn). Logg inn med din OpenSubtitles-konto for å bruke kontoens kvote.</small>
@@ -3052,6 +3078,7 @@ $('ccMenu').onclick=e=>{
   if(t==='vlc'){$('ccMenu').className='';const c=ovCtx;if(c&&c.type!=='live')playVlc(c,$('ovv').currentTime||0);else toast('VLC brukes for filmer og serier',2500);return}
   if(t==='vlcauto'){try{localStorage.setItem('vlcAuto',vlcAuto()?'0':'1')}catch(_){}toast(vlcAuto()?'Filmer og serier spilles nå i VLC':'Filmer og serier spilles i appen',3000);ccMenu();return}
   if(t==='file'){$('ccFile').click();return}
+  if(t==='mt'){try{localStorage.setItem('submt',mtOn()?'0':'1')}catch(_){}toast(mtOn()?'Engelsk tekst oversettes til norsk':'Ingen oversetting',2500);ccMenu();return}
   if(t==='osauto'){autoSub(true);return}
   if(t==='osnext'){autoSub(true,true);return}
   if(t==='osset'){const f=$('osForm');if(f)f.style.display=f.style.display==='none'?'block':'none';return}
@@ -4082,10 +4109,10 @@ async function playVlc(ctx,pos){
       let tr=[];for(let i=0;i<4;i++){tr=await W.vlcSubs();if(tr&&tr.length)break;await new Promise(r=>setTimeout(r,2000));if(window.__vlcCtx!==ctx)return}
       dlog('sub','VLC-spor: '+JSON.stringify(tr));
       if(vlcHasNo(tr))return;
-      if(tr&&tr.some(x=>/engl|\beng\b|\ben\b/i.test(x)))return; /* innebygd engelsk vises allerede */
-      const r=await autoSub(false,false,{raw:true});
+      if(!mtOn()&&tr&&tr.some(x=>/engl|\beng\b|\ben\b/i.test(x)))return; /* innebygd engelsk vises allerede */
+      const r=await autoSub(false,false,{raw:true,mt:1});
       if(r&&r.raw&&window.__vlcCtx===ctx){const res=await W.vlcAddSub(r.raw);dlog('sub','VLC addsub '+JSON.stringify(res));
-        toast(res&&res.ok?(r.lang==='en'?'🇬🇧 Engelsk':'🇳🇴 Norsk')+' undertekst lagt til i VLC':'Klarte ikke å legge teksten inn i VLC',3500)}
+        toast(res&&res.ok?(r.lang==='en'?'🇬🇧 Engelsk':r.mt?'🇳🇴 Norsk (oversatt)':'🇳🇴 Norsk')+' undertekst lagt til i VLC':'Klarte ikke å legge teksten inn i VLC',3500)}
     }catch(e){dlog('sub','VLC-tekst feilet: '+((e&&e.message)||e))}},5000);
   }catch(e){window.__vlcCtx=null;const nv=/novlc/.test(String(e&&e.message||e));
     toast(nv?(vlcP()?'Installer VLC fra Google Play først':'VLC er ikke installert på denne PC-en – last ned fra videolan.org'):'VLC: '+((e&&e.message)||e),6000);
