@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=225;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=226;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2942,6 +2942,10 @@ async function movieHash(url){
     return h.toString(16).padStart(16,'0');
   }catch(e){return null}
 }
+/* Godta bare treff der tittelen faktisk stemmer – fritekstsøket gir ellers undertekst til helt andre filmer */
+const osNorm=t=>String(t||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9æøå ]+/g,' ').replace(/\s+/g,' ').trim();
+function osMatch(f,name){if(!f)return false;const w=osNorm(name).split(' ').filter(x=>x.length>1&&!/^(the|a|an|og|and|en|ett|et)$/.test(x));if(!w.length)return false;
+  return [f.title,f.movie_name,f.parent_title,f.original_title].some(t=>{const tw=' '+osNorm(t).replace(/^\d{4} /,'')+' ';return w.every(x=>tw.includes(' '+x+' '))})}
 function srtEnd(raw){let mx=0;const re=/-->\s*(\d+):(\d+):(\d+)[,.](\d+)/g;let m;while((m=re.exec(raw)))mx=Math.max(mx,(+m[1])*3600+(+m[2])*60+(+m[3]));return mx}
 async function autoSub(manual,next,opt){
   const ctx=ovCtx;if(!ctx)return;
@@ -2965,7 +2969,7 @@ async function autoSub(manual,next,opt){
         qs.push(base+'&query='+nm+'&season_number='+sn+'&episode_number='+ep)}
       else{qs.push(base+'&query='+nm+'&type=movie'+(yr?'&year='+yr:''));qs.push(base+'&query='+nm+(yr?'%20'+yr:''))}
       for(const q of qs){
-        try{const j=await osReq('GET',q);const all=(j.data||[]).filter(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]);dlog('sub',langs+' '+all.length+' treff');
+        try{const j=await osReq('GET',q);const all=(j.data||[]).filter(d=>d.attributes&&d.attributes.files&&d.attributes.files[0]&&(d.attributes.moviehash_match||osMatch(d.attributes.feature_details,name)));dlog('sub',langs+' '+all.length+' treff');
           if(all.length){
             const sc=d=>{const a=d.attributes;return (a.moviehash_match?2e9:0)+(a.ai_translated||a.machine_translated?0:1e9)+(a.from_trusted?5e8:0)+(a.download_count||0)};
             all.sort((x,y)=>sc(y)-sc(x));return all}}catch(e){dlog('sub','søk-feil '+((e&&e.message)||e));if(/401|403|406|429/.test(String(e&&e.message)))throw e}
