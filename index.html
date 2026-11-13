@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=231;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=232;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -6251,7 +6251,10 @@ function autoSyncNow(){
   try{
     const P=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.AutoBridge;if(!P||!DB.live.length||typeof tvList!=='function')return;
     const hls=c=>{const m=String(c.url||'').match(/^(https?:\/\/[^\/]+)\/live\/([^\/]+)\/([^\/]+)\/(\d+)(?:\.(ts|m3u8))?/i);return m?m[1]+'/live/'+m[2]+'/'+m[3]+'/'+m[4]+'.m3u8':c.url};
-    const it=c=>({id:c.key,title:tvName(c),sub:(TVC.find(x=>x[0]===tvCountry(c))||[0,0,''])[2],url:hls(c),art:c.logo||''});
+    /* reserveadresser: samme kanal via alle kontoer og servere, både .m3u8 og .ts */
+    const alts=c=>{const out=[];try{const m=String(c.url||'').match(/^(https?:\/\/[^\/]+)\/live\/([^\/]+)\/([^\/]+)\/(\d+)/i);if(!m)return out;
+      for(const a of accList())for(const h of hostsOf(a))for(const ext of ['m3u8','ts']){const u=h+'/live/'+encodeURIComponent(a.xt.user)+'/'+encodeURIComponent(a.xt.pass)+'/'+m[4]+'.'+ext;if(!out.includes(u))out.push(u)}}catch(e){}return out.slice(0,8)};
+    const it=c=>({id:c.key,title:tvName(c),sub:(TVC.find(x=>x[0]===tvCountry(c))||[0,0,''])[2],url:hls(c),urls:alts(c),art:c.logo||''});
     const uniq=l=>{const s=new Set();return l.filter(c=>c&&c.url&&!s.has(normLive(c))&&s.add(normLive(c)))};
     const fav=uniq(DB.live.filter(c=>tvVis(c)&&isFav(c))).slice(0,60);
     const last=uniq(hist.filter(h=>h.type==='live').map(h=>byKey.get(h.k)).filter(c=>c&&!tvIsEv(c))).slice(0,20);
