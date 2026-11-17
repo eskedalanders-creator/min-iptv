@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=233;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=234;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1262,6 +1262,7 @@ html.tvm .cs-btn button{font-size:1.3cqw}
 .cin-ths{display:none!important}
 
 .cam.pfs{position:fixed!important;inset:0;z-index:9999;margin:0;border-radius:0;background:#000}.cam.pfs .camv{height:var(--tvh,100vh);aspect-ratio:auto}.cam.pfs .camv video{width:100%;height:100%;object-fit:contain}.cam.pfs .camb{position:absolute;left:12px;top:10px;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:8px}.camv video{width:100%;height:100%;object-fit:cover;background:#000}
+.fbp-tbl tr.grp td{text-align:left!important;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#a9b6ff;padding:16px 10px 6px!important;background:transparent!important;border:0!important}
 </style>
 <style id="pro2">
 /* ================= Eskedals Univers · PRO 2.0 – felles designlag ================= */
@@ -3647,7 +3648,7 @@ async function leagueSchedules(L,fixture){
   for(const j of r)if(j)out.push(...parseEvents(j,L.name));
   return out;
 }
-const LRX={'nor.1':/eliteserien|toppserien|norsk fotball/i,'nor.2':/obos|1\. ?divisjon/i,'uefa.champions':/champions|\bucl\b/i,'uefa.europa':/europa league|\buel\b/i,'uefa.europa.conf':/conference league|\buecl\b/i,'eng.1':/premier league|\bepl\b/i,'esp.1':/la ?liga|laliga/i,'ger.1':/bundesliga/i,'ita.1':/serie ?a\b/i};
+const LRX={'nor.1':/eliteserien|toppserien|norsk fotball/i,'nor.2':/obos|1\. ?divisjon/i,'uefa.champions':/champions|\bucl\b/i,'uefa.europa':/europa league|\buel\b/i,'uefa.europa.conf':/conference league|\buecl\b/i,'eng.1':/premier league|\bepl\b/i,'esp.1':/la ?liga|laliga/i,'ger.1':/bundesliga/i,'ita.1':/serie ?a\b/i,'uefa.nations':/nations league|landskamp|landslag|tv ?2 ?(sport|direkte)/i,'fifa.worldq.uefa':/vm[- ]?kval|world cup qual|tv ?2 ?(sport|direkte)/i,'uefa.euroq':/em[- ]?kval|euro qual|tv ?2 ?(sport|direkte)/i,'uefa.euro':/\bem\b|euro 20|tv ?2|nrk/i,'fifa.world':/\bvm\b|world cup|tv ?2|nrk/i,'fifa.friendly':/landskamp|landslag|friendl|tv ?2 ?(sport|direkte)/i};
 const NIFS_ID={'nor.2':6};
 const nifsC={};
 async function nifsData(slug){
@@ -3669,7 +3670,8 @@ async function loadLeagueFx(L,force){
   const c=lgCache[L.slug];if(!force&&c&&Date.now()-c.t<600000)return c.list;
   if(NIFS_ID[L.slug]){try{const d=await nifsData(L.slug);lgCache[L.slug]={t:Date.now(),list:d.fx};return d.fx}catch(e){}}
   const get=u=>jget(u).catch(()=>null);const y=new Date().getFullYear();let evs=[];
-  evs.push(...await leagueSchedules(L,true));
+  if(L.nat){evs=await natScan(L,0,30);if(!evs.length){const j0=await get(ESPN+L.slug+'/scoreboard');if(j0)evs.push(...(L.slug==='fifa.friendly'?await natKeep(parseEvents(j0,L.name)):parseEvents(j0,L.name)))}}
+  else evs.push(...await leagueSchedules(L,true));
   if(!evs.length){
     const j0=await get(ESPN+L.slug+'/scoreboard');
     if(j0)evs.push(...parseEvents(j0,L.name));
@@ -3689,6 +3691,7 @@ async function loadLeagueResults(L){
   const c=lgRes[L.slug];if(c&&Date.now()-c.t<600000)return c.list;
   if(NIFS_ID[L.slug]){try{const d=await nifsData(L.slug);lgRes[L.slug]={t:Date.now(),list:d.res};return d.res}catch(e){}}
   const get=u=>jget(u).catch(()=>null);const y=new Date().getFullYear();let evs=[];
+  if(L.nat)evs=await natScan(L,-14,0);else
   evs.push(...await leagueSchedules(L,false));
   if(!evs.length){
     const j0=await get(ESPN+L.slug+'/scoreboard');if(j0)evs.push(...parseEvents(j0,L.name));
@@ -3804,7 +3807,7 @@ const SPORTS=[
  {id:'handball',n:'Håndball',bg:'linear-gradient(135deg,#e0832a,#3a1c05)',ic:'ball',rx:/h[åa]ndball|handball/i,sub:'Herrer og damer'},
  {id:'golf',n:'Golf',bg:'linear-gradient(135deg,#2c9e6a,#07281a)',ic:'golf',rx:/\bgolf\b|pga|dp world|ryder/i,sub:'PGA og DP World Tour'}
 ];
-const LGB={'nor.1':['ELI','#0d7a45'],'nor.2':['OBOS','#a3202f'],'uefa.champions':['UCL','#1a43b8'],'uefa.europa':['UEL','#d9691a'],'uefa.europa.conf':['UECL','#19a35c'],'eng.1':['PL','#6a22c4'],'esp.1':['LL','#c43520'],'ger.1':['BL','#c88a14'],'ita.1':['SA','#1f86c4']};
+const LGB={'nor.1':['ELI','#0d7a45'],'nor.2':['OBOS','#a3202f'],'uefa.champions':['UCL','#1a43b8'],'uefa.europa':['UEL','#d9691a'],'uefa.europa.conf':['UECL','#19a35c'],'eng.1':['PL','#6a22c4'],'esp.1':['LL','#c43520'],'ger.1':['BL','#c88a14'],'ita.1':['SA','#1f86c4'],'uefa.nations':['UNL','#0b5ca8'],'fifa.worldq.uefa':['VMK','#7a1fa2'],'uefa.euroq':['EMK','#123c9c'],'uefa.euro':['EM','#123c9c'],'fifa.world':['VM','#8a1538'],'fifa.friendly':['🇳🇴','#b3122e']};
 const SPTILE=(id,ic,bg,name,sub,badge)=>`<div class="stile" tabindex="0" data-fl="${id}" style="background:${bg}"><span class="sti">${badge||IC[ic]||''}</span><b>${esc(name)}</b><small>${esc(sub)}</small></div>`;
 const SPHOTO={hockey:'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Ice_Hockey_Match%2C_Lake_Placid_1980.jpg/1280px-Ice_Hockey_Match%2C_Lake_Placid_1980.jpg',mma:'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Buckley_MMA_Fight_Night_%28863903%29.jpg/1280px-Buckley_MMA_Fight_Night_%28863903%29.jpg',motor:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/2010_Malaysian_GP_opening_lap.jpg/1280px-2010_Malaysian_GP_opening_lap.jpg',tennis:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Olympic_Tennis_Centre%2C_Rio%2C_Brazil.jpg/1280px-Olympic_Tennis_Centre%2C_Rio%2C_Brazil.jpg',handball:'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Brest_Bretagne_Handball_match_16_novembre_2016_24.jpg/1280px-Brest_Bretagne_Handball_match_16_novembre_2016_24.jpg',golf:'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/DZ6_2470_Perfect_day_on_the_green_-_calm_skies_crisp_fairways_and_a_flag_waiting_for_the_next_putt.jpg/1280px-DZ6_2470_Perfect_day_on_the_green_-_calm_skies_crisp_fairways_and_a_flag_waiting_for_the_next_putt.jpg',ski:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Quebec_Sprint_Cross-country_Skiing_World_Cup_2012_%284%29.jpg/1280px-Quebec_Sprint_Cross-country_Skiing_World_Cup_2012_%284%29.jpg'};
 function spHub(){
@@ -3813,7 +3816,7 @@ function spHub(){
 }
 function fotballTiles(){
   const L=DB.live.filter(fvis);const cnt=rx=>L.filter(c=>rx.test(c.lc)).length;
-  const lg=LEAGUES.map(l=>{const b=LGB[l.slug]||['⚽','#444'];const n=cnt(LRX[l.slug]);return SPTILE(l.slug,'',`linear-gradient(135deg,${b[1]},#0b0d16 120%)`,l.name,(l.slug==='nor.1'?'Inkl. Brann · ':'')+(n?n+' kanaler':'Kamper og tabell'),`<i class="lbadge" style="--c:${b[1]}">${b[0]}</i>`)}).join('');
+  const lg=LGV().map(l=>{const b=LGB[l.slug]||['⚽','#444'];const n=cnt(LRX[l.slug]);return SPTILE(l.slug,'',`linear-gradient(135deg,${b[1]},#0b0d16 120%)`,l.name,(l.slug==='nor.1'?'Inkl. Brann · ':'')+(n?n+' kanaler':'Kamper og tabell'),`<i class="lbadge" style="--c:${b[1]}">${b[0]}</i>`)}).join('');
   const br=SPTILE('brann','fire','linear-gradient(135deg,#c0112e,#2a050c)','Brann','Kamper og kanaler');
   return `<div class="sgrid">${br}${lg}${SPTILE('tvfb','tv','linear-gradient(135deg,#444a66,#14161f)','Alle fotballkanaler','Åpne kanallisten')}</div>`;
 }
@@ -4924,8 +4927,28 @@ const LEAGUES=[
   {slug:'eng.1',name:'Premier League',table:1},
   {slug:'esp.1',name:'La Liga',table:1},
   {slug:'ger.1',name:'Bundesliga',table:1},
-  {slug:'ita.1',name:'Serie A',table:1}
+  {slug:'ita.1',name:'Serie A',table:1},
+  /* Landslag: vises når turneringen er i gang (win = periode) */
+  {slug:'uefa.nations',name:'Nations League',table:1,groups:1,nat:1},
+  {slug:'fifa.worldq.uefa',name:'VM-kvalifisering',table:1,groups:1,nat:1,win:['2029-02-15','2029-11-30']},
+  {slug:'uefa.euroq',name:'EM-kvalifisering',table:1,groups:1,nat:1,win:['2027-02-15','2027-11-30']},
+  {slug:'uefa.euro',name:'EM',table:1,groups:1,nat:1,win:['2028-05-15','2028-07-20']},
+  {slug:'fifa.world',name:'VM',table:1,groups:1,nat:1,win:['2030-05-15','2030-07-25']},
+  {slug:'fifa.friendly',name:'Landskamper',nat:1}
 ];
+const lgOn=l=>{if(!l.win)return true;const t=new Date().toISOString().slice(0,10);return t>=l.win[0]&&t<=l.win[1]};
+const LGV=()=>LEAGUES.filter(lgOn);
+const isNor=t=>!!t&&/^(norway|norge)$/i.test(String(t.displayName||t.name||'').trim());
+const isMine=(t,slug)=>{const L=LEAGUES.find(l=>l.slug===slug);return L&&L.nat?isNor(t):isBrann(t)};
+/* Landskamper: bare kamper med europeiske lag + de store nasjonene (ikke Cookøyene–Tahiti) */
+const NAT_BIG=/^(brazil|argentina|united states|usa|mexico|canada|japan|south korea|morocco|senegal|uruguay|colombia)$/i;
+let natIds=null;
+async function natTeamIds(){if(natIds)return natIds;try{const j=await jget(ESPNS+'uefa.nations/standings');natIds=new Set();for(const g of (j.children||[]))for(const e of ((g.standings&&g.standings.entries)||[]))natIds.add(String(e.team.id))}catch(e){natIds=new Set()}return natIds}
+async function natKeep(list){const ids=await natTeamIds();return list.filter(e=>ids.has(String(e.h.id))||ids.has(String(e.a.id))||NAT_BIG.test(e.h.displayName||'')||NAT_BIG.test(e.a.displayName||'')||isNor(e.h)||isNor(e.a))}
+/* Landslagsturneringer: hent dag for dag (ESPN gir ikke datoområder for disse) */
+async function natScan(L,from,to){const out=[];const days=[];for(let d=from;d<=to;d++){const x=new Date(Date.now()+d*864e5);days.push(x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0'))}
+  const js=await Promise.all(days.map(d=>jget(ESPN+L.slug+'/scoreboard?dates='+d).catch(()=>null)));for(const j of js)if(j)out.push(...parseEvents(j,L.name));
+  return L.slug==='fifa.friendly'?natKeep(out):out}
 const isBrann=t=>t&&(String(t.id)==='620'||/brann/i.test(t.displayName||t.name||''));
 const jget=async u=>{let err;
   try{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){err=e}
@@ -4947,8 +4970,8 @@ function parseEvents(j,lg){
 let fxCache={t:0,list:[],brann:[]};
 async function loadFixtures(force){
   if(!force&&Date.now()-fxCache.t<10*60000)return fxCache;
-  const jobs=LEAGUES.map(async L=>{
-    try{if(L.year)return await loadLeagueFx(L);const j=await jget(ESPN+L.slug+'/scoreboard');return parseEvents(j,L.name)}catch(e){return []}
+  const jobs=LGV().map(async L=>{
+    try{if(L.year)return await loadLeagueFx(L);const j=await jget(ESPN+L.slug+'/scoreboard');const ev=parseEvents(j,L.name);return L.slug==='fifa.friendly'?await natKeep(ev):ev}catch(e){return []}
   });
   const bj=jget(ESPN+'nor.1/teams/620/schedule?fixture=true').then(j=>parseEvents(j,'Eliteserien')).catch(()=>[]);
   window.__fxErr='';
@@ -4989,7 +5012,7 @@ async function renderMatches(force){
   if(!v.dataset.init||force){
     v.dataset.init=1;
     v.innerHTML=`<div class="pagehead"><button class="ghost" data-back>← Tilbake</button><h2 style="margin:0">⚽ Kommende kamper</h2></div><div class="chips" id="mChips">${[['all','Alle'],['brann','🔥 Brann'],['nor','Norge'],['eu','Europa']].map(([k,l])=>`<button class="chip ${mOnly===k?'on':''}" data-mo="${k}">${l}</button>`).join('')}<button class="chip" id="mRef">⟳ Oppdater</button></div>
-    <div class="mcols"><div id="mList"><p class="muted">Henter kamper …</p></div><div><div class="chips" id="mLg">${LEAGUES.filter(l=>l.table).map(l=>`<button class="chip ${l.slug===mLeague?'on':''}" data-ml="${l.slug}">${l.name}</button>`).join('')}</div><div id="mTab"><p class="muted">Henter tabell …</p></div></div></div>`;
+    <div class="mcols"><div id="mList"><p class="muted">Henter kamper …</p></div><div><div class="chips" id="mLg">${LGV().filter(l=>l.table).map(l=>`<button class="chip ${l.slug===mLeague?'on':''}" data-ml="${l.slug}">${l.name}</button>`).join('')}</div><div id="mTab"><p class="muted">Henter tabell …</p></div></div></div>`;
     $('mRef').onclick=()=>{fxCache.t=0;renderMatches(true)};
     v.querySelectorAll('[data-mo]').forEach(b=>b.onclick=()=>{mOnly=b.dataset.mo;v.querySelectorAll('[data-mo]').forEach(x=>x.classList.toggle('on',x===b));drawFx()});
     v.querySelectorAll('[data-ml]').forEach(b=>b.onclick=()=>{mLeague=b.dataset.ml;v.querySelectorAll('[data-ml]').forEach(x=>x.classList.toggle('on',x===b));drawTable()});
@@ -5252,6 +5275,7 @@ const STOPW=new Set('sk fk if bk il fc ac cf sc as rb vfl vfb tsg fsv ik sv real
 const teamTok=n=>foldS(n).replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>=4&&!STOPW.has(w));
 /* Hvem viser kampen i Norge (rettighetshavere) */
 function noRights(lg,a,b){const t=(lg||'')+' '+a+' '+b;
+  if(/nations league|landskamp|vm-kval|em-kval|world cup|friendly|\bvm\b|\bem\b/i.test(lg||''))return /viaplay|\bv ?sport|viasport/i;
   if(/champions|europa|conference|uefa|ucl|uel|uecl/i.test(t))return /viaplay|\bv ?sport|viasport/i;
   if(/premier league|bundesliga|\bepl\b/i.test(t))return /viaplay|\bv ?sport|viasport/i;
   if(/eliteserien|obos|norsk cup|nm[- ]?cup|toppserien/i.test(t))return /tv ?2 ?(sport|direkte|play)|tv2 ?sport/i;
@@ -5666,16 +5690,24 @@ const FB_ZONES={
   'ger.1':[[1,4,'#2f7bff','Champions League'],[5,6,'#f0a020','Europa League'],[16,16,'#f0a020','Kvalifisering'],[17,18,'#e5484d','Nedrykk']],
   'ita.1':[[1,4,'#2f7bff','Champions League'],[5,6,'#f0a020','Europa League'],[18,20,'#e5484d','Nedrykk']]
 };
-const fbZones=slug=>FB_ZONES[slug]||(slug.startsWith('uefa')?FB_ZONES.uefa:[]);
-const fbNm=t=>t.shortDisplayName||t.displayName||t.name||'';
+const fbZones=slug=>{const L=LEAGUES.find(l=>l.slug===slug);if(L&&L.nat)return [];return FB_ZONES[slug]||(slug.startsWith('uefa')?FB_ZONES.uefa:[])};
+const NATNO={Norway:'Norge',Denmark:'Danmark',Sweden:'Sverige',Finland:'Finland',Iceland:'Island',Germany:'Tyskland',France:'Frankrike',Spain:'Spania',Italy:'Italia',England:'England',Scotland:'Skottland',Wales:'Wales','Northern Ireland':'Nord-Irland','N Ireland':'Nord-Irland','Republic of Ireland':'Irland','Rep Ireland':'Irland',Netherlands:'Nederland',Belgium:'Belgia',Portugal:'Portugal',Switzerland:'Sveits',Austria:'Østerrike',Poland:'Polen',Czechia:'Tsjekkia','Czech Republic':'Tsjekkia',Slovakia:'Slovakia',Hungary:'Ungarn',Romania:'Romania',Bulgaria:'Bulgaria',Greece:'Hellas',Türkiye:'Tyrkia',Turkey:'Tyrkia',Croatia:'Kroatia',Serbia:'Serbia',Slovenia:'Slovenia','Bosnia-Herzegovina':'Bosnia-Hercegovina','Bosnia-Herz':'Bosnia-Hercegovina',Albania:'Albania','North Macedonia':'Nord-Makedonia',Montenegro:'Montenegro',Kosovo:'Kosovo',Ukraine:'Ukraina',Georgia:'Georgia',Armenia:'Armenia',Azerbaijan:'Aserbajdsjan',Kazakhstan:'Kasakhstan',Israel:'Israel',Cyprus:'Kypros',Malta:'Malta',Luxembourg:'Luxemburg',Lithuania:'Litauen',Latvia:'Latvia',Estonia:'Estland',Belarus:'Hviterussland',Moldova:'Moldova','Faroe Islands':'Færøyene',Gibraltar:'Gibraltar',Andorra:'Andorra','San Marino':'San Marino',Liechtenstein:'Liechtenstein',Brazil:'Brasil',Argentina:'Argentina','United States':'USA',USA:'USA',Mexico:'Mexico',Japan:'Japan','South Korea':'Sør-Korea',Morocco:'Marokko'};
+const natNo=n=>NATNO[n]||n;
+const fbNm=t=>natNo(t.shortDisplayName||t.displayName||t.name||'');
 const fbLogo=t=>cinLogo(t)||'';
 const fbCrest=(t,cls)=>fbLogo(t)?`<img class="${cls||''}" src="${esc(fbLogo(t))}" alt="" loading="lazy">`:`<span class="fbp-ph ${cls||''}">${esc(fbNm(t).slice(0,3).toUpperCase())}</span>`;
 const fbFind=e=>esc(fbNm(e.h)+'|'+fbNm(e.a)+'|'+(e.lg||''));
 async function fbTable(slug){
   if(NIFS_ID[slug]){try{const d=await nifsData(slug);return d.table.map(t=>({pos:t.place,name:t.name,logo:t.logo&&t.logo.url||'',p:t.played,w:t.won,d:t.draw,l:t.lost,gd:t.goalDifference,pts:t.points,me:/brann/i.test(t.name)}))}catch(e){}}
-  const j=await jget(ESPNS+slug+'/standings');const g=(j.children&&j.children.length?j.children:[j])[0];const ents=(g.standings&&g.standings.entries)||[];
+  const j=await jget(ESPNS+slug+'/standings');
   const st=(e,n)=>{const s=(e.stats||[]).find(x=>x.name===n);return s?(s.displayValue!=null?s.displayValue:s.value):''};
-  return ents.map(e=>({pos:+st(e,'rank')||0,name:e.team.displayName||e.team.name,short:e.team.shortDisplayName||'',logo:cinLogo(e.team),p:st(e,'gamesPlayed'),w:st(e,'wins'),d:st(e,'ties')||st(e,'draws'),l:st(e,'losses'),gd:st(e,'pointDifferential'),pts:st(e,'points'),me:isBrann(e.team)})).sort((a,b)=>a.pos-b.pos).map((r,i)=>(r.pos=r.pos||i+1,r));
+  const Lx=LEAGUES.find(l=>l.slug===slug);
+  if(Lx&&Lx.groups&&j.children&&j.children.length>1){
+    const gr=j.children.map(g=>({name:String(g.name||'').replace(/^Group\s*/i,'Gruppe ').replace(/^League\s*/i,'Liga '),rows:((g.standings&&g.standings.entries)||[]).map(e=>({pos:+st(e,'rank')||0,name:natNo(e.team.displayName||e.team.name),short:e.team.shortDisplayName||'',logo:cinLogo(e.team),p:st(e,'gamesPlayed'),w:st(e,'wins'),d:st(e,'ties')||st(e,'draws'),l:st(e,'losses'),gd:st(e,'pointDifferential'),pts:st(e,'points'),me:isMine(e.team,slug)})).sort((a,b)=>a.pos-b.pos).map((r,i)=>(r.pos=r.pos||i+1,r))})).filter(g=>g.rows.length);
+    gr.sort((a,b)=>(b.rows.some(r=>r.me)-a.rows.some(r=>r.me))||a.name.localeCompare(b.name,'nb',{numeric:true}));
+    const out=[];for(const g of gr){out.push({grp:g.name});out.push(...g.rows)}return out}
+  const g=(j.children&&j.children.length?j.children:[j])[0];const ents=(g.standings&&g.standings.entries)||[];
+  return ents.map(e=>({pos:+st(e,'rank')||0,name:e.team.displayName||e.team.name,short:e.team.shortDisplayName||'',logo:cinLogo(e.team),p:st(e,'gamesPlayed'),w:st(e,'wins'),d:st(e,'ties')||st(e,'draws'),l:st(e,'losses'),gd:st(e,'pointDifferential'),pts:st(e,'points'),me:isMine(e.team,slug)})).sort((a,b)=>a.pos-b.pos).map((r,i)=>(r.pos=r.pos||i+1,r));
 }
 function fbHero(n){
   if(!n)return `<div class="fbp-heroin"><div class="fbp-none"><b>Ingen kommende Brann-kamp funnet</b><small>Sesongpause? Se terminlisten og tabellene under.</small></div></div>`;
@@ -5695,7 +5727,7 @@ function fbFxHtml(list){
   if(!list.length)return '<div class="fbp-emp">Ingen kommende kamper funnet for denne turneringen (pause i sesongen?). Bruk kanalene under.</div>';
   let day='',h='';const td=new Date().toDateString(),tm=new Date(Date.now()+864e5).toDateString();
   for(const e of list.slice(0,fbpN)){const ds=new Date(e.t).toDateString();if(ds!==day){day=ds;h+=`<div class="fbp-day">${ds===td?'I dag':ds===tm?'I morgen':esc(fmtDay(e.t))}</div>`}
-    const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a);
+    const live=e.state==='in',b=isBrann(e.h)||isBrann(e.a)||isNor(e.h)||isNor(e.a);
     h+=`<div class="fbp-row${b?' br':''}${live?' live':''}" tabindex="0" data-find="${fbFind(e)}"><span class="fbp-tm">${live?'<i class="lv"></i>'+esc(e.clock||'LIVE'):fmtTime(e.t)}</span><span class="fbp-h">${esc(fbNm(e.h))}${fbCrest(e.h,'fbp-xs')}</span><span class="fbp-x">${live?esc(e.hs)+' – '+esc(e.as):'–'}</span><span class="fbp-a">${fbCrest(e.a,'fbp-xs')}${esc(fbNm(e.a))}</span><span class="fbp-go">▶</span></div>`}
   if(list.length>fbpN)h+=`<button class="ghost fbp-more" id="fbpMore">Vis flere kamper (${list.length-fbpN})</button>`;
   return h;
@@ -5703,11 +5735,11 @@ function fbFxHtml(list){
 function fbTabHtml(rows,slug){
   if(!rows||!rows.length)return '<div class="fbp-emp">Ingen tabell tilgjengelig for denne turneringen ennå.</div>';
   const z=fbZones(slug),zc=p=>{const x=z.find(([a,b])=>p>=a&&p<=b);return x?x[2]:'transparent'};
-  return `<table class="fbp-tbl"><thead><tr><th>#</th><th class="l">Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/–</th><th>P</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.me?'me':''}" style="--z:${zc(r.pos)}"><td><i>${r.pos}</i></td><td class="l"><span class="fbp-tn">${r.logo?`<img src="${esc(r.logo)}" alt="" loading="lazy">`:'<span class="fbp-ph fbp-xs"></span>'}<span>${esc(r.name)}</span></span></td><td>${esc(r.p)}</td><td>${esc(r.w)}</td><td>${esc(r.d)}</td><td>${esc(r.l)}</td><td>${esc(r.gd)}</td><td><b>${esc(r.pts)}</b></td></tr>`).join('')}</tbody></table>`;
+  return `<table class="fbp-tbl"><thead><tr><th>#</th><th class="l">Lag</th><th>K</th><th>V</th><th>U</th><th>T</th><th>+/–</th><th>P</th></tr></thead><tbody>${rows.map(r=>r.grp?`<tr class="grp"><td colspan="8">${esc(r.grp)}</td></tr>`:`<tr class="${r.me?'me':''}" style="--z:${zc(r.pos)}"><td><i>${r.pos}</i></td><td class="l"><span class="fbp-tn">${r.logo?`<img src="${esc(r.logo)}" alt="" loading="lazy">`:'<span class="fbp-ph fbp-xs"></span>'}<span>${esc(r.name)}</span></span></td><td>${esc(r.p)}</td><td>${esc(r.w)}</td><td>${esc(r.d)}</td><td>${esc(r.l)}</td><td>${esc(r.gd)}</td><td><b>${esc(r.pts)}</b></td></tr>`).join('')}</tbody></table>`;
 }
 function fbPro(el){
   window.scrollTo(0,0);
-  const tabs=LEAGUES.map(l=>{const b=LGB[l.slug]||['⚽','#444'];return `<button class="fbp-tab${l.slug===fbpLg?' on':''}" data-fbl="${l.slug}"><i style="--c:${b[1]}">${b[0]}</i>${esc(l.name)}</button>`}).join('');
+  const tabs=LGV().map(l=>{const b=LGB[l.slug]||['⚽','#444'];return `<button class="fbp-tab${l.slug===fbpLg?' on':''}" data-fbl="${l.slug}"><i style="--c:${b[1]}">${b[0]}</i>${esc(l.name)}</button>`}).join('');
   el.innerHTML=`<div class="fbp">
    <div class="fbp-top"><button class="ghost sback" data-spback="1">← Sport</button><h1><span class="fbp-ic">${IC.fotball}</span>Fotball</h1><span id="fbpLive"></span><span class="fbp-sp"></span><button class="ghost" data-go="live:tab=fb">📺 Alle fotballkanaler</button></div>
    <section class="fbp-hero" id="fbpHero"><div class="fbp-bg fbp-photo" style="background-image:url('${UVFIG}brann-stadion.jpg')"></div><div class="fbp-heroin"><div class="fbp-none"><b>Henter neste kamp …</b></div></div></section>
