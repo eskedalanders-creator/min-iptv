@@ -11,6 +11,8 @@ ikke nytt bygg av Windows-appen.
 
 ## Anbefalt på stue-PC-en: åpne strømmetjenestene i ekte Microsoft Edge
 
+**Status 18.11.2026: innført i Windows-appen** (`openEdge` i `windows-app/main.js`): TV 2 Play, Netflix, Disney+, Max, Viaplay og SkyShowtime åpnes i Edge med vanlig profil og `--start-fullscreen`. Fjernkontrollens Tilbake sendes som Esc til Edge (tillegget går tilbake), Hjem/F8 lukker fanen (Ctrl+W) og henter fram Eskedals Univers.
+
 I dag åpnes TV 2 Play/Netflix i et eget Electron-vindu. Det vinduet husker ikke innloggingen
 (økten er ikke lagret på disk) og får ikke fjernkontrolltillegget. Edge på stue-PC-en har
 tillegget «Eskedals Univers – fjernkontroll» (mappen `C:\EskedalsUnivers\fjernkontroll-edge`)
