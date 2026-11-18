@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=265;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=266;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2164,6 +2164,22 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
 .uvbr-wm{font:800 clamp(22px,2vw,40px)/1 system-ui;color:#fff;letter-spacing:-.01em}
 .uvbr-set{background:radial-gradient(90% 80% at 50% 110%,rgba(140,160,200,.25),#0d0f16 70%)!important}
 .uvbr-nf{background:radial-gradient(90% 70% at 50% 120%,rgba(229,9,20,.4),#000 68%)!important}
+/* v266: Sport – samme oppsett som forsiden (stort bilde helt opp + 3D-hjul) */
+@media (min-width:761px){
+ body:has(#v-fotball.on.sphub) header{position:absolute!important;top:0;left:0;right:0;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))!important;border:0!important}
+ #v-fotball.sphub{padding:0!important;height:var(--tvh,100vh);overflow:hidden!important;display:flex!important;flex-direction:column;background:radial-gradient(60% 55% at 50% 100%,rgba(30,90,60,.35),transparent 70%),linear-gradient(180deg,#07130e,#040a08)}
+ #v-fotball.sphub .sph{flex:none;margin:0!important;height:calc(var(--tvh,100vh)*.6)!important;border-radius:0!important;border:0!important;box-shadow:none!important;-webkit-mask-image:linear-gradient(180deg,#000 74%,transparent);mask-image:linear-gradient(180deg,#000 74%,transparent)}
+ #v-fotball.sphub .sph-in{top:auto!important;bottom:18%!important;left:4vw!important}
+ #spW{position:relative;flex:1;min-height:200px;perspective:2400px;perspective-origin:50% 35%}
+ #spW .uvw-ring{top:47%}
+ #spW .stile,#spW .stile:hover,#spW .stile:focus,html.tvm #spW .stile:focus{transform:var(--wt)!important}
+ #spW .stile{position:absolute!important;left:calc(var(--cw) / -2)!important;top:calc(var(--ch) / -2)!important;width:var(--cw)!important;height:var(--ch)!important;min-height:0!important;margin:0!important;
+   backface-visibility:hidden;-webkit-backface-visibility:hidden;backdrop-filter:none!important;border-radius:16px!important;overflow:hidden;opacity:1;transition:opacity .6s ease,box-shadow .4s!important;border:1px solid rgba(255,255,255,.2)!important}
+ #spW .stile::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#020805;opacity:0;transition:opacity .6s ease;pointer-events:none;z-index:9}
+ #spW .stile[data-wd="1"]::after{opacity:.32}#spW .stile[data-wd="2"]::after{opacity:.6}
+ #spW .stile[data-wd="3"]{opacity:.55}#spW .stile[data-wd="3"]::after{opacity:.78}#spW .stile[data-wd="4"]{opacity:0}
+ #spW .stile.uvw-f{border-color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 50px rgba(160,255,200,.22),0 40px 90px -25px #000!important}
+}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4172,8 +4188,11 @@ function renderFotball(){
   const el=$('v-fotball');
   if(!S){el.innerHTML='<h1>Sport</h1><div class="empty">Legg til en kilde først.</div>';return}
   try{uvStop()}catch(e){}
-  if(spOpen==='fotball'||spOpen==='brann')return fbPro(el);
+  el.classList.remove('sphub');if(spOpen==='fotball'||spOpen==='brann')return fbPro(el);
   if(spOpen)return renderSportDetail(el);
+  if(innerWidth>760){const hub=spHub().replace(/^<div class="sgrid big">/,'').replace(/<\/div>$/,'');el.classList.add('sphub');el.innerHTML=sphHtml()+`<div class="uvw" id="spW">${hub}</div>`;sphStart();
+    try{uvWheel(el,{W:$('spW'),sel:':scope>.stile',view:'fotball',key:'spWc',hero:el.querySelector('.sph-btn .primary'),enter:1,ok:()=>!spOpen})}catch(e){}return}
+  el.classList.remove('sphub');
   el.innerHTML=sphHtml()+`<h2 class="sph-t">Velg sport</h2>${spHub()}`;sphStart();
 }
 const SPSTAND={hockey:'hockey/nhl',motor:'racing/f1'};
@@ -5959,32 +5978,33 @@ async function uvTv2Fill(){const box=$('uvTv2Img');if(!box)return;
   show();uvI(()=>{if(curView==='home')show()},8000)}
 /* lysbilder i hovedruta: NRK (nytt/nyheter), nye filmer/serier og nye episoder */
 /* v262: ekte 3D-sylinderhjul – hele ringen roterer jevnt, kortene står på en bue; ← → snurrer, OK åpner, ↑ hovedruta */
-function uvWheel(el){const W=el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll(':scope>.uvt')],n=T.length;if(!n)return;
+function uvWheel(el,o){o=o||{};const W=o.W||el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll(o.sel||':scope>.uvt')],n=T.length;if(!n)return;const VIEW=o.view||'home',LK=o.key||'uvWc';
   const ring=document.createElement('div');ring.className='uvw-ring';T.forEach(t=>ring.appendChild(t));W.appendChild(ring);
-  const stepA=360/n;let cur=+(localStorage.getItem('uvWc')||0)%n,pos=cur;
+  const stepA=360/n;let cur=+(localStorage.getItem(LK)||0)%n,pos=cur;
   const layout=()=>{const h=W.clientHeight,w=W.clientWidth;const ch=Math.max(140,Math.min(h*.84,380)),cw=Math.min(w*.2,ch*1.45);
-    const R=(cw/2)/Math.tan(stepA/2*Math.PI/180)*1.0;W.style.setProperty('--cw',cw+'px');W.style.setProperty('--ch',ch+'px');W.style.setProperty('--R',R+'px');
+    const R=n<3?0:Math.max(cw*.9,(cw/2)/Math.tan(Math.min(stepA,90)/2*Math.PI/180)*1.0);W.style.setProperty('--cw',cw+'px');W.style.setProperty('--ch',ch+'px');W.style.setProperty('--R',R+'px');
     T.forEach((t,i)=>t.style.setProperty('--wt',`rotateY(${(i*stepA).toFixed(3)}deg) translateZ(${R.toFixed(1)}px)`));spin()};
   const spin=()=>{ring.style.transform=`translateZ(calc(var(--R) * -1)) rotateX(-2.5deg) rotateY(${(-pos*stepA).toFixed(3)}deg)`;
     T.forEach((t,i)=>{let d=i-pos;d=((d%n)+n)%n;if(d>n/2)d-=n;const ad=Math.abs(Math.round(d));t.dataset.wd=String(Math.min(ad,4));t.classList.toggle('uvw-f',i===cur);t.tabIndex=i===cur?0:-1})};
-  const set=(i,foc)=>{let d=i-cur;d=((d%n)+n)%n;if(d>n/2)d-=n;pos+=d;cur=((i%n)+n)%n;try{localStorage.setItem('uvWc',cur)}catch(e){}spin();if(foc)T[cur].focus({preventScroll:true})};
+  const set=(i,foc)=>{let d=i-cur;d=((d%n)+n)%n;if(d>n/2)d-=n;pos+=d;cur=((i%n)+n)%n;try{localStorage.setItem(LK,cur)}catch(e){}spin();if(foc)T[cur].focus({preventScroll:true})};
   const step=dl=>set(cur+dl,true);
-  const hero=el.querySelector('.uvt.uv-mt'),pill=el.querySelector('.uvpill');
+  const hero=o.hero!==undefined?o.hero:el.querySelector('.uvt.uv-mt'),pill=o.hero!==undefined?null:el.querySelector('.uvpill');
   const onKey=e=>{if(!W.isConnected){removeEventListener('keydown',onKey,true);return}
-    if(curView!=='home'||document.querySelector('dialog[open]')||($('ov')&&$('ov').classList.contains('on'))||(window.hMenuOpen&&window.hMenuOpen()))return;
+    if(curView!==VIEW||(o.ok&&!o.ok())||document.querySelector('dialog[open]')||($('ov')&&$('ov').classList.contains('on'))||(window.hMenuOpen&&window.hMenuOpen()))return;
     const k=e.key,a=document.activeElement,inW=a&&W.contains(a),onP=a===pill,inH=a&&hero&&hero.contains(a)&&!onP;
     if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
     const hit=()=>{e.preventDefault();e.stopImmediatePropagation()};
     if(k==='ArrowLeft'||k==='ArrowRight'){if(onP)return;hit();step(k==='ArrowRight'?1:-1);return}
     if(k==='ArrowDown'){hit();if(onP&&hero){hero.focus({preventScroll:true});return}set(cur,true);return}
     if(k==='ArrowUp'){hit();if(inW&&hero){hero.focus({preventScroll:true});return}if(inH&&pill){pill.focus({preventScroll:true});return}if(!inW&&!inH&&!onP)set(cur,true);return}
-    if(k==='Enter'&&!inW&&!inH&&!onP){hit();set(cur,true);return}};
+    if(k==='Enter'&&!inW&&!inH&&!onP){hit();set(cur,true);return}
+    if(k==='Enter'&&inW&&o.enter){hit();T[cur].click();return}};
   addEventListener('keydown',onKey,true);
   W.addEventListener('click',e=>{const t=e.target.closest('.uvt');if(!t)return;const i=T.indexOf(t);if(i>=0&&i!==cur){e.preventDefault();e.stopPropagation();set(i,true)}},true);
   let wt=0;W.addEventListener('wheel',e=>{e.preventDefault();if(Date.now()-wt<200)return;wt=Date.now();step(e.deltaY>0||e.deltaX>0?1:-1)},{passive:false});
   const ro=window.ResizeObserver?new ResizeObserver(layout):null;ro&&ro.observe(W);layout();
   requestAnimationFrame(()=>requestAnimationFrame(()=>W.classList.add('rdy')));
-  if(TVM||DESKTOP)setTimeout(()=>{const a=document.activeElement;if(curView==='home'&&(!a||a===document.body))set(cur,true)},600)}
+  if(TVM||DESKTOP)setTimeout(()=>{const a=document.activeElement;if(curView===VIEW&&(!a||a===document.body))set(cur,true)},600)}
 /* hovedruta: helbilder i full kvalitet – NRK, nye/anbefalte filmer og serier (bakgrunnsbilde fra TMDB) */
 const uvBig=u=>String(u||'').replace(/\/t\/p\/w\d+\//,'/t/p/w1280/');
 async function uvSlide(k){const box=$('uvSl');if(!box)return false;const rnd=a=>a[Math.floor(Math.random()*a.length)];let it=null;
