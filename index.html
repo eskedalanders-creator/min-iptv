@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=257;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=258;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2053,7 +2053,9 @@ html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
 .uvsl-w{position:absolute;right:3%;top:7%;height:86%;aspect-ratio:16/9;max-width:64%;object-fit:cover;border-radius:14px;box-shadow:0 30px 70px rgba(0,0,0,.7);animation:uvslz 12s ease-out forwards}
 @keyframes uvslz{from{transform:scale(1)}to{transform:scale(1.04)}}
 .uvsl-ph{position:absolute;inset:0;background-size:cover;background-position:center 25%;animation:uvkb 12s linear forwards}
-.uvsl-bg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) saturate(130%) brightness(.55)}
+.uvsl-bg{position:absolute;inset:-80px;background-size:cover;background-position:center;filter:blur(60px) saturate(140%) brightness(.42)}
+.uvsl-i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,3,8,.85) 0%,rgba(14,3,8,.55) 32%,transparent 55%)}
+.uvsl-w,.uvsl-p{z-index:1}
 .uvsl-p{position:absolute;right:6%;top:8%;bottom:8%;height:84%;aspect-ratio:2/3;object-fit:cover;border-radius:12px;box-shadow:0 30px 70px rgba(0,0,0,.7)}
 .uv-mt .uvhero-t{left:3vw!important;right:auto!important;bottom:auto!important;top:50%!important;transform:translateY(-50%);text-align:left!important;align-items:flex-start!important;max-width:32%!important;gap:10px!important}
 .uv-mt .uvhero-t small{font-size:clamp(11px,.85vw,15px)}
