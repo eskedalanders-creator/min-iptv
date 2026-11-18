@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=250;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=251;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5847,10 +5847,11 @@ function uvFill(el){
     if(s)s.innerHTML=`<b>${cl.length} kamera</b> · trykk for live`;const lb=$('uvCamL');if(lb)lb.hidden=false}).catch(()=>{});
   /* trailere: én om gangen, Filmer → Serier → Sport */
   const tiles={movies:el.querySelector('.uvt.uv-film'),series:el.querySelector('.uvt.uv-ser'),sport:el.querySelector('.uvt.uv-sport'),matches:el.querySelector('.uvt.uv-mt')};
-  const order=['movies','matches','series','sport'];
+  /* Windows-appen: YouTube-spilleren viser bare svart der, så bruk utdrag fra filmene/seriene selv */
+  const order=DESKTOP?['movies','series']:['movies','matches','series','sport'];
   const next=()=>{if(curView!=='home')return;const k=order[UV.cyc++%order.length];uvPlay(tiles,k,next,0)};
-  el.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('.uvt');if(!t)return;const k=Object.keys(tiles).find(x=>tiles[x]===t);if(k&&UV.cur!==k){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}});
-  if(!TVM)Object.entries(tiles).forEach(([k,t])=>t&&t.addEventListener('mouseenter',()=>{clearTimeout(t._h);t._h=setTimeout(()=>{if(UV.cur!==k&&t.matches(':hover')){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}},500)}));
+  el.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('.uvt');if(!t)return;const k=Object.keys(tiles).find(x=>tiles[x]===t);if(k&&UV.cur!==k&&order.includes(k)){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}});
+  if(!TVM)Object.entries(tiles).forEach(([k,t])=>t&&t.addEventListener('mouseenter',()=>{clearTimeout(t._h);t._h=setTimeout(()=>{if(UV.cur!==k&&order.includes(k)&&t.matches(':hover')){UV.cyc=order.indexOf(k)+1;uvPlay(tiles,k,next,0)}},500)}));
   uvT(next,1800);
 }
 async function uvPlay(tiles,k,next,depth){
@@ -5873,8 +5874,8 @@ async function uvPlay(tiles,k,next,depth){
     const x=ids[UV.pi.sport++%ids.length];id=x.id;lb=x.lb;
   }else{
     const pool=uvPool(k==='movies'?'vod':'ser');if(!pool.length){UV.cur=null;return next()}
-    for(let n=0;n<6&&!id;n++){const c=pool[UV.pi[k]++%pool.length];if(UV.bad[c.key])continue;it=c;id=UV.ytBad>2?'':await uvTrailer(c).catch(()=>'');if(UV.cur!==k)return;
-      if(!id&&UV.ytBad>2&&(!TVM||DESKTOP)){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
+    for(let n=0;n<6&&!id;n++){const c=pool[UV.pi[k]++%pool.length];if(UV.bad[c.key])continue;it=c;id=(UV.ytBad>2||DESKTOP)?'':await uvTrailer(c).catch(()=>'');if(UV.cur!==k)return;
+      if(!id&&(UV.ytBad>2||DESKTOP)&&(!TVM||DESKTOP)){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
     if(!it||(!id&&!url)){hs('Fant ingen trailer ('+(UV.ytBad>2?'YouTube feiler':'ingen treff')+')');UV.cur=null;return uvT(()=>next(),400)}
     lb=it.nm||it.name;
   }
