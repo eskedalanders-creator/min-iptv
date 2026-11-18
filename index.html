@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=252;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=253;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1987,6 +1987,40 @@ html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
 .uvbr-tv2.hasimg::after{content:"TV 2";position:absolute;left:10px;top:10px;z-index:3;background:#e8102b;color:#fff;font:900 12px/1 'Arial Black',sans-serif;padding:4px 7px;border-radius:4px}
 .uvv.peek{opacity:1}
 .uv-mt .uvmt-bg{background:radial-gradient(70% 90% at 50% 0%,rgba(200,40,60,.45),rgba(30,6,16,.3) 70%),linear-gradient(180deg,#3a0a18,#14050c)!important}
+
+/* v253: 4 ruter per rad, større ruter, høy sammenslått hovedrute (kamper + trailere) uten overskrift */
+@media (min-width:761px){
+ #v-home.uvhome{overflow-y:auto!important}
+ .uv{height:auto!important;min-height:calc(var(--tvh,100vh) - 74px)}
+ .uvg{flex:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:calc((var(--tvh,100vh) - 74px)*.56)!important;grid-auto-rows:calc((var(--tvh,100vh) - 74px)*.4)!important;gap:2vh 1.4vw!important}
+ .uvh{font-size:clamp(15px,1.25vw,26px)!important;letter-spacing:.14em!important}
+ .uvsub,.uvgo{font-size:clamp(12px,.9vw,17px)!important}
+ .uvap span small{display:block}
+ .uv-apps .uvap b{font-size:clamp(20px,2vw,40px)!important}
+ .uvbr-lg{font-size:clamp(34px,3.4vw,70px)}.uvbr-nf .uvbr-lg{font-size:clamp(36px,3.8vw,80px)}.uvbr-nrk .uvbr-lg{font-size:clamp(28px,2.6vw,54px)}
+ .uvbr-c small{font-size:clamp(10px,.8vw,15px)}.uvbr-ic{width:clamp(48px,4.4vw,90px);height:clamp(48px,4.4vw,90px)}
+ .uvbr-cap b{font-size:clamp(13px,1.1vw,20px)}
+ /* hovedruta: én flate – video/plakater i hele bredden, kampinfo oppå til venstre */
+ .uvt.uv-mt{padding:1.2vh 1vw 1vh!important}
+ .uv-mt .uvh{position:absolute!important;right:1.6vw;top:2.2vh;z-index:9;font-size:0!important;padding:0!important;letter-spacing:0!important}
+ .uv-mt .uvh .uvi{display:none}
+ .uv-mt .uvh-r{position:static}
+ .uv-mt .uvpill{font-size:clamp(12px,.85vw,15px)!important;height:36px}
+ .uv-mt .uvhero,.uv-mt .uvv,.uv-mt .uvsh{left:0!important}
+ .uv-mt .uvmt{left:0;top:0;bottom:0;right:auto;width:42%;z-index:6;border:0!important}
+ .uv-mt .uvmt-bg{background:linear-gradient(90deg,rgba(22,4,10,.92) 0%,rgba(22,4,10,.7) 60%,rgba(22,4,10,0) 100%)!important}
+ .uv-mt .uvmt-bg::after{display:none}
+ .uv-mt .uvmt-d{width:42%;z-index:7}
+ .uv-mt .uvmt-t img,.uv-mt .uvmt-ph{width:clamp(70px,6.4vw,130px);height:clamp(70px,6.4vw,130px)}
+ .uv-mt .uvmt-t b{font-size:clamp(16px,1.4vw,28px)}
+ .uv-mt .uvmt-m strong{font-size:clamp(36px,3.6vw,70px)}
+ .uv-mt .uvmt-lg{font-size:clamp(12px,1vw,18px)}
+ .uv-mt .uvhero .uvfan{left:42%!important;right:0!important;width:auto!important}
+ .uv-mt .uvhero-t,.uv-mt .uvcap{left:auto!important;right:1.6vw;text-align:right;align-items:flex-end;max-width:52%}
+ .uv-mt .uvcap b,.uv-mt .uvhero-t b{font-size:clamp(20px,1.8vw,34px)}
+ .uv-mt .uvtag{left:auto;right:1.6vw;top:calc(2.2vh + 46px)}
+ .uv-mt .uvsh{background:linear-gradient(0deg,rgba(0,0,0,.7),transparent 40%)!important}
+}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
