@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=273;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=274;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5997,7 +5997,7 @@ async function uvTv2Fill(){const box=$('uvTv2Img');if(!box)return;
   show();uvI(()=>{if(curView==='home')show()},8000)}
 /* lysbilder i hovedruta: NRK (nytt/nyheter), nye filmer/serier og nye episoder */
 /* v262: ekte 3D-sylinderhjul – hele ringen roterer jevnt, kortene står på en bue; ← → snurrer, OK åpner, ↑ hovedruta */
-function uvWheel(el,o){o=o||{};const W=o.W||el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll(o.sel||':scope>.uvt')],n=T.length;if(!n)return;const VIEW=o.view||'home',LK=o.key||'uvWc';
+function uvWheel(el,o){o=o||{};if(matchMedia('(max-width:760px)').matches)return;const W=o.W||el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll(o.sel||':scope>.uvt')],n=T.length;if(!n)return;const VIEW=o.view||'home',LK=o.key||'uvWc';
   const ring=document.createElement('div');ring.className='uvw-ring';T.forEach(t=>ring.appendChild(t));W.appendChild(ring);
   const stepA=360/n;let cur=+(localStorage.getItem(LK)||0)%n,pos=cur;
   const layout=()=>{const h=W.clientHeight,w=W.clientWidth;const ch=Math.max(140,Math.min(h*.82,370)),cw=Math.min(w*.25,ch*1.8);
