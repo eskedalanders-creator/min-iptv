@@ -9,7 +9,32 @@ Skriptet rører ikke avspilling eller kopibeskyttelse – videoen spilles fortsa
 egen spiller. Det hentes fra GitHub-siden hver gang vinduet laster, så forbedringer krever
 ikke nytt bygg av Windows-appen.
 
-## Slik kobles det inn i Windows-appen (Electron, hovedprosessen)
+## Anbefalt på stue-PC-en: åpne strømmetjenestene i ekte Microsoft Edge
+
+I dag åpnes TV 2 Play/Netflix i et eget Electron-vindu. Det vinduet husker ikke innloggingen
+(økten er ikke lagret på disk) og får ikke fjernkontrolltillegget. Edge på stue-PC-en har
+tillegget «Eskedals Univers – fjernkontroll» (mappen `C:\EskedalsUnivers\fjernkontroll-edge`)
+og husker innlogging.
+
+I hovedprosessen: send disse adressene til Edge i stedet for å åpne eget vindu:
+
+```js
+const { shell } = require('electron');
+const EU_EXT_HOSTS = /(^|\.)(tv2\.no|netflix\.com|disneyplus\.com|max\.com|hbomax\.com|viaplay\.no|skyshowtime\.com)$/i;
+// i setWindowOpenHandler for hovedvinduet:
+mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+  try { if (EU_EXT_HOSTS.test(new URL(url).hostname)) {
+    require('child_process').spawn('cmd', ['/c', 'start', '', 'msedge', '--start-fullscreen', url], { detached: true, stdio: 'ignore' });
+    return { action: 'deny' };
+  } } catch (_) {}
+  return { action: 'allow' }; // (behold eksisterende logikk for andre adresser)
+});
+```
+
+Hvis eget Electron-vindu skal beholdes i stedet: gi det en lagret økt
+(`webPreferences: { partition: 'persist:strom' }`) slik at innloggingen huskes, og bruk koden under.
+
+## Alternativ: last inn skriptet i appens eget vindu (Electron, hovedprosessen)
 
 Legg dette i `main.js` (eller tilsvarende) – én gang:
 
