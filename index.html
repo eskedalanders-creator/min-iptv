@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=256;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=257;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5938,7 +5938,7 @@ function uvFill(el){
   /* hovedruta: én ting om gangen – smakebit/trailer, kamp, NRK, nytt i appen … (Windows-appen: utdrag i stedet for YouTube) */
   const hero=tiles.matches;
   UV.heroMode=m=>{if(!hero)return;hero.classList.remove('m-match','m-video','m-slide');hero.classList.add('m-'+m)};
-  const order=DESKTOP?['movies','match','nrk','series','new','nrk2','match','movies','nrk','newep','series','match']:['movies','match','nrk','series','new','sport','nrk2','matches','newep'];
+  const order=DESKTOP?['nrk','movies','match','series','new','nrk2','match','movies','nrk','newep','series','match','nrk2']:['nrk','movies','match','series','new','sport','nrk2','matches','newep'];
   const next=()=>{if(curView!=='home')return;const k=order[UV.cyc++%order.length];
     if(k==='match'){if(!hero||!hero.querySelector('.uvmt-i')){return next()}UV.cur=null;UV.heroMode('match');UV.mtNext&&UV.mtNext();return uvT(next,12000)}
     if(/^(nrk2?|new|newep)$/.test(k)){UV.cur=null;return uvSlide(k).then(ok=>{if(curView!=='home')return;if(!ok)return uvT(next,50);UV.heroMode('slide');uvT(next,11000)}).catch(()=>uvT(next,50))}
@@ -5977,7 +5977,7 @@ async function uvPlay(tiles,k,next,depth){
   cap.innerHTML=`<small>${k==='matches'?'Kamp · høydepunkter':k==='sport'?'Sport':k==='movies'?'Film':'Serie'}${k==='matches'?'':id?' · trailer':' · smakebit'}</small><b>${esc(lb)}</b>`;
   const o={max:k==='sport'?40000:45000,onStart:()=>{t.classList.add('play');UV.heroMode&&UV.heroMode('video');if(id)UV.ytBad=0},
     onEnd:()=>{if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;if(k==='matches'&&UV.mtNext)UV.mtNext();uvT(next,600)}},
-    onFail:()=>{if(id){UV.ytBad++;if(UV.ytBad===3)UV.ytBadT=Date.now();if(UV.ytBad===2)UV.ytHost=UV.ytHost?0:1}if(it)UV.bad[it.key]=1;if(k==='matches'&&UV.mck){const mc=LSget('uvMq',{});if(mc[UV.mck]===id){mc[UV.mck]='';LSset('uvMq',mc)}}if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>uvPlay(tiles,k,next,depth+1),300)}}};
+    onFail:()=>{if(id){UV.ytBad++;if(UV.ytBad===3)UV.ytBadT=Date.now();if(UV.ytBad===2)UV.ytHost=UV.ytHost?0:1}if(it)UV.bad[it.key]=1;if(k==='matches'&&UV.mck){const mc=LSget('uvMq',{});if(mc[UV.mck]===id){mc[UV.mck]='';LSset('uvMq',mc)}}if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>depth>=1?next():uvPlay(tiles,k,next,depth+1),300)}}};
   hs((id?'Spiller av: ':'Utsnitt: ')+lb+(UV.ytBad?' (forsøk '+(UV.ytBad+1)+(UV.ytHost?', youtube.com':'')+')':''));
   UV.ctl=id?uvYT(box,id,o):uvStream(box,url,o);
 }
