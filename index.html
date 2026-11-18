@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=243;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=244;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1927,6 +1927,45 @@ html.lite .uveq i,html.lite .uvbr-ph.on{animation:none}
 .uvx-trees{position:absolute;left:0;right:0;bottom:0;width:100%;height:30%;opacity:.95;filter:drop-shadow(0 -6px 30px rgba(120,170,255,.08))}
 .uvx-snow{position:absolute;inset:0;width:100%;height:100%}
 html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
+
+/* v244: bred hovedrute øverst (kamper + trailere) og 6×2 ruter under */
+@media (min-width:761px){
+ .uvg{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-rows:1.3fr 1fr 1fr!important;gap:1.5vh 1vw!important}
+ .uvt.uv-mt{grid-column:1/-1}
+ .uv-mt .uvmt{right:auto;width:38%;border-right:1px solid rgba(255,255,255,.08)}
+ .uv-mt .uvmt-d{right:auto;width:38%}
+ .uv-mt .uvhero,.uv-mt .uvv,.uv-mt .uvsh{left:38%!important}
+ .uv-mt .uvtag{left:calc(38% + 12px)}
+ .uv-mt .uvcap{left:calc(38% + 16px)}
+ .uv-mt.play .uvmt-s,.uv-mt.play .uvmt-d{opacity:1!important}
+ .uv-mt .uvcap b{font-size:clamp(18px,1.6vw,30px)}
+ .uvq{display:none!important}
+ .uvh{font-size:clamp(12px,.95vw,19px)!important;letter-spacing:.12em!important}
+ .uv-mt .uvh{font-size:clamp(14px,1.15vw,22px)!important}
+ .uvsub{font-size:clamp(10.5px,.72vw,14px)!important}
+ .uvgo{font-size:clamp(10.5px,.72vw,14px)!important;padding:4px 9px!important}
+ .uvbr-lg{font-size:clamp(26px,2.4vw,52px)}.uvbr-nf .uvbr-lg{font-size:clamp(26px,2.5vw,56px)}.uvbr-nrk .uvbr-lg{font-size:clamp(22px,2vw,42px)}
+ .uvbr-c small{font-size:clamp(9px,.6vw,12px)}
+ .uvbr-ic{width:clamp(36px,3vw,64px);height:clamp(36px,3vw,64px)}
+ .uvap span small{display:none}
+ .uv-apps .uvap{gap:7%!important;padding:7%!important}
+ .uv-apps .uvap span{min-width:0;overflow:hidden;border-radius:10px!important}
+ .uv-apps .uvap b{font-size:clamp(14px,1.25vw,26px)!important}
+}
+.uvhero{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden;z-index:1;background:radial-gradient(80% 100% at 70% 0%,rgba(150,40,60,.35),rgba(8,10,30,.4) 70%)}
+.uvhero .uvbg{opacity:.35}
+.uvhero-t{position:absolute;left:18px;bottom:14px;z-index:3;display:flex;flex-direction:column;gap:3px}
+.uvhero-t small{font:700 11px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#c9cfe4}
+.uvhero-t b{font:800 clamp(14px,1.2vw,22px)/1.2 system-ui;color:#fff}
+.uv-mt.play .uvhero{opacity:0;transition:opacity .9s}
+.uvh-r{position:absolute;right:4px;top:-2px;display:flex;gap:8px}
+.uvpill{display:inline-flex!important;align-items:center;gap:6px;height:30px;padding:0 12px!important;border-radius:999px!important;background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.25)!important;color:#fff;font:700 12px/1 system-ui!important;letter-spacing:.04em!important;text-transform:none!important;cursor:pointer}
+.uvpill svg{width:14px;height:14px}
+.uvpill:focus,.uvpill:hover{background:#fff!important;color:#0b0c18!important}
+.uvbr-fav{background:radial-gradient(110% 100% at 50% 0%,#c9a227 0%,#5a4310 45%,#160f02 100%)}
+.uvfavg{position:absolute;inset:8%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;align-items:center}
+.uvfavg img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:6px;box-shadow:0 6px 16px rgba(0,0,0,.5);background:#fff}
+@media (max-width:760px){.uvh-r{display:none}.uvt.uv-mt{grid-column:1/-1}}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -5560,7 +5599,7 @@ function uvStop(){
   UV.cur=null;document.querySelectorAll('.uvt.play').forEach(t=>t.classList.remove('play'));
 }
 /* dekk hele boksen med en 16:9-video (beskjærer svarte kanter og YouTube-tittel) */
-function uvCover(el,box){const w=box.clientWidth||320,h=box.clientHeight||180;let W=w,H=w*9/16;if(H<h){H=h;W=h*16/9}W*=1.18;H*=1.18;el.style.cssText=`position:absolute;left:50%;top:50%;width:${W|0}px;height:${H|0}px;transform:translate(-50%,-50%);border:0;pointer-events:none`}
+function uvCover(el,box){const w=box.clientWidth||320,h=box.clientHeight||180;let W=w,H=w*9/16;if(H<h){H=h;W=h*16/9}W*=1.18;H*=1.18;if(H<230){W*=230/H;H=230}el.style.cssText=`position:absolute;left:50%;top:50%;width:${W|0}px;height:${H|0}px;transform:translate(-50%,-50%);border:0;pointer-events:none`}
 /* YouTube-trailer i en boks. Finner ut når den starter, slutter eller feiler. */
 function uvYT(box,id,o){
   o=o||{};box.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media" tabindex="-1" title=""></iframe>`;
@@ -5636,7 +5675,7 @@ const UVI={
  fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2c.8 4 5.5 6.2 5.5 12.2a5.5 5.5 0 0 1-11 0c0-3 2-4.6 3.2-7 1.1 2 1.6 2.8 2.3 3.1.8-2.3 0-5.4 0-8.3z"/></svg>'
 };
 function uvTile(go,cls,title,ic,media,sub){
-  if(cls==='uv-mt')return `<div class="uvt ${cls}" tabindex="0" data-uvk="${cls}" data-mtile="1"><div class="uvh"><span class="uvi">${ic}</span>${title}</div><div class="uvm">${media}<div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i>HØYDEPUNKTER</span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Se kampen ›</span></div></div>`;
+  if(cls==='uv-mt')return `<div class="uvt ${cls}" tabindex="0" data-uvk="${cls}" data-mtile="1"><div class="uvh"><span class="uvi">${ic}</span>${title}<span class="uvh-r"><button class="uvpill" data-go="live:chip=brann">${UVI.fire} Brann-kanaler</button></span></div><div class="uvm">${media}<div class="uvhero">${uvFan('vod')}<div class="uvhero-t"><small>Trailere og høydepunkter</small><b>Starter straks …</b></div></div><div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i><em id="uvTagT">HØYDEPUNKTER</em></span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Se kampen ›</span></div></div>`;
   return `<div class="uvt ${cls}" tabindex="0" data-go="${go}" data-uvk="${cls}"><div class="uvh"><span class="uvi">${ic}</span>${title}</div><div class="uvm">${media}<div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i>TRAILER</span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Åpne ›</span></div></div>`;
 }
 function uvFan(kind){
@@ -5656,6 +5695,8 @@ function uvSportMedia(){return `<div class="uvspx"><div class="uvspx-bg"></div><
 function uvMatchMedia(){return `<div class="uvmt"><div class="uvmt-bg"></div><div class="uvmt-s" id="uvMt"><div class="uvmt-ld">Henter dagens kamper …</div></div><div class="uvmt-d" id="uvMtD"></div></div>`}
 function uvAppsMedia(){return `<div class="uvap">${UV_APPS.map(([l,n,c,f])=>`<span style="--c:${c};--f:${f}"><b>${l}</b><small>${n}</small></span>`).join('')}</div>`}
 function uvCamMedia(){return `<div class="uvcam" style="background-image:url('${UVFIG}kamera.jpg')"></div><span class="uvlive" id="uvCamL" hidden><i></i><em>KLAR</em></span>`}
+function uvFavMedia(){let f=[];try{f=[...DB.live,...DB.vod,...DB.ser].filter(c=>isFav(c)&&c.logo).slice(0,4)}catch(e){}
+  return `<div class="uvbr uvbr-fav">${f.length?`<div class="uvfavg">${f.map(c=>`<img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:`<div class="uvbr-c"><span class="uvbr-ic">${UVI.star}</span><small>Lagre det du liker</small></div>`}</div>`}
 function uvBrand(k){
   if(k==='nrk')return `<div class="uvbr uvbr-nrk"><div class="uvbr-img" id="uvNrkImg"></div><div class="uvbr-c"><b class="uvbr-lg">NRK</b><small>TV · arkiv · direkte</small></div></div>`;
   if(k==='tv2')return `<div class="uvbr uvbr-tv2"><div class="uvbr-c"><b class="uvbr-lg"><i>2</i></b><small>TV 2 PLAY</small></div></div>`;
@@ -5698,23 +5739,19 @@ function uvHome(){
   const wkV=DB.vod.filter(c=>fvis(c)&&c.ad>now-7*86400).length,ep=(()=>{try{return cinEpItems().length}catch(e){return 0}})();
   const me=profiles.find(p=>p.id===pid)||profiles[0];
   el.innerHTML=`<div class="uv">${uvXmasLayer()}<div class="uvg">
-   ${uvTile('series','uv-ser','Serier',UVI.ser,uvFan('ser'),`${nf(nS)} serier${ep?` · <b>${ep} nye episoder</b>`:''}`)}
-   ${uvTile('tv','uv-tv','TV',UVI.tv,uvTVMedia(),`${nf(nL)} kanaler · direkte nå`)}
-   ${uvTile('movies','uv-film','Filmer',UVI.film,uvFan('vod'),`${nf(nV)} filmer${wkV?` · <b>${wkV} nye denne uka</b>`:''}`)}
-   ${uvTile('fotball','uv-sport','Sport',UVI.sport,uvSportMedia(),'Fotball, ishockey, langrenn, MMA og mer')}
-   ${uvTile('nrk','uv-nrk','NRK TV',UVI.play,uvBrand('nrk'),'Arkiv, direkte og undertekster')}
-   ${uvTile('tv2','uv-tv2','TV 2 Play',UVI.play,uvBrand('tv2'),'Sport, serier og nyheter')}
-   ${uvTile('netflix','uv-nf','Netflix',UVI.film,uvBrand('nf'),'Filmer og serier')}
    ${uvTile('matches','uv-mt','Dagens kamper',UVI.sport,uvMatchMedia(),'<span id="uvMSub">Henter kamper …</span>')}
-   ${uvTile('spotify','uv-sp','Spotify',SPI,uvBrand('sp'),'Spill av på stue-PC-en')}
-   ${uvTile('radio','uv-rd','Radio',RDI,uvBrand('rd'),'Norske radiokanaler direkte')}
-   ${uvTile('apps','uv-apps','Apper',UVI.apps,uvAppsMedia(),'Disney+, Max, Viaplay, YouTube …')}
+   ${uvTile('series','uv-ser','Serier',UVI.ser,uvFan('ser'),`${nf(nS)} serier${ep?` · <b>${ep} nye</b>`:''}`)}
+   ${uvTile('tv','uv-tv','TV',UVI.tv,uvTVMedia(),`${nf(nL)} kanaler`)}
+   ${uvTile('movies','uv-film','Filmer',UVI.film,uvFan('vod'),`${nf(nV)} filmer${wkV?` · <b>${wkV} nye</b>`:''}`)}
+   ${uvTile('fotball','uv-sport','Sport',UVI.sport,uvSportMedia(),'Fotball, hockey, langrenn')}
+   ${uvTile('nrk','uv-nrk','NRK TV',UVI.play,uvBrand('nrk'),'Arkiv og direkte')}
+   ${uvTile('tv2','uv-tv2','TV 2 Play',UVI.play,uvBrand('tv2'),'Sport, serier, nyheter')}
+   ${uvTile('netflix','uv-nf','Netflix',UVI.film,uvBrand('nf'),'Filmer og serier')}
+   ${uvTile('spotify','uv-sp','Spotify',SPI,uvBrand('sp'),'Musikk og podkaster')}
+   ${uvTile('radio','uv-rd','Radio',RDI,uvBrand('rd'),'Radio direkte')}
+   ${uvTile('apps','uv-apps','Apper',UVI.apps,uvAppsMedia(),'Disney+, Max, YouTube …')}
+   ${uvTile('fav','uv-fav','Favoritter',UVI.star,uvFavMedia(),'Dine favoritter')}
    ${uvTile('cams','uv-cam','IP-kamera',UVI.cam,uvCamMedia(),'<span id="uvCamS">Live fra hjemme</span>')}
-  </div>
-  <div class="uvq">
-   <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
-   <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
-   <button class="uvb uvb-rc" data-go="remote"><span>📱</span>Fjernkontroll for TV/PC</button>
   </div>
   <div class="uvf"><span></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
   try{clk()}catch(e){}
@@ -5732,7 +5769,7 @@ function uvFill(el){
     b.innerHTML=`<small>${live?'<i class="lv"></i>DIREKTE NÅ':'NESTE BRANN-KAMP'}</small><div>${lg(n.h)}<b>${esc(nm(n.h))}</b><em>${live?esc(n.hs)+' – '+esc(n.as):'–'}</em><b>${esc(nm(n.a))}</b>${lg(n.a)}</div><span>${live?esc(n.clock||'Pågår'):esc(fmtDay(n.t))+' · '+fmtTime(n.t)}</span>`;
     if(s)s.innerHTML=live?'<b>Brann spiller nå</b> · se kampen':'Brann om <b>'+cd(n.t)+'</b>';
   }).catch(()=>{});
-  {const t=el.querySelector('[data-mtile]');if(t){const open=()=>{const i=t.querySelector('.uvmt-i.on');if(i){const [a,b,lg]=i.dataset.find.split('|');setFind(a,b,lg)}else showView('fotball')};t.addEventListener('click',e=>{e.stopPropagation();open()});t.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();open()}})}}
+  {const t=el.querySelector('[data-mtile]');if(t){const open=()=>{if(UV.cur&&UV.cur!=='matches'&&t.classList.contains('play')){if(UV.heroIt){try{openItem(UV.heroIt)}catch(e){go(UV.cur)}}else go(UV.cur==='sport'?'fotball':UV.cur);return}const i=t.querySelector('.uvmt-i.on');if(i){const [a,b,lg]=i.dataset.find.split('|');setFind(a,b,lg)}else showView('fotball')};t.addEventListener('click',e=>{if(e.target.closest('[data-go]'))return;e.stopPropagation();open()});t.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target===t){e.preventDefault();e.stopPropagation();open()}})}}
   /* dagens kamper – ruller */
   loadFixtures().then(f=>{const box=$('uvMt'),dots=$('uvMtD'),sub=$('uvMSub');if(!box)return;
     const now=Date.now(),td=new Date().toDateString(),sd=e=>new Date(e.t).toDateString()===td;
@@ -5766,7 +5803,7 @@ async function uvPlay(tiles,k,next,depth){
   if(depth>3)return uvT(next,15000);
   if(UV.ctl){try{UV.ctl.kill()}catch(e){}UV.ctl=null;try{accRelease('uv')}catch(e){}}
   document.querySelectorAll('.uvt.play').forEach(t=>t.classList.remove('play'));
-  const t=tiles[k];if(!t||curView!=='home')return;UV.cur=k;
+  const t=tiles.matches||tiles[k];if(!t||!tiles[k]||curView!=='home')return;UV.cur=k;UV.heroIt=null;
   const box=t.querySelector('.uvv'),cap=t.querySelector('.uvcap');let it=null,id='',lb='',url='';
   if(k==='matches'){
     const it=t.querySelector('.uvmt-i.on');if(!it){UV.cur=null;return uvT(next,800)}
@@ -5786,6 +5823,7 @@ async function uvPlay(tiles,k,next,depth){
     lb=it.nm||it.name;
   }
   if(curView!=='home'||UV.cur!==k)return;
+  UV.heroIt=it||null;{const tg=$('uvTagT');if(tg)tg.textContent=k==='matches'?'HØYDEPUNKTER':k==='sport'?'SPORT':'TRAILER'}
   cap.innerHTML=`<small>${k==='matches'?'Kamp · høydepunkter':k==='sport'?'Sport':k==='movies'?'Film':'Serie'}${k==='matches'?'':' · trailer'}</small><b>${esc(lb)}</b>`;
   const o={max:k==='sport'?40000:45000,onStart:()=>{t.classList.add('play');if(id)UV.ytBad=0},
     onEnd:()=>{if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;if(k==='matches'&&UV.mtNext)UV.mtNext();uvT(next,600)}},
