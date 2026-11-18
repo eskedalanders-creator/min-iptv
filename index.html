@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=244;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=245;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5589,7 +5589,7 @@ async function ytFind(q){
   return null}
 /* ===================== v185: Ny forside (Univers) · trailere · fotball ===================== */
 const UVFIG='https://eskedalanders-creator.github.io/min-iptv/figurer/';
-const UV={tm:[],ctl:null,cyc:0,pi:{movies:0,series:0,sport:0},bad:{},ytBad:0,cur:null,sph:null,sphI:0,sphMute:true};
+const UV={ytHost:0,tm:[],ctl:null,cyc:0,pi:{movies:0,series:0,sport:0},bad:{},ytBad:0,cur:null,sph:null,sphI:0,sphMute:true};
 const uvT=(f,ms)=>{const t=setTimeout(f,ms);UV.tm.push(t);return t},uvI=(f,ms)=>{const t=setInterval(f,ms);UV.tm.push(t);return t};
 function uvStop(){
   UV.tm.forEach(t=>{clearTimeout(t);clearInterval(t)});UV.tm=[];
@@ -5602,7 +5602,7 @@ function uvStop(){
 function uvCover(el,box){const w=box.clientWidth||320,h=box.clientHeight||180;let W=w,H=w*9/16;if(H<h){H=h;W=h*16/9}W*=1.18;H*=1.18;if(H<230){W*=230/H;H=230}el.style.cssText=`position:absolute;left:50%;top:50%;width:${W|0}px;height:${H|0}px;transform:translate(-50%,-50%);border:0;pointer-events:none`}
 /* YouTube-trailer i en boks. Finner ut når den starter, slutter eller feiler. */
 function uvYT(box,id,o){
-  o=o||{};box.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media" tabindex="-1" title=""></iframe>`;
+  o=o||{};box.innerHTML=`<iframe src="https://www.${UV.ytHost?'youtube.com':'youtube-nocookie.com'}/embed/${id}?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media" tabindex="-1" title=""></iframe>`;
   const fr=box.firstChild;uvCover(fr,box);let done=0,started=0,t1=0,t2=0;
   const off=()=>{done=1;removeEventListener('message',onm);clearTimeout(t1);clearTimeout(t2)};
   const fin=ok=>{if(done)return;off();const f=ok?o.onEnd:o.onFail;if(f)f()};
@@ -5818,7 +5818,7 @@ async function uvPlay(tiles,k,next,depth){
   }else{
     const pool=uvPool(k==='movies'?'vod':'ser');if(!pool.length){UV.cur=null;return next()}
     for(let n=0;n<6&&!id;n++){const c=pool[UV.pi[k]++%pool.length];if(UV.bad[c.key])continue;it=c;id=UV.ytBad>2?'':await uvTrailer(c).catch(()=>'');if(UV.cur!==k)return;
-      if(!id&&UV.ytBad>2&&!TVM){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
+      if(!id&&UV.ytBad>2&&(!TVM||DESKTOP)){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
     if(!it||(!id&&!url)){UV.cur=null;return uvT(()=>next(),400)}
     lb=it.nm||it.name;
   }
@@ -5827,7 +5827,7 @@ async function uvPlay(tiles,k,next,depth){
   cap.innerHTML=`<small>${k==='matches'?'Kamp · høydepunkter':k==='sport'?'Sport':k==='movies'?'Film':'Serie'}${k==='matches'?'':' · trailer'}</small><b>${esc(lb)}</b>`;
   const o={max:k==='sport'?40000:45000,onStart:()=>{t.classList.add('play');if(id)UV.ytBad=0},
     onEnd:()=>{if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;if(k==='matches'&&UV.mtNext)UV.mtNext();uvT(next,600)}},
-    onFail:()=>{if(id)UV.ytBad++;if(it)UV.bad[it.key]=1;if(k==='matches'&&UV.mck){const mc=LSget('uvMq',{});if(mc[UV.mck]===id){mc[UV.mck]='';LSset('uvMq',mc)}}if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>uvPlay(tiles,k,next,depth+1),300)}}};
+    onFail:()=>{if(id){UV.ytBad++;if(UV.ytBad===2)UV.ytHost=UV.ytHost?0:1}if(it)UV.bad[it.key]=1;if(k==='matches'&&UV.mck){const mc=LSget('uvMq',{});if(mc[UV.mck]===id){mc[UV.mck]='';LSset('uvMq',mc)}}if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>uvPlay(tiles,k,next,depth+1),300)}}};
   UV.ctl=id?uvYT(box,id,o):uvStream(box,url,o);
 }
 async function uvExpiry(){
