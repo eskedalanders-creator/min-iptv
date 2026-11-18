@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="referrer" content="strict-origin-when-cross-origin"><title>yt</title>
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}iframe{position:absolute;inset:0;width:100%;height:100%;border:0}</style></head><body>
+<script>
+/* Eskedals Univers: YouTube-spiller via en vanlig https-side, slik at YouTube får riktig avsender (appen kjører lokalt og sender ingen). Videresender meldinger begge veier. */
+(function(){var q=new URLSearchParams(location.search),v=(q.get('v')||'').replace(/[^\w-]/g,''),h=q.get('h')==='1'?'www.youtube.com':'www.youtube-nocookie.com';
+var f=document.createElement('iframe');f.allow='autoplay; encrypted-media';f.referrerPolicy='strict-origin-when-cross-origin';
+f.src='https://'+h+'/embed/'+v+'?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0&cc_load_policy=0&enablejsapi=1&origin='+encodeURIComponent(location.origin);
+document.body.appendChild(f);
+addEventListener('message',function(e){try{if(e.source===f.contentWindow){parent.postMessage(e.data,'*')}else if(e.source===parent){f.contentWindow.postMessage(e.data,'*')}}catch(x){}});
+})();
+</script></body></html>
