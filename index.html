@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=271;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=272;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -6322,9 +6322,11 @@ function brkRound(e){const s=((e.season&&e.season.slug)||'')+' | '+(((e.competit
 async function brkLoad(slug){const c=brkCache[slug];if(c&&Date.now()-c.t<60000)return c.d;
   const y=new Date().getFullYear(),get=u=>jget(u).catch(()=>null);
   const js=await Promise.all([y-1,y,y+1].map(yy=>get(ESPN+slug+'/scoreboard?dates='+yy+'&limit=900')));
-  const seen=new Set(),ev=[];for(const j of js)for(const e of ((j&&j.events)||[])){if(seen.has(e.id))continue;seen.add(e.id);const r=brkRound(e);if(r<0)continue;const p=parseEvents({events:[e]},'')[0];if(!p)continue;p.r=r;try{const cc=e.competitions[0].competitors;p.hw=!!(cc.find(x=>x.homeAway==='home')||{}).winner;p.aw=!!(cc.find(x=>x.homeAway==='away')||{}).winner}catch(_){}p.season=(e.season&&e.season.year)||0;ev.push(p)}
+  const seen=new Set(),ev=[];let allS=0;for(const j of js)for(const e of ((j&&j.events)||[])){if(seen.has(e.id))continue;seen.add(e.id);allS=Math.max(allS,(e.season&&e.season.year)||0);const r=brkRound(e);if(r<0)continue;const p=parseEvents({events:[e]},'')[0];if(!p)continue;p.r=r;try{const cc=e.competitions[0].competitors;p.hw=!!(cc.find(x=>x.homeAway==='home')||{}).winner;p.aw=!!(cc.find(x=>x.homeAway==='away')||{}).winner}catch(_){}p.season=(e.season&&e.season.year)||0;ev.push(p)}
   /* bare siste sesong */
-  const ms=Math.max(0,...ev.map(e=>e.season));const cur=ev.filter(e=>e.season===ms||!e.season);
+  const ms=Math.max(0,...ev.map(e=>e.season));let cur=ev.filter(e=>e.season===ms||!e.season);
+  /* ny sesong i gang (gruppe-/ligaspill) – vis kommende sluttspill, ikke fjorårets */
+  if(allS&&ms&&allS>ms)cur=[];
   brkCache[slug]={t:Date.now(),d:cur};return cur}
 function brkTies(list){const nm=t=>(t&&(t.shortDisplayName||t.displayName||t.name))||'';const m=new Map();
   for(const e of list.sort((a,b)=>a.t-b.t)){const k=[nm(e.h),nm(e.a)].sort().join('|');if(!m.has(k))m.set(k,[]);m.get(k).push(e)}
