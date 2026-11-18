@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=242;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=243;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1873,6 +1873,60 @@ html.lite .uv::before{filter:none}
 .vmain.browse>.vbar,.vmain.browse>#vchips{display:none!important}
 .vmain:not(.browse)>#vchips::before{content:'Filter:';align-self:center;color:#8d95a9;font-size:13px;margin-right:4px}
 html.lite .uvt,html.lite .sph-next,html.lite .fbp-cd div{backdrop-filter:none!important}
+
+/* v243: 12 ruter på forsiden + julebakgrunn */
+@media (min-width:761px){
+ .uvg{grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important;gap:1.6vh 1.1vw!important}
+ .uvh{font-size:clamp(14px,1.15vw,24px)!important;padding:0 0 7px!important}
+ .uvs{padding-top:6px!important}
+ .uvsub{font-size:clamp(11px,.78vw,15px)!important}
+ .uvt{padding:1.1vh .8vw 1vh!important}
+}
+.uvh .aklg{font-size:.62em;padding:2px 6px;border-radius:5px;letter-spacing:0;line-height:1.2}
+.uvnfi{color:#e50914;font:900 1.15em/1 'Arial Black',Arial,sans-serif;letter-spacing:0;text-shadow:0 0 14px rgba(229,9,20,.5)}
+.uvt.uv-sp .uvi,.uvt.uv-rd .uvi{display:inline-flex;width:1.1em;height:1.1em}
+.uvt.uv-sp .uvi svg,.uvt.uv-rd .uvi svg{width:100%;height:100%}
+.uvbr{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.uvbr-c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.uvbr-c small{font:700 clamp(10px,.75vw,14px)/1.2 var(--ff,system-ui);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.uvbr-lg{font:900 clamp(34px,3.4vw,70px)/1 'Arial Black',var(--ff,system-ui);letter-spacing:.02em;color:#fff}
+.uvbr-nrk{background:radial-gradient(120% 90% at 30% 10%,#0e5f86,#062236 60%,#031522)}
+.uvbr-nrk .uvbr-lg{background:#fff;color:#062236;padding:.1em .28em;border-radius:.14em;font-size:clamp(28px,2.6vw,54px)}
+.uvbr-nrk.hasimg .uvbr-c{opacity:0;transition:opacity .8s}
+.uvbr-img{position:absolute;inset:0;z-index:1}
+.uvbr-ph{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease;transform:scale(1.04)}
+.uvbr-ph.on{opacity:1;animation:uvkb 9s linear forwards}
+@keyframes uvkb{from{transform:scale(1.04)}to{transform:scale(1.12)}}
+.uvbr-nrk::after{content:"NRK";position:absolute;left:10px;top:10px;z-index:3;background:#fff;color:#062236;font:900 13px/1 'Arial Black',sans-serif;padding:4px 6px;border-radius:4px;opacity:0;transition:opacity .6s}
+.uvbr-nrk.hasimg::after{opacity:1}
+.uvbr-tv2{background:radial-gradient(110% 90% at 70% 0%,#ff3b4a,#9e0716 45%,#2a0306 100%)}
+.uvbr-tv2 .uvbr-lg i{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;border-radius:50%;background:#fff;color:#c4061a;font-style:normal;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.uvbr-nf{background:radial-gradient(90% 80% at 50% 120%,rgba(229,9,20,.45),#000 70%)}
+.uvbr-nf .uvbr-lg{color:#e50914;font-family:'Bebas Neue','Arial Narrow','Arial Black',sans-serif;font-stretch:condensed;letter-spacing:.04em;font-size:clamp(34px,3.6vw,76px);text-shadow:0 4px 30px rgba(229,9,20,.45);transform:perspective(300px) rotateX(8deg)}
+.uvbr-sp{background:radial-gradient(110% 100% at 20% 0%,#1ed760 0%,#0f7a37 40%,#04170b 100%)}
+.uvbr-rd{background:radial-gradient(110% 100% at 80% 0%,#7c5cff 0%,#3b2390 45%,#0d0726 100%)}
+.uvbr-ic{display:flex;width:clamp(44px,4vw,84px);height:clamp(44px,4vw,84px);color:#fff;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4))}
+.uvbr-sp .uvbr-ic{color:#000;background:#1ed760;border-radius:50%;padding:12%;box-sizing:border-box}
+.uvbr-ic svg{width:100%;height:100%}
+.uveq{display:flex;justify-content:center;align-items:flex-end;gap:4px;height:22px;opacity:.55}
+.uveq i{width:5px;border-radius:3px;background:#fff;height:30%;animation:uveq 1.1s ease-in-out infinite alternate}
+.uveq i:nth-child(2n){animation-duration:.8s}.uveq i:nth-child(3n){animation-duration:1.4s}.uveq i:nth-child(4n){animation-delay:-.5s}
+@keyframes uveq{to{height:100%}}
+html.lite .uveq i,html.lite .uvbr-ph.on{animation:none}
+/* julebakgrunn */
+.uv::before{background:
+   radial-gradient(38% 46% at 16% 22%,rgba(170,30,50,.26),transparent 70%),
+   radial-gradient(34% 40% at 86% 16%,rgba(255,190,110,.13),transparent 70%),
+   radial-gradient(46% 40% at 55% 100%,rgba(30,90,80,.22),transparent 72%),
+   linear-gradient(170deg,#0a0d24 0%,#0c1230 40%,#140c22 75%,#0a0a18 100%)!important}
+.uvx{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.uvx-glow{position:absolute;left:50%;top:-30%;width:90%;height:70%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,214,150,.10),transparent);animation:uvxg 12s ease-in-out infinite alternate}
+@keyframes uvxg{to{opacity:.55;transform:translateX(-46%) scale(1.08)}}
+.uvx-bokeh i{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle,var(--h),transparent 68%);filter:blur(2px);animation:uvxb var(--d) ease-in-out infinite alternate}
+@keyframes uvxb{0%{transform:translate(0,0);opacity:.5}100%{transform:translate(30px,-24px);opacity:1}}
+.uvx-trees{position:absolute;left:0;right:0;bottom:0;width:100%;height:30%;opacity:.95;filter:drop-shadow(0 -6px 30px rgba(120,170,255,.08))}
+.uvx-snow{position:absolute;inset:0;width:100%;height:100%}
+html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4154,9 +4208,12 @@ function renderNorsk(){
 /* ---------- Navigasjon med spec ---------- */
 function parseSpec(sp){const [v,rest]=sp.split(':');const o={};(rest||'').split('&').filter(Boolean).forEach(p=>{const [a,b]=p.split('=');o[a]=b});return [v,o]}
 function go(sp){
-  const [v,o]=parseSpec(sp);
+  let [v,o]=parseSpec(sp);
   if(v==='norsk')return renderNorsk();
   if(v==='live')return goLive({tab:o.tab||'all',chip:o.chip||null});
+  if(v==='nrk'){AK.tab='nrk';AK.series=null;AK.q='';v='arkiv'}
+  if(v==='tv2')return openApp('ap-tv2','https://play.tv2.no/','TV 2 Play');
+  if(v==='netflix')return openApp('ap-nf','https://www.netflix.com/browse','Netflix');
   if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',en:!!o.en,no:!!o.no,kids:!!o.kids,all:!!o.all,xmas:!!o.xmas,njul:!!o.njul,nt:!!o.nt,sort:'new'};}
   try{showView(v,true)}catch(e){toast('Feil: '+e.message,8000)}
 }
@@ -5599,6 +5656,39 @@ function uvSportMedia(){return `<div class="uvspx"><div class="uvspx-bg"></div><
 function uvMatchMedia(){return `<div class="uvmt"><div class="uvmt-bg"></div><div class="uvmt-s" id="uvMt"><div class="uvmt-ld">Henter dagens kamper …</div></div><div class="uvmt-d" id="uvMtD"></div></div>`}
 function uvAppsMedia(){return `<div class="uvap">${UV_APPS.map(([l,n,c,f])=>`<span style="--c:${c};--f:${f}"><b>${l}</b><small>${n}</small></span>`).join('')}</div>`}
 function uvCamMedia(){return `<div class="uvcam" style="background-image:url('${UVFIG}kamera.jpg')"></div><span class="uvlive" id="uvCamL" hidden><i></i><em>KLAR</em></span>`}
+function uvBrand(k){
+  if(k==='nrk')return `<div class="uvbr uvbr-nrk"><div class="uvbr-img" id="uvNrkImg"></div><div class="uvbr-c"><b class="uvbr-lg">NRK</b><small>TV · arkiv · direkte</small></div></div>`;
+  if(k==='tv2')return `<div class="uvbr uvbr-tv2"><div class="uvbr-c"><b class="uvbr-lg"><i>2</i></b><small>TV 2 PLAY</small></div></div>`;
+  if(k==='nf')return `<div class="uvbr uvbr-nf"><div class="uvbr-c"><b class="uvbr-lg">NETFLIX</b></div></div>`;
+  if(k==='sp')return `<div class="uvbr uvbr-sp"><div class="uvbr-c"><span class="uvbr-ic">${SPI}</span><small>Musikk og podkaster</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
+  if(k==='rd')return `<div class="uvbr uvbr-rd"><div class="uvbr-c"><span class="uvbr-ic">${RDI}</span><small>NRK P1 · P3 · Radio Norge · Kiss</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
+  return ''}
+/* v243: julestemning – rolig snø, varme lys og granskog i horisonten */
+function uvXmasLayer(){
+  const tree=(x,h,o)=>`<path d="M${x} ${300-h}l${h*.28} ${h*.36}h-${h*.11}l${h*.2} ${h*.3}h-${h*.12}l${h*.24} ${h*.34}h-${h*1.02}l${h*.24}-${h*.34}h-${h*.12}l${h*.2}-${h*.3}h-${h*.11}z" opacity="${o}"/>`;
+  let back='',front='';for(let i=0;i<38;i++){const x=i*44+((i*37)%23),h=70+((i*53)%60);back+=tree(x,h,.55)}for(let i=0;i<24;i++){const x=i*70+((i*29)%31)-20,h=95+((i*41)%80);front+=tree(x,h,1)}
+  return `<div class="uvx" aria-hidden="true"><div class="uvx-glow"></div><div class="uvx-bokeh">${Array.from({length:14},(_,i)=>`<i style="--x:${(i*71)%100}%;--y:${8+(i*37)%55}%;--s:${40+(i*29)%90}px;--d:${14+(i*7)%16}s;--h:${i%3?'rgba(255,196,110,.20)':'rgba(255,90,90,.14)'}"></i>`).join('')}</div><svg class="uvx-trees" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice"><g fill="#16304a">${back}</g><g fill="#0c1d30">${front}</g></svg><canvas class="uvx-snow"></canvas></div>`}
+function uvXmasStart(el){
+  const cv=el.querySelector('.uvx-snow');if(!cv)return;const ctx=cv.getContext('2d');if(!ctx)return;
+  const lite=document.documentElement.classList.contains('lite');let W=0,H=0,F=[];
+  const size=()=>{const r=cv.getBoundingClientRect();W=cv.width=Math.max(1,Math.round(r.width));H=cv.height=Math.max(1,Math.round(r.height));
+    const n=Math.round((lite?45:110)*Math.min(1.6,W*H/(1920*1000)));F=Array.from({length:n},()=>mk(Math.random()*H))};
+  const mk=y=>{const z=Math.random();return {x:Math.random()*W,y,r:.6+z*2.4,v:.25+z*.9,w:Math.random()*6.28,ws:.004+Math.random()*.012,a:.35+z*.55}};
+  size();let last=0,raf=0;const ro=window.ResizeObserver?new ResizeObserver(size):null;ro&&ro.observe(cv);
+  const step=t=>{if(!cv.isConnected){ro&&ro.disconnect();return}raf=requestAnimationFrame(step);
+    if(curView!=='home'||document.hidden||($('ov')&&$('ov').classList.contains('on')))return;
+    if(t-last<33)return;const dt=Math.min(3,(t-last)/16.7);last=t;ctx.clearRect(0,0,W,H);
+    for(const f of F){f.w+=f.ws*dt;f.y+=f.v*dt;f.x+=Math.sin(f.w)*.35*dt+.12*dt;if(f.y>H+4){Object.assign(f,mk(-4))}if(f.x>W+4)f.x=-4;
+      ctx.globalAlpha=f.a;ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.283);ctx.fillStyle='#fff';ctx.fill()}
+    ctx.globalAlpha=1};
+  raf=requestAnimationFrame(step)}
+async function uvNrkFill(){const box=$('uvNrkImg');if(!box)return;
+  let j;try{j=await nkGet('/tv/pages/frontpage')}catch(e){return}
+  const im=[];for(const sec of (j.sections||[])){const pl=(sec.included&&sec.included.plugs)||sec.plugs||[];for(const p of pl){const o=nkPlug(p);if(o&&o.img&&o.kind!=='chan')im.push(o.img)}if(im.length>=12)break}
+  if(!im.length||!$('uvNrkImg'))return;let k=0;
+  const show=()=>{const b=$('uvNrkImg');if(!b)return;const d=document.createElement('div');d.className='uvbr-ph';d.style.backgroundImage=`url('${im[k%im.length].replace(/'/g,'%27')}')`;b.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));
+    const old=[...b.children].slice(0,-1);setTimeout(()=>old.forEach(x=>x.remove()),1600);k++;b.parentNode.classList.add('hasimg')};
+  show();uvI(()=>{if(curView==='home')show()},9000)}
 function uvHome(){
   uvStop();
   const el=$('v-home');el.classList.add('uvhome');
@@ -5607,25 +5697,29 @@ function uvHome(){
   const nV=DB.vod.filter(fvis).length,nS=DB.ser.filter(fvis).length,nL=DB.live.filter(c=>fvis(c)&&!c.dup).length;
   const wkV=DB.vod.filter(c=>fvis(c)&&c.ad>now-7*86400).length,ep=(()=>{try{return cinEpItems().length}catch(e){return 0}})();
   const me=profiles.find(p=>p.id===pid)||profiles[0];
-  el.innerHTML=`<div class="uv"><div class="uvg">
+  el.innerHTML=`<div class="uv">${uvXmasLayer()}<div class="uvg">
    ${uvTile('series','uv-ser','Serier',UVI.ser,uvFan('ser'),`${nf(nS)} serier${ep?` · <b>${ep} nye episoder</b>`:''}`)}
    ${uvTile('tv','uv-tv','TV',UVI.tv,uvTVMedia(),`${nf(nL)} kanaler · direkte nå`)}
    ${uvTile('movies','uv-film','Filmer',UVI.film,uvFan('vod'),`${nf(nV)} filmer${wkV?` · <b>${wkV} nye denne uka</b>`:''}`)}
    ${uvTile('fotball','uv-sport','Sport',UVI.sport,uvSportMedia(),'Fotball, ishockey, langrenn, MMA og mer')}
+   ${uvTile('nrk','uv-nrk','NRK TV',UVI.play,uvBrand('nrk'),'Arkiv, direkte og undertekster')}
+   ${uvTile('tv2','uv-tv2','TV 2 Play',UVI.play,uvBrand('tv2'),'Sport, serier og nyheter')}
+   ${uvTile('netflix','uv-nf','Netflix',UVI.film,uvBrand('nf'),'Filmer og serier')}
    ${uvTile('matches','uv-mt','Dagens kamper',UVI.sport,uvMatchMedia(),'<span id="uvMSub">Henter kamper …</span>')}
+   ${uvTile('spotify','uv-sp','Spotify',SPI,uvBrand('sp'),'Spill av på stue-PC-en')}
+   ${uvTile('radio','uv-rd','Radio',RDI,uvBrand('rd'),'Norske radiokanaler direkte')}
+   ${uvTile('apps','uv-apps','Apper',UVI.apps,uvAppsMedia(),'Disney+, Max, Viaplay, YouTube …')}
    ${uvTile('cams','uv-cam','IP-kamera',UVI.cam,uvCamMedia(),'<span id="uvCamS">Live fra hjemme</span>')}
   </div>
   <div class="uvq">
-   <button class="uvb uvb-sp" data-go="spotify"><span>${SPI}</span>Spotify</button>
-   <button class="uvb uvb-rd" data-go="radio"><span>${RDI}</span>Radio</button>
-   <button class="uvb uvb-nrk" data-go="arkiv"><span><b class="aklg nrk">NRK</b></span>NRK / TV 2</button>
    <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
    <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
-   <button class="uvb" data-go="apps"><span>${UVI.apps}</span>Apper</button>
    <button class="uvb uvb-rc" data-go="remote"><span>📱</span>Fjernkontroll for TV/PC</button>
   </div>
   <div class="uvf"><span></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
   try{clk()}catch(e){}
+  try{uvXmasStart(el)}catch(e){}
+  try{uvNrkFill()}catch(e){}
   uvFill(el);
 }
 function uvFill(el){
