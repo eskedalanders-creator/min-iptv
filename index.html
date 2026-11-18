@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=259;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=260;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2083,6 +2083,23 @@ html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
 #hMenu button:focus,#hMenu button:hover{background:#fff;color:#14060c;outline:none}
 #hMenu button i{font-style:normal;width:26px;text-align:center}
 #hMenu button em{margin-left:auto;font-style:normal;background:#ff2d6a;color:#fff;border-radius:9px;padding:1px 7px;font-size:12px}
+/* v260: 3D-hjul, innstillinger på hjulet, gjennomsiktig topp */
+@media (min-width:761px){.uvg{grid-template-rows:calc((var(--tvh,100vh) - 74px)*.47)!important}}
+.uvw{perspective:1200px;perspective-origin:50% 30%;transform-style:preserve-3d}
+.uvw::before{content:"";position:absolute;left:50%;top:60%;width:calc(var(--rx,600px)*2.1);height:calc(var(--ry,60px)*2.4 + 40px);transform:translate(-50%,calc(-100% + 24px));border-radius:50%;border:2px solid rgba(255,214,140,.22);box-shadow:0 0 40px rgba(255,190,110,.18),inset 0 0 50px rgba(255,190,110,.10);pointer-events:none}
+.uvw::after{content:"";position:absolute;left:50%;bottom:-4%;width:70%;height:26%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,200,140,.22),transparent);filter:blur(6px);pointer-events:none}
+.uvw .uvt{transform-style:preserve-3d;-webkit-box-reflect:below 8px linear-gradient(transparent 70%,rgba(255,255,255,.16));transition:transform .7s cubic-bezier(.22,.9,.25,1),opacity .7s,filter .7s!important}
+.uvw .uvt.uvw-f{box-shadow:0 0 0 3px #fff,0 0 40px rgba(255,210,150,.35),0 40px 80px -20px rgba(0,0,0,.95)!important}
+.uvbr-set{background:radial-gradient(110% 100% at 50% 0%,#4a5568 0%,#1f2533 50%,#0b0d14 100%)}
+.uvbr-set .uvbr-ic{animation:uvspin 18s linear infinite}
+@keyframes uvspin{to{transform:rotate(360deg)}}
+#hMenu{top:50%!important;left:50%!important;right:auto!important;transform:translate(-50%,-50%);min-width:420px!important;padding:16px!important;gap:8px!important}
+#hMenu button{font-size:20px!important;padding:14px 18px!important}
+#bSet{display:none!important}
+.brand .logo>rect{fill:transparent!important}
+body:has(#v-home.on) header{background:transparent!important;border-bottom-color:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.uv::before,.uvx{position:fixed!important}
+.uvx{inset:0!important}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4367,6 +4384,7 @@ function go(sp){
   let [v,o]=parseSpec(sp);
   if(v==='norsk')return renderNorsk();
   if(v==='live')return goLive({tab:o.tab||'all',chip:o.chip||null});
+  if(v==='menu'){if(window.hMenuShow)window.hMenuShow();return}
   if(v==='nrk'){AK.tab='nrk';AK.series=null;AK.q='';v='arkiv'}
   if(v==='tv2')return openApp('ap-tv2','https://play.tv2.no'+((curView==='home'&&UV.t2&&UV.t2.u)||'/'),'TV 2 Play');
   if(v==='netflix')return openApp('ap-nf','https://www.netflix.com/browse','Netflix');
@@ -5790,6 +5808,7 @@ const UVI={
  guide:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16M12 13h6M12 16h4"/></svg>',
  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg>',
  play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z" fill="currentColor"/></svg>',
+ gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
  fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2c.8 4 5.5 6.2 5.5 12.2a5.5 5.5 0 0 1-11 0c0-3 2-4.6 3.2-7 1.1 2 1.6 2.8 2.3 3.1.8-2.3 0-5.4 0-8.3z"/></svg>'
 };
 function uvTile(go,cls,title,ic,media,sub){
@@ -5817,6 +5836,7 @@ function uvFavMedia(){let f=[];try{f=[...DB.live,...DB.vod,...DB.ser].filter(c=>
   return `<div class="uvbr uvbr-fav">${f.length?`<div class="uvfavg">${f.map(c=>`<img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:`<div class="uvbr-c"><span class="uvbr-ic">${UVI.star}</span><small>Lagre det du liker</small></div>`}</div>`}
 function uvBrand(k){
   if(k==='nrk')return `<div class="uvbr uvbr-nrk"><div class="uvbr-img" id="uvNrkImg"></div><div class="uvbr-c"><b class="uvbr-lg">NRK</b><small>TV · arkiv · direkte</small></div></div>`;
+  if(k==='set')return `<div class="uvbr uvbr-set"><div class="uvbr-c"><span class="uvbr-ic">${UVI.gear}</span><small>Søk · Varsler · Bruker · Oppdater</small></div></div>`;
   if(k==='tv2')return `<div class="uvbr uvbr-tv2"><div class="uvbr-img" id="uvTv2Img"></div><div class="uvbr-c"><b class="uvbr-lg"><i>2</i></b><small>TV 2 PLAY</small></div><div class="uvbr-cap"><small>Nytt på TV 2 Play</small><b id="uvTv2T"></b></div></div>`;
   if(k==='nf')return `<div class="uvbr uvbr-nf"><div class="uvbr-c"><b class="uvbr-lg">NETFLIX</b></div></div>`;
   if(k==='sp')return `<div class="uvbr uvbr-sp"><div class="uvbr-c"><span class="uvbr-ic">${SPI}</span><small>Musikk og podkaster</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
@@ -5874,25 +5894,33 @@ async function uvTv2Fill(){const box=$('uvTv2Img');if(!box)return;
     const old=[...b.children].slice(0,-1);setTimeout(()=>old.forEach(y=>y.remove()),1600);b.parentNode.classList.add('hasimg');const c=$('uvTv2T');if(c)c.textContent=x.t||'Nytt på TV 2 Play'};
   show();uvI(()=>{if(curView==='home')show()},8000)}
 /* lysbilder i hovedruta: NRK (nytt/nyheter), nye filmer/serier og nye episoder */
-/* v259: ovalt karusellhjul – ← → snurrer, OK åpner, ↑ til hovedruta */
+/* v260: ovalt 3D-karusellhjul – ← → snurrer, OK åpner, ↑ hovedruta, ↓ hjulet (fungerer også når ingenting har fokus) */
 function uvWheel(el){const W=el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll('.uvt')],n=T.length;if(!n)return;
-  let cur=+(localStorage.getItem('uvWc')||0)%n;
-  const draw=()=>{const w=W.clientWidth,h=W.clientHeight,rx=w*.44,ry=h*.17;
-    T.forEach((t,i)=>{let d=i-cur;d=((d%n)+n)%n;if(d>n/2)d-=n;const a=d/n*Math.PI*2,z=Math.cos(a),f=(z+1)/2;
-      const x=Math.sin(a)*rx,y=-(1-z)*ry;const sc=.34+.66*Math.pow(f,2.2);
-      t.style.transform=`translate(-50%,-50%) translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${sc.toFixed(3)})`;
-      t.style.zIndex=String(Math.round(f*100));t.style.opacity=(.25+.75*f).toFixed(2);t.style.filter=`brightness(${(.45+.55*f).toFixed(2)})`;
+  let cur=+(localStorage.getItem('uvWc')||0)%n,pos=cur;
+  const draw=()=>{const w=W.clientWidth,h=W.clientHeight,rx=w*.42,ry=h*.16;W.style.setProperty('--rx',rx+'px');W.style.setProperty('--ry',ry+'px');
+    T.forEach((t,i)=>{let d=i-pos;d=((d%n)+n)%n;if(d>n/2)d-=n;const a=d/n*Math.PI*2,z=Math.cos(a),f=(z+1)/2,sn=Math.sin(a);
+      const x=sn*rx,y=-(1-z)*ry,sc=.36+.64*Math.pow(f,2),r3=-sn*38;
+      t.style.transform=`translate(-50%,-50%) translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,${((z-1)*160).toFixed(0)}px) rotateY(${r3.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+      t.style.zIndex=String(Math.round(f*100));t.style.opacity=(.2+.8*f).toFixed(2);t.style.filter=`brightness(${(.4+.6*f).toFixed(2)}) saturate(${(.6+.4*f).toFixed(2)})`;
       t.classList.toggle('uvw-f',i===cur);t.tabIndex=i===cur?0:-1})};
-  const set=(i,foc)=>{cur=((i%n)+n)%n;try{localStorage.setItem('uvWc',cur)}catch(e){}draw();if(foc)T[cur].focus({preventScroll:true})};
-  W.addEventListener('keydown',e=>{const k=e.key;
-    if(k==='ArrowLeft'||k==='ArrowRight'){e.preventDefault();e.stopPropagation();set(cur+(k==='ArrowRight'?1:-1),true);return}
-    if(k==='ArrowUp'){e.preventDefault();e.stopPropagation();const h=el.querySelector('.uvt.uv-mt');if(h)h.focus({preventScroll:true});return}
-    if(k==='ArrowDown'){e.preventDefault();e.stopPropagation();return}},true);
+  const set=(i,foc)=>{pos+=i-cur;cur=((i%n)+n)%n;try{localStorage.setItem('uvWc',cur)}catch(e){}draw();if(foc)T[cur].focus({preventScroll:true})};
+  const step=dl=>set(cur+dl,true);
+  const hero=el.querySelector('.uvt.uv-mt'),pill=el.querySelector('.uvpill');
+  const onKey=e=>{if(!W.isConnected){removeEventListener('keydown',onKey,true);return}
+    if(curView!=='home'||document.querySelector('dialog[open]')||($('ov')&&$('ov').classList.contains('on'))||(window.hMenuOpen&&window.hMenuOpen()))return;
+    const k=e.key,a=document.activeElement,inW=a&&W.contains(a),onP=a===pill,inH=a&&hero&&hero.contains(a)&&!onP;
+    if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
+    const hit=()=>{e.preventDefault();e.stopImmediatePropagation()};
+    if(k==='ArrowLeft'||k==='ArrowRight'){if(onP)return;hit();step(k==='ArrowRight'?1:-1);return}
+    if(k==='ArrowDown'){hit();if(onP&&hero){hero.focus({preventScroll:true});return}set(cur,true);return}
+    if(k==='ArrowUp'){hit();if(inW&&hero){hero.focus({preventScroll:true});return}if(inH&&pill){pill.focus({preventScroll:true});return}if(!inW&&!inH&&!onP)set(cur,true);return}
+    if(k==='Enter'&&!inW&&!inH&&!onP){hit();set(cur,true);return}};
+  addEventListener('keydown',onKey,true);
   W.addEventListener('click',e=>{const t=e.target.closest('.uvt');if(!t)return;const i=T.indexOf(t);if(i>=0&&i!==cur){e.preventDefault();e.stopPropagation();set(i,true)}},true);
-  W.addEventListener('wheel',e=>{e.preventDefault();set(cur+(e.deltaY>0||e.deltaX>0?1:-1),false)},{passive:false});
-  const hero=el.querySelector('.uvt.uv-mt');if(hero)hero.addEventListener('keydown',e=>{if(e.key==='ArrowDown'&&e.target===hero){e.preventDefault();e.stopPropagation();set(cur,true)}},true);
+  let wt=0;W.addEventListener('wheel',e=>{e.preventDefault();if(Date.now()-wt<180)return;wt=Date.now();step(e.deltaY>0||e.deltaX>0?1:-1)},{passive:false});
   const ro=window.ResizeObserver?new ResizeObserver(draw):null;ro&&ro.observe(W);draw();
-  requestAnimationFrame(()=>W.classList.add('rdy'))}
+  requestAnimationFrame(()=>W.classList.add('rdy'));
+  if(TVM||DESKTOP)setTimeout(()=>{const a=document.activeElement;if(curView==='home'&&(!a||a===document.body))set(cur,true)},600)}
 async function uvSlide(k){const box=$('uvSl');if(!box)return false;const rnd=a=>a[Math.floor(Math.random()*a.length)];let it=null;
   const now=Date.now()/1000;
   if(k==='new'){const p=[...DB.vod,...DB.ser].filter(c=>fvis(c)&&c.logo&&c.ad>now-14*86400);if(!p.length)return false;const c=rnd(p.slice(0,80));
@@ -5939,6 +5967,7 @@ function uvHome(){
    ${uvTile('apps','uv-apps','Apper',UVI.apps,uvAppsMedia(),'Disney+, Max, YouTube …')}
    ${uvTile('fav','uv-fav','Favoritter',UVI.star,uvFavMedia(),'Dine favoritter')}
    ${uvTile('cams','uv-cam','IP-kamera',UVI.cam,uvCamMedia(),'<span id="uvCamS">Live fra hjemme</span>')}
+   ${uvTile('menu','uv-set','Innstillinger',UVI.gear,uvBrand('set'),'<span id="uvSetS">Søk, bruker, oppdater …</span>')}
   </div>
   <div class="uvf"><span></span><span class="uvfr">Innlogget: <b id="uvUser">${esc(me?me.name:'')}</b><span class="uvdot">·</span><span id="uvClock"></span></span></div></div>`;
   try{clk()}catch(e){}
@@ -6764,10 +6793,11 @@ detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpd
 (()=>{const b=$('bSet');if(!b)return;b.title='Meny';b.setAttribute('aria-label','Meny');
   const m=document.createElement('div');m.id='hMenu';m.setAttribute('role','menu');document.body.appendChild(m);
   const it=[['🔍','Søk','tvSearch'],['🔔','Nye episoder','bNew'],['⭐','Favoritter','bFav'],['⚙️','Innstillinger',null],['👤','Bytt bruker','bUser'],['⟳','Oppdater appen','bRl'],['⛶','Fullskjerm','bFs']];
-  const close=()=>{m.classList.remove('on');try{b.focus({preventScroll:true})}catch(e){}};
+  let back=null;const close=()=>{m.classList.remove('on');try{(back&&back.isConnected?back:b).focus({preventScroll:true})}catch(e){}};
   const open=()=>{const nn=$('bNewN'),cnt=nn&&!nn.hidden?nn.textContent:'';const u=$('bUserN');
     m.innerHTML=it.map(([ic,t,id],k)=>`<button data-hm="${k}"><i>${ic}</i>${t}${id==='bNew'&&cnt?`<em>${esc(cnt)}</em>`:''}${id==='bUser'&&u&&u.textContent?` <span style="opacity:.6;font-weight:500">· ${esc(u.textContent)}</span>`:''}${id==='bRl'?` <span style="opacity:.6;font-weight:500">· v${APP_BUILD}</span>`:''}</button>`).join('');
-    m.classList.add('on');setTimeout(()=>{const f=m.querySelector('button');f&&f.focus()},30)};
+    back=document.activeElement;m._t=Date.now();m.classList.add('on');setTimeout(()=>{const f=m.querySelector('button');f&&f.focus()},30)};
+  window.hMenuShow=open;
   window.hMenuOpen=()=>m.classList.contains('on');window.hMenuClose=close;
   b.onclick=e=>{e.stopPropagation();m.classList.contains('on')?close():open()};
   m.addEventListener('click',e=>{const x=e.target.closest('[data-hm]');if(!x)return;e.stopPropagation();const [,,id]=it[+x.dataset.hm];m.classList.remove('on');
@@ -6776,8 +6806,8 @@ detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpd
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();e.stopPropagation();const j=Math.max(0,Math.min(bs.length-1,i+(e.key==='ArrowDown'?1:-1)));bs[j].focus();return}
     if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();return}
     if(e.key==='Escape'||e.key==='Backspace'||e.key==='BrowserBack'){e.preventDefault();e.stopPropagation();close()}},true);
-  document.addEventListener('click',e=>{if(m.classList.contains('on')&&!m.contains(e.target))m.classList.remove('on')});
-  const dot=()=>{const nn=$('bNewN');let d=b.querySelector('.hdot');const c=nn&&!nn.hidden?nn.textContent:'';if(c){if(!d){d=document.createElement('span');d.className='hdot';b.appendChild(d)}d.textContent=c}else if(d)d.remove()};
+  document.addEventListener('click',e=>{if(m.classList.contains('on')&&!m.contains(e.target)&&Date.now()-(m._t||0)>400)m.classList.remove('on')});
+  const dot=()=>{const nn=$('bNewN');{const ss=$('uvSetS'),c2=nn&&!nn.hidden?nn.textContent:'';if(ss)ss.innerHTML=c2?`<b>${esc(c2)} nye episoder</b> · søk, bruker …`:'Søk, bruker, oppdater …'}let d=b.querySelector('.hdot');const c=nn&&!nn.hidden?nn.textContent:'';if(c){if(!d){d=document.createElement('span');d.className='hdot';b.appendChild(d)}d.textContent=c}else if(d)d.remove()};
   setInterval(dot,3000);dot()})();
 
 /* ===================== v240: TV-arkiv – NRK TV innebygd (psapi.nrk.no) + TV 2 Play ===================== */
