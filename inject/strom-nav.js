@@ -38,10 +38,12 @@
     /* horisontale rader som ikke ruller med scrollIntoView */
     let p=el.parentElement;while(p&&p!==document.body){const s=getComputedStyle(p);if(/(auto|scroll)/.test(s.overflowX)&&p.scrollWidth>p.clientWidth){const a=el.getBoundingClientRect(),b=p.getBoundingClientRect();if(a.left<b.left||a.right>b.right)p.scrollLeft+=a.left-b.left-(b.width-a.width)/2;break}p=p.parentElement}}
   const video=()=>{const v=[...document.querySelectorAll('video')].find(v=>v.readyState>0&&v.getBoundingClientRect().width>innerWidth*.5);return v||null};
-  function back(){if(history.length>1){history.back();return}hint('Tilbake til Eskedals Univers …',1500);try{console.log('EU:close')}catch(_){}setTimeout(()=>{try{window.close()}catch(_){}},300)}
+  function back(){if(history.length>1){history.back();return}hint('Trykk 🏠 Hjem for å gå tilbake til Eskedals Univers',3500);try{console.log('EU:close')}catch(_){}setTimeout(()=>{try{window.close()}catch(_){}},300)}
+  const fs=()=>{if(!document.fullscreenElement&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})};
   document.addEventListener('keydown',e=>{
     const k=e.key;const t=e.target,typing=t&&(/INPUT|TEXTAREA|SELECT/.test(t.tagName)||t.isContentEditable);
     document.body&&document.body.classList.add('eu-kb');
+    if(!typing&&/^(Arrow|Enter)/.test(k))fs();
     const v=video();
     if(v&&!typing){ /* avspilling: la spilleren styre, men gi enkle spoleknapper */
       if(k==='Enter'||k===' '||k==='MediaPlayPause'){e.preventDefault();e.stopPropagation();v.paused?v.play():v.pause();hint(v.paused?'⏸ Pause':'▶ Spiller',900);return}
