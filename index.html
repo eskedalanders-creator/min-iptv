@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=264;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=265;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2106,7 +2106,7 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
  .uvw{perspective:2400px!important;perspective-origin:50% 35%!important;transform-style:flat!important}
  .uvw::before{display:none}
  .uvw::after{bottom:0;width:80%;height:30%;background:radial-gradient(closest-side,rgba(255,190,120,.16),transparent)}
- .uvw-ring{position:absolute;left:50%;top:51%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+ .uvw-ring{position:absolute;left:50%;top:47%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
  .uvw.rdy .uvw-ring{transition:transform .9s cubic-bezier(.22,.85,.25,1)}
  #uvW .uvt,#uvW .uvt:hover,#uvW .uvt:focus,html.tvm #uvW .uvt:focus{transform:var(--wt)!important}
  #uvW .uvt{position:absolute!important;left:calc(var(--cw) / -2)!important;top:calc(var(--ch) / -2)!important;width:var(--cw)!important;height:var(--ch)!important;
@@ -2137,13 +2137,33 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
 @media (min-width:761px){
  body:has(#v-home.on) header{position:absolute!important;top:0;left:0;right:0;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))!important;border:0!important}
  body:has(#v-home.on) .uv{height:var(--tvh,100vh)!important;padding-top:0!important}
- body:has(#v-home.on) .uvg{margin:0 -3vw!important;grid-template-rows:calc(var(--tvh,100vh)*.64)!important}
+ body:has(#v-home.on) .uvg{margin:0 -3vw!important;grid-template-rows:calc(var(--tvh,100vh)*.6)!important}
  body:has(#v-home.on) .uv-mt .uvm{border-radius:0!important;box-shadow:none!important}
  body:has(#v-home.on) .uv-mt .uvm{-webkit-mask-image:linear-gradient(180deg,#000 74%,transparent 100%);mask-image:linear-gradient(180deg,#000 74%,transparent 100%);background:transparent!important}
  body:has(#v-home.on) .uv-mt .uvh{top:calc(68px + 1vh)!important;right:3vw!important}
  body:has(#v-home.on) .uv-mt .uvhero-t{left:4vw!important}
  body:has(#v-home.on) .uvt.uv-mt:focus .uvm{box-shadow:inset 0 0 0 3px #fff!important}
 }
+
+/* v265: fylte, gjennomsiktige ruter på hjulet; ekte merkevare-utseende */
+.uv-mt .uvh-r{display:none!important}
+@media (min-width:761px){
+ #uvW .uvt{padding:0!important;overflow:hidden!important;background:rgba(18,4,10,.28)!important;border:1px solid rgba(255,255,255,.22)!important;border-radius:16px!important}
+ #uvW .uvt .uvm{position:absolute!important;inset:0!important;border-radius:inherit!important;box-shadow:none!important;background:transparent!important;margin:0!important}
+ #uvW .uvt .uvh{position:absolute!important;top:0;left:0;right:0;z-index:6;padding:12px 10px 26px!important;background:linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,0))!important;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+ #uvW .uvt .uvs{position:absolute!important;left:0;right:0;bottom:0;z-index:6;padding:26px 14px 12px!important;background:linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,0))!important}
+ #uvW .uvt .uvsub{color:#fff!important}
+ #uvW .uvbr-c{padding-top:8%}
+ #uvW .uvbr-c small{display:none}
+ #uvW .uvap{padding:22% 8% 18%!important}
+ #uvW .uvch{padding-top:14%}
+}
+.uvbr-sp{background:radial-gradient(90% 80% at 50% 110%,rgba(30,215,96,.28),#121212 70%)!important}
+.uvbr-sp .uvbr-ic{color:#1ed760!important;background:none!important;padding:0!important;border-radius:0!important}
+.uvbr-rd{background:radial-gradient(90% 80% at 50% 110%,rgba(124,92,255,.35),#100c1e 70%)!important}
+.uvbr-wm{font:800 clamp(22px,2vw,40px)/1 system-ui;color:#fff;letter-spacing:-.01em}
+.uvbr-set{background:radial-gradient(90% 80% at 50% 110%,rgba(140,160,200,.25),#0d0f16 70%)!important}
+.uvbr-nf{background:radial-gradient(90% 70% at 50% 120%,rgba(229,9,20,.4),#000 68%)!important}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -5883,8 +5903,8 @@ function uvBrand(k){
   if(k==='set')return `<div class="uvbr uvbr-set"><div class="uvbr-c"><span class="uvbr-ic">${UVI.gear}</span><small>Søk · Varsler · Bruker · Oppdater</small></div></div>`;
   if(k==='tv2')return `<div class="uvbr uvbr-tv2"><div class="uvbr-img" id="uvTv2Img"></div><div class="uvbr-c"><b class="uvbr-lg"><i>2</i></b><small>TV 2 PLAY</small></div><div class="uvbr-cap"><small>Nytt på TV 2 Play</small><b id="uvTv2T"></b></div></div>`;
   if(k==='nf')return `<div class="uvbr uvbr-nf"><div class="uvbr-c"><b class="uvbr-lg">NETFLIX</b></div></div>`;
-  if(k==='sp')return `<div class="uvbr uvbr-sp"><div class="uvbr-c"><span class="uvbr-ic">${SPI}</span><small>Musikk og podkaster</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
-  if(k==='rd')return `<div class="uvbr uvbr-rd"><div class="uvbr-c"><span class="uvbr-ic">${RDI}</span><small>NRK P1 · P3 · Radio Norge · Kiss</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
+  if(k==='sp')return `<div class="uvbr uvbr-sp"><div class="uvbr-c"><span class="uvbr-ic">${SPI}</span><b class="uvbr-wm">Spotify</b><div class="uveq"><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
+  if(k==='rd')return `<div class="uvbr uvbr-rd"><div class="uvbr-c"><span class="uvbr-ic">${RDI}</span><b class="uvbr-wm">Radio</b><small>NRK P1 · P3 · Radio Norge · Kiss</small><div class="uveq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>`;
   return ''}
 /* v247: julestemning – dyp rød fløyel, lysslynge, ekte bokeh-lys og snø (tegnet på canvas) */
 function uvXmasLayer(){return `<div class="uvx" aria-hidden="true"><canvas class="uvx-cv"></canvas><div class="uvx-vig"></div></div>`}
@@ -5942,8 +5962,8 @@ async function uvTv2Fill(){const box=$('uvTv2Img');if(!box)return;
 function uvWheel(el){const W=el.querySelector('.uvw');if(!W)return;const T=[...W.querySelectorAll(':scope>.uvt')],n=T.length;if(!n)return;
   const ring=document.createElement('div');ring.className='uvw-ring';T.forEach(t=>ring.appendChild(t));W.appendChild(ring);
   const stepA=360/n;let cur=+(localStorage.getItem('uvWc')||0)%n,pos=cur;
-  const layout=()=>{const h=W.clientHeight,w=W.clientWidth;const ch=Math.max(130,Math.min(h*.70,330)),cw=Math.min(w*.19,ch*1.5);
-    const R=(cw/2)/Math.tan(stepA/2*Math.PI/180)*1.18;W.style.setProperty('--cw',cw+'px');W.style.setProperty('--ch',ch+'px');W.style.setProperty('--R',R+'px');
+  const layout=()=>{const h=W.clientHeight,w=W.clientWidth;const ch=Math.max(140,Math.min(h*.84,380)),cw=Math.min(w*.2,ch*1.45);
+    const R=(cw/2)/Math.tan(stepA/2*Math.PI/180)*1.0;W.style.setProperty('--cw',cw+'px');W.style.setProperty('--ch',ch+'px');W.style.setProperty('--R',R+'px');
     T.forEach((t,i)=>t.style.setProperty('--wt',`rotateY(${(i*stepA).toFixed(3)}deg) translateZ(${R.toFixed(1)}px)`));spin()};
   const spin=()=>{ring.style.transform=`translateZ(calc(var(--R) * -1)) rotateX(-2.5deg) rotateY(${(-pos*stepA).toFixed(3)}deg)`;
     T.forEach((t,i)=>{let d=i-pos;d=((d%n)+n)%n;if(d>n/2)d-=n;const ad=Math.abs(Math.round(d));t.dataset.wd=String(Math.min(ad,4));t.classList.toggle('uvw-f',i===cur);t.tabIndex=i===cur?0:-1})};
