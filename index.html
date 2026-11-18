@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=270;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=271;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2164,6 +2164,43 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
 .uvbr-wm{font:800 clamp(22px,2vw,40px)/1 system-ui;color:#fff;letter-spacing:-.01em}
 .uvbr-set{background:radial-gradient(90% 80% at 50% 110%,rgba(140,160,200,.25),#0d0f16 70%)!important}
 .uvbr-nf{background:radial-gradient(90% 70% at 50% 120%,rgba(229,9,20,.4),#000 68%)!important}
+/* v271: sluttspillkart */
+.brk .brk-wrap{display:flex;gap:28px;overflow-x:auto;padding:6px 4px 14px;align-items:stretch}
+.brk-col{flex:1 0 220px;display:flex;flex-direction:column;gap:10px;min-width:220px}
+.brk-col h4{margin:0 0 4px;font:800 13px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#bfe9c9}
+.brk-ties{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:12px}
+.brk-tie{position:relative;display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(20,60,35,.55),rgba(6,20,12,.7));border:1px solid rgba(160,255,190,.18);box-shadow:0 10px 26px -14px #000}
+.brk-tie::after{content:"";position:absolute;right:-29px;top:50%;width:28px;height:2px;background:rgba(160,255,190,.25)}
+.brk-col:nth-last-child(2) .brk-tie::after{width:28px}
+.brk-tie.tbd{opacity:.55;border-style:dashed}
+.brk-tie.live{border-color:#ff3b5c;box-shadow:0 0 0 1px #ff3b5c,0 0 30px -6px rgba(255,59,92,.6)}
+.brk-tie:focus,.brk-tie:hover{outline:none;border-color:#fff;background:linear-gradient(180deg,rgba(40,100,60,.7),rgba(10,30,18,.8))}
+.brk-tm{display:flex;align-items:center;gap:9px;font:600 14px/1.2 system-ui;color:#eaf6ee}
+.brk-tm img,.brk-ph{width:24px;height:24px;object-fit:contain;flex:none;border-radius:50%}
+.brk-ph{background:rgba(255,255,255,.12)}
+.brk-tm span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brk-tm b{font:800 15px/1 system-ui;font-variant-numeric:tabular-nums;min-width:18px;text-align:right}
+.brk-tm.w span,.brk-tm.w b{color:#7dffa8}
+.brk-tm.tbd{color:#9fb5a6;font-style:italic}
+.brk-tie small{font-size:11.5px;color:#9fc2ab;margin-top:2px}
+.brk-lv{font-style:normal;color:#ff6b84;font-weight:800;display:inline-flex;align-items:center;gap:5px}.brk-lv i,.brk-lvt{color:#ff6b84}
+.brk-lv i{width:7px;height:7px;border-radius:50%;background:#ff3b5c;animation:uvbl 1.2s infinite}
+.brk-cup{flex:0 0 150px;min-width:150px;align-items:center;justify-content:center;text-align:center;gap:6px}
+.brk-trophy{font-size:56px;filter:drop-shadow(0 0 18px rgba(255,210,90,.6))}
+.brk-cup b{font:800 16px/1.2 system-ui;color:#ffd96b}
+/* v271: hjulet – mer gjennomsiktig og lettere å tegne (mindre hakking) */
+@media (min-width:761px){
+ #uvW .uvt{background:rgba(20,6,12,.12)!important;border-color:rgba(255,255,255,.18)!important;box-shadow:none!important}
+ #uvW .uvt.uvw-f{box-shadow:0 0 0 2px #fff,0 20px 50px -20px rgba(0,0,0,.9)!important}
+ #uvW .uvt .uvm{opacity:.86}
+ #uvW .uvt.uvw-f .uvm{opacity:.95}
+ #uvW .uvbg{display:none!important}
+ #uvW .uvfan img{transition:none!important;box-shadow:none!important}
+ #uvW .uvt:not(.uvw-f) .uveq i,#uvW .uvt:not(.uvw-f) .uvbr-ic,#uvW .uvt:not(.uvw-f) .uvbr-ph,#uvW .uvt:not(.uvw-f) *{animation-play-state:paused!important}
+ #uvW .uvbr-sp,#uvW .uvbr-rd,#uvW .uvbr-set,#uvW .uvbr-nf{opacity:.9}
+ #uvW .uvt::after{transition:opacity .4s linear!important}
+ .uvw-ring{backface-visibility:hidden}
+}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -5926,8 +5963,8 @@ function uvXmasStart(el){
   size();let last=0,T0=performance.now();const ro=window.ResizeObserver?new ResizeObserver(size):null;ro&&ro.observe(cv);
   const step=t=>{if(!cv.isConnected){ro&&ro.disconnect();return}requestAnimationFrame(step);
     if(curView!=='home'||document.hidden||($('ov')&&$('ov').classList.contains('on')))return;
-    if(document.querySelector('.uvv.on,.uvv.peek')){last=t;return} /* ikke tegn mens trailer spilles – gir videoen full ro */
-    if(t-last<33)return;const dt=Math.min(3,(t-last)/16.7);last=t;const sec=(t-T0)/1000;ctx.clearRect(0,0,W,H);
+    if(document.querySelector('.uvv.on,.uvv.peek')||(window.__wSpin&&Date.now()-window.__wSpin<1000)){last=t;return} /* ikke tegn mens trailer spilles – gir videoen full ro */
+    if(t-last<40)return;const dt=Math.min(3,(t-last)/16.7);last=t;const sec=(t-T0)/1000;ctx.clearRect(0,0,W,H);
     /* bokeh: driver sakte og puster */
     if(bk){ctx.globalAlpha=.75+.25*Math.sin(sec*.35);ctx.drawImage(bk,Math.sin(sec*.05)*18,Math.cos(sec*.04)*10);ctx.globalAlpha=1}
     /* lysslynge */
@@ -5966,7 +6003,7 @@ function uvWheel(el,o){o=o||{};const W=o.W||el.querySelector('.uvw');if(!W)retur
   const layout=()=>{const h=W.clientHeight,w=W.clientWidth;const ch=Math.max(140,Math.min(h*.82,370)),cw=Math.min(w*.25,ch*1.8);
     const R=n<3?0:Math.max(cw*.9,(cw/2)/Math.tan(Math.min(stepA,90)/2*Math.PI/180)*.985);W.style.setProperty('--cw',cw+'px');W.style.setProperty('--ch',ch+'px');W.style.setProperty('--R',R+'px');
     T.forEach((t,i)=>t.style.setProperty('--wt',`rotateY(${(i*stepA).toFixed(3)}deg) translateZ(${R.toFixed(1)}px)`));spin()};
-  const spin=()=>{ring.style.transform=`translateZ(calc(var(--R) * -1)) rotateX(-2.5deg) rotateY(${(-pos*stepA).toFixed(3)}deg)`;
+  const spin=()=>{window.__wSpin=Date.now();ring.style.transform=`translateZ(calc(var(--R) * -1)) rotateX(-2.5deg) rotateY(${(-pos*stepA).toFixed(3)}deg)`;
     T.forEach((t,i)=>{let d=i-pos;d=((d%n)+n)%n;if(d>n/2)d-=n;const ad=Math.abs(Math.round(d));t.dataset.wd=String(Math.min(ad,4));t.classList.toggle('uvw-f',i===cur);t.tabIndex=i===cur?0:-1})};
   const set=(i,foc)=>{let d=i-cur;d=((d%n)+n)%n;if(d>n/2)d-=n;pos+=d;cur=((i%n)+n)%n;try{localStorage.setItem(LK,cur)}catch(e){}spin();if(foc)T[cur].focus({preventScroll:true})};
   const step=dl=>set(cur+dl,true);
@@ -6250,6 +6287,7 @@ function fbPro(el){
     <section class="fbp-card"><div class="fbp-sh"><h3>Kommende kamper</h3><small id="fbpFxN"></small></div><div id="fbpFx" class="fbp-fx"><p class="muted">Henter kamper …</p></div></section>
     <section class="fbp-card"><div class="fbp-sh"><h3 id="fbpTabT">Tabell</h3><small>Oppdateres automatisk</small></div><div id="fbpTab" class="fbp-tw"><p class="muted">Henter tabell …</p></div><div class="fbp-leg" id="fbpLeg"></div></section>
    </div>
+   <div id="fbpBrk"></div>
    <div id="fbpCh"></div></div>`;
   loadFixtures().then(f=>{
     if(curView!=='fotball'||!$('fbpHero'))return;
@@ -6270,9 +6308,53 @@ function fbLeague(){
    .catch(()=>{const e=$('fbpFx');if(e)e.innerHTML='<div class="fbp-emp">Kunne ikke hente kamper akkurat nå.</div>'});
   fbTable(slug).then(rows=>{if(fbpLg!==slug||!$('fbpTab'))return;$('fbpTab').innerHTML=fbTabHtml(rows,slug);const me=$('fbpTab').querySelector('tr.me');if(me&&me.offsetTop>300)$('fbpTab').scrollTop=me.offsetTop-160})
    .catch(()=>{const e=$('fbpTab');if(e)e.innerHTML='<div class="fbp-emp">Kunne ikke hente tabell.</div>'});
+  try{brkRender(slug)}catch(e){}
   const rx=LRX[slug]||/football|fotball/i,chs=DB.live.filter(c=>fvis(c)&&rx.test(c.lc)).slice(0,40);
   $('fbpCh').innerHTML=chs.length?rail('📺 Kanaler · '+esc(L.name),chs,ccard,'live:tab=fb'):'';try{epgHydrate($('fbpCh'))}catch(e){}
 }
+/* v271: sluttspillkart (live + kommende runder) for cuper – CL, EL, ECL, Nations League, EM, VM */
+const BRK_LG=new Set(['uefa.champions','uefa.europa','uefa.europa.conf','uefa.nations','uefa.euro','fifa.world']);
+const BRK_R=[['knockout-round-playoffs|playoff|play-off|knockout-playoff','Playoff'],['round-of-32|round of 32','32-delsfinale'],['round-of-16|round of 16','Åttedelsfinaler'],['quarterfinal|quarter-final','Kvartfinaler'],['semifinal|semi-final','Semifinaler'],['third|3rd','Bronsefinale'],['^final$|^final\\b|\\bfinal$','Finale']];
+const brkCache={};
+function brkRound(e){const s=((e.season&&e.season.slug)||'')+' | '+(((e.competitions||[])[0]||{}).notes||[]).map(n=>n.headline||'').join(' ');const l=s.toLowerCase();
+  for(let i=0;i<BRK_R.length;i++){const rx=new RegExp(BRK_R[i][0]);if(/third|3rd/.test(l)&&i!==5)continue;if(rx.test(l.split('|')[0].trim())||rx.test(l.split('|')[1]||''))return i}
+  return -1}
+async function brkLoad(slug){const c=brkCache[slug];if(c&&Date.now()-c.t<60000)return c.d;
+  const y=new Date().getFullYear(),get=u=>jget(u).catch(()=>null);
+  const js=await Promise.all([y-1,y,y+1].map(yy=>get(ESPN+slug+'/scoreboard?dates='+yy+'&limit=900')));
+  const seen=new Set(),ev=[];for(const j of js)for(const e of ((j&&j.events)||[])){if(seen.has(e.id))continue;seen.add(e.id);const r=brkRound(e);if(r<0)continue;const p=parseEvents({events:[e]},'')[0];if(!p)continue;p.r=r;try{const cc=e.competitions[0].competitors;p.hw=!!(cc.find(x=>x.homeAway==='home')||{}).winner;p.aw=!!(cc.find(x=>x.homeAway==='away')||{}).winner}catch(_){}p.season=(e.season&&e.season.year)||0;ev.push(p)}
+  /* bare siste sesong */
+  const ms=Math.max(0,...ev.map(e=>e.season));const cur=ev.filter(e=>e.season===ms||!e.season);
+  brkCache[slug]={t:Date.now(),d:cur};return cur}
+function brkTies(list){const nm=t=>(t&&(t.shortDisplayName||t.displayName||t.name))||'';const m=new Map();
+  for(const e of list.sort((a,b)=>a.t-b.t)){const k=[nm(e.h),nm(e.a)].sort().join('|');if(!m.has(k))m.set(k,[]);m.get(k).push(e)}
+  return [...m.values()].map(ms=>{const f=ms[0],A=f.h,B=f.a;let ga=0,gb=0,any=false;const live=ms.some(x=>x.state==='in'),done=ms.every(x=>x.state==='post');
+    for(const x of ms){if(x.state==='pre')continue;any=true;const hs=+x.hs||0,as=+x.as||0;if(nm(x.h)===nm(A)){ga+=hs;gb+=as}else{ga+=as;gb+=hs}}
+    const nxt=ms.find(x=>x.state!=='post')||ms[ms.length-1];
+    const lst=ms[ms.length-1];let win=done?(ga>gb?'A':gb>ga?'B':''):'';if(done&&!win&&lst){const wt=lst.hw?lst.h:lst.aw?lst.a:null;if(wt)win=nm(wt)===nm(A)?'A':'B'}
+    return {A,B,ga,gb,any,live,done,legs:ms.length,t:nxt.t,ms,win}})}
+function brkTeam(t,g,show,w){const nm=(t&&(t.shortDisplayName||t.displayName||t.name))||'Ikke klart';const lg=cinLogo(t);const tbd=/winner|vinner|tbd|to be|runner|loser|^w\d|^\d/i.test(nm);
+  return `<div class="brk-tm${w?' w':''}${tbd?' tbd':''}">${lg&&!tbd?`<img src="${esc(lg)}" alt="">`:'<i class="brk-ph"></i>'}<span>${esc(tbd?'Avgjøres':nm)}</span>${show?`<b>${g}</b>`:''}</div>`}
+async function brkRender(slug){const box=$('fbpBrk');if(!box)return;
+  if(!BRK_LG.has(slug)){box.innerHTML='';return}
+  box.innerHTML='<section class="fbp-card brk"><div class="fbp-sh"><h3>🏆 Sluttspill</h3><small>Henter …</small></div></section>';
+  let ev=[];try{ev=await brkLoad(slug)}catch(e){}
+  if(fbpLg!==slug||!$('fbpBrk'))return;
+  const SK={'uefa.champions':[0,8],'uefa.europa':[0,8],'uefa.europa.conf':[0,8],'uefa.nations':[3,4],'uefa.euro':[2,8],'fifa.world':[1,16]};
+  const sk=!ev.length&&SK[slug];if(!ev.length&&!sk){box.innerHTML='';return}
+  const rounds=sk?[sk[0]]:[...new Set(ev.map(e=>e.r))].filter(r=>r!==5).sort((a,b)=>a-b);
+  /* fyll på kommende runder fram til finalen */
+  const last=rounds[rounds.length-1];const all=rounds.concat([2,3,4,6].filter(r=>r>last&&(last>=1||r>=2)));
+  let prevN=0,prevR=-1;const cols=all.map(r=>{let ties=brkTies(ev.filter(e=>e.r===r));if(sk&&r===sk[0])ties=Array(sk[1]).fill(null);const want=prevN?(prevR===0?prevN:Math.max(1,Math.ceil(prevN/2))):ties.length;prevR=r;
+      if(r>last||ties.length<want){while(ties.length<want)ties.push(null)}prevN=ties.length;return {r,ties}});
+  const lv=ev.some(e=>e.state==='in');
+  const tie=x=>{if(!x)return `<div class="brk-tie tbd"><div class="brk-tm tbd"><i class="brk-ph"></i><span>Avgjøres</span></div><div class="brk-tm tbd"><i class="brk-ph"></i><span>Avgjøres</span></div><small>Kommer</small></div>`;
+    const nm=t=>(t&&(t.shortDisplayName||t.displayName))||'';const d=new Date(x.t);
+    const info=x.live?'<em class="brk-lv"><i></i>DIREKTE</em>':x.done?(x.legs>1?'Sammenlagt':'Ferdig'):`${d.toLocaleDateString('nb-NO',{weekday:'short',day:'numeric',month:'short'})} · ${fmtTime(x.t)}${x.legs>1?' · '+x.legs+' kamper':''}`;
+    return `<div class="brk-tie${x.live?' live':''}" tabindex="0" data-find="${esc(nm(x.A)+'|'+nm(x.B)+'|'+(LEAGUES.find(l=>l.slug===slug)||{}).name)}">${brkTeam(x.A,x.ga,x.any,x.win==='A')}${brkTeam(x.B,x.gb,x.any,x.win==='B')}<small>${info}</small></div>`};
+  box.innerHTML=`<section class="fbp-card brk"><div class="fbp-sh"><h3>🏆 Sluttspill</h3><small>${lv?'<b class="brk-lvt">● Live – oppdateres hvert minutt</b>':sk?'Sluttspillet er ikke trukket ennå – fylles ut automatisk':'Oppdateres automatisk'}</small></div>
+    <div class="brk-wrap">${cols.map(c=>`<div class="brk-col"><h4>${BRK_R[c.r][1]}</h4><div class="brk-ties">${c.ties.map(tie).join('')}</div></div>`).join('')}<div class="brk-col brk-cup"><div class="brk-trophy">🏆</div><small>Vinner</small><b>${(()=>{const f=cols.find(c=>c.r===6);const t=f&&f.ties[0];return t&&t.win?esc((t.win==='A'?t.A:t.B).displayName||''):'?'})()}</b></div></div></section>`;
+  clearTimeout(window.__brkT);window.__brkT=setTimeout(()=>{if(curView==='fotball'&&fbpLg===slug&&$('fbpBrk')){brkCache[slug]=null;brkRender(slug)}},lv?60000:600000)}
 function fbCd(){
   clearInterval(window.__fbCd);
   const up=()=>{const el=document.querySelector('.fbp-cd');if(!el){clearInterval(window.__fbCd);return}let d=Math.max(0,+el.dataset.t-Date.now());
