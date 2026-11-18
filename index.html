@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=260;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=261;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2084,6 +2084,7 @@ html.lite .uvx-bokeh i,html.lite .uvx-glow{animation:none}
 #hMenu button i{font-style:normal;width:26px;text-align:center}
 #hMenu button em{margin-left:auto;font-style:normal;background:#ff2d6a;color:#fff;border-radius:9px;padding:1px 7px;font-size:12px}
 /* v260: 3D-hjul, innstillinger på hjulet, gjennomsiktig topp */
+@media (min-width:761px){#uvW .uvt,#uvW .uvt:hover,#uvW .uvt:focus,html.tvm #uvW .uvt:focus{transform:var(--wt,translate(-50%,-50%))!important}}
 @media (min-width:761px){.uvg{grid-template-rows:calc((var(--tvh,100vh) - 74px)*.47)!important}}
 .uvw{perspective:1200px;perspective-origin:50% 30%;transform-style:preserve-3d}
 .uvw::before{content:"";position:absolute;left:50%;top:60%;width:calc(var(--rx,600px)*2.1);height:calc(var(--ry,60px)*2.4 + 40px);transform:translate(-50%,calc(-100% + 24px));border-radius:50%;border:2px solid rgba(255,214,140,.22);box-shadow:0 0 40px rgba(255,190,110,.18),inset 0 0 50px rgba(255,190,110,.10);pointer-events:none}
@@ -5900,7 +5901,7 @@ function uvWheel(el){const W=el.querySelector('.uvw');if(!W)return;const T=[...W
   const draw=()=>{const w=W.clientWidth,h=W.clientHeight,rx=w*.42,ry=h*.16;W.style.setProperty('--rx',rx+'px');W.style.setProperty('--ry',ry+'px');
     T.forEach((t,i)=>{let d=i-pos;d=((d%n)+n)%n;if(d>n/2)d-=n;const a=d/n*Math.PI*2,z=Math.cos(a),f=(z+1)/2,sn=Math.sin(a);
       const x=sn*rx,y=-(1-z)*ry,sc=.36+.64*Math.pow(f,2),r3=-sn*38;
-      t.style.transform=`translate(-50%,-50%) translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,${((z-1)*160).toFixed(0)}px) rotateY(${r3.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+      t.style.setProperty('--wt',`translate(-50%,-50%) translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,${((z-1)*160).toFixed(0)}px) rotateY(${r3.toFixed(1)}deg) scale(${sc.toFixed(3)})`);
       t.style.zIndex=String(Math.round(f*100));t.style.opacity=(.2+.8*f).toFixed(2);t.style.filter=`brightness(${(.4+.6*f).toFixed(2)}) saturate(${(.6+.4*f).toFixed(2)})`;
       t.classList.toggle('uvw-f',i===cur);t.tabIndex=i===cur?0:-1})};
   const set=(i,foc)=>{pos+=i-cur;cur=((i%n)+n)%n;try{localStorage.setItem('uvWc',cur)}catch(e){}draw();if(foc)T[cur].focus({preventScroll:true})};
