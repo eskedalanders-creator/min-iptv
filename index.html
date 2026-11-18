@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=245;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=246;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -5675,7 +5675,7 @@ const UVI={
  fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2c.8 4 5.5 6.2 5.5 12.2a5.5 5.5 0 0 1-11 0c0-3 2-4.6 3.2-7 1.1 2 1.6 2.8 2.3 3.1.8-2.3 0-5.4 0-8.3z"/></svg>'
 };
 function uvTile(go,cls,title,ic,media,sub){
-  if(cls==='uv-mt')return `<div class="uvt ${cls}" tabindex="0" data-uvk="${cls}" data-mtile="1"><div class="uvh"><span class="uvi">${ic}</span>${title}<span class="uvh-r"><button class="uvpill" data-go="live:chip=brann">${UVI.fire} Brann-kanaler</button></span></div><div class="uvm">${media}<div class="uvhero">${uvFan('vod')}<div class="uvhero-t"><small>Trailere og høydepunkter</small><b>Starter straks …</b></div></div><div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i><em id="uvTagT">HØYDEPUNKTER</em></span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Se kampen ›</span></div></div>`;
+  if(cls==='uv-mt')return `<div class="uvt ${cls}" tabindex="0" data-uvk="${cls}" data-mtile="1"><div class="uvh"><span class="uvi">${ic}</span>${title}<span class="uvh-r"><button class="uvpill" data-go="live:chip=brann">${UVI.fire} Brann-kanaler</button></span></div><div class="uvm">${media}<div class="uvhero">${uvFan('vod')}<div class="uvhero-t"><small>Trailere og høydepunkter</small><b id="uvHeroS">Starter straks …</b></div></div><div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i><em id="uvTagT">HØYDEPUNKTER</em></span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Se kampen ›</span></div></div>`;
   return `<div class="uvt ${cls}" tabindex="0" data-go="${go}" data-uvk="${cls}"><div class="uvh"><span class="uvi">${ic}</span>${title}</div><div class="uvm">${media}<div class="uvv"></div><div class="uvsh"></div><span class="uvtag"><i></i>TRAILER</span><div class="uvcap"></div></div><div class="uvs"><span class="uvsub">${sub}</span><span class="uvgo">Åpne ›</span></div></div>`;
 }
 function uvFan(kind){
@@ -5804,6 +5804,7 @@ async function uvPlay(tiles,k,next,depth){
   if(UV.ctl){try{UV.ctl.kill()}catch(e){}UV.ctl=null;try{accRelease('uv')}catch(e){}}
   document.querySelectorAll('.uvt.play').forEach(t=>t.classList.remove('play'));
   const t=tiles.matches||tiles[k];if(!t||!tiles[k]||curView!=='home')return;UV.cur=k;UV.heroIt=null;
+  const hs=m=>{const e=$('uvHeroS');if(e)e.textContent=m};hs('Henter '+({movies:'filmtrailer',series:'serietrailer',sport:'sport',matches:'høydepunkter'}[k]||'')+' …');
   const box=t.querySelector('.uvv'),cap=t.querySelector('.uvcap');let it=null,id='',lb='',url='';
   if(k==='matches'){
     const it=t.querySelector('.uvmt-i.on');if(!it){UV.cur=null;return uvT(next,800)}
@@ -5819,7 +5820,7 @@ async function uvPlay(tiles,k,next,depth){
     const pool=uvPool(k==='movies'?'vod':'ser');if(!pool.length){UV.cur=null;return next()}
     for(let n=0;n<6&&!id;n++){const c=pool[UV.pi[k]++%pool.length];if(UV.bad[c.key])continue;it=c;id=UV.ytBad>2?'':await uvTrailer(c).catch(()=>'');if(UV.cur!==k)return;
       if(!id&&UV.ytBad>2&&(!TVM||DESKTOP)){const r=await cinInfo(c).catch(()=>({}));url=c.t==='vod'?c.url:(r&&r.ep);if(url)break}}
-    if(!it||(!id&&!url)){UV.cur=null;return uvT(()=>next(),400)}
+    if(!it||(!id&&!url)){hs('Fant ingen trailer ('+(UV.ytBad>2?'YouTube feiler':'ingen treff')+')');UV.cur=null;return uvT(()=>next(),400)}
     lb=it.nm||it.name;
   }
   if(curView!=='home'||UV.cur!==k)return;
@@ -5828,6 +5829,7 @@ async function uvPlay(tiles,k,next,depth){
   const o={max:k==='sport'?40000:45000,onStart:()=>{t.classList.add('play');if(id)UV.ytBad=0},
     onEnd:()=>{if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;if(k==='matches'&&UV.mtNext)UV.mtNext();uvT(next,600)}},
     onFail:()=>{if(id){UV.ytBad++;if(UV.ytBad===2)UV.ytHost=UV.ytHost?0:1}if(it)UV.bad[it.key]=1;if(k==='matches'&&UV.mck){const mc=LSget('uvMq',{});if(mc[UV.mck]===id){mc[UV.mck]='';LSset('uvMq',mc)}}if(UV.cur===k){t.classList.remove('play');UV.cur=null;UV.ctl=null;uvT(()=>uvPlay(tiles,k,next,depth+1),300)}}};
+  hs((id?'Spiller av: ':'Utsnitt: ')+lb+(UV.ytBad?' (forsøk '+(UV.ytBad+1)+(UV.ytHost?', youtube.com':'')+')':''));
   UV.ctl=id?uvYT(box,id,o):uvStream(box,url,o);
 }
 async function uvExpiry(){
