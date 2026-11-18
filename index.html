@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=268;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=269;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2164,22 +2164,6 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
 .uvbr-wm{font:800 clamp(22px,2vw,40px)/1 system-ui;color:#fff;letter-spacing:-.01em}
 .uvbr-set{background:radial-gradient(90% 80% at 50% 110%,rgba(140,160,200,.25),#0d0f16 70%)!important}
 .uvbr-nf{background:radial-gradient(90% 70% at 50% 120%,rgba(229,9,20,.4),#000 68%)!important}
-/* v266: Sport – samme oppsett som forsiden (stort bilde helt opp + 3D-hjul) */
-@media (min-width:761px){
- body:has(#v-fotball.on.sphub) header{position:absolute!important;top:0;left:0;right:0;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))!important;border:0!important}
- #v-fotball.sphub.on{padding:0!important;height:var(--tvh,100vh);overflow:hidden!important;display:flex!important;flex-direction:column;background:radial-gradient(60% 55% at 50% 100%,rgba(30,90,60,.35),transparent 70%),linear-gradient(180deg,#07130e,#040a08)}
- #v-fotball.sphub .sph{flex:none;margin:0!important;height:calc(var(--tvh,100vh)*.6)!important;border-radius:0!important;border:0!important;box-shadow:none!important;-webkit-mask-image:linear-gradient(180deg,#000 74%,transparent);mask-image:linear-gradient(180deg,#000 74%,transparent)}
- #v-fotball.sphub .sph-in{top:auto!important;bottom:18%!important;left:4vw!important}
- #spW{position:relative;flex:1;min-height:200px;perspective:2400px;perspective-origin:50% 35%}
- #spW .uvw-ring{top:43%}
- #spW .stile,#spW .stile:hover,#spW .stile:focus,html.tvm #spW .stile:focus{transform:var(--wt)!important}
- #spW .stile{position:absolute!important;left:calc(var(--cw) / -2)!important;top:calc(var(--ch) / -2)!important;width:var(--cw)!important;height:var(--ch)!important;min-height:0!important;margin:0!important;
-   backface-visibility:hidden;-webkit-backface-visibility:hidden;backdrop-filter:none!important;border-radius:16px!important;overflow:hidden;opacity:1;transition:opacity .6s ease,box-shadow .4s!important;border:1px solid rgba(255,255,255,.2)!important}
- #spW .stile::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#020805;opacity:0;transition:opacity .6s ease;pointer-events:none;z-index:9}
- #spW .stile[data-wd="1"]::after{opacity:.32}#spW .stile[data-wd="2"]::after{opacity:.6}
- #spW .stile[data-wd="3"]{opacity:.55}#spW .stile[data-wd="3"]::after{opacity:.78}#spW .stile[data-wd="4"]{opacity:0}
- #spW .stile.uvw-f{border-color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 50px rgba(160,255,200,.22),0 40px 90px -25px #000!important}
-}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -4190,8 +4174,6 @@ function renderFotball(){
   try{uvStop()}catch(e){}
   el.classList.remove('sphub');if(spOpen==='fotball'||spOpen==='brann')return fbPro(el);
   if(spOpen)return renderSportDetail(el);
-  if(innerWidth>760){const hub=spHub().replace(/^<div class="sgrid big">/,'').replace(/<\/div>$/,'');el.classList.add('sphub');el.innerHTML=sphHtml()+`<div class="uvw" id="spW">${hub}</div>`;sphStart();
-    try{uvWheel(el,{W:$('spW'),sel:':scope>.stile',view:'fotball',key:'spWc',hero:el.querySelector('.sph-btn .primary'),enter:1,ok:()=>!spOpen})}catch(e){}return}
   el.classList.remove('sphub');
   el.innerHTML=sphHtml()+`<h2 class="sph-t">Velg sport</h2>${spHub()}`;sphStart();
 }
