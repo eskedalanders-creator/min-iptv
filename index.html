@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=239;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=240;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1786,6 +1786,41 @@ body.tv .tvr:focus,html.tvm .tvr:focus{transform:none!important;outline:none!imp
 .rdm-l{width:32px;height:32px;border-radius:50%;background:#fff center/contain no-repeat;flex:none;display:grid;place-items:center}
 .rd-e,.rdc-l.rd-e{background:#2a1a10!important;color:#ff8a3d}.rd-e svg{width:60%;height:60%;color:#ff8a3d!important}
 #v-radio{padding:24px clamp(16px,3vw,48px) 60px}
+/* v240: TV-arkiv (NRK TV + TV 2 Play) */
+#v-arkiv{padding:24px clamp(16px,3vw,48px) 60px}
+.akw .aktop{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:14px}
+.akw .aktop h2{margin:0}
+.aktabs{display:flex;gap:10px}
+.aktabs button{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+.aktabs button.on{background:rgba(255,255,255,.16);border-color:var(--accent2)}
+.aklg{display:inline-grid;place-items:center;min-width:42px;height:30px;padding:0 6px;border-radius:8px;font:900 15px/1 system-ui;color:#fff}
+.aklg.nrk{background:#0a0a0a;border:1px solid #444;letter-spacing:.04em}
+.aklg.tv2{background:#e2001a}
+.aklg.big{min-width:120px;height:120px;font-size:72px;border-radius:24px;flex:0 0 auto}
+.akcats{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px}
+.nkc{flex:0 0 300px;width:300px;cursor:pointer;transition:.18s;outline:none}
+.nkc:hover,.nkc:focus-visible,.nkc:focus{transform:translateY(-4px) scale(1.03)}
+.nki{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:linear-gradient(160deg,#20263a,#0e1018);border:1px solid var(--line)}
+.nkc:hover .nki,.nkc:focus .nki{border-color:var(--accent2);box-shadow:0 12px 28px -10px var(--glow)}
+.nkc:focus .nki{outline:3px solid #fff;outline-offset:2px}
+.nki img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.nkf{position:absolute;inset:0;display:grid;place-items:center;padding:10px;text-align:center;font-weight:700;color:#cfd3e0}
+.nki img+.nkf{display:none}
+.nkb{position:absolute;left:8px;top:8px;background:#c8102e;color:#fff;font:800 10px/1 system-ui;letter-spacing:.06em;padding:4px 7px;border-radius:6px}
+.nkb.s{background:rgba(0,0,0,.65)}
+.nkp{position:absolute;left:0;bottom:0;height:4px;background:var(--accent2,#e50914)}
+.nkt{margin-top:7px;font-size:14px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nks{font-size:12px;color:#a9adbb;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.nkgrid .nkc{width:auto}
+.nkhero{position:relative;min-height:230px;border-radius:18px;padding:22px 26px;margin-bottom:16px;background:#12141f center/cover no-repeat;display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+.nkhero h2{margin:8px 0 0;font-size:clamp(26px,3vw,44px)}
+.nkhero p{margin:0;max-width:720px;color:#d7d9e3}
+.nkhero .bpill{position:absolute;left:18px;top:16px}
+.aktv2{display:flex;gap:26px;align-items:flex-start;max-width:900px}
+.aktv2 h3{margin:4px 0 6px;font-size:26px}
+.uvb-nrk span .aklg{min-width:0;height:auto;padding:2px 5px;font-size:12px}
+
 .rdh svg{color:#ff8a3d!important}
 .rdnow{background:linear-gradient(135deg,rgba(255,138,61,.18),rgba(255,255,255,.04) 50%)!important}
 .rdn-l{width:clamp(110px,12vw,170px);aspect-ratio:1;border-radius:18px;background:#fff center/contain no-repeat;flex:none;display:grid;place-items:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
@@ -1853,6 +1888,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
     <button data-v="series">Serier</button>
     <button data-v="live">TV</button>
     <button data-v="movies">Filmer</button>
+     <button data-v="arkiv">NRK / TV 2</button>
     <button data-v="fotball">Sport</button>
     <button data-v="apps">Apper</button>
     <button data-v="cams">IP-kamera</button>
@@ -1927,6 +1963,7 @@ html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
   <section class="view" id="v-spotify"></section>
   <section class="view" id="v-remote"></section>
   <section class="view" id="v-radio"></section>
+  <section class="view" id="v-arkiv"></section>
 </div>
 
 <div id="ov">
@@ -3245,7 +3282,7 @@ const byNew=(a,b)=>(b.ad||0)-(a.ad||0);
 
 /* ===================== Visninger ===================== */
 let curView='home';
-const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify','remote','radio'];
+const VIEWS=['home','tv','guide','fotball','live','movies','series','fav','search','matches','apps','cams','settings','spotify','remote','radio','arkiv'];
 let navStack=[];
 function showView(v,force,np){
   if(!force&&v===curView&&$('v-'+v).classList.contains('on'))return;
@@ -3276,7 +3313,7 @@ function showView(v,force,np){
   if(v==='settings')renderSettings();
   if(v==='spotify')renderSpotify();
   if(v==='remote')renderRemote();
-  if(v==='radio')renderRadio();
+  if(v==='radio')renderRadio();   if(v==='arkiv')renderArkiv();
   $('v-'+v).scrollTop=0;
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
@@ -4134,6 +4171,7 @@ function appBack(){
   if($('ov').classList.contains('on')){closePlayer();return true}
   const ds=document.querySelectorAll('dialog[open]'),d=ds[ds.length-1];if(d){d.close();return true}
   if(curView==='fotball'&&spOpen){spOpen=spParent(spOpen);renderFotball();return true}
+  if(curView==='arkiv'&&window.akBack&&window.akBack())return true;
   if(curView!=='home'){if(navStack.length)goBack();else showView('home',true,true);return true}
   return false;
 }
@@ -5121,7 +5159,7 @@ function openApp(id,url,name){
 }
 document.addEventListener('submit',e=>{if(e.target.id==='arkivF')e.preventDefault()});
 document.addEventListener('click',e=>{const b=e.target.closest('#arkivF button');if(b){e.preventDefault();const q=encodeURIComponent(document.getElementById('arkivQ').value.trim());
-  if(b.dataset.s==='nrk')webWin('ap-nrk',q?'https://tv.nrk.no/sok?q='+q:'https://tv.nrk.no/');else webWin('ap-tv2',q?'https://play.tv2.no/sok?q='+q:'https://play.tv2.no/');return}
+  if(b.dataset.s==='nrk'){AK.tab='nrk';AK.series=null;AK.q=decodeURIComponent(q||'');showView('arkiv',true)}else openApp('ap-tv2',q?'https://play.tv2.no/sok?q='+q:'https://play.tv2.no/','TV 2 Play');return}
   const a=e.target.closest('a.app');if(a){e.preventDefault();openApp(a.dataset.app,a.href,a.querySelector('span:last-child').firstChild.textContent)}});
 /* ===== TV / fjernkontroll ===== */
 let tvLast=null;document.addEventListener('focusin',e=>{const t=e.target;if(t&&t.closest&&!t.closest('#vside,#tvMenu,header,#nav,dialog'))tvLast=t});
@@ -5579,6 +5617,7 @@ function uvHome(){
   <div class="uvq">
    <button class="uvb uvb-sp" data-go="spotify"><span>${SPI}</span>Spotify</button>
    <button class="uvb uvb-rd" data-go="radio"><span>${RDI}</span>Radio</button>
+   <button class="uvb uvb-nrk" data-go="arkiv"><span><b class="aklg nrk">NRK</b></span>NRK / TV 2</button>
    <button class="uvb" data-go="fav"><span>${UVI.star}</span>Favoritter</button>
    <button class="uvb" data-go="live:chip=brann"><span>${UVI.fire}</span>Brann-kanaler</button>
    <button class="uvb" data-go="apps"><span>${UVI.apps}</span>Apper</button>
@@ -6389,7 +6428,125 @@ window.appUpdNow=()=>{if(!NATIVE){try{navigator.serviceWorker&&navigator.service
 setInterval(()=>{if(document.visibilityState==='visible')checkAppUpdate()},20*60000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-(window.__lastUpdChk||0)>5*60000){window.__lastUpdChk=Date.now();checkAppUpdate()}});
 detectProxy().then(loadSources).then(seedCheck).then(()=>{setTimeout(()=>autoUpdate(false),9000);if(!sources.length){showView('home',true);renderSources();$('dlgSrc').showModal()}});
+
+/* ===================== v240: TV-arkiv – NRK TV innebygd (psapi.nrk.no) + TV 2 Play ===================== */
+const NK='https://psapi.nrk.no';
+const nkCache={};
+const AK={tab:'nrk',page:'frontpage',series:null,season:null,q:'',items:{},ok:null};
+async function nkGet(p,ttl){
+  const u=/^https?:/.test(p)?p:NK+p;const c=nkCache[u];if(c&&Date.now()-c.t<(ttl||600000))return c.j;
+  let j;try{j=await jget(u)}catch(e){const r=await netReq('GET',u);if(!r.ok)throw new Error('HTTP '+r.status);j=JSON.parse(r.text)}
+  nkCache[u]={t:Date.now(),j};return j}
+const nkImg=(a,w)=>{if(a&&!Array.isArray(a))a=a.webImages||a.images;if(!Array.isArray(a)||!a.length)return '';
+  const s=a.map(x=>({u:x.uri||x.url||x.imageUrl,w:x.width||x.pixelWidth||0})).filter(x=>x.u).sort((x,y)=>x.w-y.w);
+  return (s.find(x=>x.w>=(w||600))||s[s.length-1]||{}).u||''};
+const nkDur=s=>{s=+s||0;if(!s)return '';const m=Math.round(s/60);return m>=60?Math.floor(m/60)+' t '+(m%60)+' min':m+' min'};
+function nkReg(o){const k=o.kind+':'+o.id;AK.items[k]=o;return k}
+function nkPlug(p){
+  const d=p.displayContractContent||{},t=p.targetType;
+  const o={title:d.contentTitle||'',desc:d.description||'',img:nkImg(d.displayContractImage,600)||nkImg(d.fallbackImage,600)||nkImg(d.backdropImage,600)};
+  if(t==='series'&&p.series){o.kind='series';o.id=p.series.seriesId}
+  else if(t==='episode'&&p.episode){o.kind='prog';o.id=p.episode.programId;o.sid=p.episode.seriesId;o.dur=p.episode.duration}
+  else if(t==='standaloneProgram'&&p.standaloneProgram){o.kind='prog';o.id=p.standaloneProgram.programId}
+  else if(t==='program'&&p.program){o.kind='prog';o.id=p.program.programId}
+  else if(t==='channel'&&p.channel){o.kind='chan';o.id=p.channel.channelId}
+  else if(t==='page'&&p.page){o.kind='page';o.id=p.page.pageId}
+  else return null;
+  return o.id&&o.title?o:null}
+const nkCard=o=>`<div class="nkc${o.kind==='chan'?' nklive':''}" tabindex="0" data-nk="${esc(nkReg(o))}"><div class="nki">${o.img?`<img loading="lazy" decoding="async" src="${esc(o.img)}" alt="">`:''}<span class="nkf">${esc(o.title)}</span>${o.kind==='chan'?'<span class="nkb">● DIREKTE</span>':o.kind==='series'?'<span class="nkb s">SERIE</span>':''}${o.pct?`<i class="nkp" style="width:${o.pct}%"></i>`:''}</div><div class="nkt">${esc(o.title)}</div>${o.sub?`<div class="nks">${esc(o.sub)}</div>`:''}</div>`;
+const nkRail=(t,a)=>a.length?`<section class="rail"><div class="rh"><h3>${esc(t)}</h3></div><div class="rs">${a.map(nkCard).join('')}</div>${NAVB}</section>`:'';
+function nkTop(){
+  return `<div class="akw"><div class="aktop"><h2>📺 TV-arkiv</h2><div class="aktabs"><button data-aktab="nrk" class="${AK.tab==='nrk'?'on':''}"><b class="aklg nrk">NRK</b> NRK TV</button><button data-aktab="tv2" class="${AK.tab==='tv2'?'on':''}"><b class="aklg tv2">2</b> TV 2 Play</button></div></div><div id="akBody"></div></div>`}
+function renderArkiv(){const el=$('v-arkiv');if(!el)return;el.innerHTML=nkTop();if(AK.tab==='tv2')return akTv2();if(AK.series)return nkSeries(AK.series,AK.season);nkHome()}
+function nkFail(e){const B=$('akBody');if(!B)return;dlog&&dlog('nrk','feil '+((e&&e.message)||e));
+  B.innerHTML=`<p class="muted">Fikk ikke hentet NRK-arkivet direkte (${esc((e&&e.message)||String(e))}).</p><button class="primary" data-akweb="nrk">Åpne NRK TV i stedet</button>`}
+async function nkHome(){const B=$('akBody');if(!B)return;AK.items={};
+  B.innerHTML=`<div class="spsrch"><input id="nkQ" placeholder="Søk i hele NRK-arkivet – serier, filmer, dokumentarer …" autocomplete="off" value="${esc(AK.q)}"></div><div class="akcats" id="nkCats"></div><div id="nkMain"><p class="muted">Henter fra NRK …</p></div>`;
+  const q=$('nkQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{AK.q=q.value.trim();AK.q.length>1?nkSearch(AK.q):nkPage(AK.page)},450)};
+  q.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();clearTimeout(tm);AK.q=q.value.trim();if(AK.q)nkSearch(AK.q)}};
+  try{const pl=await nkGet('/tv/pages',36e5);const C=$('nkCats');if(C)C.innerHTML=[['frontpage','Forsiden']].concat((pl.pageListItems||[]).filter(p=>p.id!=='barn'&&p.id!=='samisk').map(p=>[p.id,p.title])).map(([id,t])=>`<button class="chip${AK.page===id?' on':''}" data-nkpage="${esc(id)}">${esc(t)}</button>`).join('')}catch(e){}
+  AK.q.length>1?nkSearch(AK.q):nkPage(AK.page)}
+async function nkPage(id){const M=$('nkMain');if(!M)return;AK.page=id;
+  document.querySelectorAll('#nkCats .chip').forEach(b=>b.classList.toggle('on',b.dataset.nkpage===id));
+  M.innerHTML='<p class="muted">Henter fra NRK …</p>';
+  let j;try{j=await nkGet('/tv/pages/'+encodeURIComponent(id))}catch(e){return nkFail(e)}
+  if(!$('nkMain'))return;let h='';
+  const fort=hist.filter(x=>/^nrk:/.test(x.k)&&x.dur&&x.pos>10&&x.pos<x.dur-60).slice(0,20).map(x=>({kind:'hist',id:x.k,title:x.name,img:x.logo,pct:Math.round(x.pos/x.dur*100)}));
+  if(id==='frontpage'&&fort.length)h+=nkRail('Fortsett å se fra NRK',fort);
+  for(const s of (j.sections||[])){if(s.type!=='included'||!s.included||/logg deg på/i.test(s.included.title||''))continue;
+    const a=(s.included.plugs||[]).map(nkPlug).filter(Boolean);h+=nkRail(s.included.title||'',a)}
+  $('nkMain').innerHTML=h||'<p class="muted">Ingenting å vise her akkurat nå.</p>'}
+async function nkSearch(q){const M=$('nkMain');if(!M)return;M.innerHTML='<p class="muted">Søker …</p>';
+  let j;try{j=await nkGet('/search?q='+encodeURIComponent(q)+'&pageSize=50',300000)}catch(e){return nkFail(e)}
+  if(!$('nkMain')||AK.q!==q)return;
+  const ser=[],prog=[];
+  for(const x of (j.hits||[])){const h=x.hit||{};const o={title:h.title||'',desc:h.description||'',img:nkImg(h.image,600)};
+    if(x.type==='serie'){o.kind='series';o.id=h.id;ser.push(o)}
+    else if(x.type==='program'||x.type==='episode'){o.kind='prog';o.id=h.id;if(x.type==='episode'){const m=/^serie\/([^/]+)\//.exec(h.url||'');if(m){o.sid=m[1];o.sub=m[1].replace(/-/g,' ')}}prog.push(o)}}
+  $('nkMain').innerHTML=(nkRail('Serier',ser)+nkRail('Programmer og episoder',prog))||`<p class="muted">Fant ingenting på «${esc(q)}» hos NRK.</p>`}
+function nkSeasons(nav){const out=[];const walk=a=>(a||[]).forEach(s=>{if(s.type==='season')out.push(s);if(s.sections)walk(s.sections)});walk(nav&&nav.sections);return out}
+async function nkSeries(id,season){const B=$('akBody');if(!B)return;AK.series=id;AK.items={};
+  B.innerHTML='<p class="muted">Henter serien …</p>';
+  let s;try{s=await nkGet('/tv/catalog/series/'+encodeURIComponent(id))}catch(e){return nkFail(e)}
+  const meta=s.sequential||s.standard||s.news||{};const T=meta.titles||{};
+  const seas=nkSeasons(s.navigation);if(!season)season=(seas[0]||{}).id;AK.season=season;
+  const bg=nkImg(meta.backdropImage||meta.image,1280)||nkImg(meta.image,960);
+  B.innerHTML=`<div class="nkhero"${bg?` style="background-image:linear-gradient(90deg,rgba(8,9,14,.95) 30%,rgba(8,9,14,.35)),url('${esc(bg)}')"`:''}><button class="bpill" data-akback="1">‹ Tilbake</button><h2>${esc(T.title||id)}</h2><p>${esc(T.subtitle||'')}</p></div>
+    ${seas.length>1?`<div class="akcats">${seas.map(x=>`<button class="chip${x.id===season?' on':''}" data-nkseason="${esc(x.id)}">${esc(x.title)}</button>`).join('')}</div>`:''}<div id="nkEps"><p class="muted">Henter episoder …</p></div>`;
+  if(!season){$('nkEps').innerHTML='<p class="muted">Ingen episoder tilgjengelig.</p>';return}
+  let ss;try{ss=await nkGet('/tv/catalog/series/'+encodeURIComponent(id)+'/seasons/'+encodeURIComponent(season))}catch(e){$('nkEps').innerHTML='<p class="muted">Fikk ikke hentet episodene.</p>';return}
+  if(!$('nkEps')||AK.series!==id)return;
+  const em=ss._embedded||{};let eps=em.episodes||em.instalments||[];if(!Array.isArray(eps))eps=(eps._embedded&&(eps._embedded.episodes||eps._embedded.instalments))||[];
+  const list=eps.filter(e=>e.prfId&&(!e.availability||e.availability.status==='available')).map(e=>{const h=hist.find(x=>x.k==='nrk:'+e.prfId);const t=e.titles||{};
+    return {kind:'prog',id:e.prfId,sid:id,title:(T.title?T.title+' – ':'')+(t.title||''),short:t.title||'',desc:t.subtitle||'',img:nkImg(e.image,600),dur:e.durationInSeconds,pct:h&&h.dur?Math.min(100,Math.round(h.pos/h.dur*100)):0}});
+  AK.list=list;
+  $('nkEps').innerHTML=list.length?`<div class="nkgrid">${list.map((o,i)=>`<div class="nkc nke" tabindex="0" data-nk="${esc(nkReg(o))}" data-nki="${i}"><div class="nki">${o.img?`<img loading="lazy" decoding="async" src="${esc(o.img)}" alt="">`:''}<span class="nkf">${esc(o.short)}</span>${o.pct?`<i class="nkp" style="width:${o.pct}%"></i>`:''}</div><div class="nkt">${esc(o.short)}</div><div class="nks">${esc(nkDur(o.dur))}${o.desc?' · '+esc(o.desc):''}</div></div>`).join('')}</div>`:'<p class="muted">Ingen episoder tilgjengelig i denne sesongen.</p>';
+  setTimeout(()=>{const f=document.querySelector('#nkEps .nkc');if(f&&TVM)f.focus()},60)}
+function vtt2srt(v){let n=0;return String(v).replace(/\r/g,'').replace(/^WEBVTT[^\n]*\n+/,'').split(/\n{2,}/).map(b=>{const L=b.split('\n');const i=L.findIndex(l=>/-->/.test(l));if(i<0)return '';
+  const tc=L[i].replace(/(\d\d:\d\d)\.(\d{3})/g,'$1,$2').replace(/^(\d\d:\d\d,\d{3})/,'00:$1').replace(/--> (\d\d:\d\d,\d{3})/,'--> 00:$1').replace(/(-->\s*[\d:,]+).*$/,'$1');
+  return (++n)+'\n'+tc+'\n'+L.slice(i+1).join('\n').replace(/<[^>]+>/g,'')}).filter(Boolean).join('\n\n')+'\n'}
+async function nkPlay(o,idx){
+  toast('Henter fra NRK …',1500);
+  let m;try{m=await nkGet((o.kind==='chan'?'/playback/manifest/channel/':'/playback/manifest/program/')+encodeURIComponent(o.id),20000)}catch(e){toast('Fikk ikke kontakt med NRK: '+e.message,4500);return}
+  const P=m&&m.playable,a=P&&(P.assets||[]).find(x=>!x.encrypted&&/hls/i.test(x.format||'')||/m3u8/.test(x.url||''));
+  if(!a){const np=m&&m.nonPlayable||{};toast(/geo/i.test(JSON.stringify(np))?'NRK: Dette programmet kan bare ses i Norge':(np.endUserMessage||'NRK: Programmet kan ikke spilles akkurat nå'),5000);return}
+  const h=hist.find(x=>x.k==='nrk:'+o.id);
+  const L=AK.list,nx=typeof idx==='number'&&L&&L[idx+1]?()=>nkPlay(L[idx+1],idx+1):null;
+  const ctx={k:'nrk:'+o.id,type:o.kind==='chan'?'live':'vod',title:o.title,logo:o.img,url:a.url,pos:h?h.pos:0,dur:h?h.dur:0,next:nx};
+  const st=(P.subtitles||[]).find(s=>s.defaultOn)||(P.subtitles||[]).find(s=>/^n[bno]/.test(s.language||''));
+  let vtt=null;if(st&&st.webVtt){try{const r=await fetch(st.webVtt);if(r.ok)vtt=await r.text()}catch(_){}}
+  if(vtt)ctx._subRaw={raw:vtt2srt(vtt),t:'Norsk (NRK)'};
+  ctx._as=1;
+  openPlayer(ctx);
+  if(vtt&&!(mpvOk()&&ctx.type!=='live')){extSub={raw:vtt,vtt:true,lang:'no'};try{applyExtSub()}catch(_){}}
+}
+function akTv2(){const B=$('akBody');if(!B)return;
+  B.innerHTML=`<div class="aktv2"><div class="aklg tv2 big">2</div><div><h3>TV 2 Play</h3><p class="muted">TV 2 Play er kopibeskyttet og krever innlogging, så det spilles i TV 2 sin egen spiller. Søk her, så åpnes resultatet direkte – Tilbake/Hjem tar deg tilbake til Eskedals Univers.</p>
+    <div class="spsrch"><input id="t2Q" placeholder="Søk i TV 2 Play – serier, sport, nyheter …" autocomplete="off"></div>
+    <div class="akcats"><button class="primary" data-t2="">Åpne TV 2 Play</button><button class="chip" data-t2="sport">Sport</button><button class="chip" data-t2="serier">Serier</button><button class="chip" data-t2="nyheter">Nyheter</button><button class="chip" data-t2="direkte">Direkte TV</button></div></div></div>`;
+  $('t2Q').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();const q=e.target.value.trim();openApp('ap-tv2',q?'https://play.tv2.no/sok?q='+encodeURIComponent(q):'https://play.tv2.no/','TV 2 Play')}}}
+window.akBack=function(){if(curView!=='arkiv')return false;
+  if(AK.tab==='nrk'&&AK.series){AK.series=null;AK.season=null;nkHome();return true}
+  if(AK.tab==='nrk'&&AK.q){AK.q='';nkHome();return true}
+  return false};
+document.addEventListener('click',e=>{
+  const v=$('v-arkiv');if(!v||!v.contains(e.target))return;
+  const t=e.target.closest('[data-aktab]');if(t){AK.tab=t.dataset.aktab;renderArkiv();return}
+  if(e.target.closest('[data-akback]')){window.akBack();return}
+  const w=e.target.closest('[data-akweb]');if(w){openApp('ap-nrk','https://tv.nrk.no','NRK TV');return}
+  const pg=e.target.closest('[data-nkpage]');if(pg){AK.q='';const q=$('nkQ');if(q)q.value='';nkPage(pg.dataset.nkpage);return}
+  const sn=e.target.closest('[data-nkseason]');if(sn){nkSeries(AK.series,sn.dataset.nkseason);return}
+  const t2=e.target.closest('[data-t2]');if(t2){const p=t2.dataset.t2;openApp('ap-tv2','https://play.tv2.no/'+p,'TV 2 Play');return}
+  const c=e.target.closest('[data-nk]');if(c){const o=AK.items[c.dataset.nk];if(!o)return;
+    if(o.kind==='series'){AK.season=null;nkSeries(o.id);$('v-arkiv').scrollTop=0;return}
+    if(o.kind==='page'){nkPage(o.id);return}
+    if(o.kind==='hist'){const x=hist.find(y=>y.k===o.id);if(x)openPlayer({k:x.k,type:x.type,title:x.name,logo:x.logo,url:x.url,pos:x.pos,dur:x.dur,_as:1});return}
+    const i=c.dataset.nki;nkPlay(o,i!=null?+i:undefined)}
+},true);
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const c=document.activeElement;if(c&&c.classList&&c.classList.contains('nkc')&&$('v-arkiv').contains(c)){e.preventDefault();e.stopImmediatePropagation();c.click()}},true);
 })();
+
+
 </script>
 
 <script type="text/plain" id="c3src">/* Eskedals Univers – 3D-kinosal (Three.js, hentes fra CDN). Skjermen er et ekte lerret i perspektiv:
