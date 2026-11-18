@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=263;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=264;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2131,6 +2131,19 @@ body:has(#v-home.on) header{background:transparent!important;border-bottom-color
 .uv-mt .uvhero-t em{font-style:normal;font:600 clamp(12px,.95vw,17px)/1.3 system-ui;color:#f1d7dc}
 .uv-mt .uvhero-t p{margin:4px 0 0;font:400 clamp(12px,.95vw,17px)/1.45 system-ui;color:#e9dfe2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .uv-mt .uvhero .uvfan{display:none!important}
+
+/* v264: hovedruta helt opp til toppen, logo over, ingen lysslynge/slede */
+#xmasSleigh{display:none!important}
+@media (min-width:761px){
+ body:has(#v-home.on) header{position:absolute!important;top:0;left:0;right:0;background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))!important;border:0!important}
+ body:has(#v-home.on) .uv{height:var(--tvh,100vh)!important;padding-top:0!important}
+ body:has(#v-home.on) .uvg{margin:0 -3vw!important;grid-template-rows:calc(var(--tvh,100vh)*.64)!important}
+ body:has(#v-home.on) .uv-mt .uvm{border-radius:0!important;box-shadow:none!important}
+ body:has(#v-home.on) .uv-mt .uvm{-webkit-mask-image:linear-gradient(180deg,#000 74%,transparent 100%);mask-image:linear-gradient(180deg,#000 74%,transparent 100%);background:transparent!important}
+ body:has(#v-home.on) .uv-mt .uvh{top:calc(68px + 1vh)!important;right:3vw!important}
+ body:has(#v-home.on) .uv-mt .uvhero-t{left:4vw!important}
+ body:has(#v-home.on) .uvt.uv-mt:focus .uvm{box-shadow:inset 0 0 0 3px #fff!important}
+}
 </style>
 <style id="liteCss">html.lite *,html.lite *::before,html.lite *::after{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transition:none!important;text-shadow:none!important}
 html.lite [style*="blur"],html.lite .blur{filter:none!important}</style>
@@ -5884,7 +5897,7 @@ function uvXmasStart(el){
     for(let i=0;i<(lite?26:46);i++){const x=R()*W,y=R()*H*.9,r=18+R()*R()*110,c=cols[(R()*cols.length)|0],a=.05+R()*.16;
       const gr=g.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,`rgba(${c},${a*.55})`);gr.addColorStop(.82,`rgba(${c},${a})`);gr.addColorStop(.93,`rgba(${c},${a*1.4})`);gr.addColorStop(1,`rgba(${c},0)`);
       g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,6.283);g.fill()}};
-  const lights=()=>{L=[];const n=Math.max(14,Math.round(W/70)),sag=Math.min(70,H*.07);const cols=['#ffd27a','#ff3b3b','#ffe9c4','#2ee57a','#ffb340','#ff3b3b'];
+  const lights=()=>{L=[];return;const n=Math.max(14,Math.round(W/70)),sag=Math.min(70,H*.07);const cols=['#ffd27a','#ff3b3b','#ffe9c4','#2ee57a','#ffb340','#ff3b3b'];
     for(let i=0;i<=n;i++){const t=i/n,x=t*W,y=10+sag*4*t*(1-t)+((i%2)?6:0);L.push({x,y,c:cols[i%cols.length],ph:R()*6.28,sp:.6+R()*1.4})}};
   const mk=y=>{const z=R();return {x:R()*W,y,r:.5+z*z*3.2,v:.2+z*1.1,w:R()*6.28,ws:.004+R()*.012,a:.25+z*.6,bl:z>.85}};
   const size=()=>{const r=cv.getBoundingClientRect();W=cv.width=Math.max(1,Math.round(r.width));H=cv.height=Math.max(1,Math.round(r.height));
