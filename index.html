@@ -2,7 +2,7 @@
 <html lang="no" data-theme="brann">
 <head>
 <meta charset="utf-8">
-<script>/*BOOT*/var APP_BUILD=240;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
+<script>/*BOOT*/var APP_BUILD=241;(function(){try{var n=window.IPTV_DESKTOP||(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());if(!n||window.__booted)return;var h=localStorage.getItem('remote_html'),v=+localStorage.getItem('remote_ver')||0,t=+localStorage.getItem('boot_try')||0;if(h&&v>APP_BUILD){if(t>=2){localStorage.removeItem('remote_html');localStorage.removeItem('remote_ver');localStorage.setItem('boot_try','0');return}localStorage.setItem('boot_try',String(t+1));window.__booted=1;window.__RP=1;setTimeout(function(){window.__RP=0;document.open();document.write(h);document.close()},0)}}catch(e){}})();</script>
 <script>/*LIBS*/(function(){function L(a,b){return new Promise(function(r){var s=document.createElement('script');s.async=true;s.src=a;s.onload=function(){r(1)};s.onerror=function(){if(!b)return r(0);var t=document.createElement('script');t.async=true;t.src=b;t.onload=function(){r(1)};t.onerror=function(){r(0)};document.head.appendChild(t)};document.head.appendChild(s)})}
 window.__libs=Promise.race([Promise.all([L('lib/hls.min.js','https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'),L('lib/mpegts.js','https://cdn.jsdelivr.net/npm/mpegts.js@1/dist/mpegts.min.js')]),new Promise(function(r){setTimeout(r,9000)})]).then(function(){window.__libsDone=1})})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -3295,7 +3295,7 @@ function showView(v,force,np){
   curView=v;
   if(v!=='movies')$('v-movies').innerHTML='';
   if(v!=='series')$('v-series').innerHTML='';
-  for(const x of VIEWS)$('v-'+x).classList.toggle('on',x===v);
+  for(const x of VIEWS){const vx=$('v-'+x);if(vx)vx.classList.toggle('on',x===v);else if(x===v)toast('Mangler visning: '+x,6000)}
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='tv'&&b.dataset.v==='live')||(v==='guide'&&b.dataset.v==='live')||(v==='matches'&&b.dataset.v==='fotball')));
   {const mb=$('moreBtn');if(mb)mb.classList.toggle('on',['apps','cams','fav','settings'].includes(v))}
   {const hb=document.getElementById('bHome');if(hb)hb.hidden=v==='home'}
@@ -3313,7 +3313,7 @@ function showView(v,force,np){
   if(v==='settings')renderSettings();
   if(v==='spotify')renderSpotify();
   if(v==='remote')renderRemote();
-  if(v==='radio')renderRadio();   if(v==='arkiv')renderArkiv();
+  if(v==='radio')renderRadio();   if(v==='arkiv'){try{renderArkiv()}catch(e){toast('Arkiv-feil: '+e.message,8000)}}
   $('v-'+v).scrollTop=0;
 }
 $('nav').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v==='live'?'tv':b.dataset.v)};
@@ -4157,7 +4157,7 @@ function go(sp){
   if(v==='norsk')return renderNorsk();
   if(v==='live')return goLive({tab:o.tab||'all',chip:o.chip||null});
   if(v==='movies'||v==='series'){vf={svc:o.svc||'',cat:'',q:'',en:!!o.en,no:!!o.no,kids:!!o.kids,all:!!o.all,xmas:!!o.xmas,njul:!!o.njul,nt:!!o.nt,sort:'new'};}
-  showView(v,true);
+  try{showView(v,true)}catch(e){toast('Feil: '+e.message,8000)}
 }
 function appBack(){
   {const kt=document.getElementById('kbTestD');if(kt&&kt.open)return true}
